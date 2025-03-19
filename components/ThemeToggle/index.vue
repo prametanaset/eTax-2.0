@@ -11,10 +11,10 @@ const colorMode = useColorMode()
   <div class="w-fit">
     <ToggleGroup type="single">
     <ToggleGroupItem value="a" @click="colorMode.preference = 'light'">
-      <Icon icon="radix-icons:moon" class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all" />
+      <Icon icon="radix-icons:sun" class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all" />
     </ToggleGroupItem>
     <ToggleGroupItem value="b" @click="colorMode.preference = 'dark'">
-      <Icon icon="radix-icons:sun" class="h-[1.2rem] w-[1.2rem] scale-100 transition-all"  />
+      <Icon icon="radix-icons:moon" class="h-[1.2rem] w-[1.2rem] scale-100 transition-all"  />
     </ToggleGroupItem>
     <ToggleGroupItem value="c" @click="colorMode.preference = 'system'">
       <Icon icon="radix-icons:desktop" class="h-[1.2rem] w-[1.2rem] scale-100 transition-all"  />
