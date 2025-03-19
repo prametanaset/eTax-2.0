@@ -24,6 +24,9 @@
   },
   "packageManager": "pnpm@9.5.0-beta.1+sha512.5ffe23e95a4d4876d8885d4dea4c804d85495425140911b06c6c96a319e8c94bf9c6dad920b7d8e69a31ca291656b1c779aa6adc9b105f1a4fb5232487f99bf1",
   "devDependencies": {
+    "@iconify-json/radix-icons": "^1.2.2",
+    "@iconify/vue": "^4.3.0",
+    "@nuxtjs/color-mode": "^3.5.2",
     "@nuxtjs/tailwindcss": "^6.13.2",
     "typescript": "^5.8.2"
   }

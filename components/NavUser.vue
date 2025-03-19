@@ -81,6 +81,7 @@ const { isMobile } = useSidebar()
                 <span class="truncate text-xs">{{ user.email }}</span>
               </div>
             </div>
+            <ThemeToggle />
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
