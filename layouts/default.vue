@@ -19,6 +19,8 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+
+const route = useRoute();
 </script>
 
 <template>
@@ -34,13 +36,13 @@ import {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem class="hidden md:block">
-                <BreadcrumbLink href="#">
+                <BreadcrumbLink href="/">
                   Building Your Application
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator class="hidden md:block" />
               <BreadcrumbItem>
-                <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                <BreadcrumbPage>{{ route.meta.title }}</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
@@ -49,6 +51,7 @@ import {
       <div
         class="max-w-[1980px] w-full m-auto flex flex-1 flex-col gap-4 p-4 pt-0"
       >
+        <h1 class="text-2xl">{{ route.meta.title }}</h1>
         <slot />
       </div>
     </SidebarInset>
