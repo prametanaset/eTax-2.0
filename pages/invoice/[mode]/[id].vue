@@ -55,7 +55,7 @@
                 </div>
                 <div>
                   <CardDescription>
-                  <div class="grid sm:grid-cols-2 gap-2">
+                  <div class="grid sm:grid-cols-2 gap-4">
                      <!-- customer info -->
                      <div class="sm:flex mt-2">
                       <p class="text-muted-400">เลขประจำตัวผู้เสียภาษี :&nbsp;</p>
@@ -96,15 +96,15 @@
               <BaseProductList></BaseProductList>
             </div>
           </div>
-          <div class="grid grid-cols-2 mt-8 pt-8 border-t">
-            <div class="col-end-3 mb-6">
-              <div class="grid  ">
+          <div class="grid sm:grid-cols-2 mt-8 pt-8 border-t">
+            <div class="sm:col-end-3 mb-8">
+              <div class="grid">
                 <p>ส่วนลด</p>
                 <div class="flex gap-2">
                   <Input type="number" placeholder="ส่วนลด" />
                   <!-- discount Dropdown -->
                   <Select>
-                    <SelectTrigger class="w-20 mx-auto">
+                    <SelectTrigger class="w-auto mx-auto">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -145,8 +145,7 @@
         </CardContent>
       </Card>
     </div>
-    <div class="col-span-12 lg:col-span-3">
-      
+    <div class="col-span-12 lg:col-span-3"> 
       <Card class="w-full">
         <div class="grid sm:grid-cols-2 gap-4 p-4">
           <Button><Eye />ตัวอย่าง</Button>
