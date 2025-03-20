@@ -11,13 +11,19 @@
           <BaseDatePicker></BaseDatePicker>
         </div>
         <div>
+          <Test></Test>
+        </div>
+        <div>
           <p class="text-lg">รายการสินค้า</p>
           <BaseProductList></BaseProductList>
         </div>
       </div>
-      <div class="min-h-[100vh] rounded-xl bg-[#f9f9fa]" />
+      <!-- <div class="min-h-[100vh] rounded-xl bg-[#f9f9fa]" /> -->
     </div>
+
+    
   </div>
+
 </template>
 
 <script lang="ts" setup>
