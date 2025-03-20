@@ -63,7 +63,7 @@ const data = {
         },
         {
           title: 'สร้างใบกำกับภาษี',
-          url: '/create',
+          url: '/invoice/create/invoice',
         },
         {
           title: 'Settings',

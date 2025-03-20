@@ -11,9 +11,6 @@
           <BaseDatePicker></BaseDatePicker>
         </div>
         <div>
-          <Test></Test>
-        </div>
-        <div>
           <p class="text-lg">รายการสินค้า</p>
           <BaseProductList></BaseProductList>
         </div>
