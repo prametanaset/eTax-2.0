@@ -49,7 +49,7 @@ const route = useRoute();
         </div>
       </header>
       <div
-        class="max-w-[1980px] w-full m-auto flex flex-1 flex-col gap-4 p-4 pt-0"
+        class="max-w-[1440px] w-full m-auto flex flex-1 flex-col gap-4 p-4 pt-0"
       >
         <h1 class="text-2xl">{{ route.meta.title }}</h1>
         <slot />

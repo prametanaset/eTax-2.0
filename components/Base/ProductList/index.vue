@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { Input } from '@/components/ui/input'
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
-import { Trash, ChevronDown } from 'lucide-vue-next'
+import { Trash, ChevronDown, Plus } from 'lucide-vue-next'
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
 import {
   Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList
@@ -84,7 +84,7 @@ onUnmounted(() => {
                 <img :src="product.image" class="w-10 h-10 rounded-md object-cover mr-3" />
                 <div>
                   <p class="font-medium">{{ product.name }}</p>
-                  <p class="text-sm text-gray-500">{{ product.price.toLocaleString() }} บาท</p>
+                  <p class="text-sm text-gray-500">{{ currencyFormat(product.price) }} บาท</p>
                 </div>
               </CommandItem>
             </CommandGroup>
@@ -105,15 +105,15 @@ onUnmounted(() => {
 
     <div class="space-y-4">
       <div v-for="product in products" :key="product.id"
-        class="grid sm:grid-cols-[1fr_80px_80px_90px_50px] gap-4 items-center p-4 border rounded-lg shadow-sm bg-white"
+        class="grid sm:grid-cols-[1fr_80px_80px_90px_50px] gap-4 items-center p-4 border rounded-lg shadow-sm "
         :class="screenWidth < 640 ? 'grid-cols-2' : 'grid-cols-1'">
         <!-- Product Info -->
-        <div class="flex items-center space-x-4 w-full sm:w-48" :class="screenWidth < 640 ? 'col-span-2' : ''">
+        <div class="flex items-center space-x-4 w-full overflow-hidden" :class="screenWidth < 640 ? 'col-span-2' : ''">
           <img :src="product.image" :alt="product.name" class="w-12 h-12 rounded-md object-cover" />
           <div class="flex-1 min-w-0">
-            <p class="font-medium truncate">{{ product.name }}</p>
+            <p class="font-medium truncate">{{ product.name }} Lorem ipsum dolor, sit amet consectetur adipisicing elit. Impedit, soluta?</p>
             <p class="text-sm text-gray-500">
-              {{ product.price.toLocaleString() }} บาท
+              {{ currencyFormat(product.price) }} บาท
             </p>
           </div>
         </div>
@@ -240,7 +240,8 @@ onUnmounted(() => {
     <!-- Product Selection Popover -->
     <Popover v-if="products.length">
       <PopoverTrigger as-child>
-        <Button variant="link" class="w-72 flex items-center justify-between text-left">
+        <Button variant="link" class="text-primary-500 flex items-center justify-between text-left">
+          <Plus/>
           <span>เพิ่มรายการสินค้า</span>
           <!-- <ChevronDown class="h-4 w-4 text-muted-foreground" /> -->
         </Button>
@@ -256,7 +257,7 @@ onUnmounted(() => {
                 <img :src="product.image" class="w-10 h-10 rounded-md object-cover mr-3" />
                 <div>
                   <p class="font-medium">{{ product.name }}</p>
-                  <p class="text-sm text-gray-500">{{ product.price.toLocaleString() }} บาท</p>
+                  <p class="text-sm text-gray-500">{{ currencyFormat(product.price) }} บาท</p>
                 </div>
               </CommandItem>
             </CommandGroup>
