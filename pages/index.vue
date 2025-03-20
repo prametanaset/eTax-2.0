@@ -1,137 +1,78 @@
 <template>
-  <div>
+  <div class="max-w-[1440px] m-auto">
     <!-- Charts -->
-    <div class="grid auto-rows-min gap-4 md:grid-cols-3 mb-5">
-      <div class="rounded-xl bg-muted/50">
-        <Card>
-          <CardHeader
-            class="flex flex-row items-center justify-between space-y-0 pb-2 mb-3"
-          >
-            <CardTitle class="text-md font-medium"> Total Revenue </CardTitle>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-square-kanban"
-            >
-              <rect width="18" height="18" x="3" y="3" rx="2" />
-              <path d="M8 7v7" />
-              <path d="M12 7v4" />
-              <path d="M16 7v9" />
-            </svg>
-          </CardHeader>
-          <CardContent class="flex items-center justify-between">
-            <div class="flex-none">
-              <div class="text-2xl font-bold mb-5">
-                <span class="text-primary-500">฿</span> 45,231.89
-              </div>
-              <p class="text-xs text-muted-foreground">
-                +20.1% from last month
-              </p>
-            </div>
-            <Test class="w-72 h-16" />
-          </CardContent>
+    <div class="grid gap-4 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-4 mb-[60px]">
+      <div class="relative group">
+        <div
+          class="absolute top-[60%] right-3 w-[90%] h-12 lg:h-[50%] bg-primary-400/50 blur-xl rounded-full img-shadow-animation">
+        </div>
+        <Card class="z-10 relative rouded-lg leading-none border img-border-animation p-3 w-full">
+          <BaseWidget class="w-full" :title="'Widget name'" :count-number="5" :percen-last-month="-7.5" />
         </Card>
       </div>
 
-      <!-- 2 -->
-      <div class="rounded-xl bg-muted/50">
-        <Card>
-          <CardHeader
-            class="flex flex-row items-center justify-between space-y-0 pb-2 mb-3"
-          >
-            <CardTitle class="text-md font-medium"> Total Revenue </CardTitle>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-square-kanban"
-            >
-              <rect width="18" height="18" x="3" y="3" rx="2" />
-              <path d="M8 7v7" />
-              <path d="M12 7v4" />
-              <path d="M16 7v9" />
-            </svg>
-          </CardHeader>
-          <CardContent class="flex items-center justify-between">
-            <div class="flex-none">
-              <div class="text-2xl font-bold mb-5">
-                <span class="text-primary-500">฿</span> 45,231.89
-              </div>
-              <p class="text-xs text-muted-foreground">
-                +20.1% from last month
-              </p>
-            </div>
-            <Test class="w-72 h-16" />
-          </CardContent>
+      <div class="relative group">
+        <div
+          class="absolute top-[60%] right-3 w-[90%] h-12 lg:h-[50%] bg-primary-400/50 blur-xl rounded-full img-shadow-animation">
+        </div>
+        <Card class="z-10 relative rouded-lg leading-none border img-border-animation p-3 w-full">
+          <BaseWidget class="w-full" :title="'Widget name'" :count-number="5" :percen-last-month="-7.5" />
         </Card>
       </div>
 
-      <!-- 3 -->
-      <div class="rounded-xl bg-muted/50">
-        <Card>
-          <CardHeader
-            class="flex flex-row items-center justify-between space-y-0 pb-2 mb-3"
-          >
-            <CardTitle class="text-md font-medium"> Total Revenue </CardTitle>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-square-kanban"
-            >
-              <rect width="18" height="18" x="3" y="3" rx="2" />
-              <path d="M8 7v7" />
-              <path d="M12 7v4" />
-              <path d="M16 7v9" />
-            </svg>
-          </CardHeader>
-          <CardContent class="flex items-center justify-between">
-            <div class="flex-none">
-              <div class="text-2xl font-bold mb-5">
-                <span class="text-primary-500">฿</span> 45,231.89
-              </div>
-              <p class="text-xs text-muted-foreground">
-                +20.1% from last month
-              </p>
-            </div>
-            <Test class="w-72 h-16" />
-          </CardContent>
+      <div class="relative group">
+        <div
+          class="absolute top-[60%] right-3 w-[90%] h-12 lg:h-[50%] bg-primary-400/50 blur-xl rounded-full img-shadow-animation">
+        </div>
+        <Card class="z-10 relative rouded-lg leading-none border img-border-animation p-3 w-full">
+          <BaseWidget class="w-full" :title="'Widget name'" :count-number="5" :percen-last-month="-7.5" />
+        </Card>
+      </div>
+
+      <div class="relative group sm:col-span-1 md:col-span-3 xl:col-span-1">
+        <div
+          class="absolute top-[60%] right-3 w-[90%] h-12 lg:h-[50%] bg-primary-400/50 blur-xl rounded-full img-shadow-animation">
+        </div>
+        <Card class="z-10 relative rouded-lg leading-none border img-border-animation p-3 !border-primary-500 w-full">
+          <BaseWidget class="w-full" :title="'Widget name'" :count-number="5" :percen-last-month="-7.5" />
         </Card>
       </div>
     </div>
 
     <!-- Table -->
-    <div class="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min">
-      <!-- <BaseTable /> -->
-
+    <!-- <div class="w-full rounded-xl bg-muted/50 md:min-h-min">
       <BaseDataTable />
+    </div> -->
+
+    <div>
+      <ExampleDataTable :data="tasks" :columns="columns"></ExampleDataTable>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { columns } from '@/components/Example/DataTable/columns'
+import tasks from '@/components/Example/DataTable/data/tasks.json'
+
 definePageMeta({
   title: "รายงานใบกำกับภาษี",
 });
 </script>
 
-<style></style>
+<style scoped>
+.img-shadow-animation {
+  animation-name: img-shadow-animation;
+  animation-iteration-count: infinite;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-direction: alternate;
+}
+
+.img-border-animation {
+  animation-name: img-border-animation;
+  animation-iteration-count: infinite;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-direction: alternate;
+}
+</style>

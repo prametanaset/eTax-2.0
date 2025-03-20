@@ -34,7 +34,7 @@ import {
   getSortedRowModel,
   useVueTable,
 } from '@tanstack/vue-table'
-import { ArrowUpDown, ChevronDown } from 'lucide-vue-next'
+import { ArrowUpDown, ChevronDown, Search } from 'lucide-vue-next'
 import { h, ref } from 'vue'
 import DropdownAction from './DataTableDemoColumn.vue'
 
@@ -170,46 +170,49 @@ const table = useVueTable({
 <template>
   <div class="w-full">
     <div class="flex items-center py-4">
-      <Input
-        class="max-w-sm"
-        placeholder="Filter emails..."
-        :model-value="table.getColumn('email')?.getFilterValue() as string"
-        @update:model-value=" table.getColumn('email')?.setFilterValue($event)"
-      />
+      <div class="relative w-full max-w-sm items-center">
+        <Input id="search" type="text" class="max-w-sm pl-10 " placeholder="ค้าหาใบกำกับภาษี"
+          :model-value="table.getColumn('email')?.getFilterValue() as string"
+          @update:model-value=" table.getColumn('email')?.setFilterValue($event)" />
+        <span class="absolute start-0 inset-y-0 flex items-center justify-center px-2">
+          <Search class="size-6 text-muted-foreground" />
+        </span>
+      </div>
+
       <DropdownMenu>
         <DropdownMenuTrigger as-child>
-          <Button variant="outline" class="ml-auto">
-            Columns <ChevronDown class="ml-2 h-4 w-4" />
+          <Button class="ml-auto mr-2">
+            Columns
+            <ChevronDown class="ml-2 h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuCheckboxItem
-            v-for="column in table.getAllColumns().filter((column) => column.getCanHide())"
-            :key="column.id"
-            class="capitalize"
-            :model-value="column.getIsVisible()"
-            @update:model-value="(value) => {
+          <DropdownMenuCheckboxItem v-for="column in table.getAllColumns().filter((column) => column.getCanHide())"
+            :key="column.id" class="capitalize" :model-value="column.getIsVisible()" @update:model-value="(value) => {
               column.toggleVisibility(!!value)
-            }"
-          >
+            }">
             {{ column.id }}
           </DropdownMenuCheckboxItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      <NuxtLink to="/invoice/create/invoice">
+        <Button  class="font-semibold">สร้างใบกำกับภาษี</Button>
+      </NuxtLink>
     </div>
-    <div class="rounded-md border">
-      <Table >
+    <div class="rounded-md border bg-white dark:bg-[#18181b]">
+      <Table>
         <TableHeader>
           <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
             <TableHead v-for="header in headerGroup.headers" :key="header.id">
-              <FlexRender v-if="!header.isPlaceholder" :render="header.column.columnDef.header" :props="header.getContext()" />
+              <FlexRender v-if="!header.isPlaceholder" :render="header.column.columnDef.header"
+                :props="header.getContext()" />
             </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           <template v-if="table.getRowModel().rows?.length">
-            <template v-for="row in table.getRowModel().rows" :key="row.id" >
-              <TableRow :data-state="row.getIsSelected() && 'selected'" >
+            <template v-for="row in table.getRowModel().rows" :key="row.id">
+              <TableRow :data-state="row.getIsSelected() && 'selected'">
                 <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
                   <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
                 </TableCell>
@@ -223,10 +226,7 @@ const table = useVueTable({
           </template>
 
           <TableRow v-else>
-            <TableCell
-              :colspan="columns.length"
-              class="h-24 text-center"
-            >
+            <TableCell :colspan="columns.length" class="h-24 text-center">
               No results.
             </TableCell>
           </TableRow>
@@ -240,20 +240,10 @@ const table = useVueTable({
         {{ table.getFilteredRowModel().rows.length }} row(s) selected.
       </div>
       <div class="space-x-2">
-        <Button
-          variant="outline"
-          size="sm"
-          :disabled="!table.getCanPreviousPage()"
-          @click="table.previousPage()"
-        >
+        <Button variant="outline" size="sm" :disabled="!table.getCanPreviousPage()" @click="table.previousPage()">
           Previous
         </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          :disabled="!table.getCanNextPage()"
-          @click="table.nextPage()"
-        >
+        <Button variant="outline" size="sm" :disabled="!table.getCanNextPage()" @click="table.nextPage()">
           Next
         </Button>
       </div>

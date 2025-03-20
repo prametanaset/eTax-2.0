@@ -70,7 +70,8 @@ const activeTeam = ref(props.teams[0])
             <div class="flex size-6 items-center justify-center rounded-sm border">
               <component :is="team.logo" class="size-4 shrink-0" />
             </div>
-            {{ team.name }}
+            <!-- {{ team.name }} -->
+              {{ activeTeam.plan }}
             <DropdownMenuShortcut>⌘{{ index + 1 }}</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -79,7 +80,7 @@ const activeTeam = ref(props.teams[0])
               <Plus class="size-4" />
             </div>
             <div class="font-medium text-muted-foreground">
-              Add team
+              เพิ่มสาขา
             </div>
           </DropdownMenuItem>
         </DropdownMenuContent>

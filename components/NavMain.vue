@@ -45,7 +45,7 @@ defineProps<{
           <CollapsibleTrigger as-child>
             <SidebarMenuButton :tooltip="item.title">
               <component :is="item.icon" v-if="item.icon" />
-              <span>{{ item.title }}</span>
+              <span class="text-xm font-semibold">{{ item.title }}</span>
               <ChevronRight class="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
             </SidebarMenuButton>
           </CollapsibleTrigger>
@@ -54,7 +54,7 @@ defineProps<{
               <SidebarMenuSubItem v-for="subItem in item.items" :key="subItem.title">
                 <SidebarMenuSubButton as-child>
                   <NuxtLink :to="subItem.url">
-                    <span>{{ subItem.title }}</span>
+                    <span class="text-sm">{{ subItem.title }}</span>
                   </NuxtLink>
                 </SidebarMenuSubButton>
               </SidebarMenuSubItem>

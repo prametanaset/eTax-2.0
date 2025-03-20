@@ -8,7 +8,7 @@ import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover
 import {
   Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList
 } from '@/components/ui/command'
-import { Label } from '@/components/ui/Label'
+import { Label } from '@/components/ui/label'
 
 const [UseTemplate, DiscountForm] = createReusableTemplate()
 

@@ -4,9 +4,9 @@ export default {
   content: [],
   theme: {
     extend: {
-      fontFamily: {
-        sans: ["IBM Plex Sans Thai", "sans-serif"],
-      },
+      // fontFamily: {
+      //   sans: ["Sarabun", "sans-serif"],
+      // },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

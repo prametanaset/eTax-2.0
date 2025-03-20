@@ -35,19 +35,19 @@ const data = {
   },
   teams: [
     {
-      name: 'Acme Inc',
+      name: 'บริษัท ซันสเกลอัพ จำกัด',
       logo: GalleryVerticalEnd,
-      plan: 'Enterprise',
+      plan: 'สำนักงานใหญ่',
     },
     {
-      name: 'Acme Corp.',
+      name: 'บริษัท ซันสเกลอัพ จำกัด',
       logo: AudioWaveform,
-      plan: 'Startup',
+      plan: 'สาขาที่ 1',
     },
     {
-      name: 'Evil Corp.',
+      name: 'บริษัท ซันสเกลอัพ จำกัด',
       logo: Command,
-      plan: 'Free',
+      plan: 'สาขาที่ 2',
     },
   ],
   navMain: [
@@ -139,14 +139,14 @@ const data = {
   ],
   projects: [
     {
-      name: 'Design Engineering',
-      url: '#',
-      icon: Frame,
+      name: 'รายงานใบกำกับภาษี',
+      url: '/',
+      icon: PieChart,
     },
     {
-      name: 'Sales & Marketing',
-      url: '#',
-      icon: PieChart,
+      name: 'สร้างใบกำกับภาษี',
+      url: '/invoice/create/invoice',
+      icon: Frame,
     },
     {
       name: 'Travel',

@@ -16,6 +16,7 @@
     "@unovis/ts": "^1.5.1",
     "@unovis/vue": "^1.5.1",
     "@vee-validate/zod": "^4.15.0",
+    "apexcharts": "^4.5.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-vue-next": "^0.483.0",
@@ -28,6 +29,7 @@
     "vee-validate": "^4.15.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",
+    "vue3-apexcharts": "^1.8.0",
     "zod": "^3.24.2"
   },
   "packageManager": "pnpm@9.5.0-beta.1+sha512.5ffe23e95a4d4876d8885d4dea4c804d85495425140911b06c6c96a319e8c94bf9c6dad920b7d8e69a31ca291656b1c779aa6adc9b105f1a4fb5232487f99bf1",
@@ -38,6 +40,7 @@
     "@nuxtjs/tailwindcss": "^6.13.2",
     "@vueuse/core": "^13.0.0",
     "@vueuse/nuxt": "^13.0.0",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "unplugin-icons": "^22.1.0"
   }
 }

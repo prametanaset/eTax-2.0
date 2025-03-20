@@ -16,5 +16,5 @@ const data = [
     :show-x-axis="false"
     :show-y-axis="false" -->
 <template>
-  <AreaChart :show-grid-line="false" :margin="0" :show-legend="false" :show-x-axis="false" :show-y-axis="false" :data="data" index="name" :categories="['total']" />
+  <AreaChart :show-grid-line="false" :show-legend="false" :show-x-axis="false" :show-y-axis="false" :data="data" index="name" :categories="['total']" />
 </template>
