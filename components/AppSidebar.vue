@@ -52,18 +52,18 @@ const data = {
   ],
   navMain: [
     {
-      title: 'Playground',
+      title: 'ใบกำกับภาษี',
       url: '#',
       icon: SquareTerminal,
       isActive: true,
       items: [
         {
-          title: 'History',
-          url: '#',
+          title: 'รายงานใบกำกับภาษี',
+          url: '/',
         },
         {
-          title: 'Starred',
-          url: '#',
+          title: 'สร้างใบกำกับภาษี',
+          url: '/create',
         },
         {
           title: 'Settings',

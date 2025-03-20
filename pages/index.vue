@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- Charts -->
     <div class="grid auto-rows-min gap-4 md:grid-cols-4">
       <div class="aspect-video rounded-xl bg-muted/50">
         <Card>
@@ -84,18 +85,16 @@
         </Card>
       </div>
     </div>
+
+    <!-- Table -->
+    <div  class="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min">
+      <BaseTable />
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+
 </script>
 
 <style></style>
