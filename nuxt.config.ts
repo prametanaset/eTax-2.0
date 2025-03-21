@@ -29,8 +29,12 @@ export default defineNuxtConfig({
       Sarabun: {
         wght: [100, 200, 300, 400, 500, 600, 700, 800],
         ital: [100, 200, 300, 400, 500, 600, 700, 800,],
+      },
+      "Noto Sans Thai": {
+        wght: [100, 200, 300, 400, 500, 600, 700, 800, 900],
       }
     },
     display: "swap",
-  }
+  },
+  css: ['@/assets/css/fonts.css']
 })

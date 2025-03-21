@@ -69,7 +69,7 @@ export const columns: ColumnDef<Invoice>[] = [
           ),
           h(
             "p",
-            { class: "text-sm text-muted-foreground" },
+            { class: "text-sm text-muted-400" },
             row.original.email
           ),
         ]),

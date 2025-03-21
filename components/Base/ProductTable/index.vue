@@ -2,7 +2,8 @@
   <div class="space-y-4">
     <DataTableToolbar :table="table" />
     <div class="rounded-md border bg-[hsl(var(--card))]">
-      <Table>
+      <!-- hsl(var(--card)); -->
+      <Table class=" ">
         <TableHeader>
           <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
             <TableHead v-for="header in headerGroup.headers" :key="header.id">
@@ -47,7 +48,7 @@ import type {
   VisibilityState,
 } from '@tanstack/vue-table'
 
-import type { Task, Invoice } from './data/schema'
+import type { Product } from './data/schema'
 import { valueUpdater } from '@/utils'
 
 import {
@@ -72,8 +73,8 @@ import DataTablePagination from './Pagination.vue'
 import DataTableToolbar from './Toolbar.vue'
 
 interface DataTableProps {
-  columns: ColumnDef<Invoice, any>[]
-  data: Invoice[]
+  columns: ColumnDef<Product, any>[]
+  data: Product[]
 }
 const props = defineProps<DataTableProps>()
 
