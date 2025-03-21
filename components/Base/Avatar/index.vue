@@ -2,12 +2,12 @@
   <div>
     <div class="flex items-center space-x-4">
         <Avatar>
-          <AvatarImage :src="props.img" />
-          <AvatarFallback>{{ props.text }}</AvatarFallback>
+          <AvatarImage :src="props.img || null" />
+          <AvatarFallback>{{ props.text || 'TS' }}</AvatarFallback>
         </Avatar>
         <div>
-          <p class="text-sm font-medium leading-none">{{ props.title }}</p>
-          <p class="text-sm text-muted-foreground">{{ props.description }}</p>
+          <p class="text-sm font-medium leading-none">{{ props.title || null }}</p>
+          <p class="text-sm text-muted-foreground">{{ props.description || null }}</p>
         </div>
       </div>
   </div>

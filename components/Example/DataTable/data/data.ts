@@ -30,18 +30,18 @@ export const statuses = [
     icon: h(QuestionMarkCircledIcon),
   },
   {
-    value: 'todo',
-    label: 'Todo',
+    value: 'pending',
+    label: 'ฉบับร่าง',
     icon: h(CircleIcon),
   },
   {
     value: 'in progress',
-    label: 'In Progress',
+    label: 'รอดำเนินการ',
     icon: h(StopwatchIcon),
   },
   {
-    value: 'done',
-    label: 'Done',
+    value: 'completed',
+    label: 'ส่งแล้ว',
     icon: h(CheckCircledIcon),
   },
   {
