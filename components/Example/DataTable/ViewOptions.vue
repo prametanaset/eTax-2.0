@@ -4,10 +4,10 @@
       <Button
         variant="outline"
         size="sm"
-        class="ml-auto hidden h-8 lg:flex"
+        class="ml-auto hidden h-8 lg:flex bg-[hsl(var(--card))]"
       >
         <MixerHorizontalIcon class="mr-2 h-4 w-4" />
-        View
+        มุมมอง
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end" class="w-[150px]">

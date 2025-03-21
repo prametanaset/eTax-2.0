@@ -2,15 +2,15 @@
    <div class="flex items-center justify-between">
     <div class="flex flex-1 items-center space-x-2">
       <Input
-        placeholder="Filter tasks..."
-        :model-value="(table.getColumn('title')?.getFilterValue() as string) ?? ''"
-        class="h-8 w-[150px] lg:w-[250px]"
-        @input="table.getColumn('title')?.setFilterValue($event.target.value)"
+        placeholder="กรุณากรอกคำค้นหา"
+        :model-value="(table.getColumn('name')?.getFilterValue() as string) ?? ''"
+        class="h-8 w-[150px] lg:w-[250px] bg-[hsl(var(--card))]"
+        @input="table.getColumn('name')?.setFilterValue($event.target.value)"
       />
       <DataTableFacetedFilter
         v-if="table.getColumn('status')"
         :column="table.getColumn('status')"
-        title="Status"
+        title="สถานะ"
         :options="statuses"
       />
       <DataTableFacetedFilter
@@ -36,7 +36,7 @@
 
 <script lang="ts" setup>
 import type { Table } from '@tanstack/vue-table'
-import type { Task } from '../data/schema'
+import type { Invoice } from './data/schema'
 import { Button } from '@/components/ui/button'
 
 import { Input } from '@/components/ui/input'
@@ -48,7 +48,7 @@ import DataTableFacetedFilter from './FacetedFilter.vue'
 import DataTableViewOptions from './ViewOptions.vue'
 
 interface DataTableToolbarProps {
-  table: Table<Task>
+  table: Table<Invoice>
 }
 
 const props = defineProps<DataTableToolbarProps>()

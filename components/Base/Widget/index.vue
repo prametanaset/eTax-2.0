@@ -2,10 +2,10 @@
   <div class="grid grid-cols-2 gap-4">
     <div class="min-w-[30%] flex flex-col justify-between py-1 md:col-span-2 lg:col-span-1">
 
-      <h4 class="scroll-m-20 text-sm  font-medium tracking-tight">
+      <h4 class="text-sm  font-medium tracking-tight">
         {{ props.title }}
       </h4>
-      <h4 class="scroll-m-20 text-3xl  font-bold tracking-tight">
+      <h4 class="text-3xl  font-bold tracking-tight">
         {{ props.countNumber }}
       </h4>
 

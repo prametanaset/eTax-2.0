@@ -88,11 +88,9 @@ export const columns: ColumnDef<Invoice>[] = [
 
       if (!status) return null;
 
-      return h("div", { class: "flex w-[100px] items-center" }, [
-        status.icon &&
-          h(status.icon, { class: "mr-2 h-4 w-4 text-muted-foreground" }),
-        h("span", status.label),
-      ]);
+      return h('div', { class: 'flex space-x-4' }, [
+        status ? h(Badge, { variant: 'outline' }, () => status.label) : null,
+      ])
     },
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));

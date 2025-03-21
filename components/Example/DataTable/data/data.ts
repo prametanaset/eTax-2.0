@@ -24,11 +24,11 @@ export const labels = [
 ]
 
 export const statuses = [
-  {
-    value: 'backlog',
-    label: 'Backlog',
-    icon: h(QuestionMarkCircledIcon),
-  },
+  // {
+  //   value: 'backlog',
+  //   label: 'Backlog',
+  //   icon: h(QuestionMarkCircledIcon),
+  // },
   {
     value: 'pending',
     label: 'ฉบับร่าง',
@@ -44,11 +44,11 @@ export const statuses = [
     label: 'ส่งแล้ว',
     icon: h(CheckCircledIcon),
   },
-  {
-    value: 'canceled',
-    label: 'Canceled',
-    icon: h(CrossCircledIcon),
-  },
+  // {
+  //   value: 'canceled',
+  //   label: 'Canceled',
+  //   icon: h(CrossCircledIcon),
+  // },
 ]
 
 export const priorities = [

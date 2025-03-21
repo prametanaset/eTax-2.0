@@ -1,19 +1,19 @@
 <template>
   <div class="flex items-center justify-between px-2">
     <div class="flex-1 text-sm text-muted-foreground">
-      {{ table.getFilteredSelectedRowModel().rows.length }} of
-      {{ table.getFilteredRowModel().rows.length }} row(s) selected.
+      เลือก {{ table.getFilteredSelectedRowModel().rows.length }} จาก
+      {{ table.getFilteredRowModel().rows.length }} รายการ
     </div>
     <div class="flex items-center space-x-6 lg:space-x-8">
       <div class="flex items-center space-x-2">
         <p class="text-sm font-medium">
-          Rows per page
+          จำนวนรายการ
         </p>
         <Select
           :model-value="`${table.getState().pagination.pageSize}`"
           @update:model-value="table.setPageSize"
         >
-          <SelectTrigger class="h-8 w-[70px]">
+          <SelectTrigger class="h-8 w-[70px] bg-[hsl(var(--card))]">
             <SelectValue :placeholder="`${table.getState().pagination.pageSize}`" />
           </SelectTrigger>
           <SelectContent side="top">
@@ -24,13 +24,13 @@
         </Select>
       </div>
       <div class="flex w-[100px] items-center justify-center text-sm font-medium">
-        Page {{ table.getState().pagination.pageIndex + 1 }} of
+        หน้าที่ {{ table.getState().pagination.pageIndex + 1 }} จาก
         {{ table.getPageCount() }}
       </div>
       <div class="flex items-center space-x-2">
         <Button
           variant="outline"
-          class="hidden h-8 w-8 p-0 lg:flex"
+          class="hidden h-8 w-8 p-0 lg:flex bg-[hsl(var(--card))]"
           :disabled="!table.getCanPreviousPage()"
           @click="table.setPageIndex(0)"
         >
@@ -39,7 +39,7 @@
         </Button>
         <Button
           variant="outline"
-          class="h-8 w-8 p-0"
+          class="h-8 w-8 p-0 bg-[hsl(var(--card))]"
           :disabled="!table.getCanPreviousPage()"
           @click="table.previousPage()"
         >
@@ -48,7 +48,7 @@
         </Button>
         <Button
           variant="outline"
-          class="h-8 w-8 p-0"
+          class="h-8 w-8 p-0 bg-[hsl(var(--card))]"
           :disabled="!table.getCanNextPage()"
           @click="table.nextPage()"
         >
@@ -57,7 +57,7 @@
         </Button>
         <Button
           variant="outline"
-          class="hidden h-8 w-8 p-0 lg:flex"
+          class="hidden h-8 w-8 p-0 lg:flex bg-[hsl(var(--card))]"
           :disabled="!table.getCanNextPage()"
           @click="table.setPageIndex(table.getPageCount() - 1)"
         >
