@@ -47,7 +47,7 @@ import type {
   VisibilityState,
 } from '@tanstack/vue-table'
 
-import type { Task } from './data/schema'
+import type { Task, Invoice } from './data/schema'
 import { valueUpdater } from '@/utils'
 
 import {
@@ -72,8 +72,8 @@ import DataTablePagination from './Pagination.vue'
 import DataTableToolbar from './Toolbar.vue'
 
 interface DataTableProps {
-  columns: ColumnDef<Task, any>[]
-  data: Task[]
+  columns: ColumnDef<Invoice, any>[]
+  data: Invoice[]
 }
 const props = defineProps<DataTableProps>()
 

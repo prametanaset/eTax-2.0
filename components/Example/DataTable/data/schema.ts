@@ -10,4 +10,14 @@ export const taskSchema = z.object({
   priority: z.string(),
 })
 
+export const invoiceSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  status: z.string(),
+  email: z.string(),
+  createDate: z.string(),
+})
+
 export type Task = z.infer<typeof taskSchema>
+
+export type Invoice = z.infer<typeof invoiceSchema>

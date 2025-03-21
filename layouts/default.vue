@@ -32,8 +32,8 @@ const route = useRoute();
       >
         <div class="flex items-center gap-2 px-4">
           <SidebarTrigger class="-ml-1" />
-          <Separator orientation="vertical" class="mr-2 h-4" />
-          <Breadcrumb>
+          <Separator v-if="route.name !== 'index'" orientation="vertical" class="mr-2 h-4" />
+          <Breadcrumb v-if="route.name !== 'index'">
             <BreadcrumbList>
               <BreadcrumbItem class="hidden md:block">
                 <BreadcrumbLink href="/">

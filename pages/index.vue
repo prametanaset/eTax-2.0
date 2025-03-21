@@ -45,14 +45,18 @@
     </div> -->
 
     <div>
-      <ExampleDataTable :data="tasks" :columns="columns"></ExampleDataTable>
+      <ExampleDataTable :data="invoices_100_thai" :columns="columns"></ExampleDataTable>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { columns } from '@/components/Example/DataTable/columns'
+import {
+  Card,
+} from '@/components/ui/card'
 import tasks from '@/components/Example/DataTable/data/tasks.json'
+import invoices_100_thai from '@/public/data/invoices_100_thai.json'
 
 definePageMeta({
   title: "รายงานใบกำกับภาษี",
