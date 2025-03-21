@@ -108,7 +108,7 @@
 
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 0 0% 14.9%;
+    --muted: 240, 4%, 46%;
 
     --muted-foreground: 0 0% 63.9%;
 
@@ -120,9 +120,9 @@
 
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 14.9%;
+    --border: 240, 4%, 46%;
 
-    --input: 0 0% 14.9%;
+    --input: 240, 4%, 46%;
 
     --ring: 0 0% 83.1%;
 

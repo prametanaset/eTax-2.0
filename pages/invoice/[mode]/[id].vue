@@ -96,7 +96,7 @@
               <BaseProductList></BaseProductList>
             </div>
           </div>
-          <div class="grid sm:grid-cols-2 mt-8 pt-8 border-t">
+          <div class="grid sm:grid-cols-2 mt-8 pt-8 border-t ">
             <div class="sm:col-end-3 mb-8">
               <div class="grid">
                 <p>ส่วนลด</p>

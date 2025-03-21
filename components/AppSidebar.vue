@@ -20,6 +20,9 @@ import {
   PieChart,
   Settings2,
   SquareTerminal,
+  BetweenHorizontalStart ,
+  Users,
+  Home
 } from 'lucide-vue-next'
 
 const props = withDefaults(defineProps<SidebarProps>(), {
@@ -52,65 +55,54 @@ const data = {
   ],
   navMain: [
     {
+      title: 'หน้าแรก',
+      url: '/',
+      icon: Home,
+      isActive: true,
+      items: [
+        {
+          title: 'Dashboard',
+          url: '/',
+        },
+      ],
+    },
+    {
       title: 'ใบกำกับภาษี',
-      url: '#',
+      url: '/invoice',
       icon: SquareTerminal,
       isActive: true,
       items: [
         {
           title: 'รายงานใบกำกับภาษี',
-          url: '/',
+          url: '/invoice',
         },
         {
           title: 'สร้างใบกำกับภาษี',
           url: '/invoice/create/invoice',
-        },
+        }
+      ],
+    },
+    {
+      title: 'จัดการสินค้า',
+      url: '/category',
+      icon: BetweenHorizontalStart ,
+      items: [
         {
-          title: 'Settings',
-          url: '#',
+          title: 'รายการสินค้า',
+          url: '/category',
         },
       ],
     },
     {
-      title: 'Models',
-      url: '#',
-      icon: Bot,
+      title: 'จัดการพนักงาน',
+      url: '/employees',
+      icon: Users,
       items: [
         {
-          title: 'Genesis',
-          url: '#',
+          title: 'รายชื่อพนักงาน',
+          url: '/employees',
         },
-        {
-          title: 'Explorer',
-          url: '#',
-        },
-        {
-          title: 'Quantum',
-          url: '#',
-        },
-      ],
-    },
-    {
-      title: 'Documentation',
-      url: '#',
-      icon: BookOpen,
-      items: [
-        {
-          title: 'Introduction',
-          url: '#',
-        },
-        {
-          title: 'Get Started',
-          url: '#',
-        },
-        {
-          title: 'Tutorials',
-          url: '#',
-        },
-        {
-          title: 'Changelog',
-          url: '#',
-        },
+        
       ],
     },
     {

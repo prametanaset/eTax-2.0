@@ -17,13 +17,14 @@ const props = defineProps({
   text: String,
   title: String,
   description: String,
+  bgButton:String,
 });
 </script>
 
 <template>
   <Dialog>
     <DialogTrigger as-child>
-      <Button variant="outline">
+      <Button variant="outline" :class='bgButton'>
         {{ props.text }}
       </Button>
     </DialogTrigger>
