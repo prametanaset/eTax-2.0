@@ -111,7 +111,7 @@ onUnmounted(() => {
         <div class="flex items-center space-x-4 w-full overflow-hidden" :class="screenWidth < 640 ? 'col-span-2' : ''">
           <img :src="product.image" :alt="product.name" class="w-12 h-12 rounded-md object-cover" />
           <div class="flex-1 min-w-0">
-            <p class="font-medium truncate">{{ product.name }} Lorem ipsum dolor, sit amet consectetur adipisicing elit. Impedit, soluta?</p>
+            <p class="font-medium truncate">{{ product.name }}</p>
             <p class="text-sm text-gray-500">
               {{ currencyFormat(product.price) }} บาท
             </p>
