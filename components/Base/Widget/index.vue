@@ -23,7 +23,7 @@
     <div class="min-w-[70%] flex flex-col items-end justify-between md:min-w-[60%] md:col-span-2 lg:col-span-1">
       <div>
         <div class="flex items-center" :class="percenLastMonth > 0 ? 'text-success-400' : 'text-red-400'">
-          <Icon :name="percenLastMonth > 0 ? 'lucide:chevron-up' : 'lucide:chevron-down'
+          <Icon :icon="percenLastMonth > 0 ? 'radix-icons:chevron-up' : 'radix-icons:chevron-down'
             " class="h-4 w-4 mr-1 mb-1 group-hover:text-[#c164ff]" />
           <div class="text-base sm:text-sm md:text-sm">
             {{ percenLastMonth }}%
@@ -39,6 +39,8 @@
 </template>
 
 <script lang="ts" setup>
+import { Icon } from '@iconify/vue'
+
 const props = defineProps<{
   title: string;
   countNumber: number;

@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-4">
-    <DataTableToolbar :table="table" />
+    <BaseInvoiceDataTableToolbar :table="table" />
     <div class="rounded-md border bg-[hsl(var(--card))]">
       <Table>
         <TableHeader>
@@ -35,7 +35,7 @@
       </Table>
     </div>
 
-    <DataTablePagination :table="table" />
+    <BaseInvoiceDataTablePagination :table="table" />
   </div>
 </template>
 
@@ -68,14 +68,14 @@ import {
   getSortedRowModel,
   useVueTable,
 } from '@tanstack/vue-table'
-import DataTablePagination from './Pagination.vue'
-import DataTableToolbar from './Toolbar.vue'
+import BaseInvoiceDataTablePagination from './Pagination.vue'
+import BaseInvoiceDataTableToolbar from './Toolbar.vue'
 
-interface DataTableProps {
+interface BaseInvoiceDataTableProps {
   columns: ColumnDef<Invoice, any>[]
   data: Invoice[]
 }
-const props = defineProps<DataTableProps>()
+const props = defineProps<BaseInvoiceDataTableProps>()
 
 const sorting = ref<SortingState>([])
 const columnFilters = ref<ColumnFiltersState>([])
