@@ -290,7 +290,7 @@ const addItem = () => {
   });
 };
 
-// คำนวณยอดรวมทั้งหมด
+// ✅ คำนวณยอดรวมทั้งหมด (ก่อน VAT)
 const totalAmount = computed(() =>
   invoice.invItem.reduce((sum, item) => sum + item.totalPrice, 0)
 );
@@ -298,32 +298,34 @@ const totalAmount = computed(() =>
 // ✅ คำนวณส่วนลดรวม (รวมส่วนลดจากสินค้าแต่ละชิ้น + ส่วนลดของทั้งบิล)
 const totalDiscount = computed(() => invoice.invDiscount);
 
+// ✅ คำนวณยอดรวมก่อนภาษี (Net Amount)
 const subtotal = computed(() =>
   invoice.invItem.reduce((sum, item) => {
     if (item.includeVat === "รวมภาษีมูลค่าเพิ่มแล้ว") {
-      return sum + item.totalPrice * 0.93;
+      return sum + item.totalPrice / 1.07; // หัก VAT ออกจากราคารวม
     }
-    return sum + item.totalPrice;
+    return sum + item.totalPrice; // ราคาสินค้าปกติที่ยังไม่รวม VAT
   }, 0)
 );
 
+// ✅ คำนวณภาษีมูลค่าเพิ่ม (VAT)
 const totalVat = computed(() =>
   invoice.invItem.reduce((sum, item) => {
-    if (
-      item.includeVat === "ยังไม่รวมภาษีมูลค่าเพิ่ม" ||
-      item.includeVat === "รวมภาษีมูลค่าเพิ่มแล้ว"
-    ) {
-      return sum + item.totalPrice * 0.07;
+    if (item.includeVat === "ยังไม่รวมภาษีมูลค่าเพิ่ม") {
+      return sum + item.totalPrice * 0.07; // คิด VAT 7% จากราคาสินค้า
+    } else if (item.includeVat === "รวมภาษีมูลค่าเพิ่มแล้ว") {
+      return sum + (item.totalPrice - item.totalPrice / 1.07); // แยก VAT ออกจากราคารวม
     }
     return sum;
   }, 0)
 );
 
-// คำนวณยอดสุทธิ (ยอดเงินก่อนภาษี + ภาษี)
+// ✅ คำนวณยอดสุทธิ (Grand Total)
 const grandTotal = computed(
   () => subtotal.value + totalVat.value - totalDiscount.value
 );
 
+// ✅ Watch คำนวณ totalPrice ใหม่ทุกครั้งที่ qty หรือ price เปลี่ยน
 watch(
   invoice.invItem,
   (newVal) => {
