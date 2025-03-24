@@ -295,7 +295,7 @@ const totalAmount = computed(() =>
   invoice.invItem.reduce((sum, item) => sum + item.totalPrice, 0)
 );
 
-// ✅ คำนวณส่วนลดรวม (รวมส่วนลดจากสินค้าแต่ละชิ้น + ส่วนลดของทั้งบิล)
+// ✅ คำนวณส่วนลดส่วนลดของบิล)
 const totalDiscount = computed(() => invoice.invDiscount);
 
 // ✅ คำนวณยอดรวมก่อนภาษี (Net Amount)
