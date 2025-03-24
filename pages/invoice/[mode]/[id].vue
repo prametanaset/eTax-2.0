@@ -290,40 +290,30 @@ const addItem = () => {
   });
 };
 
-// ✅ คำนวณยอดรวมทั้งหมด (ก่อน VAT)
+// ✅ คำนวณยอดรวมทั้งหมด (ก่อนหักส่วนลดและ VAT)
 const totalAmount = computed(() =>
   invoice.invItem.reduce((sum, item) => sum + item.totalPrice, 0)
 );
 
-// ✅ คำนวณส่วนลดส่วนลดของบิล)
+// ✅ คำนวณส่วนลดทั้งหมด (เฉพาะส่วนลดของบิล ไม่รวมส่วนลดของสินค้าแต่ละรายการ)
 const totalDiscount = computed(() => invoice.invDiscount);
 
-// ✅ คำนวณยอดรวมก่อนภาษี (Net Amount)
-const subtotal = computed(() =>
-  invoice.invItem.reduce((sum, item) => {
-    if (item.includeVat === "รวมภาษีมูลค่าเพิ่มแล้ว") {
-      return sum + item.totalPrice / 1.07; // หัก VAT ออกจากราคารวม
-    }
-    return sum + item.totalPrice; // ราคาสินค้าปกติที่ยังไม่รวม VAT
-  }, 0)
+// ✅ คำนวณยอดรวมก่อนภาษี (Net Amount) โดยหักส่วนลดก่อน
+const subtotal = computed(
+  () =>
+    invoice.invItem.reduce((sum, item) => {
+      if (item.includeVat === "รวมภาษีมูลค่าเพิ่มแล้ว") {
+        return sum + item.totalPrice / 1.07; // แยก VAT ออกจากราคาที่รวม VAT แล้ว
+      }
+      return sum + item.totalPrice; // ราคาสินค้าที่ยังไม่รวม VAT
+    }, 0) - totalDiscount.value // หักส่วนลดของบิลก่อนคำนวณ VAT
 );
 
-// ✅ คำนวณภาษีมูลค่าเพิ่ม (VAT)
-const totalVat = computed(() =>
-  invoice.invItem.reduce((sum, item) => {
-    if (item.includeVat === "ยังไม่รวมภาษีมูลค่าเพิ่ม") {
-      return sum + item.totalPrice * 0.07; // คิด VAT 7% จากราคาสินค้า
-    } else if (item.includeVat === "รวมภาษีมูลค่าเพิ่มแล้ว") {
-      return sum + (item.totalPrice - item.totalPrice / 1.07); // แยก VAT ออกจากราคารวม
-    }
-    return sum;
-  }, 0)
-);
+// ✅ คำนวณภาษีมูลค่าเพิ่ม (VAT) จากยอดที่หักส่วนลดแล้ว
+const totalVat = computed(() => subtotal.value * 0.07);
 
 // ✅ คำนวณยอดสุทธิ (Grand Total)
-const grandTotal = computed(
-  () => subtotal.value + totalVat.value - totalDiscount.value
-);
+const grandTotal = computed(() => subtotal.value + totalVat.value);
 
 // ✅ Watch คำนวณ totalPrice ใหม่ทุกครั้งที่ qty หรือ price เปลี่ยน
 watch(
