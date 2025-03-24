@@ -298,6 +298,7 @@ const totalAmount = computed(() =>
 // ✅ คำนวณส่วนลดรวม (รวมส่วนลดจากสินค้าแต่ละชิ้น + ส่วนลดของทั้งบิล)
 const totalDiscount = computed(() => invoice.invDiscount);
 
+// ยอดรวมก่อนภาษี
 const subtotal = computed(() =>
   invoice.invItem.reduce((sum, item) => {
     if (item.includeVat === "รวมภาษีมูลค่าเพิ่มแล้ว") {
@@ -307,6 +308,7 @@ const subtotal = computed(() =>
   }, 0)
 );
 
+// ยอดภาษี
 const totalVat = computed(() =>
   invoice.invItem.reduce((sum, item) => {
     if (
