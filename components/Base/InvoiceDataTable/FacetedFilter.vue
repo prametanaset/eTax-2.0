@@ -1,9 +1,10 @@
 <template>
   <Popover>
     <PopoverTrigger as-child>
-      <Button variant="outline" size="sm" class="h-8 border-dashed bg-[hsl(var(--card))]">
+      <Button variant="outline" size="sm" class="h-8 bg-[hsl(var(--card))]">
         <PlusCircledIcon class="mr-2 h-4 w-4" />
-        {{ title }}
+        <!-- {{ title }} -->
+        กรอง
         <template v-if="selectedValues.size > 0">
           <Separator orientation="vertical" class="mx-2 h-4" />
           <Badge
@@ -71,8 +72,8 @@
               >
                 <CheckIcon :class="cn('h-4 w-4')" />
               </div>
-              <component :is="option.icon" v-if="option.icon" class="mr-2 h-4 w-4 text-muted-foreground" />
-              <span>{{ option.label }}</span>
+              <!-- <component :is="option.icon" v-if="option.icon" class="mr-2 h-4 w-4 text-muted-foreground" /> -->
+              <span class="font-bold">{{ option.label }}</span>
               <span v-if="facets?.get(option.value)" class="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs">
                 {{ facets.get(option.value) }}
               </span>
@@ -115,6 +116,9 @@ import { Separator } from '@/components/ui/separator'
 
 import CheckIcon from '~icons/radix-icons/check'
 import PlusCircledIcon from '~icons/radix-icons/plus-circled'
+import PlusIcon from '~icons/radix-icons/plus'
+
+
 
 interface DataTableFacetedFilter {
   column?: Column<Invoice, any>

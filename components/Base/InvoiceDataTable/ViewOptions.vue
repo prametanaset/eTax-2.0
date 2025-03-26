@@ -11,18 +11,21 @@
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end" class="w-[150px]">
-      <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+      <DropdownMenuLabel>คอลัมน์</DropdownMenuLabel>
       <DropdownMenuSeparator />
 
       <DropdownMenuCheckboxItem
-        v-for="column in columns"
-        :key="column.id"
-        class="capitalize"
-        :model-value="column.getIsVisible()"
-        @update:model-value="(value) => column.toggleVisibility(!!value)"
-      >
-        {{ column.id }}
-      </DropdownMenuCheckboxItem>
+  v-for="column in columns"
+  :key="column.id"
+  class="capitalize"
+  :model-value="column.getIsVisible()"
+  @update:model-value="(value) => column.toggleVisibility(!!value)"
+>
+  <span v-if="column.id == 'name'">ลูกค้า</span>
+  <span v-else-if="column.id == 'status'">สถานะ</span>
+  <span v-else-if="column.id == 'createDate'">วันที่สร้าง</span>
+  <span v-else>อื่นๆ</span>
+</DropdownMenuCheckboxItem>
     </DropdownMenuContent>
   </DropdownMenu>
 </template>

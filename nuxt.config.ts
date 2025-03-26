@@ -11,6 +11,14 @@ export default defineNuxtConfig({
     "unplugin-icons/nuxt",
     "@nuxtjs/device",
     "@vee-validate/nuxt",
+    "@nuxtjs/tailwindcss",
+    "shadcn-nuxt",
+    "@nuxtjs/color-mode",
+    "@nuxtjs/google-fonts",
+    "@vueuse/nuxt",
+    "unplugin-icons/nuxt",
+    "@nuxtjs/device",
+    "@pinia/nuxt",
   ],
   shadcn: {
     /**

@@ -106,7 +106,7 @@ const data = {
       ],
     },
     {
-      title: 'Settings',
+      title: 'ตั้งค่า',
       url: '#',
       icon: Settings2,
       items: [
@@ -151,14 +151,14 @@ const data = {
 
 <template>
   <Sidebar v-bind="props">
-    <SidebarHeader>
+    <!-- <SidebarHeader>
       <TeamSwitcher :teams="data.teams" />
-    </SidebarHeader>
+    </SidebarHeader> -->
     <SidebarContent>
       <NavMain :items="data.navMain" />
-      <NavProjects :projects="data.projects" />
+      <!-- <NavProjects :projects="data.projects" /> -->
     </SidebarContent>
-    <SidebarFooter>
+    <SidebarFooter >
       <NavUser :user="data.user" />
     </SidebarFooter>
     <SidebarRail />
