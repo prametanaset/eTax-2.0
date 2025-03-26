@@ -4,7 +4,7 @@
       <Input
         placeholder="กรุณากรอกคำค้นหา"
         :model-value="(table.getColumn('name')?.getFilterValue() as string) ?? ''"
-        class="h-8 w-[150px] lg:w-[250px] bg-[hsl(var(--card))]"
+        class="h-8 w-[150px] lg:w-[250px] bg-[hsl(var(--card))] font-medium"
         @input="table.getColumn('name')?.setFilterValue($event.target.value)"
       />
       <DataTableFacetedFilter
@@ -31,6 +31,11 @@
       </Button>
     </div>
     <DataTableViewOptions :table="table" />
+
+    <NuxtLink to="/invoice/create/invoice">
+        <Button  class="font-semibold text-sm pl-3 pr-4 h-8 ml-2 bg-purple-600">        <PlusIcon class="h-4 w-4" />
+          สร้างใบกำกับภาษี</Button>
+    </NuxtLink>
   </div>
 </template>
 
@@ -42,6 +47,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { computed } from 'vue'
 import Cross2Icon from '~icons/radix-icons/cross-2'
+import PlusIcon from '~icons/radix-icons/plus'
 
 import { priorities, statuses } from './data/data'
 import DataTableFacetedFilter from './FacetedFilter.vue'

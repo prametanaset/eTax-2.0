@@ -56,7 +56,7 @@ const route = useRoute();
         class="max-w-[1440px] m-auto flex flex-1 flex-col gap-4 p-4 pt-0 overflow-x-auto"
       >
         <div class="flex items-center gap-2">
-          <NuxtLink to="/"  v-if="route.name !== 'index'">
+          <!-- <NuxtLink to="/"  v-if="route.name !== 'index'">
             <svg
               width="25"
               height="25"
@@ -71,7 +71,7 @@ const route = useRoute();
                 clip-rule="evenodd"
               ></path>
             </svg>
-          </NuxtLink>
+          </NuxtLink> -->
           <h1 class="text-2xl font-semibold">{{ route.meta.title }}</h1>
         </div>
         <slot />

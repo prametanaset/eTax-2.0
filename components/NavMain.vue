@@ -1,20 +1,13 @@
 <script setup lang="ts">
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible'
-import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
+  SidebarMenuButton,
 } from '@/components/ui/sidebar'
-import { ChevronRight, type LucideIcon } from 'lucide-vue-next'
+import { type LucideIcon } from 'lucide-vue-next'
+import { useRoute } from 'vue-router'
 
 defineProps<{
   items: {
@@ -22,46 +15,28 @@ defineProps<{
     url: string
     icon?: LucideIcon
     isActive?: boolean
-    items?: {
-      title: string
-      url: string
-    }[]
   }[]
 }>()
+
+
+const route = useRoute()
 </script>
 
 <template>
   <SidebarGroup>
-    <SidebarGroupLabel>Platform</SidebarGroupLabel>
+    <SidebarGroupLabel>เมนูหลัก</SidebarGroupLabel>
     <SidebarMenu>
-      <Collapsible
+      <SidebarMenuItem
         v-for="item in items"
         :key="item.title"
-        as-child
-        :default-open="item.isActive"
-        class="group/collapsible"
       >
-        <SidebarMenuItem>
-          <CollapsibleTrigger as-child>
-            <SidebarMenuButton :tooltip="item.title">
-              <component :is="item.icon" v-if="item.icon" />
-              <span class="text-xm font-semibold">{{ item.title }}</span>
-              <ChevronRight class="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-            </SidebarMenuButton>
-          </CollapsibleTrigger>
-          <CollapsibleContent>
-            <SidebarMenuSub>
-              <SidebarMenuSubItem v-for="subItem in item.items" :key="subItem.title">
-                <SidebarMenuSubButton as-child>
-                  <NuxtLink :to="subItem.url">
-                    <span class="text-sm">{{ subItem.title }}</span>
-                  </NuxtLink>
-                </SidebarMenuSubButton>
-              </SidebarMenuSubItem>
-            </SidebarMenuSub>
-          </CollapsibleContent>
-        </SidebarMenuItem>
-      </Collapsible>
+        <SidebarMenuButton as-child :tooltip="item.title" :is-active="route.path === item.url" >
+          <NuxtLink :to="item.url" class="flex items-center gap-2">
+            <component :is="item.icon" v-if="item.icon" />
+            <span class="text-sm font-semibold">{{ item.title }}</span>
+          </NuxtLink>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
     </SidebarMenu>
   </SidebarGroup>
 </template>

@@ -14,10 +14,29 @@ const frameworks = [
 ]
 
 const customers = [
-  { value: 'Morty', title: 'Morty Smith', email: 'morty@gmail.com', url: '/avatars/shadcn.png' },
-  { value: 'Rick', title: 'Rick Sanchez', email: 'Sanchez@gmail.com', url: '/avatars/rick.png' },
-  { value: 'Summer', title: 'Summer Smith', email: 'summer@gmail.com', url: '/avatars/summer.png' },
+  {
+    value: 'Morty',
+    title: 'Morty Smith',
+    email: 'morty@gmail.com',
+    url: '/avatars/shadcn.png',
+    address: '123 ถนนสุขสันต์ แขวงคลองตันเหนือ เขตวัฒนา กรุงเทพฯ 10110'
+  },
+  {
+    value: 'Rick',
+    title: 'Rick Sanchez',
+    email: 'Sanchez@gmail.com',
+    url: '/avatars/rick.png',
+    address: '456 ถนนพหลโยธิน แขวงลาดยาว เขตจตุจักร กรุงเทพฯ 10900'
+  },
+  {
+    value: 'Summer',
+    title: 'Summer Smith',
+    email: 'summer@gmail.com',
+    url: '/avatars/summer.png',
+    address: '789 ถนนสีลม แขวงสีลม เขตบางรัก กรุงเทพฯ 10500'
+  }
 ]
+
 
 const value = ref<typeof customers[0]>()
 </script>
@@ -26,7 +45,7 @@ const value = ref<typeof customers[0]>()
   <Combobox v-model="value" by="title">
     <ComboboxAnchor class="w-full h-fit" as-child>
       <ComboboxTrigger as-child>
-        <Button variant="outline" class="justify-between font-normal text-left">
+        <Button variant="outline" class="justify-between font-normal text-left bg-[hsl(var(--card))]">
           <!-- {{ value?.title ?? 'Select framework' }} -->
           <BaseAvatar v-if="value" text="OM" :title="value?.title" :description="value?.email" :img="value?.url"/>
           <p v-else>

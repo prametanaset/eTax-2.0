@@ -1,20 +1,20 @@
 @font-face {
     font-family: 'SukhumvitSet';
-    src: url('@/assets/fonts/SukhumvitSet-Thin.ttf') format('truetype');
+    src: url('@/assets/fonts/sukhumvittadmai_regular-webfont.woff') format('woff');
     font-weight: 100;
     font-style: normal;
   }
   
   @font-face {
     font-family: 'SukhumvitSet';
-    src: url('@/assets/fonts/SukhumvitSet-Light.ttf') format('truetype');
+    src: url('@/assets/fonts/sukhumvittadmai_med-webfont.woff') format('woff');
     font-weight: 300;
     font-style: normal;
   }
   
   @font-face {
     font-family: 'SukhumvitSet';
-    src: url('@/assets/fonts/SukhumvitSet-Text.ttf') format('truetype');
+    src: url('@/assets/fonts/sukhumvittadmai_bol-webfont.woff') format('woff');
     font-weight: 400;
     font-style: normal;
   }

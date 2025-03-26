@@ -36,7 +36,7 @@ export const columns: ColumnDef<Invoice>[] = [
     accessorKey: "id",
     header: ({ column }) =>
       h(DataTableColumnHeader, { column, title: "หมายเลขใบกำกับภาษี" }),
-    cell: ({ row }) => h("div", { class: "w-20" }, row.getValue("id")),
+    cell: ({ row }) => h("div", { class: "w-20 font-semibold" }, row.getValue("id")),
     enableSorting: false,
     enableHiding: false,
   },
@@ -64,12 +64,12 @@ export const columns: ColumnDef<Invoice>[] = [
         h("div", {}, [
           h(
             "p",
-            { class: "text-sm font-medium leading-none" },
+            { class: "text-sm font-semibold leading-none" },
             row.getValue("name")
           ),
           h(
             "p",
-            { class: "text-sm text-muted-400" },
+            { class: "text-sm text-muted-400 font-thin" },
             row.original.email
           ),
         ]),
@@ -121,7 +121,7 @@ export const columns: ColumnDef<Invoice>[] = [
     accessorKey: "createDate",
     header: ({ column }) =>
       h(DataTableColumnHeader, { column, title: "วันที่สร้าง" }),
-    cell: ({ row }) => h("div", {}, row.getValue("createDate")),
+    cell: ({ row }) => h("div", { class: "font-semibold" }, row.getValue("createDate")),
   },
   {
     id: "actions",

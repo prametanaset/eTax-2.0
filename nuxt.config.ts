@@ -2,7 +2,16 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', 'shadcn-nuxt', '@nuxtjs/color-mode', '@nuxtjs/google-fonts', '@vueuse/nuxt', 'unplugin-icons/nuxt', '@nuxtjs/device'],
+  modules: [
+    '@nuxtjs/tailwindcss',
+    'shadcn-nuxt',
+    '@nuxtjs/color-mode',
+    '@nuxtjs/google-fonts',
+    '@vueuse/nuxt',
+    'unplugin-icons/nuxt',
+    '@nuxtjs/device',
+    '@pinia/nuxt',
+  ],
   shadcn: {
     /**
      * Prefix for all the imported component
