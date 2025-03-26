@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto max-w-sm mt-5 min-w-[300px]">
     <CardHeader>
-      <CardTitle class="text-3xl"> Welcome back </CardTitle>
+      <CardTitle class="text-3xl"> Create account </CardTitle>
     </CardHeader>
     <CardContent>
       <Form class="grid gap-4" @submit="onSubmit">
@@ -31,11 +31,11 @@
             }}</span>
           </div>
         </div>
-        <Button class="w-full"> เข้าสู่ระบบ </Button>
+        <Button class="w-full"> ดำเนินการต่อ </Button>
       </Form>
       <div class="mt-4 mb-8 text-center text-sm">
-        Don't have an account?
-        <a href="/register" class="underline"> Sign up </a>
+        Already have an account?
+        <a href="/login" class="underline"> Login </a>
       </div>
       <Separator label="OR" />
       <div class="grid gap-2 mt-8 mb-4 text-sm">
