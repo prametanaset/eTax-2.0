@@ -1,21 +1,30 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', 'shadcn-nuxt', '@nuxtjs/color-mode', '@nuxtjs/google-fonts', '@vueuse/nuxt', 'unplugin-icons/nuxt', '@nuxtjs/device'],
+  modules: [
+    "@nuxtjs/tailwindcss",
+    "shadcn-nuxt",
+    "@nuxtjs/color-mode",
+    "@nuxtjs/google-fonts",
+    "@vueuse/nuxt",
+    "unplugin-icons/nuxt",
+    "@nuxtjs/device",
+    "@vee-validate/nuxt",
+  ],
   shadcn: {
     /**
      * Prefix for all the imported component
      */
-    prefix: '',
+    prefix: "",
     /**
      * Directory that the component lives in.
      * @default "./components/ui"
      */
-    componentDir: './components/ui'
+    componentDir: "./components/ui",
   },
   colorMode: {
-    classSuffix: ''
+    classSuffix: "",
   },
   googleFonts: {
     families: {
@@ -28,13 +37,13 @@ export default defineNuxtConfig({
       },
       Sarabun: {
         wght: [100, 200, 300, 400, 500, 600, 700, 800],
-        ital: [100, 200, 300, 400, 500, 600, 700, 800,],
+        ital: [100, 200, 300, 400, 500, 600, 700, 800],
       },
       "Noto Sans Thai": {
         wght: [100, 200, 300, 400, 500, 600, 700, 800, 900],
-      }
+      },
     },
     display: "swap",
   },
-  css: ['@/assets/css/fonts.css']
-})
+  css: ["@/assets/css/fonts.css"],
+});
