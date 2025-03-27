@@ -53,5 +53,5 @@ export default defineNuxtConfig({
     },
     display: "swap",
   },
-  css: ["@/assets/css/fonts.css"],
+  css: ["@/assets/css/fonts.css", "@/assets/css/main.css"],
 });

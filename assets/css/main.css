@@ -1,0 +1,15 @@
+.img-shadow-animation {
+  animation-name: img-shadow-animation;
+  animation-iteration-count: infinite;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-direction: alternate;
+}
+
+.img-border-animation {
+  animation-name: img-border-animation;
+  animation-iteration-count: infinite;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-direction: alternate;
+}

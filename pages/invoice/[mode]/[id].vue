@@ -1,7 +1,10 @@
 <template>
   <div class="grid grid-cols-12 gap-6">
-    <div class="col-span-12 lg:col-span-9">
-      <Card class="w-full rounded-xl pb-0">
+    <div class="col-span-12 lg:col-span-9 relative">
+      <div
+        class="absolute top-[0%] right-0 w-[95%] lg:h-[100%] bg-primary-400/50 blur-xl rounded-full img-shadow-animation"
+      ></div>
+      <Card class="w-full rounded-xl pb-0 z-10 relative">
         <CardHeader>
           <!-- <Card class="p-4 relative overflow-hidden border-primary-500 rounded-2xl"> -->
           <div class="relative rounded-2xl">
@@ -329,13 +332,24 @@ const subtotal = computed(
     invoice.invItem.reduce((sum, item) => {
       if (item.includeVat === "รวมภาษีมูลค่าเพิ่มแล้ว") {
         return sum + item.totalPrice / 1.07; // แยก VAT ออกจากราคาที่รวม VAT แล้ว
+      } else {
+        return sum + item.totalPrice; // ราคาสินค้าที่ยังไม่รวม VAT หรือยกเว้นภาษี
       }
-      return sum + item.totalPrice; // ราคาสินค้าที่ยังไม่รวม VAT
-    }, 0) - totalDiscount.value // หักส่วนลดของบิลก่อนคำนวณ VAT
+    }, 0) - totalDiscount.value // หักส่วนลดของบิล
 );
 
-// ✅ คำนวณภาษีมูลค่าเพิ่ม (VAT) จากยอดที่หักส่วนลดแล้ว
-const totalVat = computed(() => subtotal.value * 0.07);
+// ✅ คำนวณภาษีมูลค่าเพิ่ม (VAT) เฉพาะสินค้าที่ต้องเสียภาษี
+const totalVat = computed(() =>
+  invoice.invItem
+    .filter((item) => item.includeVat !== "ยกเว้นภาษี") // คำนวณเฉพาะสินค้าที่ต้องเสียภาษี
+    .reduce((sum, item) => {
+      if (item.includeVat === "รวมภาษีมูลค่าเพิ่มแล้ว") {
+        return sum + (item.totalPrice / 1.07) * 0.07; // แยก VAT ออกจากราคาที่รวม VAT แล้ว
+      } else {
+        return sum + item.totalPrice * 0.07; // คำนวณ VAT จากราคาที่ยังไม่รวมภาษี
+      }
+    }, 0)
+);
 
 // ✅ คำนวณยอดสุทธิ (Grand Total)
 const grandTotal = computed(() => subtotal.value + totalVat.value);
