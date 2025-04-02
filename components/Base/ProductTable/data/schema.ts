@@ -1,17 +1,17 @@
-import { z } from 'zod'
+import { z } from "zod";
+import type { description } from "~/layouts/default.vue";
 
 // We're keeping a simple non-relational schema here.
 // IRL, you will have a schema for your data models.
 
 export const productSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  price: z.number(),
-  vat: z.boolean(),
-  vatRate: z.number(),
-})
+  ID: z.string(),
+  ProductCode: z.string(),
+  Name: z.string(),
+  Description: z.string(),
+  Price: z.number(),
+  Vat: z.boolean(),
+  VatRate: z.number(),
+});
 
-
-
-export type Product = z.infer<typeof productSchema>
-
+export type Product = z.infer<typeof productSchema>;

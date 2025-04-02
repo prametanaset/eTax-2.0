@@ -1,49 +1,62 @@
 <template>
   <DropdownMenu>
-    <div class='mr-4'>
-        <BaseDialog text='เพิ่มสินค้า' bg-button='bg-primary-500' title='เพิ่มสินค้า' >
-            <template #content>
-                <div class='grid gap-y-4'>
-                  <div>
-                    <Label>ชื่อสินค้า</Label>
-                    <Input placeholder='กรอกชื่อสินค้า' v-model='product.name'/>
-                  </div>
-                  <div>
-                    <Label>รายละเอียดสินค้า</Label>
-                    <Textarea placeholder='กรอกชื่อสินค้า' v-model='product.desc'/>
-                  </div>
-                  <div>
-                    <Label>ราคา</Label>
-                    <Input placeholder='0' type='number' v-model='product.price'/>
-                  </div>
-                  <div class='grid gap-2'>
-                    <div class='flex gap-2 items-center'>
-                      <Switch id="airplane-mode" v-model='product.include_vat'/>
-                      <Label>VAT %</Label>
-                    </div>
-                    <Input v-if='product.include_vat' placeholder='0' type='number' min='0' v-model='product.vat_value'/>
-                    <!-- <NumberField  v-if='product.include_vat' v-model='product.vat_value' >
-                      <NumberFieldContent>
-                        <NumberFieldDecrement />
-                        <NumberFieldInput />
-                        <NumberFieldIncrement />
-                      </NumberFieldContent>
-                    </NumberField> -->
-                  </div>
-                </div>
-            </template> 
-            <template #footer>
-              <div class='flex justify-end '>
-                <div class='flex gap-2'>
-                  <DialogClose as-child>
-                    <Button variant="outline">ยกเลิก</Button>
-                  </DialogClose>
-                  <Button type="submit">สร้าง</Button>
-                </div>
+    <div class="mr-4">
+      <Toaster />
+      <BaseDialog
+        v-model:open="isDialogOpen"
+        text="เพิ่มสินค้า"
+        bg-button="bg-primary-500"
+        title="เพิ่มสินค้า"
+      >
+        <template #content>
+          <div class="grid gap-y-4">
+            <div>
+              <Label>ชื่อสินค้า</Label>
+              <Input placeholder="กรอกชื่อสินค้า" v-model="product.Name" />
+            </div>
+            <div>
+              <Label>รายละเอียดสินค้า</Label>
+              <Textarea
+                placeholder="กรอกชื่อสินค้า"
+                v-model="product.Description"
+              />
+            </div>
+            <div>
+              <Label>ราคา</Label>
+              <Input placeholder="0" type="number" v-model="product.Price" />
+            </div>
+            <div class="grid gap-2">
+              <div class="flex gap-2 items-center">
+                <Switch id="airplane-mode" v-model="product.Vat" />
+                <Label>VAT</Label>
               </div>
-            </template>
-          </BaseDialog>
-      </div>
+              <Input
+                v-if="product.Vat"
+                placeholder="0"
+                type="number"
+                min="0"
+                v-model="product.VatRate"
+              />
+            </div>
+          </div>
+        </template>
+        <template #footer>
+          <div class="flex justify-end">
+            <div class="flex gap-2">
+              <DialogClose as-child>
+                <Button variant="outline">ยกเลิก</Button>
+              </DialogClose>
+              <Button
+                :disabled="!canCreate"
+                type="submit"
+                @click="handleCreateProduct"
+                >สร้าง</Button
+              >
+            </div>
+          </div>
+        </template>
+      </BaseDialog>
+    </div>
     <DropdownMenuTrigger as-child>
       <Button
         variant="outline"
@@ -72,10 +85,10 @@
 </template>
 
 <script lang="ts" setup>
-import type { Table } from '@tanstack/vue-table'
-import type { Product } from './data/schema'
-import { Button } from '@/components/ui/button'
-import { Switch } from '@/components/ui/switch'
+import type { Table } from "@tanstack/vue-table";
+import type { Product } from "./data/schema";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -83,40 +96,105 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+} from "@/components/ui/dropdown-menu";
 
-import MixerHorizontalIcon from '~icons/radix-icons/mixer-horizontal'
+import MixerHorizontalIcon from "~icons/radix-icons/mixer-horizontal";
 import {
   NumberField,
   NumberFieldContent,
   NumberFieldDecrement,
   NumberFieldIncrement,
   NumberFieldInput,
-} from '@/components/ui/number-field'
+} from "@/components/ui/number-field";
+import type { description } from "~/layouts/default.vue";
+import { Toaster } from "@/components/ui/toast";
+import { useToast } from "~/components/ui/toast/use-toast";
+
+const { toast } = useToast();
 
 interface DataTableViewOptionsProps {
-  table: Table<Product>
+  table: Table<Product>;
 }
 
-const props = defineProps<DataTableViewOptionsProps>()
+const { createProduct } = useProductService();
 
-const columns = computed(() => props.table.getAllColumns()
-  .filter(
-    column =>
-      typeof column.accessorFn !== 'undefined' && column.getCanHide(),
-  ))
+const props = defineProps<DataTableViewOptionsProps>();
 
+const canCreate = ref(false);
+const isDialogOpen = ref(false);
+
+const productStore = useProductStore();
+
+const columns = computed(() =>
+  props.table
+    .getAllColumns()
+    .filter(
+      (column) =>
+        typeof column.accessorFn !== "undefined" && column.getCanHide()
+    )
+);
 
 const product = reactive({
-  id: 0,
-  name: '',
-  desc: '',
-  price: 0,
-  include_vat: false,
-  vat_value: 0
-})
+  ID: 0,
+  ProductCode: "",
+  Name: "",
+  Description: "",
+  Price: 0,
+  Vat: false,
+  VatRate: 0,
+});
+
+async function addProduct() {
+  try {
+    await createProduct(product);
+  } catch (err) {
+    throw err;
+  }
+}
+
+const handleCreateProduct = async () => {
+  try {
+    await addProduct();
+    isDialogOpen.value = false;
+    await productStore.getProduct(); // ✅ Store จะอัปเดตค่าเอง
+
+    // Clear ข้อมูลของ product
+    product.ID = 0;
+    product.ProductCode = "";
+    product.Name = "";
+    product.Description = "";
+    product.Price = 0;
+    product.Vat = false;
+    product.VatRate = 0;
+
+    toast({
+      title: "สร้างสินค้าสำเร็จ",
+    });
+  } catch (err) {
+    console.error("❌ Error creating product:", err);
+    toast({
+      variant: "destructive",
+      title: "เกิดข้อผิดพลาดในการสร้างสินค้า",
+    });
+  }
+};
+
+watch(
+  product,
+  (newVal) => {
+    if (
+      newVal &&
+      newVal.Name.trim() !== "" &&
+      newVal.Price !== null &&
+      newVal.Price > 0
+    ) {
+      canCreate.value = true;
+    } else {
+      canCreate.value = false;
+    }
+  },
+  { deep: true, immediate: true }
+);
 </script>
 
-<style>
-
-</style>
+<style></style>

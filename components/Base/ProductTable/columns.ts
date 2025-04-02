@@ -33,16 +33,32 @@ export const columns: ColumnDef<Product>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id",
+    accessorKey: "ProductCode",
     header: ({ column }) =>
       h(DataTableColumnHeader, { column, title: "หมายเลขสินค้า" }),
-    cell: ({ row }) => h("div", { class: "w-20" }, row.getValue("id")),
+    cell: ({ row }) => h("div", { class: "w-20" }, row.getValue("ProductCode")),
     enableSorting: false,
     enableHiding: false,
   },
-
   {
-    accessorKey: "name",
+    accessorKey: "Name",
+    header: ({ column }) =>
+      h(DataTableColumnHeader, { column, title: "ชื่อสินค้า" }),
+
+    cell: ({ row }) => {
+      return h("div", { class: "flex items-center space-x-4" }, [
+        h("div", {}, [
+          h(
+            "p",
+            { class: "text-sm font-medium leading-none" },
+            row.getValue("Name")
+          ),
+        ]),
+      ]);
+    },
+  },
+  {
+    accessorKey: "Description",
     header: ({ column }) =>
       h(DataTableColumnHeader, { column, title: "รายละเอียดสินค้า/บริการ" }),
 
@@ -52,33 +68,32 @@ export const columns: ColumnDef<Product>[] = [
           h(
             "p",
             { class: "text-sm font-medium leading-none" },
-            row.getValue("name")
+            row.getValue("Description")
           ),
         ]),
       ]);
     },
   },
   {
-    accessorKey: "price",
-    header: ({ column }) =>
-      h(DataTableColumnHeader, { column, title: "ราคา" }),
-    cell: ({ row }) => h("div", {}, row.getValue("price")),
+    accessorKey: "Price",
+    header: ({ column }) => h(DataTableColumnHeader, { column, title: "ราคา" }),
+    cell: ({ row }) => h("div", {}, currencyFormat(row.getValue("Price"))),
   },
   {
-    accessorKey: "vat",
+    accessorKey: "Vat",
     header: ({ column }) =>
       h(DataTableColumnHeader, { column, title: "สถานะ" }),
 
     cell: ({ row }) => {
       const status = statuses.find(
-        (status) => status.value === row.getValue("vat")
+        (status) => status.value === row.getValue("Vat")
       );
 
       if (!status) return null;
 
-      return h('div', { class: 'flex space-x-2' }, [
-        status ? h(Badge, { variant: 'outline' }, () => status.label) : null,
-      ])
+      return h("div", { class: "flex space-x-2" }, [
+        status ? h(Badge, { variant: "outline" }, () => status.label) : null,
+      ]);
     },
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
@@ -86,10 +101,10 @@ export const columns: ColumnDef<Product>[] = [
   },
 
   {
-    accessorKey: "vatRate",
+    accessorKey: "VatRate",
     header: ({ column }) =>
       h(DataTableColumnHeader, { column, title: "อัตราภาษี" }),
-    cell: ({ row }) => h("div", {}, row.getValue("vatRate") + ' %'),
+    cell: ({ row }) => h("div", {}, row.getValue("VatRate") + " %"),
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },

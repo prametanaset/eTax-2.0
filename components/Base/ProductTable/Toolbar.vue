@@ -1,21 +1,21 @@
 <template>
-   <div class="flex items-center justify-between">
+  <div class="flex items-center justify-between">
     <div class="flex flex-1 items-center space-x-2">
       <Input
         placeholder="Filter Products..."
-        :model-value="(table.getColumn('name')?.getFilterValue() as string) ?? ''"
+        :model-value="(table.getColumn('Name')?.getFilterValue() as string) ?? ''"
         class="h-8 w-[150px] lg:w-[250px] bg-[hsl(var(--card))]"
-        @input="table.getColumn('name')?.setFilterValue($event.target.value)"
+        @input="table.getColumn('Name')?.setFilterValue($event.target.value)"
       />
       <DataTableFacetedFilter
-        v-if="table.getColumn('vat')"
-        :column="table.getColumn('vat')"
+        v-if="table.getColumn('Vat')"
+        :column="table.getColumn('Vat')"
         title="สถานะ"
         :options="statuses"
       />
       <DataTableFacetedFilter
-        v-if="table.getColumn('vatRate')"
-        :column="table.getColumn('vatRate')"
+        v-if="table.getColumn('VatRate')"
+        :column="table.getColumn('VatRate')"
         title="อัตราภาษี"
         :options="rates"
       />
@@ -35,27 +35,27 @@
 </template>
 
 <script lang="ts" setup>
-import type { Table } from '@tanstack/vue-table'
-import type { Product } from './data/schema'
-import { Button } from '@/components/ui/button'
+import type { Table } from "@tanstack/vue-table";
+import type { Product } from "./data/schema";
+import { Button } from "@/components/ui/button";
 
-import { Input } from '@/components/ui/input'
-import { computed } from 'vue'
-import Cross2Icon from '~icons/radix-icons/cross-2'
+import { Input } from "@/components/ui/input";
+import { computed } from "vue";
+import Cross2Icon from "~icons/radix-icons/cross-2";
 
-import { rates, statuses } from './data/data'
-import DataTableFacetedFilter from './FacetedFilter.vue'
-import DataTableViewOptions from './ViewOptions.vue'
+import { rates, statuses } from "./data/data";
+import DataTableFacetedFilter from "./FacetedFilter.vue";
+import DataTableViewOptions from "./ViewOptions.vue";
 
 interface DataTableToolbarProps {
-  table: Table<Product>
+  table: Table<Product>;
 }
 
-const props = defineProps<DataTableToolbarProps>()
+const props = defineProps<DataTableToolbarProps>();
 
-const isFiltered = computed(() => props.table.getState().columnFilters.length > 0)
+const isFiltered = computed(
+  () => props.table.getState().columnFilters.length > 0
+);
 </script>
 
-<style>
-
-</style>
+<style></style>

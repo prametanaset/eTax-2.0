@@ -54,4 +54,9 @@ export default defineNuxtConfig({
     display: "swap",
   },
   css: ["@/assets/css/fonts.css", "@/assets/css/main.css"],
+  runtimeConfig: {
+    public: {
+      $http: process.env.PUBLIC_HTTP || "http://localhost:8080/v1", // API base URL
+    },
+  },
 });

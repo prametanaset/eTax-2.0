@@ -1,21 +1,26 @@
 <template>
-  <div>
-      <div>
-        <BaseProductTable :data="products_data" :columns="columns"></BaseProductTable>
-      </div>
+  <div class="xl:w-[1400px]">
+    <BaseProductTable :data="products" :columns="columns"></BaseProductTable>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { Search } from 'lucide-vue-next'
-import products_data from '@/public/data/products_100_realistic.json'
-import { columns } from '@/components/Base/ProductTable/columns'
+import { columns } from "@/components/Base/ProductTable/columns";
+import { useProductStore } from "@/stores/productStore";
+
+const productStore = useProductStore();
+
+// สร้าง computed property เพื่อดึงข้อมูลจาก store และอัพเดทอัตโนมัติ
+const products = computed(() => productStore.products);
+
+// เมื่อ component ถูก mount ให้เรียกใช้ฟังก์ชัน getProduct จาก store เพื่อดึงข้อมูลสินค้า
+onMounted(() => {
+  productStore.getProduct();
+});
 
 definePageMeta({
-  title:'รายการสินค้า'
-})
+  title: "รายการสินค้า",
+});
 </script>
 
-<style>
-
-</style>
+<style></style>

@@ -1,56 +1,61 @@
 <script setup lang="ts">
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
-import { Combobox, ComboboxAnchor, ComboboxEmpty, ComboboxGroup, ComboboxInput, ComboboxItem, ComboboxItemIndicator, ComboboxList, ComboboxTrigger, ComboboxCancel } from '@/components/ui/combobox'
-import { Check, ChevronsUpDown, Search } from 'lucide-vue-next'
-import { ref } from 'vue'
+import { ref } from "vue";
+import { Button } from "@/components/ui/button";
+import {
+  Combobox,
+  ComboboxAnchor,
+  ComboboxEmpty,
+  ComboboxGroup,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+  ComboboxTrigger,
+} from "@/components/ui/combobox";
+import { ChevronsUpDown, Search } from "lucide-vue-next";
 
-const frameworks = [
-  { value: 'next.js', label: 'Next.js' },
-  { value: 'sveltekit', label: 'SvelteKit' },
-  { value: 'nuxt', label: 'Nuxt' },
-  { value: 'remix', label: 'Remix' },
-  { value: 'astro', label: 'Astro' },
-]
+const { getCustomers, updateCustomers } = useCustomerService();
 
-const customers = [
-  {
-    value: 'Morty',
-    title: 'Morty Smith',
-    email: 'morty@gmail.com',
-    url: '/avatars/shadcn.png',
-    address: '123 ถนนสุขสันต์ แขวงคลองตันเหนือ เขตวัฒนา กรุงเทพฯ 10110'
-  },
-  {
-    value: 'Rick',
-    title: 'Rick Sanchez',
-    email: 'Sanchez@gmail.com',
-    url: '/avatars/rick.png',
-    address: '456 ถนนพหลโยธิน แขวงลาดยาว เขตจตุจักร กรุงเทพฯ 10900'
-  },
-  {
-    value: 'Summer',
-    title: 'Summer Smith',
-    email: 'summer@gmail.com',
-    url: '/avatars/summer.png',
-    address: '789 ถนนสีลม แขวงสีลม เขตบางรัก กรุงเทพฯ 10500'
+// กำหนด Type ให้ `customers`
+type Customer = {
+  ID: number;
+  FirstName: string;
+  LastName: string;
+  Email: string;
+  Phone: string;
+  Address: string;
+  CreatedAt: string; // หรือ Date ถ้าจะใช้เป็น Date object
+  UpdatedAt: string;
+};
+
+const customers = ref<Customer[]>([]);
+onMounted(async () => {
+  try {
+    customers.value = await getCustomers();
+  } catch (error) {
+    console.error("❌ Failed to load customers:", error);
   }
-]
+});
 
-
-const value = ref<typeof customers[0]>()
+// กำหนด `value` ให้รองรับ `Customer | null`
+const value = ref<Customer | null>(null);
 </script>
 
 <template>
-  <Combobox v-model="value" by="title">
+  <Combobox v-model="value" by="ID">
     <ComboboxAnchor class="w-full h-fit" as-child>
       <ComboboxTrigger as-child>
-        <Button variant="outline" class="justify-between font-normal text-left bg-[hsl(var(--card))]">
-          <!-- {{ value?.title ?? 'Select framework' }} -->
-          <BaseAvatar v-if="value" text="OM" :title="value?.title" :description="value?.email" :img="value?.url"/>
-          <p v-else>
-            กรุณาเพิ่มข้อมูลลูกค้า
-          </p>
+        <Button
+          variant="outline"
+          class="justify-between font-normal text-left bg-[hsl(var(--card))]"
+        >
+          <!-- แสดงข้อมูลลูกค้าที่เลือก -->
+          <BaseAvatar
+            v-if="value"
+            :text="`${value.FirstName[0]} ${value.LastName[0]}`"
+            :title="`${value.FirstName} ${value.LastName}`"
+            :description="value.Email"
+          />
+          <p v-else>กรุณาเลือกข้อมูลลูกค้า</p>
           <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </ComboboxTrigger>
@@ -58,23 +63,31 @@ const value = ref<typeof customers[0]>()
 
     <ComboboxList class="p-1 w-72">
       <div class="relative w-full max-w-sm items-center">
-        <ComboboxInput class="pl-9 focus-visible:ring-0 border-0 border-b rounded-none h-10" placeholder="ค้นหาลูกค้า..." />
-        <span class="absolute start-0 inset-y-0 flex items-center justify-center px-3">
+        <ComboboxInput
+          class="pl-9 focus-visible:ring-0 border-0 border-b rounded-none h-10"
+          placeholder="ค้นหาลูกค้า..."
+        />
+        <span
+          class="absolute start-0 inset-y-0 flex items-center justify-center px-3"
+        >
           <Search class="size-4 text-muted-foreground" />
         </span>
       </div>
 
-      <ComboboxEmpty>
-        No framework found.
-      </ComboboxEmpty>
+      <ComboboxEmpty> ไม่มีข้อมูลลูกค้า </ComboboxEmpty>
 
       <ComboboxGroup>
+        <!-- แสดงรายการลูกค้าจากข้อมูล -->
         <ComboboxItem
           v-for="customer in customers"
-          :key="customer.value"
+          :key="customer.ID"
           :value="customer"
         >
-          <BaseAvatar text="OM" :title="customer.title" :description="customer.email" :img="customer.url"/>
+          <BaseAvatar
+            :text="`${customer.FirstName[0]} ${customer.LastName[0]}`"
+            :title="`${customer.FirstName} ${customer.LastName}`"
+            :description="customer.Email"
+          />
         </ComboboxItem>
       </ComboboxGroup>
     </ComboboxList>

@@ -367,7 +367,7 @@ watch(
 
 watch(customer, (newAddress) => {
   if (customer.value) {
-    customerAddress.value = newAddress.address;
+    customerAddress.value = newAddress.Address;
   }
 });
 </script>

@@ -1,0 +1,44 @@
+import { defineStore } from "pinia";
+import { ref, computed } from "vue";
+
+import useProductService from "~/composables/useProductService";
+
+export const useProductStore = defineStore("product", () => {
+  interface Product {
+    ID: number;
+    ProductCode: string;
+    Name: string;
+    Price: number;
+    Vat: boolean;
+    VatRate: number;
+  }
+
+  const products = ref<Array<Product>>([]);
+  const { getProducts } = useProductService();
+
+  // ✅ Action: เพิ่มสินค้า
+  const addProduct = (product: Product) => {
+    products.value.push(product);
+  };
+
+  // ✅ Action: ลบสินค้า
+  const removeProduct = (id: number) => {
+    products.value = products.value.filter((product) => product.ID !== id);
+  };
+
+  const setProducts = (newProducts: Array<Product>) => {
+    products.value = newProducts;
+  };
+
+  // ✅ โหลดสินค้าจาก API และบันทึกลง Store
+  const getProduct = async () => {
+    try {
+      const response = await getProducts();
+      products.value = response; // อัปเดต State
+    } catch (error) {
+      console.error("❌ Failed to load products:", error);
+    }
+  };
+
+  return { products, addProduct, removeProduct, setProducts, getProduct };
+});

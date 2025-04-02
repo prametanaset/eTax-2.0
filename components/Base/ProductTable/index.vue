@@ -5,9 +5,16 @@
       <!-- hsl(var(--card)); -->
       <Table class=" ">
         <TableHeader>
-          <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
+          <TableRow
+            v-for="headerGroup in table.getHeaderGroups()"
+            :key="headerGroup.id"
+          >
             <TableHead v-for="header in headerGroup.headers" :key="header.id">
-              <FlexRender v-if="!header.isPlaceholder" :render="header.column.columnDef.header" :props="header.getContext()" />
+              <FlexRender
+                v-if="!header.isPlaceholder"
+                :render="header.column.columnDef.header"
+                :props="header.getContext()"
+              />
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -19,16 +26,16 @@
               :data-state="row.getIsSelected() && 'selected'"
             >
               <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
-                <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
+                <FlexRender
+                  :render="cell.column.columnDef.cell"
+                  :props="cell.getContext()"
+                />
               </TableCell>
             </TableRow>
           </template>
 
           <TableRow v-else>
-            <TableCell
-              :colspan="columns.length"
-              class="h-24 text-center"
-            >
+            <TableCell :colspan="columns.length" class="h-24 text-center">
               No results.
             </TableCell>
           </TableRow>
@@ -46,10 +53,10 @@ import type {
   ColumnFiltersState,
   SortingState,
   VisibilityState,
-} from '@tanstack/vue-table'
+} from "@tanstack/vue-table";
 
-import type { Product } from './data/schema'
-import { valueUpdater } from '@/utils'
+import type { Product } from "./data/schema";
+import { valueUpdater } from "@/utils";
 
 import {
   Table,
@@ -58,7 +65,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
+} from "@/components/ui/table";
 import {
   FlexRender,
   getCoreRowModel,
@@ -68,44 +75,57 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useVueTable,
-} from '@tanstack/vue-table'
-import DataTablePagination from './Pagination.vue'
-import DataTableToolbar from './Toolbar.vue'
+} from "@tanstack/vue-table";
+import DataTablePagination from "./Pagination.vue";
+import DataTableToolbar from "./Toolbar.vue";
 
 interface DataTableProps {
-  columns: ColumnDef<Product, any>[]
-  data: Product[]
+  columns: ColumnDef<Product, any>[];
+  data: Product[];
 }
-const props = defineProps<DataTableProps>()
+const props = defineProps<DataTableProps>();
 
-const sorting = ref<SortingState>([])
-const columnFilters = ref<ColumnFiltersState>([])
-const columnVisibility = ref<VisibilityState>({})
-const rowSelection = ref({})
+const sorting = ref<SortingState>([]);
+const columnFilters = ref<ColumnFiltersState>([]);
+const columnVisibility = ref<VisibilityState>({});
+const rowSelection = ref({});
 
 const table = useVueTable({
-  get data() { return props.data },
-  get columns() { return props.columns },
+  get data() {
+    return props.data;
+  },
+  get columns() {
+    return props.columns;
+  },
   state: {
-    get sorting() { return sorting.value },
-    get columnFilters() { return columnFilters.value },
-    get columnVisibility() { return columnVisibility.value },
-    get rowSelection() { return rowSelection.value },
+    get sorting() {
+      return sorting.value;
+    },
+    get columnFilters() {
+      return columnFilters.value;
+    },
+    get columnVisibility() {
+      return columnVisibility.value;
+    },
+    get rowSelection() {
+      return rowSelection.value;
+    },
   },
   enableRowSelection: true,
-  onSortingChange: updaterOrValue => valueUpdater(updaterOrValue, sorting),
-  onColumnFiltersChange: updaterOrValue => valueUpdater(updaterOrValue, columnFilters),
-  onColumnVisibilityChange: updaterOrValue => valueUpdater(updaterOrValue, columnVisibility),
-  onRowSelectionChange: updaterOrValue => valueUpdater(updaterOrValue, rowSelection),
+  onSortingChange: (updaterOrValue) => valueUpdater(updaterOrValue, sorting),
+  onColumnFiltersChange: (updaterOrValue) =>
+    valueUpdater(updaterOrValue, columnFilters),
+  onColumnVisibilityChange: (updaterOrValue) =>
+    valueUpdater(updaterOrValue, columnVisibility),
+  onRowSelectionChange: (updaterOrValue) =>
+    valueUpdater(updaterOrValue, rowSelection),
   getCoreRowModel: getCoreRowModel(),
   getFilteredRowModel: getFilteredRowModel(),
   getPaginationRowModel: getPaginationRowModel(),
   getSortedRowModel: getSortedRowModel(),
   getFacetedRowModel: getFacetedRowModel(),
   getFacetedUniqueValues: getFacetedUniqueValues(),
-})
+});
 </script>
 
-<style>
-
-</style>
+<style></style>

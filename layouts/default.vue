@@ -74,7 +74,9 @@ const route = useRoute();
           </NuxtLink> -->
           <h1 class="text-2xl font-semibold">{{ route.meta.title }}</h1>
         </div>
-        <slot />
+        <div class="w-full" id="main">
+          <slot />
+        </div>
       </div>
     </SidebarInset>
   </SidebarProvider>
