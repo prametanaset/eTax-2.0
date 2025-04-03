@@ -6,23 +6,23 @@
         v-model:open="isDialogOpen"
         text="เพิ่มสินค้า"
         bg-button="bg-primary-500"
-        title="เพิ่มสินค้า"
+        :title="productStore.productsToEdit ? 'แก้ไขสินค้า' : 'เพิ่มสินค้า'"
       >
         <template #content>
           <div class="grid gap-y-4">
             <div>
-              <Label>ชื่อสินค้า</Label>
+              <Label>ชื่อสินค้า <span class="text-red-500">*</span></Label>
               <Input placeholder="กรอกชื่อสินค้า" v-model="product.Name" />
             </div>
             <div>
               <Label>รายละเอียดสินค้า</Label>
               <Textarea
-                placeholder="กรอกชื่อสินค้า"
+                placeholder="รายละเอียดสินค้า"
                 v-model="product.Description"
               />
             </div>
             <div>
-              <Label>ราคา</Label>
+              <Label>ราคา<span class="text-red-500">*</span></Label>
               <Input placeholder="0" type="number" v-model="product.Price" />
             </div>
             <div class="grid gap-2">
@@ -47,10 +47,18 @@
                 <Button variant="outline">ยกเลิก</Button>
               </DialogClose>
               <Button
+                v-if="productStore.productsToEdit === null"
                 :disabled="!canCreate"
                 type="submit"
                 @click="handleCreateProduct"
                 >สร้าง</Button
+              >
+              <Button
+                v-else
+                :disabled="!canCreate"
+                type="submit"
+                @click="handleUpdateProduct"
+                >บันทึก</Button
               >
             </div>
           </div>
@@ -99,14 +107,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import MixerHorizontalIcon from "~icons/radix-icons/mixer-horizontal";
-import {
-  NumberField,
-  NumberFieldContent,
-  NumberFieldDecrement,
-  NumberFieldIncrement,
-  NumberFieldInput,
-} from "@/components/ui/number-field";
-import type { description } from "~/layouts/default.vue";
 import { Toaster } from "@/components/ui/toast";
 import { useToast } from "~/components/ui/toast/use-toast";
 
@@ -116,7 +116,7 @@ interface DataTableViewOptionsProps {
   table: Table<Product>;
 }
 
-const { createProduct } = useProductService();
+const { createProduct, updateProduct, deleteProduct } = useProductService();
 
 const props = defineProps<DataTableViewOptionsProps>();
 
@@ -136,6 +136,7 @@ const columns = computed(() =>
 
 const product = reactive({
   ID: 0,
+  StoreId: 0,
   ProductCode: "",
   Name: "",
   Description: "",
@@ -151,6 +152,20 @@ async function addProduct() {
     throw err;
   }
 }
+async function editProduct() {
+  try {
+    await updateProduct(product);
+  } catch (err) {
+    throw err;
+  }
+}
+async function removeProduct() {
+  try {
+    await deleteProduct(productStore.productsToDelete);
+  } catch (err) {
+    throw err;
+  }
+}
 
 const handleCreateProduct = async () => {
   try {
@@ -160,6 +175,7 @@ const handleCreateProduct = async () => {
 
     // Clear ข้อมูลของ product
     product.ID = 0;
+    product.StoreId = 0;
     product.ProductCode = "";
     product.Name = "";
     product.Description = "";
@@ -178,6 +194,96 @@ const handleCreateProduct = async () => {
     });
   }
 };
+const handleUpdateProduct = async () => {
+  try {
+    await editProduct();
+    isDialogOpen.value = false;
+    await productStore.getProduct(); // ✅ Store จะอัปเดตค่าเอง
+
+    // Clear ข้อมูลของ product
+    product.ID = 0;
+    product.StoreId = 0;
+    product.ProductCode = "";
+    product.Name = "";
+    product.Description = "";
+    product.Price = 0;
+    product.Vat = false;
+    product.VatRate = 0;
+
+    toast({
+      title: "บันทึกข้อมูลสินค้าแล้ว",
+    });
+  } catch (err) {
+    console.error("❌ Error creating product:", err);
+    toast({
+      variant: "destructive",
+      title: "เกิดข้อผิดพลาดในการบันทึกข้อมูลสินค้า",
+    });
+  }
+};
+
+const handleDeleteProduct = async () => {
+  try {
+    await removeProduct();
+    await productStore.getProduct(); // ✅ Store จะอัปเดตค่าเอง
+
+    toast({
+      title: "ลบข้อมูลสินค้าแล้ว",
+    });
+  } catch (err) {
+    console.error("❌ Error delete product:", err);
+    toast({
+      variant: "destructive",
+      title: "เกิดข้อผิดพลาดในการลบข้อมูลสินค้า",
+    });
+  }
+};
+
+watch(
+  () => productStore.productsToEdit,
+  (newValue) => {
+    if (newValue) {
+      isDialogOpen.value = true;
+    }
+  },
+  { deep: true }
+);
+
+watch(
+  () => productStore.productsToDelete,
+  (newValue) => {
+    if (newValue) {
+      handleDeleteProduct();
+    }
+  },
+  { deep: true }
+);
+
+watch(
+  () => isDialogOpen.value, // ✅ ใช้ฟังก์ชันแทนค่า
+  (newVal) => {
+    if (!newVal) {
+      productStore.clearProductToEdit();
+
+      product.ID = 0;
+      product.Name = "";
+      product.ProductCode = "";
+      product.Description = "";
+      product.Price = 0;
+      product.Vat = false;
+      product.VatRate = 0;
+    } else {
+      product.ID = productStore.productsToEdit.ID;
+      product.StoreId = productStore.productsToEdit.StoreId;
+      product.Name = productStore.productsToEdit.Name;
+      product.ProductCode = productStore.productsToEdit.ProductCode;
+      product.Description = productStore.productsToEdit.Description;
+      product.Price = productStore.productsToEdit.Price;
+      product.Vat = productStore.productsToEdit.Vat;
+      product.VatRate = productStore.productsToEdit.VatRate;
+    }
+  }
+);
 
 watch(
   product,
