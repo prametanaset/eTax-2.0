@@ -94,12 +94,12 @@ const data = {
       ],
     },
     {
-      title: 'จัดการพนักงาน',
+      title: 'จัดการลูกค้า',
       url: '/employees',
       icon: Users,
       items: [
         {
-          title: 'รายชื่อพนักงาน',
+          title: 'รายชื่อลูกค้า',
           url: '/employees',
         },
         

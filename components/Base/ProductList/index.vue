@@ -73,7 +73,7 @@ onUnmounted(() => {
           <ChevronDown class="h-4 w-4 text-muted-foreground" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent class="p-0 w-80" align="end">
+      <PopoverContent class="p-0 w-[var(--reka-popper-anchor-width)]" align="end">
         <Command>
           <CommandInput placeholder="Search product..." />
           <CommandList>
@@ -130,7 +130,7 @@ onUnmounted(() => {
           <Label class="block text-xs text-gray-600 sm:hidden">ส่วนลด</Label>
           <Popover v-if="screenWidth > 640">
             <PopoverTrigger as-child>
-              <Button variant="outline" class="w-full sm:w-20 text-center text-sm truncate">
+              <Button variant="outline" class="w-full sm:w-20 text-center text-sm truncate bg-[hsl(var(--card))]">
                 {{ product.discountValue }} {{ product.discountType }}
               </Button>
             </PopoverTrigger>

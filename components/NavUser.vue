@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import {
   DropdownMenu,
@@ -13,13 +9,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+} from "@/components/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from '@/components/ui/sidebar'
+} from "@/components/ui/sidebar";
 import {
   BadgeCheck,
   Bell,
@@ -27,17 +23,17 @@ import {
   CreditCard,
   LogOut,
   Sparkles,
-} from 'lucide-vue-next'
+} from "lucide-vue-next";
 
 const props = defineProps<{
   user: {
-    name: string
-    email: string
-    avatar: string
-  }
-}>()
+    name: string;
+    email: string;
+    avatar: string;
+  };
+}>();
 
-const { isMobile } = useSidebar()
+const { isMobile } = useSidebar();
 </script>
 
 <template>
@@ -47,14 +43,11 @@ const { isMobile } = useSidebar()
         <DropdownMenuTrigger as-child>
           <SidebarMenuButton
             size="lg"
-            class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground 
-            "
+            class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
           >
             <Avatar class="h-8 w-8 rounded-full">
               <AvatarImage :src="user.avatar" :alt="user.name" />
-              <AvatarFallback class="rounded-full">
-                CN
-              </AvatarFallback>
+              <AvatarFallback class="rounded-full"> CN </AvatarFallback>
             </Avatar>
             <div class="grid flex-1 text-left text-sm leading-tight">
               <span class="truncate font-semibold">{{ user.name }}</span>
@@ -73,9 +66,7 @@ const { isMobile } = useSidebar()
             <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
               <Avatar class="h-8 w-8 rounded-full">
                 <AvatarImage :src="user.avatar" :alt="user.name" />
-                <AvatarFallback class="rounded-lg">
-                  CN
-                </AvatarFallback>
+                <AvatarFallback class="rounded-lg"> CN </AvatarFallback>
               </Avatar>
               <div class="grid flex-1 text-left text-sm leading-tight">
                 <span class="truncate font-semibold">{{ user.name }}</span>
@@ -86,31 +77,34 @@ const { isMobile } = useSidebar()
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>
+            <DropdownMenuItem class="cursor-pointer">
               <Sparkles />
-              Upgrade to Pro
+
+              อัปเกรดบริการของคุณ
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>
+            <DropdownMenuItem class="cursor-pointer"> 
               <BadgeCheck />
-              Account
+              โปรไฟล์
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem class="cursor-pointer">
               <CreditCard />
-              Billing
+              ดูบริการ
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem class="cursor-pointer">
               <Bell />
-              Notifications
+              การแจ้งเตือน
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <LogOut />
-            Log out
-          </DropdownMenuItem>
+          <NuxtLink to="/login" >
+            <DropdownMenuItem class="cursor-pointer">
+              <LogOut />
+              ลงชื่อออก
+            </DropdownMenuItem>
+          </NuxtLink>
         </DropdownMenuContent>
       </DropdownMenu>
     </SidebarMenuItem>

@@ -17,9 +17,9 @@ const conf = {
   nx: 40,
   ny: 100,
   cscale: chroma.scale(['#A577FF', '#C5A3FF', '#A577FF', '#B038FF', '#9A2CC7', '#7A229F']).mode('lch'),
-  darken: -1,
+  darken: -1.05,
   angle: Math.PI / 3,
-  timeCoef: 0.03
+  timeCoef: 0.05
 }
 const uTimeCoef = { value: conf.timeCoef }
 const uTime = { value: 0 }
