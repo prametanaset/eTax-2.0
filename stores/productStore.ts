@@ -6,6 +6,7 @@ import useProductService from "~/composables/useProductService";
 export const useProductStore = defineStore("product", () => {
   interface Product {
     ID: number;
+    StoreId: number;
     ProductCode: string;
     Name: string;
     Price: number;
@@ -14,6 +15,8 @@ export const useProductStore = defineStore("product", () => {
   }
 
   const products = ref<Array<Product>>([]);
+  const productsToEdit = ref<Array<Product>>([]);
+  const productsToDelete = ref<Array<Product>>([]);
   const { getProducts } = useProductService();
 
   // ✅ Action: เพิ่มสินค้า
@@ -30,6 +33,21 @@ export const useProductStore = defineStore("product", () => {
     products.value = newProducts;
   };
 
+  const setProductToEdit = (newProducts: Array<Product>) => {
+    productsToEdit.value = newProducts;
+  };
+
+  const setProductToDelete = (newProducts: Array<Product>) => {
+    productsToDelete.value = newProducts;
+  };
+
+  const clearProductToEdit = () => {
+    productsToEdit.value = null;
+  };
+  const clearProductStore = () => {
+    products.value = null;
+  };
+
   // ✅ โหลดสินค้าจาก API และบันทึกลง Store
   const getProduct = async () => {
     try {
@@ -40,5 +58,17 @@ export const useProductStore = defineStore("product", () => {
     }
   };
 
-  return { products, addProduct, removeProduct, setProducts, getProduct };
+  return {
+    products,
+    productsToEdit,
+    productsToDelete,
+    addProduct,
+    removeProduct,
+    setProducts,
+    getProduct,
+    setProductToEdit,
+    clearProductToEdit,
+    clearProductStore,
+    setProductToDelete,
+  };
 });

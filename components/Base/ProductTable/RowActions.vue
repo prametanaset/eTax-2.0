@@ -9,34 +9,29 @@
         <span class="sr-only">Open menu</span>
       </Button>
     </DropdownMenuTrigger>
-    <DropdownMenuContent align="end" class="w-[160px]">
-      <DropdownMenuItem>Edit</DropdownMenuItem>
-      <DropdownMenuItem>Make a copy</DropdownMenuItem>
-      <DropdownMenuItem>Favorite</DropdownMenuItem>
+    <DropdownMenuContent align="end" class="w-[160px] cursor-pointer">
+      <DropdownMenuItem
+        @click="editProduct(row.original)"
+        class="cursor-pointer"
+        >แก้ไข</DropdownMenuItem
+      >
       <DropdownMenuSeparator />
-      <DropdownMenuSub>
-        <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
-        <DropdownMenuSubContent>
-          <DropdownMenuRadioGroup :value="Product.label">
-            <DropdownMenuRadioItem v-for="label in labels" :key="label.value" :value="label.value">
-              {{ label.label }}
-            </DropdownMenuRadioItem>
-          </DropdownMenuRadioGroup>
-        </DropdownMenuSubContent>
-      </DropdownMenuSub>
-      <DropdownMenuSeparator />
-      <DropdownMenuItem>
-        Delete
-        <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+      <DropdownMenuItem
+        class="cursor-pointer"
+        @click="deleteProduct(row.original)"
+      >
+        ลบสินค้า
+        <DropdownMenuShortcut><Trash2 class="w-4" /></DropdownMenuShortcut>
       </DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
 </template>
 
 <script lang="ts" setup>
-import type { Row } from '@tanstack/vue-table'
-import type { Product } from './data/schema'
-import { Button } from '@/components/ui/button'
+import type { Row } from "@tanstack/vue-table";
+import type { Product } from "./data/schema";
+import { Button } from "@/components/ui/button";
+import { Trash2 } from "lucide-vue-next";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -49,20 +44,27 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import DotsHorizontalIcon from '~icons/radix-icons/dots-horizontal'
+} from "@/components/ui/dropdown-menu";
+import DotsHorizontalIcon from "~icons/radix-icons/dots-horizontal";
 
-import { labels } from './data/data'
-import { productSchema } from './data/schema'
+import { labels } from "./data/data";
+import { productSchema } from "./data/schema";
+import ViewOptions from "./ViewOptions.vue";
 
 interface DataTableRowActionsProps {
-  row: Row<Product>
+  row: Row<Product>;
 }
-const props = defineProps<DataTableRowActionsProps>()
+const props = defineProps<DataTableRowActionsProps>();
+const productStore = useProductStore();
 
-const Product = computed(() => productSchema.parse(props.row.original))
+const Product = computed(() => productSchema.parse(props.row.original));
+
+const editProduct = (product: Product) => {
+  productStore.setProductToEdit(product);
+};
+const deleteProduct = (product: Product) => {
+  productStore.setProductToDelete(product);
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

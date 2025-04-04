@@ -1,30 +1,36 @@
 <template>
   <div class="flex items-center justify-between px-2">
     <div class="flex-1 text-sm text-muted-foreground">
-      {{ table.getFilteredSelectedRowModel().rows.length }} of
-      {{ table.getFilteredRowModel().rows.length }} row(s) selected.
+      เลือก {{ table.getFilteredSelectedRowModel().rows.length }} จาก
+      {{ table.getFilteredRowModel().rows.length }} รายการ
     </div>
     <div class="flex items-center space-x-6 lg:space-x-8">
       <div class="flex items-center space-x-2">
-        <p class="text-sm font-medium">
-          Rows per page
-        </p>
+        <p class="text-sm font-medium">จำนวนรารยการ</p>
         <Select
           :model-value="`${table.getState().pagination.pageSize}`"
           @update:model-value="table.setPageSize"
         >
           <SelectTrigger class="h-8 w-[70px] bg-[hsl(var(--card))]">
-            <SelectValue :placeholder="`${table.getState().pagination.pageSize}`" />
+            <SelectValue
+              :placeholder="`${table.getState().pagination.pageSize}`"
+            />
           </SelectTrigger>
           <SelectContent side="top">
-            <SelectItem v-for="pageSize in [10, 20, 30, 40, 50]" :key="pageSize" :value="`${pageSize}`">
+            <SelectItem
+              v-for="pageSize in [10, 20, 30, 40, 50]"
+              :key="pageSize"
+              :value="`${pageSize}`"
+            >
               {{ pageSize }}
             </SelectItem>
           </SelectContent>
         </Select>
       </div>
-      <div class="flex w-[100px] items-center justify-center text-sm font-medium ">
-        Page {{ table.getState().pagination.pageIndex + 1 }} of
+      <div
+        class="flex w-[100px] items-center justify-center text-sm font-medium"
+      >
+        หน้า {{ table.getState().pagination.pageIndex + 1 }} จาก
         {{ table.getPageCount() }}
       </div>
       <div class="flex items-center space-x-2">
@@ -70,27 +76,25 @@
 </template>
 
 <script lang="ts" setup>
-import type { Table } from '@tanstack/vue-table'
-import type { Product } from './data/schema'
-import { Button } from '@/components/ui/button'
+import type { Table } from "@tanstack/vue-table";
+import type { Product } from "./data/schema";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import ChevronLeftIcon from '~icons/radix-icons/chevron-left'
-import ChevronRightIcon from '~icons/radix-icons/chevron-right'
+} from "@/components/ui/select";
+import ChevronLeftIcon from "~icons/radix-icons/chevron-left";
+import ChevronRightIcon from "~icons/radix-icons/chevron-right";
 
-import DoubleArrowLeftIcon from '~icons/radix-icons/double-arrow-left'
-import DoubleArrowRightIcon from '~icons/radix-icons/double-arrow-right'
+import DoubleArrowLeftIcon from "~icons/radix-icons/double-arrow-left";
+import DoubleArrowRightIcon from "~icons/radix-icons/double-arrow-right";
 interface DataTablePaginationProps {
-  table: Table<Product>
+  table: Table<Product>;
 }
-defineProps<DataTablePaginationProps>()
+defineProps<DataTablePaginationProps>();
 </script>
 
-<style>
-
-</style>
+<style></style>
