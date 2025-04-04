@@ -6,56 +6,70 @@
         <BaseThreeLinesEffect class="z-50" />
         <!-- <BaseThreeLinesEffectIndexVue /> -->
       </ClientOnly>
-
-      <div v-if="false" class="content">
-        <div class="content__container">
-          <!-- <p class="content__container__text">
-            Hello
-          </p> -->
-
-          <ul class="content__container__list">
-            <li class="content__container__list__item">เราสร้างสิ่งนี้... เพราะเรารู้ว่า มันควรจะง่ายกว่านี้</li>
-            <li class="content__container__list__item">เราทำสิ่งที่รัฐบาลควรจะทำให้มันง่าย แต่มันไม่เคยง่าย</li>
-            <li class="content__container__list__item">จนกระทั่งตอนนี้</li>
-            <li class="content__container__list__item">จากวุ่นวาย...สู่เรียบง่าย ในคลิกเดียว</li>
-          </ul>
-        </div>
-      </div>
     </div>
     <div class="w-2/5 bg-white p-40">
       <div class="my-auto">
         <CardHeader>
-          <CardTitle class="text-3xl">เริ่มต้นใช้งาน</CardTitle>
+          <CardTitle class="text-3xl font-bold font-ibm" align="center">เริ่มต้นใช้งาน</CardTitle>
         </CardHeader>
         <CardContent>
           <Form class="grid gap-4" @submit="onSubmit">
-            <div class="grid gap-2">
+            <div class="grid gap-3">
               <div>
-                <Label for="email">Email</Label>
-                <Input name="email" type="email" placeholder="Email address*" required v-model="email.value" />
-                <span class="text-red-500 text-sm">{{ email.errorMessage }}</span>
+                <!-- <Label for="email">อีเมลผู้ใช้งาน</Label> -->
+                <Input
+                  name="email"
+                  type="email"
+                  placeholder="หมายเลขโทรศัพท์ ชื่อผู้ใช้ หรืออีเมล"
+                  required
+                  v-model="email.value"
+                  class="placeholder:font-semibold h-10 font-normal"
+                />
+                <span class="text-red-500 text-sm font-light">{{
+                  email.errorMessage
+                }}</span>
               </div>
               <div>
-                <Label for="password">Password</Label>
-                <Input name="password" type="password" placeholder="Password*" required v-model="password.value" />
-                <span class="text-red-500 text-sm">{{ password.errorMessage }}</span>
+                <!-- <Label for="password">Password</Label> -->
+                <Input
+                  name="password"
+                  type="password"
+                  placeholder="รหัสผ่าน"
+                  required
+                  v-model="password.value"
+                  class="placeholder:font-semibold h-10"
+                />
+                <span class="text-red-500 text-sm font-light">{{
+                  password.errorMessage
+                }}</span>
               </div>
             </div>
-            <Button class="w-full">เข้าสู่ระบบ</Button>
-            <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+            <Button class="w-full text-md font-semibold">เข้าสู่ระบบ</Button>
+            <link
+              href="https://fonts.googleapis.com/css?family=Lato"
+              rel="stylesheet"
+            />
           </Form>
           <div class="mt-4 mb-8 text-center text-sm">
-            Don't have an account? <a href="/register" class="underline">Sign up</a>
+            ยังไม่มีบัญชีใช่ไหม?
+            <!-- <a href="/register" class="underline">ลงชื่อสมัคร</a> -->
+            <NuxtLink to="/register"
+              ><Button variant="link" class="px-0 font-normal">ลงชื่อสมัคร</Button></NuxtLink
+            >
           </div>
-          <Separator label="OR" />
+          <Separator label="หรือ" />
           <div class="grid gap-2 mt-8 mb-4 text-sm">
-            <Button class="w-full bg-white text-muted-800 hover:text-white">
-              <span class="w-6"><img src="@/assets/img/google-logo.png" alt="" class="w-full" /></span>
-              Continue with Google
+            <Button class="w-full bg-white text-muted-800 hover:bg-zinc-200 h-10">
+              <span class="w-6"
+                ><img src="@/assets/img/google-logo.png" alt="" class="w-full"
+              /></span>
+              ดำเนินการต่อด้วย Google
             </Button>
-            <Button class="w-full bg-white text-muted-800 hover:text-white">
-              <span class="w-6"><img src="@/assets/img/thaiid-logo.png" alt="" class="w-full" /></span>
-              Continue with ThaiID
+            <Button class="w-full bg-white text-muted-800 hover:text-white h-10">
+              <span class="w-6"
+                ><img src="@/assets/img/thaiid-logo.png" alt="" class="w-full"
+              /></span>
+              ดำเนินการต่อด้วย ThaiID
             </Button>
           </div>
         </CardContent>
@@ -73,7 +87,7 @@ definePageMeta({
 });
 
 // ใช้ useForm() สำหรับจัดการฟอร์ม
-const { handleSubmit } = useForm();
+const { handleSubmit, validate, meta } = useForm();
 
 const checkEmailInDB = (email: string) => {
   if (!email) return "กรุณากรอกอีเมล";
@@ -87,13 +101,20 @@ const validatePassword = (value: string) => {
 };
 
 // ฟังก์ชันเมื่อกด Submit
-const onSubmit = handleSubmit(() => { });
+const onSubmit = handleSubmit((tValue, tOutput) => {
+  console.log("tValue:",tValue);
+  console.log("tOutput:",tOutput);
 
+  console.log("Form submitted!"); // all fields passed validation
+  navigateTo('/')
+})
 // ใช้ useField() สำหรับแต่ละฟิลด์
 const email = useField("email", checkEmailInDB);
 const password = useField("password", validatePassword);
 </script>
 
 <style scoped>
-
+.font-ibm {
+  font-family: "Noto Sans Thai";
+}
 </style>
