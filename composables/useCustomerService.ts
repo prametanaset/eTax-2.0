@@ -4,6 +4,8 @@ import type { Customer } from "~/types/customer";
 export default function useCustomers() {
   const $axios = useAxios(); // ดึง Axios จาก composable
 
+  const customerList = ref([]);
+
   const getCustomers = async () => {
     try {
       const response = await $axios.get("/customers");
@@ -23,5 +25,21 @@ export default function useCustomers() {
     }
   };
 
-  return { getCustomers, updateCustomers };
+  const createCustomerService = async (payload: Customer) => {
+    console.log(payload);
+  };
+  const updateCustomerService = async (payload: Customer) => {
+    console.log(payload);
+  };
+  const deleteCustomerService = async (payload: Customer) => {
+    console.log(payload);
+  };
+
+  return {
+    getCustomers,
+    updateCustomers,
+    createCustomerService,
+    updateCustomerService,
+    deleteCustomerService,
+  };
 }

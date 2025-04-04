@@ -18,6 +18,7 @@ const { getCustomers, updateCustomers } = useCustomerService();
 // กำหนด Type ให้ `customers`
 type Customer = {
   ID: number;
+  StoreId: number;
   FirstName: string;
   LastName: string;
   Email: string;
@@ -62,9 +63,9 @@ const value = ref<Customer | null>(null);
     </ComboboxAnchor>
 
     <ComboboxList class="p-1 w-[var(--reka-popper-anchor-width)]">
-      <div class="relative items-center">
+      <div class="relative w-full max-w-sm items-center">
         <ComboboxInput
-          class="pl-9 focus-visible:ring-0 border-0 border-b rounded-none h-10"
+          class="pl-9 focus-visible:ring-0 border-0 border-b rounded-none h-10 w-[var(--reka-popper-anchor-width)]"
           placeholder="ค้นหาลูกค้า..."
         />
         <span

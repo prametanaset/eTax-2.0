@@ -3,7 +3,7 @@ import { ref, computed } from "vue";
 
 import useProductService from "~/composables/useProductService";
 
-export const useProductStore = defineStore("product", () => {
+export const useProductStore = defineStore("productStore", () => {
   interface Product {
     ID: number;
     StoreId: number;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SidebarProps } from '@/components/ui/sidebar'
+import type { SidebarProps } from "@/components/ui/sidebar";
 
 import {
   Sidebar,
@@ -7,7 +7,7 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from '@/components/ui/sidebar'
+} from "@/components/ui/sidebar";
 
 import {
   AudioWaveform,
@@ -20,133 +20,132 @@ import {
   PieChart,
   Settings2,
   SquareTerminal,
-  BetweenHorizontalStart ,
+  BetweenHorizontalStart,
   Users,
-  Home
-} from 'lucide-vue-next'
+  Home,
+} from "lucide-vue-next";
 
 const props = withDefaults(defineProps<SidebarProps>(), {
-  collapsible: 'icon',
-})
+  collapsible: "icon",
+});
 
 // This is sample data.
 const data = {
   user: {
-    name: 'shadcn',
-    email: 'm@example.com',
-    avatar: '/avatars/shadcn.png',
+    name: "shadcn",
+    email: "m@example.com",
+    avatar: "/avatars/shadcn.png",
   },
   teams: [
     {
-      name: 'บริษัท ซันสเกลอัพ จำกัด',
+      name: "บริษัท ซันสเกลอัพ จำกัด",
       logo: GalleryVerticalEnd,
-      plan: 'สำนักงานใหญ่',
+      plan: "สำนักงานใหญ่",
     },
     {
-      name: 'บริษัท ซันสเกลอัพ จำกัด',
+      name: "บริษัท ซันสเกลอัพ จำกัด",
       logo: AudioWaveform,
-      plan: 'สาขาที่ 1',
+      plan: "สาขาที่ 1",
     },
     {
-      name: 'บริษัท ซันสเกลอัพ จำกัด',
+      name: "บริษัท ซันสเกลอัพ จำกัด",
       logo: Command,
-      plan: 'สาขาที่ 2',
+      plan: "สาขาที่ 2",
     },
   ],
   navMain: [
     {
-      title: 'หน้าแรก',
-      url: '/',
+      title: "หน้าแรก",
+      url: "/",
       icon: Home,
       isActive: true,
       items: [
         {
-          title: 'Dashboard',
-          url: '/',
+          title: "Dashboard",
+          url: "/",
         },
       ],
     },
     {
-      title: 'ใบกำกับภาษี',
-      url: '/invoice',
+      title: "ใบกำกับภาษี",
+      url: "/invoice",
       icon: SquareTerminal,
       isActive: true,
       items: [
         {
-          title: 'รายงานใบกำกับภาษี',
-          url: '/invoice',
+          title: "รายงานใบกำกับภาษี",
+          url: "/invoice",
         },
         {
-          title: 'สร้างใบกำกับภาษี',
-          url: '/invoice/create/invoice',
-        }
+          title: "สร้างใบกำกับภาษี",
+          url: "/invoice/create/invoice",
+        },
       ],
     },
     {
-      title: 'จัดการสินค้า',
-      url: '/category',
-      icon: BetweenHorizontalStart ,
+      title: "จัดการสินค้า",
+      url: "/category",
+      icon: BetweenHorizontalStart,
       items: [
         {
-          title: 'รายการสินค้า',
-          url: '/category',
+          title: "รายการสินค้า",
+          url: "/category",
         },
       ],
     },
     {
-      title: 'จัดการพนักงาน',
-      url: '/employees',
+      title: "จัดการลูกค้า",
+      url: "/customers",
       icon: Users,
       items: [
         {
-          title: 'รายชื่อพนักงาน',
-          url: '/employees',
+          title: "รายชื่อพนักงาน",
+          url: "/employees",
         },
-        
       ],
     },
     {
-      title: 'ตั้งค่า',
-      url: '#',
+      title: "ตั้งค่า",
+      url: "#",
       icon: Settings2,
       items: [
         {
-          title: 'General',
-          url: '#',
+          title: "General",
+          url: "#",
         },
         {
-          title: 'Team',
-          url: '#',
+          title: "Team",
+          url: "#",
         },
         {
-          title: 'Billing',
-          url: '#',
+          title: "Billing",
+          url: "#",
         },
         {
-          title: 'Limits',
-          url: '#',
+          title: "Limits",
+          url: "#",
         },
       ],
     },
   ],
   projects: [
     {
-      name: 'รายงานใบกำกับภาษี',
-      url: '/',
+      name: "รายงานใบกำกับภาษี",
+      url: "/",
       icon: PieChart,
     },
     {
-      name: 'สร้างใบกำกับภาษี',
-      url: '/invoice/create/invoice',
+      name: "สร้างใบกำกับภาษี",
+      url: "/invoice/create/invoice",
       icon: Frame,
     },
     {
-      name: 'Travel',
-      url: '#',
+      name: "Travel",
+      url: "#",
       icon: Map,
     },
   ],
-}
+};
 </script>
 
 <template>
@@ -158,7 +157,7 @@ const data = {
       <NavMain :items="data.navMain" />
       <!-- <NavProjects :projects="data.projects" /> -->
     </SidebarContent>
-    <SidebarFooter >
+    <SidebarFooter>
       <NavUser :user="data.user" />
     </SidebarFooter>
     <SidebarRail />

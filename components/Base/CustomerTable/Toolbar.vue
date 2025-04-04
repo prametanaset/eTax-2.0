@@ -1,0 +1,63 @@
+<template>
+  <div class="flex items-center justify-between">
+    <div class="flex flex-1 items-center space-x-2">
+      <Input
+        placeholder="ค้นหาลูกค้า..."
+        :model-value="(table.getColumn('FirstName')?.getFilterValue() as string) ?? ''"
+        class="h-8 w-[150px] lg:w-[250px] bg-[hsl(var(--card))]"
+        @input="
+          table.getColumn('FirstName')?.setFilterValue($event.target.value)
+        "
+      />
+      <!-- <DataTableFacetedFilter
+        v-if="table.getColumn('Vat')"
+        :column="table.getColumn('Vat')"
+        title="สถานะ"
+        :options="statuses"
+      />
+      <DataTableFacetedFilter
+        v-if="table.getColumn('VatRate')"
+        :column="table.getColumn('VatRate')"
+        title="อัตราภาษี"
+        :options="rates"
+      /> -->
+
+      <Button
+        v-if="isFiltered"
+        variant="ghost"
+        class="h-8 px-2 lg:px-3"
+        @click="table.resetColumnFilters()"
+      >
+        ล้าง
+        <Cross2Icon class="ml-2 h-4 w-4" />
+      </Button>
+    </div>
+    <DataTableViewOptions :table="table" />
+  </div>
+</template>
+
+<script lang="ts" setup>
+import type { Table } from "@tanstack/vue-table";
+import type { Customer } from "./data/schema";
+import { Button } from "@/components/ui/button";
+
+import { Input } from "@/components/ui/input";
+import { computed } from "vue";
+import Cross2Icon from "~icons/radix-icons/cross-2";
+
+import { rates, statuses } from "./data/data";
+import DataTableFacetedFilter from "./FacetedFilter.vue";
+import DataTableViewOptions from "./ViewOptions.vue";
+
+interface DataTableToolbarProps {
+  table: Table<Customer>;
+}
+
+const props = defineProps<DataTableToolbarProps>();
+
+const isFiltered = computed(
+  () => props.table.getState().columnFilters.length > 0
+);
+</script>
+
+<style></style>
