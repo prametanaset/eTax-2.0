@@ -61,8 +61,8 @@ const value = ref<Customer | null>(null);
       </ComboboxTrigger>
     </ComboboxAnchor>
 
-    <ComboboxList class="p-1 w-72">
-      <div class="relative w-full max-w-sm items-center">
+    <ComboboxList class="p-1 w-[var(--reka-popper-anchor-width)]">
+      <div class="relative items-center">
         <ComboboxInput
           class="pl-9 focus-visible:ring-0 border-0 border-b rounded-none h-10"
           placeholder="ค้นหาลูกค้า..."

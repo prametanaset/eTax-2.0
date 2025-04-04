@@ -1,0 +1,104 @@
+<rsm:TaxInvoice_CrossIndustryInvoice
+    xmlns:rsm="urn:etda:uncefact:data:standard:TaxInvoice_CrossIndustryInvoice:2"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ram="urn:etda:uncefact:data:standard:TaxInvoice_ReusableAggregateBusinessInformationEntity:2"
+    xsi:schemaLocation="urn:etda:uncefact:data:standard:TaxInvoice_CrossIndustryInvoice:2">
+    <rsm:ExchangedDocumentContext>
+        <ram:GuidelineSpecifiedDocumentContextParameter>
+            <ram:ID schemeAgencyID="ETDA" schemeVersionID="v2.0">ER3-2560</ram:ID>
+        </ram:GuidelineSpecifiedDocumentContextParameter>
+    </rsm:ExchangedDocumentContext>
+    <rsm:ExchangedDocument>
+        <ram:ID>INV-001</ram:ID>
+        <ram:Name>ใบเสร็จรับเงิน/ใบกำกับภาษี</ram:Name>
+        <ram:TypeCode>T03</ram:TypeCode>
+        <ram:IssueDateTime>2568-03-27T16:28:14.430</ram:IssueDateTime>
+        <ram:CreationDateTime>2568-03-27T16:28:14.430</ram:CreationDateTime>
+        <ram:IncludedNote>
+            <ram:Content>หมายเหตุ:</ram:Content>
+        </ram:IncludedNote>
+    </rsm:ExchangedDocument>
+    <rsm:SupplyChainTradeTransaction>
+        <ram:ApplicableHeaderTradeAgreement>
+            <ram:SellerTradeParty>
+                <ram:Name>ร้านภูสิท</ram:Name>
+                <ram:SpecifiedTaxRegistration>
+                    <ram:ID schemeID="TXID">045123654785200000</ram:ID>
+                </ram:SpecifiedTaxRegistration>
+                <ram:DefinedTradeContact>
+                    <ram:EmailURIUniversalCommunication>
+                        <ram:URIID>phusit999g@gmail.com</ram:URIID>
+                    </ram:EmailURIUniversalCommunication>
+                    <ram:TelephoneUniversalCommunication>
+                        <ram:CompleteNumber>+66-992480066</ram:CompleteNumber>
+                    </ram:TelephoneUniversalCommunication>
+                </ram:DefinedTradeContact>
+                <ram:PostalTradeAddress>
+                    <ram:PostcodeCode>42190</ram:PostcodeCode>
+                    <ram:LineOne>หมู่ 1 </ram:LineOne>
+                    <ram:CityName>4214</ram:CityName>
+                    <ram:CitySubDivisionName>421401</ram:CitySubDivisionName>
+                    <ram:CountryID schemeID="3166-1 alpha-2">TH</ram:CountryID>
+                    <ram:CountrySubDivisionID>421401</ram:CountrySubDivisionID>
+                    <ram:BuildingNumber>111/226</ram:BuildingNumber>
+                </ram:PostalTradeAddress>
+            </ram:SellerTradeParty>
+            <ram:BuyerTradeParty>
+                <ram:Name>Franz Müller</ram:Name>
+                <ram:SpecifiedTaxRegistration>
+                    <ram:ID schemeID="NIDN">1100703197590</ram:ID>
+                </ram:SpecifiedTaxRegistration>
+                <ram:PostalTradeAddress>
+                    <ram:PostcodeCode>55232</ram:PostcodeCode>
+                    <ram:LineOne>teststr.12</ram:LineOne>
+                    <ram:CountryID schemeID="3166-1 alpha-2">TH</ram:CountryID>
+                </ram:PostalTradeAddress>
+            </ram:BuyerTradeParty>
+        </ram:ApplicableHeaderTradeAgreement>
+        <ram:ApplicableHeaderTradeDelivery />
+        <ram:ApplicableHeaderTradeSettlement>
+            <ram:InvoiceCurrencyCode listID="ISO 4217 3A">THB</ram:InvoiceCurrencyCode>
+            <ram:ApplicableTradeTax>
+                <ram:TypeCode>VAT</ram:TypeCode>
+                <ram:CalculatedRate>7.00</ram:CalculatedRate>
+                <ram:BasisAmount>15030.60</ram:BasisAmount>
+                <ram:CalculatedAmount>1052.14</ram:CalculatedAmount>
+            </ram:ApplicableTradeTax>
+            <ram:SpecifiedTradeSettlementHeaderMonetarySummation>
+                <ram:LineTotalAmount>15030.60</ram:LineTotalAmount>
+                <ram:TaxBasisTotalAmount>15030.60</ram:TaxBasisTotalAmount>
+                <ram:TaxTotalAmount>1052.14</ram:TaxTotalAmount>
+                <ram:GrandTotalAmount>16082.74</ram:GrandTotalAmount>
+                <ram:TotalPrepaidAmount>0.00</ram:TotalPrepaidAmount>
+            </ram:SpecifiedTradeSettlementHeaderMonetarySummation>
+        </ram:ApplicableHeaderTradeSettlement>
+        <ram:IncludedSupplyChainTradeLineItem>
+            <ram:AssociatedDocumentLineDocument>
+                <ram:LineID>1</ram:LineID>
+            </ram:AssociatedDocumentLineDocument>
+            <ram:SpecifiedTradeProduct>
+                <ram:Name>นมสด</ram:Name>
+            </ram:SpecifiedTradeProduct>
+            <ram:SpecifiedLineTradeAgreement>
+                <ram:GrossPriceProductTradePrice>
+                    <ram:ChargeAmount>130.0000</ram:ChargeAmount>
+                </ram:GrossPriceProductTradePrice>
+            </ram:SpecifiedLineTradeAgreement>
+            <ram:SpecifiedLineTradeDelivery>
+                <ram:BilledQuantity unitCode="C62">123.0000</ram:BilledQuantity>
+            </ram:SpecifiedLineTradeDelivery>
+            <ram:SpecifiedLineTradeSettlement>
+                <ram:SpecifiedTradeAllowanceCharge>
+                    <ram:ChargeIndicator>false</ram:ChargeIndicator>
+                    <ram:ActualAmount>959.4000</ram:ActualAmount>
+                    <ram:ReasonCode>95</ram:ReasonCode>
+                    <ram:Reason>ส่วนลดจากราคาปกติ</ram:Reason>
+                </ram:SpecifiedTradeAllowanceCharge>
+                <ram:SpecifiedTradeSettlementLineMonetarySummation>
+                    <ram:NetLineTotalAmount>15030.60</ram:NetLineTotalAmount>
+                    <ram:NetIncludingTaxesLineTotalAmount>16082.74</ram:NetIncludingTaxesLineTotalAmount>
+                </ram:SpecifiedTradeSettlementLineMonetarySummation>
+            </ram:SpecifiedLineTradeSettlement>
+        </ram:IncludedSupplyChainTradeLineItem>
+    </rsm:SupplyChainTradeTransaction>
+</rsm:TaxInvoice_CrossIndustryInvoice>

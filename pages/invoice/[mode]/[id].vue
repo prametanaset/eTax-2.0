@@ -106,7 +106,7 @@
           <div class="grid gap-4 mt-8 overflow-hidden">
             <p class="text-lg">รายการสินค้า</p>
             <!-- product table form -->
-            <Table class="min-w-[800px] overflow-x-auto">
+            <Table v-if="false" class="min-w-[800px] overflow-x-auto">
               <TableHeader>
                 <TableRow>
                   <TableHead>ลำดับ</TableHead>

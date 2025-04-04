@@ -5,12 +5,12 @@
       v-if="!device.isMobile"
       class="grid gap-4 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-4 mb-[60px]"
     >
-      <div class="relative group">
+      <div class="relative group " >
         <div
           class="absolute top-[60%] right-3 w-[90%] h-12 lg:h-[50%] bg-primary-400/50 blur-xl rounded-full img-shadow-animation"
         ></div>
         <Card
-          class="z-10 relative rouded-lg leading-none border img-border-animation p-3 w-full"
+          class="z-10 relative rouded-lg leading-none border img-border-animation p-3 w-full nui-card"
         >
           <BaseWidget
             class="w-full"
@@ -191,5 +191,11 @@ const device = useDevice();
   animation-duration: 2s;
   animation-timing-function: linear;
   animation-direction: alternate;
+}
+
+.nui-card{
+    border-width: 1px;
+    --tw-border-opacity: 1;
+    border-color: rgb(226 232 240/var(--tw-border-opacity,1));
 }
 </style>

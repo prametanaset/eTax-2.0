@@ -103,9 +103,9 @@ onUnmounted(() => {
       <span class="text-center"></span> <!-- Empty for delete button -->
     </div>
 
-    <div class="space-y-4">
+    <div class="space-y-4 ">
       <div v-for="product in products" :key="product.id"
-        class="grid sm:grid-cols-[1fr_80px_80px_90px_50px] gap-4 items-center p-4 border rounded-lg shadow-sm "
+        class="grid sm:grid-cols-[1fr_80px_80px_90px_50px] gap-4 items-center p-4 border rounded-lg shadow-sm  bg-[hsl(var(--card))]"
         :class="screenWidth < 640 ? 'grid-cols-2' : 'grid-cols-1'">
         <!-- Product Info -->
         <div class="flex items-center space-x-4 w-full overflow-hidden" :class="screenWidth < 640 ? 'col-span-2' : ''">
