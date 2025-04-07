@@ -55,7 +55,7 @@ import type {
   VisibilityState,
 } from "@tanstack/vue-table";
 
-import type { Product } from "./data/schema";
+import type { Customer } from "./data/schema";
 import { valueUpdater } from "@/utils";
 
 import {

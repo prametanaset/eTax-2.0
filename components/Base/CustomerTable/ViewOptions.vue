@@ -53,7 +53,10 @@
                 <Button variant="outline">ยกเลิก</Button>
               </DialogClose>
               <Button
-                v-if="customerStore.customerToUpdate === null"
+                v-if="
+                  customerStore.customerToUpdate === null ||
+                  customerStore.customerToUpdate.length === 0
+                "
                 :disabled="!canCreate"
                 type="submit"
                 @click="handleCreateCustomer"
@@ -166,7 +169,7 @@ async function editProduct() {
     throw err;
   }
 }
-async function removeProduct() {
+async function removeCustomer() {
   try {
     await deleteCustomerService(customerStore.customerToDelete);
   } catch (err) {
@@ -230,7 +233,7 @@ const handleUpdateCustomer = async () => {
 
 const handleDeleteCustomer = async () => {
   try {
-    await removeProduct();
+    await removeCustomer();
     await customerStore.getCustomer(); // ✅ Store จะอัปเดตค่าเอง
 
     toast({
@@ -310,6 +313,16 @@ watch(
     }
   },
   { deep: true, immediate: true }
+);
+
+watch(
+  () => customerStore.customerToDelete,
+  (newValue) => {
+    if (newValue) {
+      handleDeleteCustomer();
+    }
+  },
+  { deep: true }
 );
 </script>
 

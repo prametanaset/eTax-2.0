@@ -47,7 +47,10 @@
                 <Button variant="outline">ยกเลิก</Button>
               </DialogClose>
               <Button
-                v-if="productStore.productsToEdit === null"
+                v-if="
+                  productStore.productsToEdit === null ||
+                  productStore.productsToEdit.length === 0
+                "
                 :disabled="!canCreate"
                 type="submit"
                 @click="handleCreateProduct"

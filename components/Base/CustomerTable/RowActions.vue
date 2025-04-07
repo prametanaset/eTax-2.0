@@ -53,11 +53,11 @@ interface DataTableRowActionsProps {
 const props = defineProps<DataTableRowActionsProps>();
 const customerStore = useCustomerStore();
 
-const updateCustomer = (customer: any) => {
-  customerStore.customerToUpdate = customer;
+const updateCustomer = (customer: Customer) => {
+  customerStore.setCustomerToUpdate(customer);
 };
-const deleteCustomer = (customer: any) => {
-  customerStore.customerToDelete = customer;
+const deleteCustomer = (customer: Customer) => {
+  customerStore.setcustomerToDelete(customer);
 };
 </script>
 
