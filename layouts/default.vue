@@ -21,6 +21,14 @@ import {
 } from "@/components/ui/sidebar";
 
 const route = useRoute();
+
+const data = {
+  user: {
+    name: "shadcn",
+    email: "prametanaset147@gmail.com",
+    avatar: "/avatars/shadcn.png",
+  },
+}
 </script>
 
 <template>
@@ -28,33 +36,34 @@ const route = useRoute();
     <AppSidebar />
     <SidebarInset>
       <header
-        class="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12"
-      >
-        <div class="flex items-center gap-2 px-4">
-          <SidebarTrigger class="-ml-1" />
-          <Separator
-            v-if="route.name !== 'index'"
-            orientation="vertical"
-            class="mr-2 h-4"
-          />
-          <Breadcrumb v-if="route.name !== 'index'">
-            <BreadcrumbList>
-              <BreadcrumbItem class="hidden md:block">
-                <BreadcrumbLink href="/">
-                  Building Your Application
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator class="hidden md:block" />
-              <BreadcrumbItem>
-                <BreadcrumbPage>{{ route.meta.title }}</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
+        class="flex h-14 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+        <div class="flex items-center justify-between w-full px-4 pr-2">
+          <div id="bread-crumb" class="flex items-center">
+            <SidebarTrigger class="-ml-1" />
+            <Separator v-if="route.name !== 'index'" orientation="vertical" class="mr-2 h-4" />
+            <Breadcrumb v-if="route.name !== 'index'">
+              <BreadcrumbList>
+                <BreadcrumbItem class="hidden md:block">
+                  <BreadcrumbLink href="/">
+                    Building Your Application
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator class="hidden md:block" />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>{{ route.meta.title }}</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
+          <div id="profile">
+            <NavUser2 :user="data.user" />
+          </div>
         </div>
+
       </header>
-      <div
-        class="max-w-[1440px] m-auto flex flex-1 flex-col gap-4 p-4 pt-0 overflow-x-auto"
-      >
+      <!-- Layout.vue -->
+      <div class="w-full max-w-[1440px] mx-auto px-4 pt-6 overflow-x-hidden">
+
         <div class="flex items-center gap-2">
           <!-- <NuxtLink to="/"  v-if="route.name !== 'index'">
             <svg
@@ -74,7 +83,7 @@ const route = useRoute();
           </NuxtLink> -->
           <h1 class="text-2xl font-semibold">{{ route.meta.title }}</h1>
         </div>
-        <div class="w-full" id="main">
+        <div class="mt-4" id="main">
           <slot />
         </div>
       </div>

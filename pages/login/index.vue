@@ -2,7 +2,7 @@
   <div class="flex h-screen">
     <div class="w-3/5">
       <!-- <p>Background here!</p> -->
-      <ClientOnly>
+      <ClientOnly v-if="!device.isMobile">
         <BaseThreeLinesEffect class="z-50" />
         <!-- <BaseThreeLinesEffectIndexVue /> -->
       </ClientOnly>
@@ -81,6 +81,7 @@
 
 <script lang="ts" setup>
 import { useForm, useField } from "vee-validate";
+const device = useDevice();
 
 definePageMeta({
   layout: false,

@@ -1,17 +1,18 @@
 <template>
   <div class="grid grid-cols-2 gap-4">
-    <div class="min-w-[30%] flex flex-col justify-between py-1 md:col-span-2 lg:col-span-1">
+    <div class="min-w-[30%] flex flex-col justify-between py-1 gap-1 md:col-span-2 lg:col-span-1">
 
-      <h4 class="text-sm  font-medium tracking-tight">
+      <h4 class="text-sm text-muted-500  font-semibold tracking-tight">
         {{ props.title }}
       </h4>
-      <h4 class="text-3xl  font-bold tracking-tight">
-        {{ props.countNumber }}
+      <h4  :class="props.status == 'money' ? 'text-4xl  font-bold tracking-tight text-primary-500/95 dark:text-white' : 'text-4xl font-bold tracking-tight text-gray-800 dark:text-white'">
+        {{ props.status == 'money' ? `฿ ${props.countNumber}` :`${props.countNumber}` }}
+        <!-- {{ props.status }} -->
       </h4>
 
       <div>
-        <p class="text-muted-500 text-sm dark:text-[#B4B4B4]">
-          <span class="text-muted-700 font-semibold dark:text-white">{{
+        <p class="text-muted-500 text-sm font-thin dark:text-[#B4B4B4]">
+          <span class="text-gray-700 font-normal dark:text-white">{{
             percenLastMonth > 0 ? percenLastMonth : percenLastMonth * -1
           }}</span>
           ใบกำกับภาษี
@@ -45,7 +46,10 @@ const props = defineProps<{
   title: string;
   countNumber: number;
   percenLastMonth: number;
+  status: string;
 }>();
+
+console.log("XXXX", props)
 </script>
 
 <style></style>

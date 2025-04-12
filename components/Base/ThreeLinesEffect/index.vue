@@ -16,8 +16,8 @@ const clock = new THREE.Clock()
 const conf = {
   nx: 40,
   ny: 100,
-  cscale: chroma.scale(['#A577FF', '#C5A3FF', '#A577FF', '#B038FF', '#9A2CC7', '#7A229F']).mode('lch'),
-  darken: -1.05,
+  cscale: chroma.scale(['#A577FF', '#C5A3FF', '#A577FF', '#A577FF', '#A577FF', '#9038FF']).mode('lch'),
+  darken: -1,
   angle: Math.PI / 3,
   timeCoef: 0.05
 }
