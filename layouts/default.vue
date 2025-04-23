@@ -28,7 +28,7 @@ const data = {
     email: "prametanaset147@gmail.com",
     avatar: "/avatars/shadcn.png",
   },
-}
+};
 </script>
 
 <template>
@@ -36,17 +36,20 @@ const data = {
     <AppSidebar />
     <SidebarInset>
       <header
-        class="flex h-14 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+        class="flex h-14 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12"
+      >
         <div class="flex items-center justify-between w-full px-4 pr-2">
           <div id="bread-crumb" class="flex items-center">
             <SidebarTrigger class="-ml-1" />
-            <Separator v-if="route.name !== 'index'" orientation="vertical" class="mr-2 h-4" />
+            <Separator
+              v-if="route.name !== 'index'"
+              orientation="vertical"
+              class="mr-2 h-4"
+            />
             <Breadcrumb v-if="route.name !== 'index'">
               <BreadcrumbList>
                 <BreadcrumbItem class="hidden md:block">
-                  <BreadcrumbLink href="/">
-                    Building Your Application
-                  </BreadcrumbLink>
+                  <BreadcrumbLink href="/"> e-Tax </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator class="hidden md:block" />
                 <BreadcrumbItem>
@@ -59,11 +62,9 @@ const data = {
             <NavUser2 :user="data.user" />
           </div>
         </div>
-
       </header>
       <!-- Layout.vue -->
       <div class="w-full max-w-[1440px] mx-auto px-4 pt-6 overflow-x-hidden">
-
         <div class="flex items-center gap-2">
           <!-- <NuxtLink to="/"  v-if="route.name !== 'index'">
             <svg

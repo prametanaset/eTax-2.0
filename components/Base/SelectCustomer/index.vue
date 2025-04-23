@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/combobox";
 import { ChevronsUpDown, Search } from "lucide-vue-next";
 
-const { getCustomers, updateCustomers } = useCustomerService();
+const { getCustomersService } = useCustomerService();
 
 // กำหนด Type ให้ `customers`
 type Customer = {
@@ -31,7 +31,7 @@ type Customer = {
 const customers = ref<Customer[]>([]);
 onMounted(async () => {
   try {
-    customers.value = await getCustomers();
+    customers.value = await getCustomersService();
   } catch (error) {
     console.error("❌ Failed to load customers:", error);
   }

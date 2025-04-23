@@ -14,6 +14,7 @@ import {
   BookOpen,
   Bot,
   Command,
+  Mail,
   Frame,
   GalleryVerticalEnd,
   Map,
@@ -105,6 +106,11 @@ const data = {
       ],
     },
     {
+      title: "Mail",
+      url: "/mail",
+      icon: Mail,
+    },
+    {
       title: "ตั้งค่า",
       url: "#",
       icon: Settings2,
@@ -159,7 +165,6 @@ const data = {
     </SidebarContent>
     <SidebarFooter>
       <!-- <NavUser :user="data.user" /> -->
-       
     </SidebarFooter>
     <SidebarRail />
   </Sidebar>
