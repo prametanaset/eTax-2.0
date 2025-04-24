@@ -7,6 +7,7 @@ interface MailListProps {
 }
 
 const mailStore = useMailStore();
+const device = useDevice();
 
 defineProps<MailListProps>();
 const selectedMail = defineModel<string>("selectedMail", { required: false });
@@ -39,7 +40,7 @@ function getBadgeVariantFromLabel(label: string) {
           "
           @click="(selectedMail = item.id), mailStore.selectMail.push(item)"
         >
-          <div class="flex w-full gap-5">
+          <div v-if="!device.isMobile" class="flex w-full gap-5">
             <div class="flex items-center w-[20%]">
               <div class="flex items-center gap-2">
                 <div class="font-semibold">
@@ -77,11 +78,50 @@ function getBadgeVariantFromLabel(label: string) {
               </div>
             </div>
           </div>
+
+          <!-- -------------------------------------------------- mobile display ----------------------------------------------------->
+          <div v-else class="w-full">
+            <div class="flex justify-between">
+              <div class="flex items-center gap-2">
+                <div class="font-semibold">
+                  {{ item.name }}
+                </div>
+                <span
+                  v-if="!item.read"
+                  class="flex h-2 w-2 rounded-full bg-primary-500"
+                />
+              </div>
+              <div class="flex justify-end items-center gap-2">
+                <!-- <Badge
+                v-for="label of item.labels"
+                :key="label"
+                :variant="getBadgeVariantFromLabel(label)"
+              >
+                {{ label }}
+              </Badge> -->
+                <div
+                  :class="
+                    cn(
+                      'text-xs',
+                      selectedMail === item.id
+                        ? 'text-foreground'
+                        : 'text-muted-foreground'
+                    )
+                  "
+                >
+                  {{ formatThaiDate(new Date(item.date)) }}
+                </div>
+              </div>
+            </div>
+            <div class="text-muted-400 flex-none w-[80wv]">
+              {{ item.subject }}
+            </div>
+          </div>
         </button>
       </TransitionGroup>
-      <TransitionGroup v-else name="list" appear>
+      <Transition v-else name="slide-fade" appear>
         <BaseMailDisplay :mail="mailStore.selectMail[0]" />
-      </TransitionGroup>
+      </Transition>
     </div>
   </ScrollArea>
 </template>
@@ -101,5 +141,30 @@ function getBadgeVariantFromLabel(label: string) {
 
 .list-leave-active {
   position: absolute;
+}
+
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.4s ease;
+}
+
+.slide-fade-enter-from {
+  opacity: 0;
+  transform: translateX(100%); /* เริ่มจากขวาสุด */
+}
+
+.slide-fade-enter-to {
+  opacity: 1;
+  transform: translateX(0); /* มายืนตำแหน่งปกติ */
+}
+
+.slide-fade-leave-from {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateX(100%);
 }
 </style>

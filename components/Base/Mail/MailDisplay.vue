@@ -11,6 +11,7 @@ import {
   ReplyAll,
   Trash2,
   ChevronLeft,
+  Star,
 } from "lucide-vue-next";
 import { computed } from "vue";
 
@@ -33,8 +34,8 @@ const today = new Date();
 </script>
 
 <template>
-  <div class="flex h-full flex-col">
-    <div class="flex items-center p-2">
+  <div class="flex h-full w-full flex-col">
+    <div class="flex items-center pb-2">
       <div class="flex items-center gap-2">
         <Tooltip>
           <TooltipTrigger as-child @click="mailStore.clearSelectMailStore">
@@ -45,7 +46,7 @@ const today = new Date();
           </TooltipTrigger>
           <TooltipContent>Back</TooltipContent>
         </Tooltip>
-        <Tooltip>
+        <!-- <Tooltip>
           <TooltipTrigger as-child>
             <Button variant="ghost" size="icon" :disabled="!mail">
               <Archive class="size-4" />
@@ -72,8 +73,17 @@ const today = new Date();
           </TooltipTrigger>
           <TooltipContent>Move to trash</TooltipContent>
         </Tooltip>
-        <Separator orientation="vertical" class="mx-1 h-6" />
         <Tooltip>
+          <TooltipTrigger as-child>
+            <Button variant="ghost" size="icon" :disabled="!mail">
+              <Star class="size-4" />
+              <span class="sr-only">ติดดาว</span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>ติดดาว</TooltipContent>
+        </Tooltip>
+        <Separator orientation="vertical" class="mx-1 h-6" /> -->
+        <!-- <Tooltip>
           <Popover>
             <PopoverTrigger as-child>
               <TooltipTrigger as-child>
@@ -119,7 +129,7 @@ const today = new Date();
             </PopoverContent>
           </Popover>
           <TooltipContent>Snooze</TooltipContent>
-        </Tooltip>
+        </Tooltip> -->
       </div>
       <div class="ml-auto flex items-center gap-2">
         <Tooltip>

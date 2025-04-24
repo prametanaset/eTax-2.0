@@ -1,5 +1,5 @@
 <template>
-  <Card class="p-3 flex-col col-span-2">
+  <Card class="flex-col col-span-2">
     <Mail :accounts="accounts" :mails="mailList" :nav-collapsed-size="4" />
   </Card>
 </template>
