@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Icon } from "@iconify/vue";
 
 import {
   DropdownMenu,
@@ -32,6 +33,29 @@ const props = defineProps<{
     avatar: string;
   };
 }>();
+
+const linkData = [
+  {
+    title: "อัปเกรดบริการของคุณ",
+    icon: Sparkles,
+    link: "",
+  },
+  {
+    title: "โปรไฟล์",
+    icon: BadgeCheck,
+    link: "/profile",
+  },
+  {
+    title: "ดูบริการ",
+    icon: CreditCard,
+    link: "",
+  },
+  {
+    title: "การแจ้งเตือน",
+    icon: Bell,
+    link: "",
+  },
+];
 
 const { isMobile } = useSidebar();
 </script>
@@ -69,7 +93,7 @@ const { isMobile } = useSidebar();
           align="end"
           :side-offset="4"
         >
-        <DropdownMenuLabel class="p-0 font-normal">
+          <DropdownMenuLabel class="p-0 font-normal">
             <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
               <Avatar class="h-8 w-8 rounded-full">
                 <AvatarImage :src="user.avatar" :alt="user.name" />
@@ -84,25 +108,15 @@ const { isMobile } = useSidebar();
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem class="cursor-pointer">
-              <Sparkles />
-
-              อัปเกรดบริการของคุณ
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
-          <DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            <DropdownMenuItem class="cursor-pointer">
-              <BadgeCheck />
-              โปรไฟล์
-            </DropdownMenuItem>
-            <DropdownMenuItem class="cursor-pointer">
-              <CreditCard />
-              ดูบริการ
-            </DropdownMenuItem>
-            <DropdownMenuItem class="cursor-pointer">
-              <Bell />
-              การแจ้งเตือน
+            <DropdownMenuItem
+              class="cursor-pointer"
+              v-for="(data, index) in linkData"
+              :key="index"
+            >
+              <NuxtLink :to="data.link" class="flex gap-2">
+                <component :is="data.icon" v-if="data.icon" class="w-4" />
+                {{ data.title }}
+              </NuxtLink>
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />

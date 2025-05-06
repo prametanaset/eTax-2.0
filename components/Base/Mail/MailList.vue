@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { Mail } from "./data/mail";
 import { cn } from "@/lib/utils";
+import { Star } from "lucide-vue-next";
 
 interface MailListProps {
   items: Mail[];
@@ -23,7 +24,7 @@ function getBadgeVariantFromLabel(label: string) {
 
 <template>
   <ScrollArea class="h-screen flex">
-    <div class="gap-2 p-4 pt-0 w-full">
+    <div class="gap-2 py-4 pt-0 w-full">
       <TransitionGroup
         name="list"
         appear
@@ -34,15 +35,35 @@ function getBadgeVariantFromLabel(label: string) {
           :key="item.id"
           :class="
             cn(
-              'items-start gap-2  p-3 text-left text-sm transition-all hover:bg-accent w-full',
-              selectedMail === item.id && 'bg-muted'
+              'items-start gap-2 text-left text-sm transition-all hover:bg-accent w-full',
+              selectedMail === item.id && 'bg-muted',
+              device.isMobile ? '' : 'py-3'
             )
           "
           @click="(selectedMail = item.id), mailStore.selectMail.push(item)"
         >
-          <div v-if="!device.isMobile" class="flex w-full gap-5">
-            <div class="flex items-center w-[20%]">
+          <div
+            v-if="!device.isMobile"
+            class="flex w-full gap-5 overflow-hidden"
+          >
+            <div class="flex items-center w-[10%] overflow-hidden">
               <div class="flex items-center gap-2">
+                <Tooltip>
+                  <TooltipTrigger
+                    as-child
+                    @click="mailStore.clearSelectMailStore"
+                  >
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      @click="console.log('click')"
+                    >
+                      <Star class="size-4" />
+                      <span class="sr-only">ติดดาว</span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>ติดดาว</TooltipContent>
+                </Tooltip>
                 <div class="font-semibold">
                   {{ item.name }}
                 </div>
@@ -53,10 +74,16 @@ function getBadgeVariantFromLabel(label: string) {
               </div>
             </div>
 
-            <div class="font-semibold w-[40%] text-overflow-ellipsis">
-              {{ item.subject }}
+            <!-- Subject & Text Container -->
+            <div class="w-[70%] overflow-hidden">
+              <div class="overflow-hidden whitespace-nowrap text-ellipsis">
+                <span class="font-semibold">{{ item.subject }}</span>
+                <!-- <span class="text-muted-500"> - {{ item.text }}</span> -->
+              </div>
             </div>
-            <div class="flex justify-end items-center gap-2 w-[30%]">
+
+            <!-- Date & Labels -->
+            <div class="flex justify-end items-center gap-2 w-[20%]">
               <Badge
                 v-for="label of item.labels"
                 :key="label"
@@ -78,11 +105,29 @@ function getBadgeVariantFromLabel(label: string) {
               </div>
             </div>
           </div>
-
-          <!-- -------------------------------------------------- mobile display ----------------------------------------------------->
-          <div v-else class="w-full">
-            <div class="flex justify-between">
+          <!-- ----------------------------------------- device mobile -------------------------------------- -->
+          <div
+            v-else
+            class="grid w-full gap-2 overflow-hidden border-collapse border-b pb-3"
+          >
+            <div class="flex items-center w-full overflow-hidden">
               <div class="flex items-center gap-2">
+                <Tooltip>
+                  <TooltipTrigger
+                    as-child
+                    @click="mailStore.clearSelectMailStore"
+                  >
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      @click="console.log('click')"
+                    >
+                      <Star class="size-4" />
+                      <span class="sr-only">ติดดาว</span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>ติดดาว</TooltipContent>
+                </Tooltip>
                 <div class="font-semibold">
                   {{ item.name }}
                 </div>
@@ -91,30 +136,35 @@ function getBadgeVariantFromLabel(label: string) {
                   class="flex h-2 w-2 rounded-full bg-primary-500"
                 />
               </div>
-              <div class="flex justify-end items-center gap-2">
-                <!-- <Badge
+            </div>
+
+            <!-- Subject & Text Container -->
+            <div class="w-full">
+              <span class="font-semibold">{{ item.subject }}</span>
+              <span class="text-muted-500"> - {{ item.text }}</span>
+            </div>
+
+            <!-- Date & Labels -->
+            <div class="flex items-center gap-2 w-full">
+              <Badge
                 v-for="label of item.labels"
                 :key="label"
                 :variant="getBadgeVariantFromLabel(label)"
               >
                 {{ label }}
-              </Badge> -->
-                <div
-                  :class="
-                    cn(
-                      'text-xs',
-                      selectedMail === item.id
-                        ? 'text-foreground'
-                        : 'text-muted-foreground'
-                    )
-                  "
-                >
-                  {{ formatThaiDate(new Date(item.date)) }}
-                </div>
+              </Badge>
+              <div
+                :class="
+                  cn(
+                    'text-xs',
+                    selectedMail === item.id
+                      ? 'text-foreground'
+                      : 'text-muted-foreground'
+                  )
+                "
+              >
+                {{ formatThaiDate(new Date(item.date)) }}
               </div>
-            </div>
-            <div class="text-muted-400 flex-none w-[80wv]">
-              {{ item.subject }}
             </div>
           </div>
         </button>
