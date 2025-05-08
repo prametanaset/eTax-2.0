@@ -1,30 +1,60 @@
 <script setup>
-import { ref } from 'vue'
-import { Input } from '@/components/ui/input'
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
-import { Button } from '@/components/ui/button'
-import { Trash, ChevronDown, Plus } from 'lucide-vue-next'
-import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
+import { ref } from "vue";
+import { Input } from "@/components/ui/input";
 import {
-  Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList
-} from '@/components/ui/command'
-import { Label } from '@/components/ui/label'
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Trash, ChevronDown, Plus } from "lucide-vue-next";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { Label } from "@/components/ui/label";
 
-const [UseTemplate, DiscountForm] = createReusableTemplate()
+const [UseTemplate, DiscountForm] = createReusableTemplate();
 
 const availableProducts = [
-  { id: 1, name: 'เสื้อยืด', price: 125000, image: '/images/products/shirt.jpg' },
-  { id: 2, name: 'กางเกงยีน', price: 250000, image: '/images/products/jeans.jpg' },
-  { id: 3, name: 'รองเท้าผ้าใบ', price: 180000, image: '/images/products/sneakers.jpg' }
-]
+  {
+    id: 1,
+    name: "เสื้อยืด",
+    price: 125000,
+    image: "/images/products/shirt.jpg",
+  },
+  {
+    id: 2,
+    name: "กางเกงยีน",
+    price: 250000,
+    image: "/images/products/jeans.jpg",
+  },
+  {
+    id: 3,
+    name: "รองเท้าผ้าใบ",
+    price: 180000,
+    image: "/images/products/sneakers.jpg",
+  },
+];
 
 // Initially empty, user selects product first
-const products = ref([])
-const isPopoverOpen = ref(false)
+const products = ref([]);
+const isPopoverOpen = ref(false);
 
 const addProduct = (selectedProduct) => {
   const existingProduct = products.value.find(
-    product => product.id === selectedProduct.id
+    (product) => product.id === selectedProduct.id
   );
 
   if (existingProduct) {
@@ -36,17 +66,17 @@ const addProduct = (selectedProduct) => {
       ...selectedProduct,
       quantity: 1,
       discountValue: 0,
-      discountType: '%',
-      tax: '10%'
+      discountType: "%",
+      tax: "10%",
     });
   }
 
   isPopoverOpen.value = false; // 👈 Close it manually here
-}
+};
 
 const removeProduct = (id) => {
-  products.value = products.value.filter(product => product.id !== id)
-}
+  products.value = products.value.filter((product) => product.id !== id);
+};
 
 const screenWidth = ref(0); // Start with 0 or a default value
 
@@ -62,34 +92,42 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener("resize", updateWidth);
 });
-
 </script>
 
 <template>
   <div class="space-y-4">
-
     <!-- Product Selection Popover -->
     <Popover v-if="!(products.length > 0)">
       <PopoverTrigger as-child>
-        <Button  class=" flex items-center justify-between text-left">
+        <Button class="flex items-center justify-between text-left">
           <Plus />
           <span>เพิ่มรายการสินค้า</span>
         </Button>
       </PopoverTrigger>
-<!--       <PopoverContent class="p-0 w-[var(--reka-popper-anchor-width)]" align="end" >
+      <!--       <PopoverContent class="p-0 w-[var(--reka-popper-anchor-width)]" align="end" >
  -->
-      <PopoverContent  class="p-0">
+      <PopoverContent class="p-0">
         <Command>
           <CommandInput placeholder="Search product..." />
           <CommandList>
             <CommandEmpty>No products found.</CommandEmpty>
             <CommandGroup>
-              <CommandItem v-for="product in availableProducts" :key="product.id" @select="addProduct(product)"
-                :value="product.id" class="flex items-center px-4 py-2 cursor-pointer">
-                <img :src="product.image" class="w-10 h-10 rounded-md object-cover mr-3" />
+              <CommandItem
+                v-for="product in availableProducts"
+                :key="product.id"
+                @select="addProduct(product)"
+                :value="product.id"
+                class="flex items-center px-4 py-2 cursor-pointer"
+              >
+                <img
+                  :src="product.image"
+                  class="w-10 h-10 rounded-md object-cover mr-3"
+                />
                 <div>
                   <p class="font-semibold">{{ product.name }}</p>
-                  <p class="text-sm text-gray-500">{{ currencyFormat(product.price) }} บาท</p>
+                  <p class="text-sm text-gray-500">
+                    {{ currencyFormat(product.price) }} บาท
+                  </p>
                 </div>
               </CommandItem>
             </CommandGroup>
@@ -99,22 +137,35 @@ onUnmounted(() => {
     </Popover>
 
     <!-- Header Row -->
-    <div v-if="products.length"
-      class="grid grid-cols-[1fr_80px_80px_100px_50px] gap-4 p-2 py-1 font-semibold border-b text-sm items-center max-sm:hidden">
+    <div
+      v-if="products.length"
+      class="grid grid-cols-[1fr_80px_80px_100px_50px] gap-4 p-2 py-1 font-semibold border-b text-sm items-center max-sm:hidden"
+    >
       <span class="pl-2">รายละเอียด</span>
       <span class="text-center">จำนวน</span>
       <span class="text-center">ส่วนลด</span>
       <span class="text-center">ภาษี</span>
-      <span class="text-center"></span> <!-- Empty for delete button -->
+      <span class="text-center"></span>
+      <!-- Empty for delete button -->
     </div>
 
-    <div class="space-y-3 ">
-      <div v-for="product in products" :key="product.id"
-        class="grid sm:grid-cols-[1fr_80px_80px_90px_50px] gap-4 items-center p-4 border rounded-lg shadow-sm  bg-[hsl(var(--card))]"
-        :class="screenWidth < 640 ? 'grid-cols-2' : 'grid-cols-1'">
+    <div class="space-y-3">
+      <div
+        v-for="product in products"
+        :key="product.id"
+        class="grid sm:grid-cols-[1fr_80px_80px_90px_50px] gap-4 items-center p-4 border rounded-lg shadow-sm bg-[hsl(var(--card))]"
+        :class="screenWidth < 640 ? 'grid-cols-2' : 'grid-cols-1'"
+      >
         <!-- Product Info -->
-        <div class="flex items-center space-x-4 w-full overflow-hidden" :class="screenWidth < 640 ? 'col-span-2' : ''">
-          <img :src="product.image" :alt="product.name" class="w-12 h-12 rounded-xl object-cover" />
+        <div
+          class="flex items-center space-x-4 w-full overflow-hidden"
+          :class="screenWidth < 640 ? 'col-span-2' : ''"
+        >
+          <img
+            :src="product.image"
+            :alt="product.name"
+            class="w-12 h-12 rounded-xl object-cover"
+          />
           <div class="flex-1 min-w-0">
             <p class="font-normal truncate">{{ product.name }}</p>
             <p class="text-sm text-gray-500">
@@ -126,8 +177,12 @@ onUnmounted(() => {
         <!-- Quantity Input -->
         <div class="w-full sm:w-16 mx-auto">
           <Label class="block text-xs text-gray-600 sm:hidden">จำนวน</Label>
-          <Input type="number" v-model="product.quantity" min="1"
-            class="text-center w-full border-gray-300 rounded-md" />
+          <Input
+            type="number"
+            v-model="product.quantity"
+            min="1"
+            class="text-center w-full border-gray-300 rounded-md"
+          />
         </div>
 
         <!-- Discount Popover -->
@@ -135,7 +190,10 @@ onUnmounted(() => {
           <Label class="block text-xs text-gray-600 sm:hidden">ส่วนลด</Label>
           <Popover v-if="screenWidth > 640">
             <PopoverTrigger as-child>
-              <Button variant="outline" class="w-full sm:w-20 text-center text-sm truncate bg-[hsl(var(--card))]">
+              <Button
+                variant="outline"
+                class="w-full sm:w-20 text-center text-sm truncate bg-[hsl(var(--card))]"
+              >
                 {{ product.discountValue }} {{ product.discountType }}
               </Button>
             </PopoverTrigger>
@@ -162,7 +220,12 @@ onUnmounted(() => {
                   </div>
                   <div class="grid grid-cols-3 items-center gap-4">
                     <span>มูลค่า</span>
-                    <Input type="number" v-model="product.discountValue" min="0" class="col-span-2 h-8 text-center" />
+                    <Input
+                      type="number"
+                      v-model="product.discountValue"
+                      min="0"
+                      class="col-span-2 h-8 text-center"
+                    />
                   </div>
                 </div>
               </div>
@@ -172,14 +235,19 @@ onUnmounted(() => {
           <!-- Mobile Discount -->
           <Drawer v-else>
             <DrawerTrigger as-child>
-              <Button variant="outline" class="w-full sm:w-20 text-center text-sm truncate">
+              <Button
+                variant="outline"
+                class="w-full sm:w-20 text-center text-sm truncate"
+              >
                 {{ product.discountValue }} {{ product.discountType }}
               </Button>
             </DrawerTrigger>
             <DrawerContent>
               <DrawerHeader class="text-left">
                 <DrawerTitle>เพิ่มส่วนลด</DrawerTitle>
-                <DrawerDescription>กรุณาเลือกประเภทและมูลค่าของส่วนลด</DrawerDescription>
+                <DrawerDescription
+                  >กรุณาเลือกประเภทและมูลค่าของส่วนลด</DrawerDescription
+                >
               </DrawerHeader>
               <form class="grid gap-4 px-4 py-2">
                 <div class="grid grid-cols-3 items-center gap-4">
@@ -196,14 +264,17 @@ onUnmounted(() => {
                 </div>
                 <div class="grid grid-cols-3 items-center gap-4">
                   <Label>มูลค่า</Label>
-                  <Input type="number" v-model="product.discountValue" min="0" class="col-span-2 h-8 text-center" />
+                  <Input
+                    type="number"
+                    v-model="product.discountValue"
+                    min="0"
+                    class="col-span-2 h-8 text-center"
+                  />
                 </div>
                 <!-- <Button type="submit"> -->
 
                 <DrawerClose type="button">
-                  <Button class="w-full">
-                    บันทึก
-                  </Button>
+                  <Button class="w-full"> บันทึก </Button>
                 </DrawerClose>
               </form>
               <DrawerFooter class="pt-2">
@@ -234,8 +305,11 @@ onUnmounted(() => {
         <!-- Delete Button -->
         <div>
           <!-- <Label class="block text-xs text-gray-600 sm:hidden">ลบ</Label> -->
-          <Button variant="ghost" class="text-red-500 hover:text-red-600 w-full sm:w-auto"
-            @click="removeProduct(product.id)">
+          <Button
+            variant="ghost"
+            class="text-red-500 hover:text-red-600 w-full sm:w-auto"
+            @click="removeProduct(product.id)"
+          >
             <Trash class="w-5 h-5 mx-auto sm:mx-0" />
           </Button>
         </div>
@@ -243,10 +317,13 @@ onUnmounted(() => {
     </div>
 
     <!-- Product Selection Popover -->
-    <Popover v-if="products.length">
+    <Popover v-if="products.length" v-model:open="isPopoverOpen">
       <PopoverTrigger as-child>
-        <Button variant="link" class="flex items-center justify-between text-left">
-          <Plus/>
+        <Button
+          variant="link"
+          class="flex items-center justify-between text-left"
+        >
+          <Plus />
           <span>เพิ่มรายการสินค้า</span>
           <!-- <ChevronDown class="h-4 w-4 text-muted-foreground" /> -->
         </Button>
@@ -257,12 +334,22 @@ onUnmounted(() => {
           <CommandList>
             <CommandEmpty>No products found.</CommandEmpty>
             <CommandGroup>
-              <CommandItem v-for="product in availableProducts" :key="product.id" @select="addProduct(product)"
-                :value="product.id" class="flex items-center px-4 py-2 cursor-pointer">
-                <img :src="product.image" class="w-10 h-10 rounded-md object-cover mr-3" />
+              <CommandItem
+                v-for="product in availableProducts"
+                :key="product.id"
+                @select="addProduct(product)"
+                :value="product.id"
+                class="flex items-center px-4 py-2 cursor-pointer"
+              >
+                <img
+                  :src="product.image"
+                  class="w-10 h-10 rounded-md object-cover mr-3"
+                />
                 <div>
                   <p class="font-medium">{{ product.name }}</p>
-                  <p class="text-sm text-gray-500">{{ currencyFormat(product.price) }} บาท</p>
+                  <p class="text-sm text-gray-500">
+                    {{ currencyFormat(product.price) }} บาท
+                  </p>
                 </div>
               </CommandItem>
             </CommandGroup>
