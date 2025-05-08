@@ -63,11 +63,11 @@ const data = {
 
           <div id="profile" class="flex items-center gap-3">
             <Badge
-  variant="outline"
-  class="bg-green-100 text-green-600 border-green-300 px-3 py-1 mr-2 text-sm font-light leading-none rounded-lg whitespace-nowrap"
->
-<MailCheck class="h-4 mr-1" />e-Tax พร้อมใช้งาน
-</Badge>
+              variant="outline"
+              class="bg-green-100 text-green-600 border-green-300 px-3 py-1 mr-2 text-sm font-light leading-none rounded-lg whitespace-nowrap"
+            >
+              <MailCheck class="h-4 mr-1" />e-Tax พร้อมใช้งาน
+            </Badge>
 
             <Separator orientation="vertical" class="h-8 w-px bg-muted-300" />
 
@@ -78,12 +78,10 @@ const data = {
       <!-- Layout.vue -->
       <div
         :class="[
-          'w-full  mx-auto px-4 pt-6 overflow-x-hidden',
+          'w-full  mx-auto px-4 pt-6',
           route.path == '/mail' ? '' : 'max-w-[1440px]',
         ]"
       >
-        <div v-if="route.path !== '/mail'" class="flex items-center gap-2">
-      <div class="w-full max-w-[1440px] mx-auto px-4 pt-6">
         <div class="flex items-center gap-2">
           <!-- <NuxtLink to="/"  v-if="route.name !== 'index'">
             <svg
