@@ -19,7 +19,7 @@ const conf = {
   cscale: chroma.scale(['#A577FF', '#C5A3FF', '#A577FF', '#A577FF', '#A577FF', '#9038FF']).mode('lch'),
   darken: -1,
   angle: Math.PI / 3,
-  timeCoef: 0.05
+  timeCoef: 0.1
 }
 const uTimeCoef = { value: conf.timeCoef }
 const uTime = { value: 0 }
@@ -80,10 +80,10 @@ function initScene() {
         uTimeCoef,
         uMat2: { value: mat2 },
         uSize: { value: 1.5 / conf.nx },
-        uRnd1: { value: new THREE.Vector3(rnd(-1, 1), rnd(-1, 1), rnd(-1, 1)) },
-        uRnd2: { value: new THREE.Vector3(rnd(-1, 1), rnd(-1, 1), rnd(-1, 1)) },
-        uRnd3: { value: new THREE.Vector3(rnd(-1, 1), rnd(-1, 1), rnd(-1, 1)) },
-        uRnd4: { value: new THREE.Vector3(rnd(-1, 1), rnd(-1, 1), rnd(-1, 1)) },
+        // uRnd1: { value: new THREE.Vector3(rnd(-1, 1), rnd(-1, 1), rnd(-1, 1)) },
+        // uRnd2: { value: new THREE.Vector3(rnd(-1, 1), rnd(-1, 1), rnd(-1, 1)) },
+        // uRnd3: { value: new THREE.Vector3(rnd(-1, 1), rnd(-1, 1), rnd(-1, 1)) },
+        // uRnd4: { value: new THREE.Vector3(rnd(-1, 1), rnd(-1, 1), rnd(-1, 1)) },
         uRnd5: { value: new THREE.Vector3(rnd(0.2, 0.5), rnd(0.3, 0.6), rnd(0.4, 0.7)) },
         uColor1: { value: new THREE.Color(conf.cscale(i / conf.nx).hex()) },
         uColor2: { value: new THREE.Color(conf.cscale(i / conf.nx).darken(conf.darken).hex()) }

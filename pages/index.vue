@@ -17,7 +17,7 @@
     ></div>
     <Card
       class="z-10 relative rounded-md leading-none border img-border-animation p-3 w-full"
-      :class="index === widgets.length - 1 ? '!border-primary-500' : 'nui-card'"
+      :class="index === widgets.length - 1 ? '!border-primary-500' : ''"
     >
       <BaseWidget
         class="w-full"
@@ -69,11 +69,12 @@
 
 
     <!-- Table -->
-    <div class="overflow-x-auto">
-      <BaseInvoiceDataTable
+    <div class="w-full">
+      <!-- <BaseInvoiceDataTable
         :data="invoices_100_thai"
         :columns="columns"
-      />
+      /> -->
+      <BaseDataTable />
     </div> 
   </div>
 </template>

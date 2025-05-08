@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="flex items-center justify-between space-x-4 border border-muted-700">
-      <Popover>
-        <PopoverTrigger class="w-72 h-fit" as-child>
-          <Button variant="outline" class="ml-auto flex items-center justify-between text-left">
+    <div >
+      <Popover  v-model:open="isOpen">
+        <PopoverTrigger class="w-full h-fit" as-child>
+          <Button variant="outline" class="flex items-center bg-[hsl(var(--card))] justify-between text-left py-3">
             <!-- Display the currently selected customer's avatar -->
             <BaseAvatar
               :text="selectedCustomer.value.substring(0,2).toUpperCase()"
@@ -14,10 +14,10 @@
             <ChevronDown class="ml-2 h-4 w-4 text-muted-foreground" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent class="p-0" align="end">
+        <PopoverContent class="p-0" align="start">
           <!-- The Command component now uses the selected customer object -->
-          <Command v-model="selectedCustomer">
-            <CommandInput placeholder="Select customer..." />
+          <Command v-model="selectedCustomer" v-model:open="isOpen">
+            <CommandInput placeholder="Select customer..." class="font-thin" />
             <CommandList>
               <CommandEmpty>No customers found.</CommandEmpty>
               <CommandGroup>
@@ -27,6 +27,7 @@
                   :key="customer.value"
                   :value="customer"
                   class="flex items-center px-4 py-2"
+                  @select="onStatusSelect(customer.value)"
                 >
                   <BaseAvatar
                     :text="customer.value.substring(0,2).toUpperCase()"
@@ -70,6 +71,13 @@ const customers = [
 
 // Set the default selected customer (here using the first customer)
 const selectedCustomer = ref(customers[0])
+const isOpen = ref(false)
+const selectedStatus = ref<Status | null>(null)
+
+function onStatusSelect(status: Status) {
+  selectedStatus.value = status
+  isOpen.value = false
+}
 </script>
 
 <style>

@@ -4,29 +4,37 @@
       <div
         class="absolute top-[0%] right-0 w-[95%] lg:h-[100%] bg-primary-400/50 blur-xl rounded-full img-shadow-animation"
       ></div>
-      <Card class="w-full rounded-xl pb-0 z-10 relative">
-        <CardHeader>
+      <Card class="w-full rounded-2xl pb-0 z-10 relative">
+        <CardHeader class="px-0">
           <!-- <Card class="p-4 relative overflow-hidden border-primary-500 rounded-2xl"> -->
           <div class="relative rounded-2xl">
-            <div class="border-b-[1.5px] border-slate-200">
+            <div class="border-b-[3px] border-[hsl(var(--background))]">
               <CardTitle
-                class="xs:grid sm:flex items-center justify-between gap-3"
+                class="xs:grid sm:flex items-center justify-between gap-3 px-6 pb-3"
               >
                 <div class="sm:flex">
-                  <div class="font-semibold mr-2">ใบกำกับภาษีเลขที่</div>
-                  <div class="text-purple-700">#INV 0001/08/2569</div>
+                  <div class="font-semibold mr-2">หมายเลขใบกำกับภาษี</div>
+                  <div class="text-purple-700"><span class="text-muted-500/50">#</span>INV-0010</div>
                 </div>
                 <div>
-                  <p class="w-full py-3 text-lg font-semibold text-muted-400">
+                  <!-- <p class="w-full py-3 text-lg font-semibold text-muted-400">
                     {{ formatThaiDate(new Date()) }}
-                  </p>
+                  </p> -->
+                  <Badge
+                  v-if="false"
+                    variant="outline"
+                    class="flex-none text-sm font-medium px-2 py-1 rounded-full mb-2 bg-primary/10 text-primary dark:text-primary-light"
+                  >
+                    <!-- {{ formatThaiDate(new Date()) }} -->
+                    สร้างเมื่อ 11 เมษายน 2567
+                  </Badge>
                 </div>
               </CardTitle>
             </div>
           </div>
         </CardHeader>
         <div class="z-999 grid sm:grid-cols-2 gap-8 px-4 mb-4">
-          <div v-if="true">
+          <div v-if="false">
             <p class="flext-none mb-2 font-semibold text-lg">ผู้ขาย</p>
             <div class="border !border-primary-500 px-4 py-3 rounded-lg">
               <p class="mb-1 text-xl font-semibold">{{ storeApi.storeName }}</p>
@@ -39,18 +47,10 @@
               </CardDescription>
             </div>
           </div>
-          <div class="mr-1">
-            <p class="mb-2 font-semibold text-lg">ผู้ซื้อ</p>
-            <BaseSelectCustomer v-model="customer"></BaseSelectCustomer>
-            <div v-if="customer != null" class="grid w-full gap-1 mt-2">
-              <Label for="message">ที่อยู่ลูกค้า</Label>
-              <Textarea
-                v-model="customerAddress"
-                id="message"
-                placeholder="Type your message here."
-                class="w-full font-semibold"
-              />
-            </div>
+          <div class="mr-1 px-2">
+            <p class="mb-2 text-xl">ลูกค้า</p>
+            <BaseCustomer v-model="customer"></BaseCustomer>
+
           </div>
         </div>
         <CardContent>
@@ -103,9 +103,12 @@
               </div>
             </div>
           </div>
+
           <div class="grid gap-4 mt-8 overflow-hidden">
-            <p class="text-lg">รายการสินค้า</p>
+            <p class="text-xl ">รายการสินค้า</p>
             <!-- product table form -->
+            <BaseProductList></BaseProductList>
+
             <Table v-if="false" class="min-w-[800px] overflow-x-auto">
               <TableHeader>
                 <TableRow>
@@ -180,14 +183,14 @@
                 </TableRow>
               </TableBody>
             </Table>
-            <div class="">
+            <div v-if="false" class="">
               <Button @click="addItem">
                 <Plus />
                 เพิ่มสินค้า
               </Button>
             </div>
           </div>
-          <div class="grid sm:grid-cols-2 mt-8 pt-8 border-t">
+          <div v-if="false" class="grid sm:grid-cols-2 mt-8 pt-8">
             <div class="sm:col-end-3 mb-8">
               <div class="grid">
                 <div class="">
@@ -199,7 +202,7 @@
                   />
                 </div>
               </div>
-              <div class="flex flex-col justify-end mt-8">
+              <div v-if="false" class="flex flex-col justify-end mt-8">
                 <div class="flex justify-between w-full">
                   <p class="text-muted-400">ยอดเงินรวม</p>
                   <p>{{ currencyFormat(totalAmount) }}</p>
@@ -223,7 +226,7 @@
               </div>
             </div>
           </div>
-          <div class="w-full">
+          <div v-if="false" class="w-full">
             <Label for="email">หมายเหตุ</Label>
             <Textarea />
           </div>
@@ -231,10 +234,15 @@
       </Card>
     </div>
     <div class="col-span-12 lg:col-span-3">
-      <Card class="w-full">
+      <BaseNotificationCard class="w-full mb-3" />
+      <Card v-if="true" class="w-full">
         <div class="grid sm:grid-cols-2 gap-4 p-4">
-          <Button> <Eye />ตัวอย่าง </Button>
-          <Button> <Save />สร้าง </Button>
+          <Button variant="outline" class="bg-[hsl(var(--card))]">
+            <Eye />ตัวอย่าง
+          </Button>
+          <Button variant="outline" class="bg-[hsl(var(--card))]">
+            <Save />สร้าง
+          </Button>
           <Button class="col-span-2"> <Send />สร้าง และ ส่ง </Button>
         </div>
       </Card>

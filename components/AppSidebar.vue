@@ -66,6 +66,7 @@ const data = {
           url: "/",
         },
       ],
+      newTab: false
     },
     {
       title: "ใบกำกับภาษี",
@@ -82,6 +83,7 @@ const data = {
           url: "/invoice/create/invoice",
         },
       ],
+      newTab: false
     },
     {
       title: "จัดการสินค้า",
@@ -93,6 +95,7 @@ const data = {
           url: "/category",
         },
       ],
+      newTab: false
     },
     {
       title: "จัดการลูกค้า",
@@ -104,11 +107,13 @@ const data = {
           url: "/employees",
         },
       ],
+      newTab: false
     },
     {
       title: "Mail",
       url: "/mail",
       icon: Mail,
+      newTab: true
     },
     {
       title: "ตั้งค่า",
@@ -132,6 +137,7 @@ const data = {
           url: "#",
         },
       ],
+      newTab: false
     },
   ],
   projects: [
@@ -155,7 +161,7 @@ const data = {
 </script>
 
 <template>
-  <Sidebar v-bind="props">
+  <Sidebar class="w-[240px]" v-bind="props">
     <!-- <SidebarHeader>
       <TeamSwitcher :teams="data.teams" />
     </SidebarHeader> -->
