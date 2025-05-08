@@ -19,12 +19,13 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { MailCheck } from "lucide-vue-next";
 
 const route = useRoute();
 
 const data = {
   user: {
-    name: "shadcn",
+    name: "ธนเสฏฐ์ ศรีรัตน์ดา",
     email: "prametanaset147@gmail.com",
     avatar: "/avatars/shadcn.png",
   },
@@ -41,30 +42,41 @@ const data = {
         <div class="flex items-center justify-between w-full px-4 pr-2">
           <div id="bread-crumb" class="flex items-center">
             <SidebarTrigger class="-ml-1" />
-            <Separator
-              v-if="route.name !== 'index'"
-              orientation="vertical"
-              class="mr-2 h-4"
-            />
-            <Breadcrumb v-if="route.name !== 'index'">
+            <!-- <Separator v-if="route.name !== 'index'" orientation="vertical" class="mr-2 h-4" /> -->
+            <Separator orientation="vertical" class="mr-2 h-4" />
+
+            <!-- <Breadcrumb v-if="route.name !== 'index'"> -->
+            <Breadcrumb>
               <BreadcrumbList>
-                <BreadcrumbItem class="hidden md:block">
-                  <BreadcrumbLink href="/"> e-Tax </BreadcrumbLink>
+                <!-- <BreadcrumbItem class="hidden md:block">
+                  <BreadcrumbLink href="/">
+                    Building Your Application
+                  </BreadcrumbLink>
                 </BreadcrumbItem>
-                <BreadcrumbSeparator class="hidden md:block" />
+                <BreadcrumbSeparator class="hidden md:block" /> -->
                 <BreadcrumbItem>
                   <BreadcrumbPage>{{ route.meta.title }}</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
-          <div id="profile">
+
+          <div id="profile" class="flex items-center gap-3">
+            <Badge
+  variant="outline"
+  class="bg-green-100 text-green-600 border-green-300 px-3 py-1 mr-2 text-sm font-light leading-none rounded-lg whitespace-nowrap"
+>
+<MailCheck class="h-4 mr-1" />e-Tax พร้อมใช้งาน
+</Badge>
+
+            <Separator orientation="vertical" class="h-8 w-px bg-muted-300" />
+
             <NavUser2 :user="data.user" />
           </div>
         </div>
       </header>
       <!-- Layout.vue -->
-      <div class="w-full max-w-[1440px] mx-auto px-4 pt-6 overflow-x-hidden">
+      <div class="w-full max-w-[1440px] mx-auto px-4 pt-6">
         <div class="flex items-center gap-2">
           <!-- <NuxtLink to="/"  v-if="route.name !== 'index'">
             <svg

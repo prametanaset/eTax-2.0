@@ -1,17 +1,28 @@
 <template>
   <div class="grid grid-cols-2 gap-4">
     <div class="min-w-[30%] flex flex-col justify-between py-1 gap-1 md:col-span-2 lg:col-span-1">
-
-      <h4 class="text-sm text-muted-500  font-semibold tracking-tight">
+      <!--         :variant="props.status === 'money' ? 'outline' : 'secondary'"
+ -->
+      <Badge
+        :variant="props.status === 'money' ? 'secondary' : 'secondary'"
+        class="text-xs font-semibold tracking-tight w-fit"
+        :class="{
+          'bg-green-50 text-green-700': props.status === 'success',
+          'bg-yellow-50 text-yellow-800': props.status === 'warning',
+          'bg-red-50 text-red-700': props.status === 'cancel',
+          'bg-purple-50 text-purple-700': props.status === 'money'
+        }"
+      >
         {{ props.title }}
-      </h4>
-      <h4  :class="props.status == 'money' ? 'text-4xl  font-bold tracking-tight text-primary-500/95 dark:text-white' : 'text-4xl font-bold tracking-tight text-gray-800 dark:text-white'">
+      </Badge>
+
+      <h4  :class="props.status == 'money' ? 'text-4xl  font-bold tracking-tight text-primary-500/100 dark:text-white' : 'text-4xl font-bold tracking-tight text-gray-800 dark:text-white'">
         {{ props.status == 'money' ? `฿ ${props.countNumber}` :`${props.countNumber}` }}
         <!-- {{ props.status }} -->
       </h4>
 
       <div>
-        <p class="text-muted-500 text-sm font-thin dark:text-[#B4B4B4]">
+        <p class="text-muted-500 text-sm font-thin ml-1 dark:text-[#B4B4B4]">
           <span class="text-gray-700 font-normal dark:text-white">{{
             percenLastMonth > 0 ? percenLastMonth : percenLastMonth * -1
           }}</span>
@@ -25,7 +36,7 @@
       <div>
         <div class="flex items-center" :class="percenLastMonth > 0 ? 'text-success-400' : 'text-red-400'">
           <Icon :icon="percenLastMonth > 0 ? 'radix-icons:chevron-up' : 'radix-icons:chevron-down'
-            " class="h-4 w-4 mr-1 mb-1 group-hover:text-[#c164ff]" />
+            " class="h-3 w-3 mr-1 mb-1 group-hover:text-[#c164ff]" />
           <div class="text-base sm:text-sm md:text-sm">
             {{ percenLastMonth }}%
           </div>
@@ -48,8 +59,6 @@ const props = defineProps<{
   percenLastMonth: number;
   status: string;
 }>();
-
-console.log("XXXX", props)
 </script>
 
 <style></style>

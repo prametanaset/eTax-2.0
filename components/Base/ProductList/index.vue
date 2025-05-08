@@ -13,13 +13,14 @@ import { Label } from '@/components/ui/label'
 const [UseTemplate, DiscountForm] = createReusableTemplate()
 
 const availableProducts = [
-  { id: 1, name: 'Summer 2K23 T-shirt', price: 125000, image: '/avatars/shadcn.png' },
-  { id: 2, name: 'Winter Jacket', price: 250000, image: '/avatars/rick.png' },
-  { id: 3, name: 'Sneakers', price: 180000, image: '/avatars/summer.png' }
+  { id: 1, name: 'เสื้อยืด', price: 125000, image: '/images/products/shirt.jpg' },
+  { id: 2, name: 'กางเกงยีน', price: 250000, image: '/images/products/jeans.jpg' },
+  { id: 3, name: 'รองเท้าผ้าใบ', price: 180000, image: '/images/products/sneakers.jpg' }
 ]
 
 // Initially empty, user selects product first
 const products = ref([])
+const isPopoverOpen = ref(false)
 
 const addProduct = (selectedProduct) => {
   const existingProduct = products.value.find(
@@ -39,6 +40,8 @@ const addProduct = (selectedProduct) => {
       tax: '10%'
     });
   }
+
+  isPopoverOpen.value = false; // 👈 Close it manually here
 }
 
 const removeProduct = (id) => {
@@ -68,12 +71,14 @@ onUnmounted(() => {
     <!-- Product Selection Popover -->
     <Popover v-if="!(products.length > 0)">
       <PopoverTrigger as-child>
-        <Button variant="outline" class="w-72 flex items-center justify-between text-left">
+        <Button  class=" flex items-center justify-between text-left">
+          <Plus />
           <span>เพิ่มรายการสินค้า</span>
-          <ChevronDown class="h-4 w-4 text-muted-foreground" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent class="p-0 w-[var(--reka-popper-anchor-width)]" align="end">
+<!--       <PopoverContent class="p-0 w-[var(--reka-popper-anchor-width)]" align="end" >
+ -->
+      <PopoverContent  class="p-0">
         <Command>
           <CommandInput placeholder="Search product..." />
           <CommandList>
@@ -83,7 +88,7 @@ onUnmounted(() => {
                 :value="product.id" class="flex items-center px-4 py-2 cursor-pointer">
                 <img :src="product.image" class="w-10 h-10 rounded-md object-cover mr-3" />
                 <div>
-                  <p class="font-medium">{{ product.name }}</p>
+                  <p class="font-semibold">{{ product.name }}</p>
                   <p class="text-sm text-gray-500">{{ currencyFormat(product.price) }} บาท</p>
                 </div>
               </CommandItem>
@@ -95,7 +100,7 @@ onUnmounted(() => {
 
     <!-- Header Row -->
     <div v-if="products.length"
-      class="grid grid-cols-[1fr_80px_80px_100px_50px] gap-4 p-2 text-gray-500 font-medium border-b items-center max-sm:hidden">
+      class="grid grid-cols-[1fr_80px_80px_100px_50px] gap-4 p-2 py-1 font-semibold border-b text-sm items-center max-sm:hidden">
       <span class="pl-2">รายละเอียด</span>
       <span class="text-center">จำนวน</span>
       <span class="text-center">ส่วนลด</span>
@@ -103,15 +108,15 @@ onUnmounted(() => {
       <span class="text-center"></span> <!-- Empty for delete button -->
     </div>
 
-    <div class="space-y-4 ">
+    <div class="space-y-3 ">
       <div v-for="product in products" :key="product.id"
         class="grid sm:grid-cols-[1fr_80px_80px_90px_50px] gap-4 items-center p-4 border rounded-lg shadow-sm  bg-[hsl(var(--card))]"
         :class="screenWidth < 640 ? 'grid-cols-2' : 'grid-cols-1'">
         <!-- Product Info -->
         <div class="flex items-center space-x-4 w-full overflow-hidden" :class="screenWidth < 640 ? 'col-span-2' : ''">
-          <img :src="product.image" :alt="product.name" class="w-12 h-12 rounded-md object-cover" />
+          <img :src="product.image" :alt="product.name" class="w-12 h-12 rounded-xl object-cover" />
           <div class="flex-1 min-w-0">
-            <p class="font-medium truncate">{{ product.name }}</p>
+            <p class="font-normal truncate">{{ product.name }}</p>
             <p class="text-sm text-gray-500">
               {{ currencyFormat(product.price) }} บาท
             </p>
@@ -240,13 +245,13 @@ onUnmounted(() => {
     <!-- Product Selection Popover -->
     <Popover v-if="products.length">
       <PopoverTrigger as-child>
-        <Button variant="link" class="text-primary-500 flex items-center justify-between text-left">
+        <Button variant="link" class="flex items-center justify-between text-left">
           <Plus/>
           <span>เพิ่มรายการสินค้า</span>
           <!-- <ChevronDown class="h-4 w-4 text-muted-foreground" /> -->
         </Button>
       </PopoverTrigger>
-      <PopoverContent class="p-0 w-72" align="end">
+      <PopoverContent class="p-0 w-72" :data-align="'start'">
         <Command>
           <CommandInput placeholder="Search product..." />
           <CommandList>

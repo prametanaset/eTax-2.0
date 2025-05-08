@@ -59,6 +59,10 @@ const chartOptions1 = computed(() => {
   };
 });
 
+const generateRandomData = (length = 7, max = 600) => {
+  return Array.from({ length }, () => Math.floor(Math.random() * max));
+};
+
 const areaChart1 = {
   series: [
     {
