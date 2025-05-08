@@ -1,31 +1,13 @@
-<template>
-  <div id="handle-group-1" direction="horizontal" class="rounded-lg">
-    <!-- <ResizablePanel id="handle-panel-1" :default-size="20">
-      <Nav :is-collapsed="isCollapsed" :links="links" />
-    </ResizablePanel> -->
-    <!-- <ResizableHandle id="handle-handle-1" /> -->
-    <div class="py-2 mb-3 flex justify-between flex-end">
-      <form :class="[device.isMobile ? 'w-full' : 'w-[40rem]']">
-        <div class="relative">
-          <Search
-            class="absolute left-2 top-2.5 size-4 text-muted-foreground"
-          />
-          <Input v-model="searchValue" placeholder="ค้นหาอีเมล" class="pl-8" />
-        </div>
-      </form>
-    </div>
-    <MailList v-model:selected-mail="selectedMail" :items="filteredMailList" />
-    <!-- <BaseMailList2 /> -->
-    <MailDisplay :mail="selectedMailData" />
-  </div>
-</template>
-
 <script lang="ts" setup>
-import Nav from "./Nav.vue";
-import MailList from "./MailList.vue";
 import type { Mail } from "./data/mail";
 
-import { Search, Menu } from "lucide-vue-next";
+import { cn } from "@/lib/utils";
+import { refDebounced } from "@vueuse/core";
+import { Search } from "lucide-vue-next";
+import { computed, ref } from "vue";
+import MailDisplay from "./MailDisplay.vue";
+import MailList from "./MailList.vue";
+import Nav from "./Nav.vue";
 
 interface MailProps {
   accounts: {
@@ -39,30 +21,15 @@ interface MailProps {
   navCollapsedSize: number;
 }
 
-const data = {
-  user: {
-    name: "shadcn",
-    email: "prametanaset147@gmail.com",
-    avatar: "/avatars/shadcn.png",
-  },
-};
-
-const mailStore = useMailStore();
-const device = useDevice();
-
 const props = withDefaults(defineProps<MailProps>(), {
   defaultCollapsed: false,
   defaultLayout: () => [265, 440, 655],
 });
 
+const isCollapsed = ref(props.defaultCollapsed);
+const selectedMail = ref<string | undefined>(props.mails[0].id);
 const searchValue = ref("");
 const debouncedSearch = refDebounced(searchValue, 250);
-
-const isCollapsed = ref(props.defaultCollapsed);
-
-function onCollapse() {
-  isCollapsed.value = true;
-}
 
 const filteredMailList = computed(() => {
   let output: Mail[] = [];
@@ -84,7 +51,9 @@ const filteredMailList = computed(() => {
   return output;
 });
 
-const selectedMail = ref<string | undefined>();
+const unreadMailList = computed(() =>
+  filteredMailList.value.filter((item) => !item.read)
+);
 
 const selectedMailData = computed(() =>
   props.mails.find((item) => item.id === selectedMail.value)
@@ -98,9 +67,9 @@ const links = [
     variant: "default",
   },
   {
-    title: "ETDA",
-    label: "",
-    icon: "lucide:inbox",
+    title: "Drafts",
+    label: "9",
+    icon: "lucide:file",
     variant: "ghost",
   },
   {
@@ -110,18 +79,146 @@ const links = [
     variant: "ghost",
   },
   {
+    title: "Junk",
+    label: "23",
+    icon: "lucide:archive",
+    variant: "ghost",
+  },
+  {
     title: "Trash",
     label: "",
     icon: "lucide:trash",
     variant: "ghost",
   },
   {
-    title: "Star",
+    title: "Archive",
     label: "",
-    icon: "lucide:star",
+    icon: "lucide:archive",
     variant: "ghost",
   },
 ];
+
+const links2 = [
+  {
+    title: "Social",
+    label: "972",
+    icon: "lucide:user-2",
+    variant: "ghost",
+  },
+  {
+    title: "Updates",
+    label: "342",
+    icon: "lucide:alert-circle",
+    variant: "ghost",
+  },
+  {
+    title: "Forums",
+    label: "128",
+    icon: "lucide:message-square",
+    variant: "ghost",
+  },
+  {
+    title: "Shopping",
+    label: "8",
+    icon: "lucide:shopping-cart",
+    variant: "ghost",
+  },
+  {
+    title: "Promotions",
+    label: "21",
+    icon: "lucide:archive",
+    variant: "ghost",
+  },
+];
+
+function onCollapse() {
+  isCollapsed.value = true;
+}
+
+function onExpand() {
+  isCollapsed.value = false;
+}
 </script>
 
-<style></style>
+<template>
+  <TooltipProvider :delay-duration="0">
+    <ResizablePanelGroup
+      id="resize-panel-group-1"
+      direction="horizontal"
+      class="h-full items-stretch"
+    >
+      <ResizablePanel
+        id="resize-panel-1"
+        :default-size="defaultLayout[0]"
+        :collapsed-size="navCollapsedSize"
+        collapsible
+        :min-size="15"
+        :max-size="20"
+        :class="
+          cn(
+            isCollapsed &&
+              'min-w-[50px] transition-all duration-300 ease-in-out'
+          )
+        "
+        @expand="onExpand"
+        @collapse="onCollapse"
+      >
+        <Nav :is-collapsed="isCollapsed" :links="links" />
+        <Separator />
+        <Nav :is-collapsed="isCollapsed" :links="links2" />
+      </ResizablePanel>
+      <ResizableHandle id="resize-handle-1" with-handle />
+      <ResizablePanel id="resize-panel-2" :default-size="30" :min-size="30">
+        <Tabs default-value="all">
+          <div class="flex items-center px-4 py-[.38rem]">
+            <h1 class="text-xl font-bold">Inbox</h1>
+            <TabsList class="ml-auto">
+              <TabsTrigger value="all" class="text-zinc-600 dark:text-zinc-200">
+                All mail
+              </TabsTrigger>
+              <TabsTrigger
+                value="unread"
+                class="text-zinc-600 dark:text-zinc-200"
+              >
+                Unread
+              </TabsTrigger>
+            </TabsList>
+          </div>
+          <Separator />
+          <div
+            class="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+          >
+            <form>
+              <div class="relative">
+                <Search
+                  class="absolute left-2 top-2.5 size-4 text-muted-foreground"
+                />
+                <Input
+                  v-model="searchValue"
+                  placeholder="Search"
+                  class="pl-8"
+                />
+              </div>
+            </form>
+          </div>
+          <TabsContent value="all" class="m-0">
+            <MailList
+              v-model:selected-mail="selectedMail"
+              :items="filteredMailList"
+            />
+          </TabsContent>
+          <TabsContent value="unread" class="m-0">
+            <MailList
+              v-model:selected-mail="selectedMail"
+              :items="unreadMailList"
+            />
+          </TabsContent>
+        </Tabs>
+      </ResizablePanel>
+      <ResizableHandle id="resiz-handle-2" with-handle />
+      <ResizablePanel id="resize-panel-3" :default-size="defaultLayout[2]">
+        <MailDisplay :mail="selectedMailData" />
+      </ResizablePanel>
+    </ResizablePanelGroup>
+  </TooltipProvider>
+</template>

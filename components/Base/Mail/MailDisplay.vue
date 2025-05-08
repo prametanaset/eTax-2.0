@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { useMailStore } from "#imports";
 import type { Mail } from "./data/mail";
+
 import {
   Archive,
   ArchiveX,
@@ -10,8 +10,6 @@ import {
   Reply,
   ReplyAll,
   Trash2,
-  ChevronLeft,
-  Star,
 } from "lucide-vue-next";
 import { computed } from "vue";
 
@@ -20,9 +18,6 @@ interface MailDisplayProps {
 }
 
 const props = defineProps<MailDisplayProps>();
-
-const mailStore = useMailStore();
-
 const mailFallbackName = computed(() => {
   return props.mail?.name
     .split(" ")
@@ -34,19 +29,10 @@ const today = new Date();
 </script>
 
 <template>
-  <div class="flex h-full w-full flex-col">
-    <div class="flex items-center pb-2">
+  <div class="flex h-full flex-col">
+    <div class="flex items-center p-2">
       <div class="flex items-center gap-2">
         <Tooltip>
-          <TooltipTrigger as-child @click="mailStore.clearSelectMailStore">
-            <Button variant="ghost" size="icon" :disabled="!mail">
-              <ChevronLeft class="size-4" />
-              <span class="sr-only">Back</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Back</TooltipContent>
-        </Tooltip>
-        <!-- <Tooltip>
           <TooltipTrigger as-child>
             <Button variant="ghost" size="icon" :disabled="!mail">
               <Archive class="size-4" />
@@ -73,17 +59,8 @@ const today = new Date();
           </TooltipTrigger>
           <TooltipContent>Move to trash</TooltipContent>
         </Tooltip>
+        <Separator orientation="vertical" class="mx-1 h-6" />
         <Tooltip>
-          <TooltipTrigger as-child>
-            <Button variant="ghost" size="icon" :disabled="!mail">
-              <Star class="size-4" />
-              <span class="sr-only">ติดดาว</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>ติดดาว</TooltipContent>
-        </Tooltip>
-        <Separator orientation="vertical" class="mx-1 h-6" /> -->
-        <!-- <Tooltip>
           <Popover>
             <PopoverTrigger as-child>
               <TooltipTrigger as-child>
@@ -100,25 +77,25 @@ const today = new Date();
                   <Button variant="ghost" class="justify-start font-normal">
                     Later today
                     <span class="ml-auto text-muted-foreground">
-                      {{ formatThaiDate(new Date()) }}
+                      {{ formatThaiDate(today) }}
                     </span>
                   </Button>
                   <Button variant="ghost" class="justify-start font-normal">
                     Tomorrow
                     <span class="ml-auto text-muted-foreground">
-                      {{ formatThaiDate(new Date()) }}
+                      {{ formatThaiDate(today) }}
                     </span>
                   </Button>
                   <Button variant="ghost" class="justify-start font-normal">
                     This weekend
                     <span class="ml-auto text-muted-foreground">
-                      {{ formatThaiDate(new Date()) }}
+                      {{ formatThaiDate(today) }}
                     </span>
                   </Button>
                   <Button variant="ghost" class="justify-start font-normal">
                     Next week
                     <span class="ml-auto text-muted-foreground">
-                      {{ formatThaiDate(new Date()) }}
+                      {{ formatThaiDate(today) }}
                     </span>
                   </Button>
                 </div>
@@ -129,7 +106,7 @@ const today = new Date();
             </PopoverContent>
           </Popover>
           <TooltipContent>Snooze</TooltipContent>
-        </Tooltip> -->
+        </Tooltip>
       </div>
       <div class="ml-auto flex items-center gap-2">
         <Tooltip>
@@ -178,11 +155,6 @@ const today = new Date();
     </div>
     <Separator />
     <div v-if="mail" class="flex flex-1 flex-col">
-      <div class="py-5">
-        <div class="text-xl">
-          {{ mail.subject }}
-        </div>
-      </div>
       <div class="flex items-start p-4">
         <div class="flex items-start gap-4 text-sm">
           <Avatar>
@@ -194,7 +166,9 @@ const today = new Date();
             <div class="font-semibold">
               {{ mail.name }}
             </div>
-
+            <div class="line-clamp-1 text-xs">
+              {{ mail.subject }}
+            </div>
             <div class="line-clamp-1 text-xs">
               <span class="font-medium">Reply-To:</span> {{ mail.email }}
             </div>

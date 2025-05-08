@@ -1,15 +1,16 @@
 <template>
-  <Mail :accounts="accounts" :mails="mailList" />
+  <div class="hidden flex-col md:flex">
+    <Mail :accounts="accounts" :mails="mails" :nav-collapsed-size="4" />
+  </div>
 </template>
 
 <script lang="ts" setup>
-import Card from "~/components/ui/card/Card.vue";
 import Mail from "~/components/Base/Mail/Mail.vue";
 import { accounts, mails } from "@/components/Base/Mail/data/mail";
 
 definePageMeta({
   title: "Mail",
-  layout: "navmail",
+  layout: "default",
 });
 
 const mailStore = useMailStore();
