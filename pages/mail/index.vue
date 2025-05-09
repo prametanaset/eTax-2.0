@@ -1,6 +1,6 @@
 <template>
-  <div class="hidden flex-col md:flex">
-    <Mail :accounts="accounts" :mails="mails" :nav-collapsed-size="4" />
+  <div class="h-[90vh] flex-col md:flex">
+    <Mail :accounts="accounts" :mails="mails" :nav-collapsed-size="1" />
   </div>
 </template>
 

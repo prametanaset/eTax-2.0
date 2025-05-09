@@ -21,13 +21,10 @@ interface MailProps {
   navCollapsedSize: number;
 }
 
-const props = withDefaults(defineProps<MailProps>(), {
-  defaultCollapsed: false,
-  defaultLayout: () => [0, 340, 0],
-});
+const props = withDefaults(defineProps<MailProps>(), {});
 
-const isCollapsed = ref(props.defaultCollapsed);
-const selectedMail = ref<string | undefined>();
+const isCollapsed = ref(true);
+const selectedMail = ref<string | undefined>(props.mails[0].id);
 const searchValue = ref("");
 const debouncedSearch = refDebounced(searchValue, 250);
 
@@ -57,10 +54,6 @@ const unreadMailList = computed(() =>
 
 const selectedMailData = computed(() =>
   props.mails.find((item) => item.id === selectedMail.value)
-);
-
-const mailPanelWidth = computed(() =>
-  selectedMailData.value ? "w-[1000px]" : "w-[0px]"
 );
 
 const links = [
@@ -102,6 +95,39 @@ const links = [
   },
 ];
 
+const links2 = [
+  {
+    title: "Social",
+    label: "972",
+    icon: "lucide:user-2",
+    variant: "ghost",
+  },
+  {
+    title: "Updates",
+    label: "342",
+    icon: "lucide:alert-circle",
+    variant: "ghost",
+  },
+  {
+    title: "Forums",
+    label: "128",
+    icon: "lucide:message-square",
+    variant: "ghost",
+  },
+  {
+    title: "Shopping",
+    label: "8",
+    icon: "lucide:shopping-cart",
+    variant: "ghost",
+  },
+  {
+    title: "Promotions",
+    label: "21",
+    icon: "lucide:archive",
+    variant: "ghost",
+  },
+];
+
 function onCollapse() {
   isCollapsed.value = true;
 }
@@ -120,12 +146,17 @@ function onExpand() {
     >
       <ResizablePanel
         id="resize-panel-1"
-        :default-size="defaultLayout[0]"
+        :default-size="200"
         :collapsed-size="navCollapsedSize"
         collapsible
         :min-size="15"
         :max-size="10"
-        :class="cn('min-w-[50px] transition-all duration-300 ease-in-out')"
+        :class="
+          cn(
+            isCollapsed &&
+              'min-w-[50px] transition-all duration-300 ease-in-out'
+          )
+        "
         @expand="onExpand"
         @collapse="onCollapse"
       >
@@ -134,11 +165,7 @@ function onExpand() {
         <!-- <Nav :is-collapsed="isCollapsed" :links="links2" /> -->
       </ResizablePanel>
       <ResizableHandle id="resize-handle-1" with-handle />
-      <ResizablePanel
-        id="resize-panel-2"
-        :default-size="defaultLayout[1]"
-        :min-size="0"
-      >
+      <ResizablePanel id="resize-panel-2" :default-size="30" :min-size="0">
         <Tabs default-value="all">
           <div class="flex items-center px-4 py-[.38rem]">
             <h1 class="text-xl font-bold">Inbox</h1>
@@ -186,32 +213,9 @@ function onExpand() {
         </Tabs>
       </ResizablePanel>
       <ResizableHandle id="resize-handle-2" with-handle />
-      <transition name="panel-fade" mode="out-in">
-        <div
-          :key="selectedMailData"
-          :class="['transition-all duration-300', mailPanelWidth]"
-        >
-          <MailDisplay v-if="selectedMailData" :mail="selectedMailData" />
-          <div
-            v-else
-            class="h-full w-full flex items-center justify-center text-muted"
-          >
-            No mail selected
-          </div>
-        </div>
-      </transition>
+      <ResizablePanel id="resize-panel-3" :default-size="600">
+        <MailDisplay :mail="selectedMailData" />
+      </ResizablePanel>
     </ResizablePanelGroup>
   </TooltipProvider>
 </template>
-
-<style scoped>
-.panel-fade-enter-active,
-.panel-fade-leave-active {
-  transition: all 0.3s ease;
-}
-.panel-fade-enter-from,
-.panel-fade-leave-to {
-  opacity: 0;
-  transform: translateX(20px);
-}
-</style>
