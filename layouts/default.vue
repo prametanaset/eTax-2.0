@@ -54,9 +54,9 @@ const data = {
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator class="hidden md:block" /> -->
-                <BreadcrumbItem>
+                <!-- <BreadcrumbItem>
                   <BreadcrumbPage>{{ route.meta.title }}</BreadcrumbPage>
-                </BreadcrumbItem>
+                </BreadcrumbItem> -->
               </BreadcrumbList>
             </Breadcrumb>
           </div>
@@ -64,7 +64,7 @@ const data = {
           <div id="profile" class="flex items-center gap-3">
             <Badge
               variant="outline"
-              class="bg-green-100 text-green-600 border-green-300 px-3 py-1 mr-2 text-sm font-light leading-none rounded-lg whitespace-nowrap"
+              class=" text-green-600 border-green-500 px-1 py-2 mr-2 text-sm font-light leading-none rounded-lg whitespace-nowrap"
             >
               <MailCheck class="h-4 mr-1" />e-Tax พร้อมใช้งาน
             </Badge>

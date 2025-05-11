@@ -1,5 +1,7 @@
 <template>
   <div class="flex h-screen">
+    <BaseLogin></BaseLogin>
+    <div v-if="false">
     <div class="w-3/5">
       <!-- <p>Background here!</p> -->
       <ClientOnly v-if="!device.isMobile">
@@ -74,6 +76,7 @@
           </div>
         </CardContent>
       </div>
+    </div>
     </div>
   </div>
 </template>

@@ -4,231 +4,44 @@
       <div
         class="absolute top-[0%] right-0 w-[95%] lg:h-[100%] bg-primary-400/50 blur-xl rounded-full img-shadow-animation"
       ></div>
-      <Card class="w-full rounded-2xl pb-0 z-10 relative">
-        <CardHeader class="px-0">
-          <!-- <Card class="p-4 relative overflow-hidden border-primary-500 rounded-2xl"> -->
-          <div class="relative rounded-2xl">
-            <div class="border-b-[3px] border-[hsl(var(--background))]">
-              <CardTitle
-                class="xs:grid sm:flex items-center justify-between gap-3 px-6 pb-3"
-              >
-                <div class="sm:flex">
-                  <div class="font-semibold mr-2">หมายเลขใบกำกับภาษี</div>
-                  <div class="text-purple-700"><span class="text-muted-500/50">#</span>INV-0010</div>
-                </div>
-                <div>
-                  <!-- <p class="w-full py-3 text-lg font-semibold text-muted-400">
-                    {{ formatThaiDate(new Date()) }}
-                  </p> -->
-                  <Badge
-                  v-if="false"
-                    variant="outline"
-                    class="flex-none text-sm font-medium px-2 py-1 rounded-full mb-2 bg-primary/10 text-primary dark:text-primary-light"
-                  >
-                    <!-- {{ formatThaiDate(new Date()) }} -->
-                    สร้างเมื่อ 11 เมษายน 2567
-                  </Badge>
-                </div>
-              </CardTitle>
+      <Card class="w-full rounded-xl pb-0 z-10 relative">
+        <CardHeader class="px-0 pb-0">
+          <CardTitle class="px-6">
+            <div class="mb-2">
+              <h1 class="text-2xl font-bold text-purple-700">ใบกำกับภาษี</h1>
+              <div class="flex items-center gap-4 text-base text-gray-600 mt-2">
+                <span class="font-medium">เลขที่ใบกำกับภาษี:</span> <span class="text-purple-600">INV-0010</span>
+                <span class="font-medium ml-6">วันที่ออก:</span> <span>10 พฤษภาคม 2568</span>
+                <Badge class="ml-auto bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">พร้อมใช้งาน</Badge>
+              </div>
+            </div>
+          </CardTitle>
+          <div class="z-999 grid sm:grid-cols-1 gap-2 px-4">
+            <div v-if="false" class="mr-1 px-2">
+              <p class="mb-1 text-md font-medium">From</p>
+              <BaseCustomer v-model="customer"></BaseCustomer>
+              <!-- <BaseCustomerAddress></BaseCustomerAddress> -->
+            </div>
+            <div class="px-2">
+              <!-- <p class="mb-1 text-md font-medium">ข้อมูลลูกค้า</p> -->
+              <!-- <BaseCustomer v-model="customer"></BaseCustomer> -->
+              <BaseCustomerAddress></BaseCustomerAddress>
             </div>
           </div>
         </CardHeader>
-        <div class="z-999 grid sm:grid-cols-2 gap-8 px-4 mb-4">
-          <div v-if="false">
-            <p class="flext-none mb-2 font-semibold text-lg">ผู้ขาย</p>
-            <div class="border !border-primary-500 px-4 py-3 rounded-lg">
-              <p class="mb-1 text-xl font-semibold">{{ storeApi.storeName }}</p>
-              <CardDescription class="text-muted-600 font-semibold">
-                <span>{{ storeApi.address.building + " " }} </span>
-                <span>ต.{{ storeApi.address.subDistrict + " " }} </span>
-                <span>อ.{{ storeApi.address.district + " " }} </span>
-                <span>จ.{{ storeApi.address.province + " " }} </span>
-                <p>TAX ID : 0405566001773</p>
-              </CardDescription>
-            </div>
-          </div>
-          <div class="mr-1 px-2">
-            <p class="mb-2 text-xl">ลูกค้า</p>
-            <BaseCustomer v-model="customer"></BaseCustomer>
-
-          </div>
+        <div class="px-6 my-4">
+          <!-- <BaseCustomerAddress></BaseCustomerAddress> -->
+          <h3 class="text-sm font-semibold text-purple-700 flex items-center gap-1">
+  <Notebook class="w-4 h-4" /> หมายเหตุ
+</h3>
+            <Textarea class="mt-1" />
         </div>
         <CardContent>
-          <div v-if="false" class="grid gap-y-6 sm:flex-row border-b pb-4">
-            <div class="grid w-full gap-y-2">
-              <CardTitle class="text-success-500">ผู้รับ</CardTitle>
-              <div class="flex flex-col sm:grid gap-y-2">
-                <div class="sm:w-[50%]">
-                  <BaseSelectCustomer></BaseSelectCustomer>
-                </div>
-                <div>
-                  <CardDescription>
-                    <div class="grid sm:grid-cols-2 gap-4">
-                      <!-- customer info -->
-                      <div class="sm:flex mt-2">
-                        <p class="text-muted-400">
-                          เลขประจำตัวผู้เสียภาษี :&nbsp;
-                        </p>
-                        <p class="font-bold">1234567890123</p>
-                      </div>
-                      <!-- END customer info -->
-                      <!-- section address -->
-                      <div class="sm:text-end">
-                        <div
-                          class="flex items-center sm:justify-end hover:underline cursor-pointer"
-                        >
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger as-child>
-                                <p class="text-muted-400">ที่อยู่</p>
-                                <span>
-                                  <Pencil class="w-3 ml-1 text-muted-400" />
-                                </span>
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p>แก้ไขที่อยู่</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        </div>
-                        <div>
-                          979 ถ. พระรามที่ 1 แขวงปทุมวัน เขตปทุมวัน
-                          กรุงเทพมหานคร 10330
-                        </div>
-                      </div>
-                      <!-- END section address -->
-                    </div>
-                  </CardDescription>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <div class="grid gap-4 mt-8 overflow-hidden">
-            <p class="text-xl ">รายการสินค้า</p>
+          <div class="grid gap-4 overflow-hidden">
+            <p class="text-xl font-semibold">รายการสินค้า</p>
             <!-- product table form -->
             <BaseProductList></BaseProductList>
-
-            <Table v-if="false" class="min-w-[800px] overflow-x-auto">
-              <TableHeader>
-                <TableRow>
-                  <TableHead>ลำดับ</TableHead>
-                  <TableHead class="w-[200px]"> สินค้า </TableHead>
-                  <TableHead>จำนวน/หน่วย</TableHead>
-                  <TableHead>ราคาหน่วย</TableHead>
-                  <TableHead>ส่วนลด</TableHead>
-                  <TableHead>VAT</TableHead>
-                  <TableHead class="text-right min-w-[100px]">
-                    จำนวนเงิน
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow v-for="(item, index) in invoice.invItem" :key="index">
-                  <TableCell>{{ index + 1 }}</TableCell>
-                  <TableCell>
-                    <Input
-                      class="bg-[hsl(var(--card))]"
-                      v-model="item.itemName"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Input
-                      v-model="item.qty"
-                      class="bg-[hsl(var(--card))]"
-                      type="number"
-                      @input="item.qty = Math.max(0, item.qty)"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Input
-                      v-model="item.price"
-                      class="bg-[hsl(var(--card))]"
-                      type="number"
-                      @input="item.price = Math.max(0, item.price)"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Input
-                      v-model="item.discount"
-                      class="bg-[hsl(var(--card))]"
-                      type="number"
-                      @input="item.discount = Math.max(0, item.discount)"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Select v-model="item.includeVat">
-                      <SelectTrigger>
-                        <SelectValue v-model="item.includeVat" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectItem value="ยกเว้นภาษี">
-                            ยกเว้นภาษี
-                          </SelectItem>
-                          <SelectItem value="รวมภาษีมูลค่าเพิ่มแล้ว">
-                            รวม VAT
-                          </SelectItem>
-                          <SelectItem value="ยังไม่รวมภาษีมูลค่าเพิ่ม">
-                            ยังไม่รวม VAT
-                          </SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </TableCell>
-
-                  <TableCell class="text-right min-w-[100px]">
-                    {{ currencyFormat(item.totalPrice) }}
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-            <div v-if="false" class="">
-              <Button @click="addItem">
-                <Plus />
-                เพิ่มสินค้า
-              </Button>
-            </div>
-          </div>
-          <div v-if="false" class="grid sm:grid-cols-2 mt-8 pt-8">
-            <div class="sm:col-end-3 mb-8">
-              <div class="grid">
-                <div class="">
-                  <Label>ส่วนลด</Label>
-                  <Input
-                    type="number"
-                    placeholder="ส่วนลด"
-                    v-model="invoice.invDiscount"
-                  />
-                </div>
-              </div>
-              <div v-if="false" class="flex flex-col justify-end mt-8">
-                <div class="flex justify-between w-full">
-                  <p class="text-muted-400">ยอดเงินรวม</p>
-                  <p>{{ currencyFormat(totalAmount) }}</p>
-                </div>
-                <div class="flex justify-between w-full">
-                  <p class="text-muted-400">ส่วนลด</p>
-                  <p>{{ currencyFormat(totalDiscount) }}</p>
-                </div>
-                <div class="flex justify-between w-full">
-                  <p class="text-muted-400">ยอดเงินก่อนภาษี</p>
-                  <p>{{ currencyFormat(subtotal) }}</p>
-                </div>
-                <div class="flex justify-between w-full">
-                  <p class="text-muted-400">ภาษีมูลค่าเพิ่ม</p>
-                  <p>{{ currencyFormat(totalVat) }}</p>
-                </div>
-                <div class="flex justify-between w-full">
-                  <p class="text-muted-400">ยอดสุทธิ</p>
-                  <p>{{ currencyFormat(grandTotal) }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div v-if="false" class="w-full">
-            <Label for="email">หมายเหตุ</Label>
-            <Textarea />
           </div>
         </CardContent>
       </Card>
@@ -255,7 +68,21 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { Plus, Pencil, Eye, Send, Save, ChevronDown } from "lucide-vue-next";
+import {
+  Plus,
+  Pencil,
+  Eye,
+  Send,
+  Save,
+  ChevronDown,
+  MapPinned,
+  UserRound,
+  Edit,
+  MapPin,
+  Mail,
+  Phone,
+  Notebook
+} from "lucide-vue-next";
 import {
   Card,
   CardContent,

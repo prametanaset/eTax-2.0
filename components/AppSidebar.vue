@@ -113,7 +113,7 @@ const data = {
       title: "Mail",
       url: "/mail",
       icon: Mail,
-      newTab: true
+      newTab: false
     },
     {
       title: "ตั้งค่า",

@@ -139,13 +139,15 @@ onUnmounted(() => {
     <!-- Header Row -->
     <div
       v-if="products.length"
-      class="grid grid-cols-[1fr_80px_80px_100px_50px] gap-4 p-2 py-1 font-semibold border-b text-sm items-center max-sm:hidden"
+      class="grid grid-cols-[1fr_80px_80px_100px_50px_50px] gap-4 p-2 py-1 font-semibold border-b text-sm items-center max-sm:hidden"
     >
       <span class="pl-2">รายละเอียด</span>
       <span class="text-center">จำนวน</span>
       <span class="text-center">ส่วนลด</span>
       <span class="text-center">ภาษี</span>
+      <span class="text-center">รวม</span>
       <span class="text-center"></span>
+
       <!-- Empty for delete button -->
     </div>
 
@@ -153,7 +155,7 @@ onUnmounted(() => {
       <div
         v-for="product in products"
         :key="product.id"
-        class="grid sm:grid-cols-[1fr_80px_80px_90px_50px] gap-4 items-center p-4 border rounded-lg shadow-sm bg-[hsl(var(--card))]"
+        class="grid sm:grid-cols-[1fr_80px_80px_90px_80px_auto] gap-2 items-center p-4 border rounded-lg shadow-sm bg-[hsl(var(--card))]"
         :class="screenWidth < 640 ? 'grid-cols-2' : 'grid-cols-1'"
       >
         <!-- Product Info -->
@@ -168,9 +170,11 @@ onUnmounted(() => {
           />
           <div class="flex-1 min-w-0">
             <p class="font-normal truncate">{{ product.name }}</p>
-            <p class="text-sm text-gray-500">
+            <p class="text-xs text-gray-500">SKU: SHIRT-001</p>
+
+            <!-- <p class="text-sm text-gray-500">
               {{ currencyFormat(product.price) }} บาท
-            </p>
+            </p> -->
           </div>
         </div>
 
@@ -200,32 +204,27 @@ onUnmounted(() => {
             <PopoverContent class="w-80">
               <div class="grid gap-4">
                 <div class="space-y-2">
-                  <h4 class="font-medium leading-none">เพิ่มส่วนลด</h4>
-                  <p class="text-sm text-muted-foreground">
+                  <h4 class="font-bold leading-none">เพิ่มส่วนลด</h4>
+                  <p class="text-sm text-muted-foreground font-medium">
                     กรุณาเลือกประเภทและมูลค่าของส่วนลด
                   </p>
                 </div>
                 <div class="grid gap-2">
                   <div class="grid grid-cols-3 items-center gap-4">
-                    <span>ประเภท</span>
+                    <span class="font-semibold">ประเภท</span>
                     <Select v-model="product.discountType">
-                      <SelectTrigger class="col-span-2 h-8">
+                      <SelectTrigger class="col-span-2 h-8 font-light" >
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="%">%</SelectItem>
-                        <SelectItem value="บาท">บาท</SelectItem>
+                        <SelectItem value="%" class="font-light">เปอร์เซ็นต์ (%)</SelectItem>
+                        <SelectItem value="บาท"  class="font-light">บาท (฿)</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div class="grid grid-cols-3 items-center gap-4">
-                    <span>มูลค่า</span>
-                    <Input
-                      type="number"
-                      v-model="product.discountValue"
-                      min="0"
-                      class="col-span-2 h-8 text-center"
-                    />
+                    <span class="font-semibold">มูลค่า</span>
+                    <Input type="number" v-model="product.discountValue" min="0" class="col-span-2 h-8 text-center" />
                   </div>
                 </div>
               </div>
@@ -300,6 +299,17 @@ onUnmounted(() => {
               <SelectItem value="15%">15%</SelectItem>
             </SelectContent>
           </Select>
+        </div>
+
+        <!-- Subtotal Input -->
+        <div class="w-full mx-auto">
+          <Label class="block text-xs text-gray-600 sm:hidden">จำนวน</Label>
+          <Input
+            type="text"
+            v-model="product.quantity"
+            min="1"
+            class="text-center w-full rounded-md"
+          />
         </div>
 
         <!-- Delete Button -->
