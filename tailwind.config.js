@@ -17,7 +17,7 @@ export default {
         'slide-up': 'slide-up 8s ease-in-out infinite',
       },
       fontFamily: {
-        sans: ['SukhumvitSet', "sans-serif"],
+        sans: ["Noto Sans Thai",'SukhumvitSet', "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",

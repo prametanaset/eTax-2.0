@@ -34,7 +34,7 @@ import {
   getSortedRowModel,
   useVueTable,
 } from "@tanstack/vue-table";
-import { ArrowUpDown, ChevronDown, Search } from "lucide-vue-next";
+import { ArrowUpDown, ChevronDown, Search, Plus } from "lucide-vue-next";
 import { h, ref } from "vue";
 import DropdownAction from "./DataTableDemoColumn.vue";
 import { Badge } from "@/components/ui/badge";
@@ -291,7 +291,7 @@ function getStatusLabel(status) {
         </DropdownMenuContent>
       </DropdownMenu>
       <NuxtLink to="/invoice/create/invoice">
-        <Button class="font-semibold">สร้างใบกำกับภาษี</Button>
+        <Button class="font-semibold font-noto"><Plus/>สร้างใบกำกับภาษี</Button>
       </NuxtLink>
     </div>
     <div class="rounded-md border bg-[hsl(var(--card))]">
