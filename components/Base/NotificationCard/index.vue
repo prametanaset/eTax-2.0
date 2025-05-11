@@ -40,13 +40,13 @@ const product = reactive({
   <Card :class="cn('w-[380px]', $attrs.class ?? '')">
     <div class="flex flex-col gap-y-0 p-6">
       <h3 class="font-semibold tracking-tight text-xl leading-tight">จำนวนเงินในใบแจ้งหนี้</h3>
-      <p class="font-thin text-sm text-muted-600 leading-snug">แสดงเป็นบาท (THB)</p>
+      <p class="font-normal text-sm text-muted-600 leading-snug">แสดงเป็นบาท (THB)</p>
     </div>
     <CardContent class="grid gap-4">
       <div class="border-muted-200 dark:border-muted-800/80 border-b pb-4">
         <div class="font-heading text-2xl leading-none font-bold tracking-normal mb-3">
           ฿1,074.00
-          <span class="text-sm leading-normal font-thin tracking-normal text-muted-600 inline">
+          <span class="text-sm leading-normal font-normal tracking-normal text-muted-600 inline">
             (รวมภาษีมูลค่าเพิ่ม)
           </span>
         </div>
@@ -77,12 +77,12 @@ const product = reactive({
                   <div class="grid grid-cols-3 items-center gap-4">
                     <span class="font-semibold">ประเภท</span>
                     <Select v-model="product.discountType">
-                      <SelectTrigger class="col-span-2 h-8 font-light" >
+                      <SelectTrigger class="col-span-2 h-8 font-normal" >
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="%" class="font-light">เปอร์เซ็นต์ (%)</SelectItem>
-                        <SelectItem value="บาท"  class="font-light">บาท (฿)</SelectItem>
+                        <SelectItem value="%" class="font-normal">เปอร์เซ็นต์ (%)</SelectItem>
+                        <SelectItem value="บาท"  class="font-normal">บาท (฿)</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -98,20 +98,20 @@ const product = reactive({
 
       <div class="border-muted-200 dark:border-muted-800/80 border-b pb-4">
         <div class="flex justify-between w-full">
-          <p class="text-base font-light">ยอดก่อนภาษี</p>
+          <p class="text-base font-normal">ยอดก่อนภาษี</p>
           <p>฿1,200.00</p>
         </div>
         <div class="flex justify-between w-full">
-          <p class="text-base font-light">ส่วนลด</p>
+          <p class="text-base font-normal">ส่วนลด</p>
           <p>-฿100.00</p>
         </div>
         <div class="flex justify-between w-full">
-          <p class="text-base font-light">ภาษี (7%)</p>
+          <p class="text-base font-normal">ภาษี (7%)</p>
           <p>฿74.00</p>
         </div>
       </div>
       <div class="flex justify-between w-full text-xl">
-        <p class="text-lg">รวมทั้งหมด</p>
+        <p class="text-lg font-suk">รวมทั้งหมด</p>
         <p>฿1,074.00</p>
       </div>
       <div v-if="false" class="flex items-center space-x-4 rounded-md border p-4">

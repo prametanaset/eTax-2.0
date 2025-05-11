@@ -16,13 +16,17 @@
         {{ props.title }}
       </Badge>
 
-      <h4  :class="props.status == 'money' ? 'text-4xl  font-bold tracking-tight text-primary-500/100 dark:text-white' : 'text-4xl font-bold tracking-tight text-gray-800 dark:text-white'">
-        {{ props.status == 'money' ? `฿ ${props.countNumber}` :`${props.countNumber}` }}
-        <!-- {{ props.status }} -->
-      </h4>
+      <h4
+  :class="props.status == 'money'
+    ? 'text-4xl flex items-center gap-2 font-bold tracking-tight text-primary-500/100 dark:text-white'
+    : 'text-4xl font-bold tracking-tight text-gray-800 dark:text-white'"
+>
+  <Newspaper v-if="props.status == 'money'" />
+  {{ props.countNumber.toLocaleString() }}
+</h4>
 
       <div>
-        <p class="text-muted-500 text-sm font-thin ml-1 dark:text-[#B4B4B4]">
+        <p class="text-muted-500 text-sm font-medium ml-1 dark:text-[#B4B4B4]">
           <span class="text-gray-700 font-normal dark:text-white">{{
             percenLastMonth > 0 ? percenLastMonth : percenLastMonth * -1
           }}</span>
@@ -52,7 +56,7 @@
 
 <script lang="ts" setup>
 import { Icon } from '@iconify/vue'
-
+import {Newspaper} from 'lucide-vue-next'
 const props = defineProps<{
   title: string;
   countNumber: number;

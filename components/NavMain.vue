@@ -24,7 +24,7 @@ const route = useRoute();
 
 <template>
   <SidebarGroup>
-    <SidebarGroupLabel>เมนูหลัก</SidebarGroupLabel>
+    <!-- <SidebarGroupLabel>เมนูหลัก</SidebarGroupLabel> -->
     <SidebarMenu class="pl-1 pr-3">
       <SidebarMenuItem v-for="item in items" :key="item.title">
         <SidebarMenuButton
@@ -46,7 +46,7 @@ const route = useRoute();
           <template v-else>
             <NuxtLink :to="item.url" class="flex items-center gap-2 py-5">
               <component :is="item.icon" v-if="item.icon" />
-              <span class="text-md font-semibold">{{ item.title }}</span>
+              <span class="text-md font-medium">{{ item.title }}</span>
             </NuxtLink>
           </template>
         </SidebarMenuButton>

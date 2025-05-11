@@ -77,7 +77,7 @@ const onSubmit = handleSubmit((tValue, tOutput) => {
   console.log("tOutput:",tOutput);
 
   console.log("Form submitted!"); // all fields passed validation
-  navigateTo('/')
+  navigateTo('/dashboard')
 })
 // ใช้ useField() สำหรับแต่ละฟิลด์
 const email = useField("email", checkEmailInDB);

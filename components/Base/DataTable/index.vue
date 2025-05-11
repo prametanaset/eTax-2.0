@@ -132,7 +132,7 @@ const columns: ColumnDef<Payment>[] = [
           h("p", { class: "text-sm font-semibold mb-1" }, row.original.name),
           h(
             "p",
-            { class: "text-sm text-muted-500 font-thin leading-none" },
+            { class: "text-sm text-muted-500 font-normal leading-none" },
             row.getValue("email")
           ),
         ])
@@ -233,9 +233,9 @@ const table = useVueTable({
 function getStatusLabel(status) {
   switch (status) {
     case 0:
-      return "สำเร็จ";
+      return "ส่งแล้ว";
     case 1:
-      return "กำลังดำเนินการ";
+      return "รอดำเนินการ";
     case 2:
       return "ยกเลิก";
     case 3:
@@ -302,12 +302,12 @@ function getStatusLabel(status) {
             :key="headerGroup.id"
             class="font-noto"
           >
-            <TableHead v-for="header in headerGroup.headers" :key="header.id" class="font-semibold text-sm" >
+            <TableHead v-for="header in headerGroup.headers" :key="header.id" class="font-semibold text-base" >
               <FlexRender
                 v-if="!header.isPlaceholder"
                 :render="header.column.columnDef.header"
                 :props="header.getContext()"
-                class="font-semibold text-sm"
+                class="font-semibold text-base"
               />
             </TableHead>
           </TableRow>

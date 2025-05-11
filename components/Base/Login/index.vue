@@ -1,26 +1,35 @@
 <script setup lang="ts">
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-const isLogin = ref(false);
+const isLogin = ref(true);
 </script>
 
 <template>
   <div
     class="container relative flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0"
   >
-  
-  <Button variant="link"
+    <div class="absolute right-4 top-4 md:right-8 md:top-8 flex items-center">
+      <!-- ✅ ปุ่มที่คลิกได้ -->
+       <p class="text-sm text-muted-foreground">
+      {{ isLogin ? "ยังไม่มีบัญชีใช่ไหม?" : "มีบัญชีอยู่แล้ว?" }}
+    </p>
+    <Button
+      variant="link"
       href="#"
       @click.prevent="isLogin = !isLogin"
       :class="
         cn(
-          buttonVariants({ variant: 'ghost' }),
-          'absolute right-4 top-4 md:right-8 md:top-8'
+          buttonVariants({ variant: 'link' }),
         )
       "
+      class="pl-1"
     >
       {{ isLogin ? "สร้างบัญชี" : "เข้าสู่ระบบ" }}
     </Button>
+
+    </div>
+
+
     <div
       class="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex"
     >

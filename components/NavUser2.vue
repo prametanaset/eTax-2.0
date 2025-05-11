@@ -114,7 +114,7 @@ const { isMobile } = useSidebar();
     :to="data.link"
     class="no-underline"
   >
-    <DropdownMenuItem class="cursor-pointer font-light flex gap-2">
+    <DropdownMenuItem class="cursor-pointer font-normal flex gap-2">
       <component :is="data.icon" v-if="data.icon" class="w-4" />
       {{ data.title }}
     </DropdownMenuItem>
@@ -122,7 +122,7 @@ const { isMobile } = useSidebar();
 </DropdownMenuGroup>
 
           <DropdownMenuSeparator />
-          <NuxtLink to="/login">
+          <NuxtLink to="/">
             <DropdownMenuItem class="cursor-pointer font-semibold">
               <LogOut />
               ลงชื่อออก
