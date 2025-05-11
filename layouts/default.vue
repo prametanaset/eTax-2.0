@@ -43,7 +43,7 @@ const data = {
           <div id="bread-crumb" class="flex items-center">
             <SidebarTrigger class="-ml-1" />
             <!-- <Separator v-if="route.name !== 'index'" orientation="vertical" class="mr-2 h-4" /> -->
-            <Separator orientation="vertical" class="mr-2 h-4" />
+            <!-- <Separator orientation="vertical" class="mr-2 h-4" /> -->
 
             <!-- <Breadcrumb v-if="route.name !== 'index'"> -->
             <Breadcrumb>
