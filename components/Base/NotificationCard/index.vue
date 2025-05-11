@@ -112,7 +112,7 @@ const product = reactive({
       </div>
       <div class="flex justify-between w-full text-xl">
         <p class="text-lg font-suk">รวมทั้งหมด</p>
-        <p>฿1,074.00</p>
+        <p class="font-bold">฿1,074.00</p>
       </div>
       <div v-if="false" class="flex items-center space-x-4 rounded-md border p-4">
         <!-- <Bell /> -->
