@@ -96,12 +96,14 @@ const columns: ColumnDef<Payment>[] = [
         "onUpdate:modelValue": (value) =>
           table.toggleAllPageRowsSelected(!!value),
         ariaLabel: "Select all",
+        class: "ml-3 mb-2"
       }),
     cell: ({ row }) =>
       h(Checkbox, {
         modelValue: row.getIsSelected(),
         "onUpdate:modelValue": (value) => row.toggleSelected(!!value),
         ariaLabel: "Select row",
+        class: "ml-3 mb-2"
       }),
     enableSorting: false,
     enableHiding: false,
@@ -298,12 +300,14 @@ function getStatusLabel(status) {
           <TableRow
             v-for="headerGroup in table.getHeaderGroups()"
             :key="headerGroup.id"
+            class="font-noto"
           >
-            <TableHead v-for="header in headerGroup.headers" :key="header.id">
+            <TableHead v-for="header in headerGroup.headers" :key="header.id" class="font-semibold text-sm" >
               <FlexRender
                 v-if="!header.isPlaceholder"
                 :render="header.column.columnDef.header"
                 :props="header.getContext()"
+                class="font-semibold text-sm"
               />
             </TableHead>
           </TableRow>
@@ -362,3 +366,9 @@ function getStatusLabel(status) {
     </div>
   </div>
 </template>
+
+<style scoped>
+.font-noto {
+  font-family: "Noto Sans Thai";
+}
+</style>
