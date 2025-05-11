@@ -30,6 +30,18 @@ const data = {
     avatar: "/avatars/shadcn.png",
   },
 };
+
+const isOnline = ref(true);
+
+const toggleDotColor = () => {
+  isOnline.value = !isOnline.value;
+};
+
+const tooltipClass = computed(() =>
+  isOnline.value
+    ? 'bg-green-100 text-green-800'
+    : 'bg-red-100 text-red-800'
+)
 </script>
 
 <template>
@@ -62,14 +74,30 @@ const data = {
           </div>
 
           <div id="profile" class="flex items-center gap-3">
-            <Badge
+            <!-- <Badge
               variant="outline"
               class=" text-green-600 border-green-500 px-1 py-2 mr-2 text-sm font-light leading-none rounded-lg whitespace-nowrap"
             >
               <MailCheck class="h-4 mr-1" />e-Tax พร้อมใช้งาน
-            </Badge>
+            </Badge> -->
+            
+            <TooltipProvider>
+  <Tooltip>
+    <TooltipTrigger as-child>
+      <BaseDotNoti
+        :color="isOnline ? '#44ec83' : '#f87171'"
+        @click="toggleDotColor"
+      />
+    </TooltipTrigger>
+    <TooltipContent
+      :class="['text-sm px-3 py-1.5 rounded-md shadow', tooltipClass]"
+    >
+      <p>{{ isOnline ? 'e-Tax พร้อมใช้งาน' : 'e-Tax ไม่พร้อมใช้งาน' }}</p>
+    </TooltipContent>
+  </Tooltip>
+</TooltipProvider>
 
-            <Separator orientation="vertical" class="h-8 w-px bg-muted-300" />
+            <!-- <Separator orientation="vertical" class="h-8 w-px bg-muted-300" /> -->
 
             <NavUser2 :user="data.user" />
           </div>
