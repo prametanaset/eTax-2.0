@@ -81,16 +81,16 @@ const tooltipClass = computed(() =>
               <MailCheck class="h-4 mr-1" />e-Tax พร้อมใช้งาน
             </Badge> -->
             
-            <TooltipProvider>
-  <Tooltip>
+            <TooltipProvider :delay-duration="100">
+  <Tooltip >
     <TooltipTrigger as-child>
       <BaseDotNoti
         :color="isOnline ? '#44ec83' : '#f87171'"
         @click="toggleDotColor"
       />
     </TooltipTrigger>
-    <TooltipContent
-      :class="['text-sm px-3 py-1.5 rounded-md shadow', tooltipClass]"
+    <TooltipContent  side="left" align="center"
+      :class="['text-sm px-3 mr-2 py-1.5 rounded-md shadow', tooltipClass]"
     >
       <p>{{ isOnline ? 'e-Tax พร้อมใช้งาน' : 'e-Tax ไม่พร้อมใช้งาน' }}</p>
     </TooltipContent>
