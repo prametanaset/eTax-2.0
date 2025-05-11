@@ -57,13 +57,13 @@ const data = {
   navMain: [
     {
       title: "หน้าแรก",
-      url: "/",
+      url: "/dashboard",
       icon: Home,
       isActive: true,
       items: [
         {
           title: "Dashboard",
-          url: "/",
+          url: "/dashboard",
         },
       ],
       newTab: false
