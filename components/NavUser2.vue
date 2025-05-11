@@ -75,10 +75,13 @@ const { isMobile } = useSidebar();
               <AvatarFallback class="rounded-full"> CN </AvatarFallback>
             </Avatar>
             <div class="grid flex-1 text-left text-sm">
-              <span class="truncate font-semibold leading-snug">{{ user.name }}</span>
-              <span class="truncate text-xs font-light leading-none">{{ user.email }}</span>
+              <span class="truncate font-semibold leading-snug">{{
+                user.name
+              }}</span>
+              <span class="truncate text-xs font-light leading-none">{{
+                user.email
+              }}</span>
             </div>
-
           </SidebarMenuButton>
         </DropdownMenuTrigger>
         <!-- <DropdownMenuContent
@@ -108,18 +111,18 @@ const { isMobile } = useSidebar();
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-  <NuxtLink
-    v-for="(data, index) in linkData"
-    :key="index"
-    :to="data.link"
-    class="no-underline"
-  >
-    <DropdownMenuItem class="cursor-pointer font-normal flex gap-2">
-      <component :is="data.icon" v-if="data.icon" class="w-4" />
-      {{ data.title }}
-    </DropdownMenuItem>
-  </NuxtLink>
-</DropdownMenuGroup>
+            <NuxtLink
+              v-for="(data, index) in linkData"
+              :key="index"
+              :to="data.link"
+              class="no-underline"
+            >
+              <DropdownMenuItem class="cursor-pointer font-normal flex gap-2">
+                <component :is="data.icon" v-if="data.icon" class="w-4" />
+                {{ data.title }}
+              </DropdownMenuItem>
+            </NuxtLink>
+          </DropdownMenuGroup>
 
           <DropdownMenuSeparator />
           <NuxtLink to="/">
