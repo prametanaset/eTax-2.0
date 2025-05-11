@@ -166,7 +166,7 @@ const data = {
       <!-- <TeamSwitcher :teams="data.teams" /> -->
        <SidebarMenuButton
             size="lg"
-            class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground  pointer-events-none"
           >
       <div class="flex items-center justify-center mr-2 font-semibold">
          <svg
