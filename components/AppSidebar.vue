@@ -164,6 +164,10 @@ const data = {
   <Sidebar class="w-[240px]" v-bind="props">
     <SidebarHeader>
       <!-- <TeamSwitcher :teams="data.teams" /> -->
+       <SidebarMenuButton
+            size="lg"
+            class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+          >
       <div class="flex items-center justify-center mr-2 font-semibold">
          <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -208,6 +212,7 @@ const data = {
         </svg>
         ScaleTax
       </div>
+      </SidebarMenuButton>
     </SidebarHeader>
     <SidebarContent>
       <NavMain :items="data.navMain" />

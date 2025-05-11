@@ -25,7 +25,7 @@ const route = useRoute();
 <template>
   <SidebarGroup>
     <!-- <SidebarGroupLabel>เมนูหลัก</SidebarGroupLabel> -->
-    <SidebarMenu class="pl-1 pr-3">
+    <SidebarMenu class="pr-3">
       <SidebarMenuItem v-for="item in items" :key="item.title">
         <SidebarMenuButton
           as-child
