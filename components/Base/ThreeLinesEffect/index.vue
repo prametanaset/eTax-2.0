@@ -19,7 +19,7 @@ const conf = {
   cscale: chroma.scale(['#A577FF', '#C5A3FF', '#A577FF', '#A577FF', '#A577FF', '#9038FF']).mode('lch'),
   darken: -1,
   angle: Math.PI / 3,
-  timeCoef: 0.05
+  timeCoef: 0.04
 }
 const uTimeCoef = { value: conf.timeCoef }
 const uTime = { value: 0 }
