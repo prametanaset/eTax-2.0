@@ -161,7 +161,7 @@ const data = {
 </script>
 
 <template>
-  <Sidebar class="w-[240px]" v-bind="props">
+  <Sidebar class="w-[--sidebar-width]" v-bind="props">
     <SidebarHeader>
       <!-- <TeamSwitcher :teams="data.teams" /> -->
        <SidebarMenuButton

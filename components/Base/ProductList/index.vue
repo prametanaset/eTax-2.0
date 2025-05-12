@@ -96,6 +96,20 @@ onUnmounted(() => {
 
 <template>
   <div class="space-y-4">
+    <!-- Header Row -->
+    <div
+      v-if="true"
+      class="grid grid-cols-[1fr_80px_80px_100px_50px_50px] gap-4 p-2 py-1 font-semibold border-b text-sm items-center max-sm:hidden"
+    >
+      <span class="pl-2">รายละเอียด</span>
+      <span class="text-center">จำนวน</span>
+      <span class="text-center">ส่วนลด</span>
+      <span class="text-center">ภาษี</span>
+      <span class="text-center">รวม</span>
+      <span class="text-center"></span>
+
+      <!-- Empty for delete button -->
+    </div>
     <!-- Product Selection Popover -->
     <Popover v-if="!(products.length > 0)">
       <PopoverTrigger as-child>
@@ -136,20 +150,7 @@ onUnmounted(() => {
       </PopoverContent>
     </Popover>
 
-    <!-- Header Row -->
-    <div
-      v-if="products.length"
-      class="grid grid-cols-[1fr_80px_80px_100px_50px_50px] gap-4 p-2 py-1 font-semibold border-b text-sm items-center max-sm:hidden"
-    >
-      <span class="pl-2">รายละเอียด</span>
-      <span class="text-center">จำนวน</span>
-      <span class="text-center">ส่วนลด</span>
-      <span class="text-center">ภาษี</span>
-      <span class="text-center">รวม</span>
-      <span class="text-center"></span>
-
-      <!-- Empty for delete button -->
-    </div>
+    
 
     <div class="space-y-3">
       <div

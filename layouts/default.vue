@@ -39,23 +39,42 @@ const toggleDotColor = () => {
 
 const tooltipClass = computed(() =>
   isOnline.value
-    ? 'bg-green-100 text-green-800'
-    : 'bg-red-100 text-red-800'
-)
+    ? "bg-green-100 text-green-800"
+    : "bg-yellow-100 text-yellow-800"
+);
+
+const isStuck = ref(false);
+const sentinel = ref<HTMLElement | null>(null);
+
+onMounted(() => {
+  const observer = new IntersectionObserver(
+    ([e]) => {
+      isStuck.value = !e.isIntersecting;
+    },
+    { threshold: [1] }
+  );
+  if (sentinel.value) {
+    observer.observe(sentinel.value);
+  }
+});
 </script>
 
 <template>
   <SidebarProvider>
     <AppSidebar />
     <SidebarInset>
-      <header
-        class="flex h-14 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12"
-      >
+     <div ref="sentinel" class="h-1"></div> <!-- Invisible marker -->
+    <header
+      :class="[
+        'sticky top-0 flex h-14 shrink-0 z-50 bg-[hsl(var(--background))] items-center gap-2 transition-all',
+        isStuck ? 'border-b border-gray-150 ' : ''
+      ]"
+    >
         <div class="flex items-center justify-between w-full px-4 pr-2">
           <div id="bread-crumb" class="flex items-center">
             <SidebarTrigger class="-ml-1" />
             <!-- <Separator v-if="route.name !== 'index'" orientation="vertical" class="mr-2 h-4" /> -->
-            <!-- <Separator orientation="vertical" class="mr-2 h-4" /> -->
+            <Separator orientation="vertical" class="mr-2 h-4" />
 
             <!-- <Breadcrumb v-if="route.name !== 'index'"> -->
             <Breadcrumb>
@@ -71,6 +90,8 @@ const tooltipClass = computed(() =>
                 </BreadcrumbItem> -->
               </BreadcrumbList>
             </Breadcrumb>
+
+            <p class="text-xl font-semibold opacity-95">{{ route.meta.title }}</p>
           </div>
 
           <div id="profile" class="flex items-center gap-3">
@@ -80,22 +101,31 @@ const tooltipClass = computed(() =>
             >
               <MailCheck class="h-4 mr-1" />e-Tax พร้อมใช้งาน
             </Badge> -->
-            
+
             <TooltipProvider :delay-duration="100">
-  <Tooltip >
-    <TooltipTrigger as-child>
-      <BaseDotNoti
-        :color="isOnline ? '#44ec83' : '#f87171'"
-        @click="toggleDotColor"
-      />
-    </TooltipTrigger>
-    <TooltipContent  side="left" align="center"
-      :class="['text-sm px-3 mr-2 py-1.5 rounded-md shadow', tooltipClass]"
-    >
-      <p>{{ isOnline ? 'e-Tax พร้อมใช้งาน' : 'e-Tax ไม่พร้อมใช้งาน' }}</p>
-    </TooltipContent>
-  </Tooltip>
-</TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger as-child>
+                  <BaseDotNoti
+                    :color="isOnline ? '#44ec83' : '#facc70'"
+                    @click="toggleDotColor"
+                  />
+                </TooltipTrigger>
+                <TooltipContent
+                  side="left"
+                  align="center"
+                  :class="[
+                    'text-sm px-3 mr-2 py-1.5 rounded-md shadow',
+                    tooltipClass,
+                  ]"
+                >
+                  <p>
+                    {{
+                      isOnline ? "e-Tax พร้อมใช้งาน" : "e-Tax ไม่พร้อมใช้งาน"
+                    }}
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
 
             <!-- <Separator orientation="vertical" class="h-8 w-px bg-muted-300" /> -->
 
@@ -106,11 +136,11 @@ const tooltipClass = computed(() =>
       <!-- Layout.vue -->
       <div
         :class="[
-          'w-full  mx-auto px-4 pt-6',
+          'w-full  mx-auto px-4 pt-0',
           route.path == '/mail' ? '' : 'max-w-[1440px]',
         ]"
       >
-        <div class="flex items-center gap-2">
+        <div v-if="false" class="flex items-center gap-2">
           <!-- <NuxtLink to="/"  v-if="route.name !== 'index'">
             <svg
               width="25"

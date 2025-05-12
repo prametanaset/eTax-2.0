@@ -2,17 +2,22 @@
   <div class="grid grid-cols-12 gap-6">
     <div class="col-span-12 lg:col-span-9 relative">
       <div
-        class="absolute top-[0%] right-0 w-[95%] lg:h-[100%] bg-primary-400/50 blur-xl rounded-full img-shadow-animation"
+        class="absolute top-[5%] right-0 w-[95%] lg:h-[95%] bg-primary-400/50 blur-xl rounded-full img-shadow-animation"
       ></div>
-      <Card class="w-full rounded-xl pb-0 z-10 relative">
+      <Card class="w-full rounded-xl pb-6 z-10 relative">
         <CardHeader class="px-0 pb-0">
           <CardTitle class="px-6">
             <div class="mb-2">
               <h1 class="text-2xl font-bold text-purple-700">ใบกำกับภาษี</h1>
               <div class="flex items-center gap-4 text-base text-gray-600 mt-2">
-                <span class="font-medium">เลขที่ใบกำกับภาษี:</span> <span class="text-purple-600">INV-0010</span>
-                <span class="font-medium ml-6">วันที่ออก:</span> <span>10 พฤษภาคม 2568</span>
-                <Badge class="ml-auto bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">พร้อมใช้งาน</Badge>
+                <span class="font-medium">เลขที่ใบกำกับภาษี:</span>
+                <span class="text-purple-600">INV-0010</span>
+                <span class="font-medium ml-6">วันที่ออก:</span>
+                <span>10 พฤษภาคม 2568</span>
+                <Badge
+                  class="ml-auto bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full"
+                  >พร้อมใช้งาน</Badge
+                >
               </div>
             </div>
           </CardTitle>
@@ -29,26 +34,28 @@
             </div>
           </div>
         </CardHeader>
-        <div class="px-6 my-4">
-          <!-- <BaseCustomerAddress></BaseCustomerAddress> -->
-          <h3 class="text-sm font-semibold text-purple-700 flex items-center gap-1">
-  <Notebook class="w-4 h-4" /> หมายเหตุ
-</h3>
-            <Textarea class="mt-1" />
-        </div>
-        <CardContent>
 
-          <div class="grid gap-4 overflow-hidden">
+        <CardContent>
+          <div class="grid gap-4 overflow-hidden my-4 mt-7 mb-0">
             <p class="text-xl font-semibold">รายการสินค้า</p>
             <!-- product table form -->
             <BaseProductList></BaseProductList>
           </div>
         </CardContent>
+        <div class="px-6 mt-2">
+          <!-- <BaseCustomerAddress></BaseCustomerAddress> -->
+          <h3
+            class="text-sm font-semibold text-purple-700 flex items-center gap-1"
+          >
+            <Notebook class="w-4 h-4" /> หมายเหตุ
+          </h3>
+          <Textarea class="mt-1" />
+        </div>
       </Card>
     </div>
-    <div class="col-span-12 lg:col-span-3">
+    <div class="col-span-12 lg:col-span-3 sticky top-[4.5rem] self-start">
       <BaseNotificationCard class="w-full mb-3" />
-      <Card v-if="true" class="w-full">
+      <Card class="w-full">
         <div class="grid sm:grid-cols-2 gap-4 p-4">
           <Button variant="outline" class="bg-[hsl(var(--card))]">
             <Eye />ตัวอย่าง
@@ -81,7 +88,7 @@ import {
   MapPin,
   Mail,
   Phone,
-  Notebook
+  Notebook,
 } from "lucide-vue-next";
 import {
   Card,
