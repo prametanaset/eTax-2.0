@@ -1,7 +1,6 @@
 <template>
   <div class="flex h-screen">
     <BaseLogin></BaseLogin>
-   
   </div>
 </template>
 
