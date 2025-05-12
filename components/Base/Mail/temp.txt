@@ -3,28 +3,24 @@ import type { Mail } from "./data/mail";
 
 import { cn } from "@/lib/utils";
 import { refDebounced } from "@vueuse/core";
-import { Search } from "lucide-vue-next";
+import { Menu, Search } from "lucide-vue-next";
 import { computed, ref } from "vue";
 import MailDisplay from "./MailDisplay.vue";
 import MailList from "./MailList.vue";
 import Nav from "./Nav.vue";
 
 interface MailProps {
-  accounts: {
-    label: string;
-    email: string;
-    icon: string;
-  }[];
   mails: Mail[];
   defaultLayout?: number[];
   defaultCollapsed?: boolean;
   navCollapsedSize: number;
 }
 
-const props = withDefaults(defineProps<MailProps>(), {});
-
-const isCollapsed = ref(true);
-const selectedMail = ref<string | undefined>(props.mails[0].id);
+const device = useDevice();
+const props = defineProps<MailProps>();
+const sizePanel = ref([0, 100, 0]);
+const isCollapsed = ref(props.defaultCollapsed);
+const selectedMail = ref<string | undefined>();
 const searchValue = ref("");
 const debouncedSearch = refDebounced(searchValue, 250);
 
@@ -95,45 +91,26 @@ const links = [
   },
 ];
 
-const links2 = [
-  {
-    title: "Social",
-    label: "972",
-    icon: "lucide:user-2",
-    variant: "ghost",
-  },
-  {
-    title: "Updates",
-    label: "342",
-    icon: "lucide:alert-circle",
-    variant: "ghost",
-  },
-  {
-    title: "Forums",
-    label: "128",
-    icon: "lucide:message-square",
-    variant: "ghost",
-  },
-  {
-    title: "Shopping",
-    label: "8",
-    icon: "lucide:shopping-cart",
-    variant: "ghost",
-  },
-  {
-    title: "Promotions",
-    label: "21",
-    icon: "lucide:archive",
-    variant: "ghost",
-  },
-];
-
 function onCollapse() {
   isCollapsed.value = true;
 }
 
 function onExpand() {
   isCollapsed.value = false;
+}
+
+function randomizeSizes() {
+  // สุ่มสัดส่วน 3 ช่อง ที่รวมกันได้ 100%
+  const left = Math.floor(Math.random() * 40) + 10; // 10-50%
+  const right = Math.floor(Math.random() * (50 - left)) + 10;
+  const center = 100 - left - right;
+  sizePanel.value = [left, center, right];
+  console.log(sizePanel.value);
+}
+
+// ตัวจัดการเมื่อผู้ใช้ลาก resize ด้วยตนเอง
+function onSizeChange(newSizes: number[]) {
+  sizePanel.value = newSizes;
 }
 </script>
 
@@ -143,39 +120,58 @@ function onExpand() {
       id="resize-panel-group-1"
       direction="horizontal"
       class="h-full"
+      :size="sizePanel"
+      @size-change="onSizeChange"
     >
       <ResizablePanel
+        v-if="!device.isMobile"
         id="resize-panel-1"
-        :default-size="200"
         :collapsed-size="navCollapsedSize"
         collapsible
+        :default-size="sizePanel[0]"
         :min-size="15"
         :max-size="10"
-        :class="
-          cn(
-            isCollapsed &&
-              'min-w-[50px] transition-all duration-300 ease-in-out'
-          )
-        "
+        :class="cn('min-w-[50px] transition-all duration-300 ease-in-out')"
         @expand="onExpand"
         @collapse="onCollapse"
       >
         <Nav :is-collapsed="isCollapsed" :links="links" />
+
         <!-- <Separator /> -->
         <!-- <Nav :is-collapsed="isCollapsed" :links="links2" /> -->
       </ResizablePanel>
-      <ResizableHandle id="resize-handle-1" with-handle />
-      <ResizablePanel id="resize-panel-2" :default-size="30" :min-size="0">
+      <ResizableHandle
+        v-if="!device.isMobile"
+        id="resize-handle-1"
+        with-handle
+      />
+      <ResizablePanel
+        id="resize-panel-2"
+        :min-size="0"
+        :default-size="sizePanel[1]"
+      >
         <Tabs default-value="all">
-          <div class="flex items-center px-4 py-[.38rem]">
+          <div class="flex items-center px-4 py-[.38rem] gap-2">
+            <Sheet v-if="device.isMobile">
+              <SheetTrigger as-child>
+                <Button variant="outline"> <Menu /> </Button>
+              </SheetTrigger>
+              <SheetContent :side="'left'">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam,
+                repellat.
+              </SheetContent>
+            </Sheet>
             <h1 class="text-xl font-bold">Inbox</h1>
             <TabsList class="ml-auto">
-              <TabsTrigger value="all" class="text-zinc-600 dark:text-zinc-200">
+              <TabsTrigger
+                value="all"
+                class="text-zinc-600 dark:text-zinc-200 data-[state=active]:text-primary font-medium"
+              >
                 All mail
               </TabsTrigger>
               <TabsTrigger
                 value="unread"
-                class="text-zinc-600 dark:text-zinc-200"
+                class="text-zinc-600 dark:text-zinc-200 data-[state=active]:text-primary font-medium"
               >
                 Unread
               </TabsTrigger>
@@ -212,10 +208,39 @@ function onExpand() {
           </TabsContent>
         </Tabs>
       </ResizablePanel>
-      <ResizableHandle id="resize-handle-2" with-handle />
-      <ResizablePanel id="resize-panel-3" :default-size="600">
-        <MailDisplay :mail="selectedMailData" />
+      <ResizableHandle
+        v-if="!device.isMobile"
+        id="resize-handle-2"
+        with-handle
+      />
+      <ResizablePanel id="resize-panel-3" :default-size="sizePanel[2]">
+        <transition name="panel-fade" mode="out-in">
+          <div
+            :key="selectedMailData"
+            :class="['transition-all duration-300', mailPanelWidth]"
+          >
+            <MailDisplay v-if="selectedMailData" :mail="selectedMailData" />
+            <div
+              v-else
+              class="h-full w-full flex items-center justify-center text-muted"
+            >
+              No mail selected
+            </div>
+          </div>
+        </transition>
       </ResizablePanel>
     </ResizablePanelGroup>
   </TooltipProvider>
 </template>
+
+<style scoped>
+.panel-fade-enter-active,
+.panel-fade-leave-active {
+  transition: all 0.3s ease;
+}
+.panel-fade-enter-from,
+.panel-fade-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
+}
+</style>

@@ -8,6 +8,7 @@ interface MailListProps {
 
 defineProps<MailListProps>();
 const selectedMail = defineModel<string>("selectedMail", { required: false });
+const mailStore = useMailStore();
 
 function getBadgeVariantFromLabel(label: string) {
   if (["work"].includes(label.toLowerCase())) return "default";
@@ -19,8 +20,8 @@ function getBadgeVariantFromLabel(label: string) {
 </script>
 
 <template>
-  <ScrollArea class="h-screen flex">
-    <div class="flex-1 flex flex-col gap-2 p-4 pt-0">
+  <ScrollArea class="h-[90vh] flex">
+    <div class="flex-1 flex flex-col gap-2 pt-0">
       <TransitionGroup name="list" appear>
         <button
           v-for="item of items"
@@ -31,7 +32,7 @@ function getBadgeVariantFromLabel(label: string) {
               selectedMail === item.id && 'bg-muted'
             )
           "
-          @click="selectedMail = item.id"
+          @click="(selectedMail = item.id), mailStore.setSelectMail(item)"
         >
           <div class="flex w-full flex-col gap-1">
             <div class="flex items-center">

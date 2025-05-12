@@ -3,29 +3,22 @@ import type { Mail } from "./data/mail";
 
 import { cn } from "@/lib/utils";
 import { refDebounced } from "@vueuse/core";
-import { Search } from "lucide-vue-next";
+import { Menu, Search } from "lucide-vue-next";
 import { computed, ref } from "vue";
 import MailDisplay from "./MailDisplay.vue";
 import MailList from "./MailList.vue";
 import Nav from "./Nav.vue";
 
 interface MailProps {
-  accounts: {
-    label: string;
-    email: string;
-    icon: string;
-  }[];
   mails: Mail[];
   defaultLayout?: number[];
   defaultCollapsed?: boolean;
   navCollapsedSize: number;
 }
 
-const props = withDefaults(defineProps<MailProps>(), {
-  defaultCollapsed: false,
-  defaultLayout: () => [0, 340, 0],
-});
-
+const device = useDevice();
+const props = defineProps<MailProps>();
+const sizePanel = ["w-[10%]", "w-[100%]", "w-[0%]"];
 const isCollapsed = ref(props.defaultCollapsed);
 const selectedMail = ref<string | undefined>();
 const searchValue = ref("");
@@ -55,12 +48,10 @@ const unreadMailList = computed(() =>
   filteredMailList.value.filter((item) => !item.read)
 );
 
+const mailStore = useMailStore();
+
 const selectedMailData = computed(() =>
   props.mails.find((item) => item.id === selectedMail.value)
-);
-
-const mailPanelWidth = computed(() =>
-  selectedMailData.value ? "w-[1000px]" : "w-[0px]"
 );
 
 const links = [
@@ -101,117 +92,89 @@ const links = [
     variant: "ghost",
   },
 ];
-
-function onCollapse() {
-  isCollapsed.value = true;
-}
-
-function onExpand() {
-  isCollapsed.value = false;
-}
 </script>
 
 <template>
-  <TooltipProvider :delay-duration="0">
-    <ResizablePanelGroup
-      id="resize-panel-group-1"
-      direction="horizontal"
-      class="h-full"
+  <div class="flex w-full">
+    <div v-if="!device.isMobile" :class="sizePanel[0]">
+      <Nav :is-collapsed="isCollapsed" :links="links" />
+    </div>
+    <div
+      :class="[
+        'transition-all duration-300 px-2',
+        mailStore.selectMail.length == 0 ? sizePanel[1] : 'w-[50%]',
+      ]"
     >
-      <ResizablePanel
-        id="resize-panel-1"
-        :default-size="defaultLayout[0]"
-        :collapsed-size="navCollapsedSize"
-        collapsible
-        :min-size="15"
-        :max-size="10"
-        :class="cn('min-w-[50px] transition-all duration-300 ease-in-out')"
-        @expand="onExpand"
-        @collapse="onCollapse"
-      >
-        <Nav :is-collapsed="isCollapsed" :links="links" />
-        <!-- <Separator /> -->
-        <!-- <Nav :is-collapsed="isCollapsed" :links="links2" /> -->
-      </ResizablePanel>
-      <ResizableHandle id="resize-handle-1" with-handle />
-      <ResizablePanel
-        id="resize-panel-2"
-        :default-size="defaultLayout[1]"
-        :min-size="0"
-      >
-        <Tabs default-value="all">
-          <div class="flex items-center px-4 py-[.38rem]">
-            <h1 class="text-xl font-bold">Inbox</h1>
-            <TabsList class="ml-auto">
-              <TabsTrigger value="all" class="text-zinc-600 dark:text-zinc-200">
-                All mail
-              </TabsTrigger>
-              <TabsTrigger
-                value="unread"
-                class="text-zinc-600 dark:text-zinc-200"
-              >
-                Unread
-              </TabsTrigger>
-            </TabsList>
-          </div>
-          <Separator />
-          <div
-            class="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60"
-          >
-            <form>
-              <div class="relative">
-                <Search
-                  class="absolute left-2 top-2.5 size-4 text-muted-foreground"
-                />
-                <Input
-                  v-model="searchValue"
-                  placeholder="Search"
-                  class="pl-8"
-                />
-              </div>
-            </form>
-          </div>
-          <TabsContent value="all" class="m-0">
-            <MailList
-              v-model:selected-mail="selectedMail"
-              :items="filteredMailList"
-            />
-          </TabsContent>
-          <TabsContent value="unread" class="m-0">
-            <MailList
-              v-model:selected-mail="selectedMail"
-              :items="unreadMailList"
-            />
-          </TabsContent>
-        </Tabs>
-      </ResizablePanel>
-      <ResizableHandle id="resize-handle-2" with-handle />
-      <transition name="panel-fade" mode="out-in">
-        <div
-          :key="selectedMailData"
-          :class="['transition-all duration-300', mailPanelWidth]"
-        >
-          <MailDisplay v-if="selectedMailData" :mail="selectedMailData" />
-          <div
-            v-else
-            class="h-full w-full flex items-center justify-center text-muted"
-          >
-            No mail selected
-          </div>
+      <Tabs default-value="all">
+        <div class="flex items-center py-[.38rem] gap-2">
+          <Sheet v-if="device.isMobile">
+            <SheetTrigger as-child>
+              <Button variant="outline"> <Menu /> </Button>
+            </SheetTrigger>
+            <SheetContent :side="'left'">
+              <Nav :is-collapsed="isCollapsed" :links="links" />
+            </SheetContent>
+          </Sheet>
+          <h1 class="text-xl font-bold">Inbox</h1>
+          <TabsList class="ml-auto">
+            <TabsTrigger
+              value="all"
+              class="text-zinc-600 dark:text-zinc-200 data-[state=active]:text-primary font-medium"
+            >
+              All mail
+            </TabsTrigger>
+            <TabsTrigger
+              value="unread"
+              class="text-zinc-600 dark:text-zinc-200 data-[state=active]:text-primary font-medium"
+            >
+              Unread
+            </TabsTrigger>
+          </TabsList>
         </div>
-      </transition>
-    </ResizablePanelGroup>
-  </TooltipProvider>
+        <Separator />
+        <div
+          class="bg-background/95 py-4 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+        >
+          <form>
+            <div class="relative">
+              <Search
+                class="absolute left-2 top-2.5 size-4 text-muted-foreground"
+              />
+              <Input v-model="searchValue" placeholder="Search" class="pl-8" />
+            </div>
+          </form>
+        </div>
+        <TabsContent value="all" class="m-0">
+          <MailList
+            v-model:selected-mail="selectedMail"
+            :items="filteredMailList"
+          />
+        </TabsContent>
+        <TabsContent value="unread" class="m-0">
+          <MailList
+            v-model:selected-mail="selectedMail"
+            :items="unreadMailList"
+          />
+        </TabsContent>
+      </Tabs>
+    </div>
+    <div
+      :class="[
+        'transition-all duration-300',
+        mailStore.selectMail.length == 0 && device.isMobile
+          ? sizePanel[2]
+          : 'w-[50%]',
+      ]"
+    >
+      <MailDisplay v-if="selectedMailData" :mail="mailStore.selectMail" />
+      <!-- <div
+        v-else
+        class="h-full w-full flex items-center justify-center text-muted"
+      >
+        No mail selected
+      </div> -->
+    </div>
+  </div>
 </template>
 
-<style scoped>
-.panel-fade-enter-active,
-.panel-fade-leave-active {
-  transition: all 0.3s ease;
-}
-.panel-fade-enter-from,
-.panel-fade-leave-to {
-  opacity: 0;
-  transform: translateX(20px);
-}
-</style>
+<style scoped></style>
