@@ -21,9 +21,19 @@ export const useMailStore = defineStore("mailStore", () => {
     mailList.value = mails;
   }
 
+  function setSelectMail(mail: any) {
+    selectMail.value = mail;
+  }
+
   function clearSelectMailStore() {
     selectMail.value = [];
   }
 
-  return { selectMail, mailList, clearSelectMailStore, getMails };
+  return {
+    selectMail,
+    mailList,
+    clearSelectMailStore,
+    getMails,
+    setSelectMail,
+  };
 });

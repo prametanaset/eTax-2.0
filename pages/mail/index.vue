@@ -1,6 +1,6 @@
 <template>
   <div class="h-[90vh] flex-col md:flex">
-    <Mail :accounts="accounts" :mails="mails" :nav-collapsed-size="1" />
+    <Mail :mails="mails" />
   </div>
 </template>
 
@@ -9,7 +9,6 @@ import Mail from "~/components/Base/Mail/Mail.vue";
 import { accounts, mails } from "@/components/Base/Mail/data/mail";
 
 definePageMeta({
-  title: "Mail",
   layout: "default",
 });
 
