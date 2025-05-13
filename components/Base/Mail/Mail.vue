@@ -158,7 +158,7 @@ function onExpand() {
         :min-size="30"
       >
         <Tabs default-value="all">
-          <div class="flex items-center py-[.38rem] gap-2">
+          <div class="flex items-center py-[.38rem]">
             <Sheet v-if="device.isMobile">
               <SheetTrigger as-child>
                 <Button variant="outline"> <Menu /> </Button>
@@ -167,17 +167,17 @@ function onExpand() {
                 <Nav :links="links" />
               </SheetContent>
             </Sheet>
-            <h1 class="text-xl font-bold">Inbox</h1>
+            <h1 class="text-xl font-bold ml-2">Inbox</h1>
             <TabsList class="ml-auto">
               <TabsTrigger
                 value="all"
-                class="text-zinc-600 dark:text-zinc-200 data-[state=active]:text-primary font-medium"
+                class="text-zinc-600 data-[state=active]:text-primary font-medium"
               >
                 ทั้งหมด
               </TabsTrigger>
               <TabsTrigger
                 value="unread"
-                class="text-zinc-600 dark:text-zinc-200 data-[state=active]:text-primary font-medium"
+                class="text-zinc-600 data-[state=active]:text-primary font-medium"
               >
                 ที่ยังไม่อ่าน
               </TabsTrigger>
@@ -185,7 +185,7 @@ function onExpand() {
           </div>
           <Separator />
           <div
-            class="bg-background/95 py-4 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+            class="bg-background/95 py-4 px-2 backdrop-blur supports-[backdrop-filter]:bg-background/60"
           >
             <form>
               <div class="relative">
