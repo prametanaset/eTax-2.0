@@ -31,7 +31,7 @@ function getBadgeVariantFromLabel(label: string) {
             cn(
               'flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent',
               selectedMail === item.id && !device.isMobile
-                ? 'border-primary-500 , bg-muted-300 dark:bg-muted-700'
+                ? 'border-primary-500 , bg-muted-300 dark:bg-muted-800'
                 : ''
             )
           "
