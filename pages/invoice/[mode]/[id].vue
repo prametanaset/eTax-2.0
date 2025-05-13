@@ -5,7 +5,7 @@
         class="absolute top-[5%] right-0 w-[95%] lg:h-[95%] bg-primary-400/50 blur-xl rounded-full img-shadow-animation"
       ></div>
       <Card class="w-full rounded-xl pb-6 z-10 relative">
-        <CardHeader class="px-0 pb-0">
+        <CardHeader class="px-0 py-4">
           <CardTitle class="px-6">
             <div class="mb-2">
               <h1 class="text-2xl font-bold text-purple-700 dark:text-white">
@@ -14,7 +14,7 @@
               <div class="flex items-center gap-3 text-base mt-2">
                 <!-- Tax Invoice Number -->
                 <div class="flex flex-col w-[24%]">
-                  <span class="font-medium dark:text-white"
+                  <span class="font-semibold dark:text-white"
                     >เลขที่</span
                   >
                   <Input type="text" placeholder="กรอกเลขที่ใบกำกับภาษี" class="h-10 font-normal"/>
@@ -22,7 +22,7 @@
 
                 <!-- Issue Date -->
                 <div class="flex flex-col w-[24%]">
-                  <span class="font-medium dark:text-white">วันที่ออก</span>
+                  <span class="font-semibold dark:text-white">วันที่ออก</span>
                   <Popover>
                     <PopoverTrigger as-child>
                       <Button
@@ -51,7 +51,7 @@
 
                 <!-- Badge -->
                 <Badge
-                  class="ml-auto bg-green-100 text-green-700 text-sm px-2 py-1 rounded-full"
+                  class="ml-auto bg-green-100 text-green-700 text-sm px-2 py-1 rounded-full pointer-events-none"
                 >
                   พร้อมใช้งาน
                 </Badge>
@@ -67,7 +67,11 @@
             <div class="px-2">
               <!-- <p class="mb-1 text-md font-medium">ข้อมูลลูกค้า</p> -->
               <!-- <BaseCustomer v-model="customer"></BaseCustomer> -->
-              <BaseCustomerAddress></BaseCustomerAddress>
+                 <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <BaseSellerAddress></BaseSellerAddress>
+                  <BaseCustomerAddress></BaseCustomerAddress>
+
+</div>
             </div>
           </div>
         </CardHeader>

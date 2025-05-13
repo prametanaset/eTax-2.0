@@ -53,10 +53,6 @@ import { cn } from '@/lib/utils'
 
 const device = useDevice();
 
-definePageMeta({
-  layout: false,
-});
-
 // ใช้ useForm() สำหรับจัดการฟอร์ม
 const { handleSubmit, validate, meta } = useForm();
 

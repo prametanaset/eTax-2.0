@@ -1,11 +1,11 @@
 <template>
   <NuxtLayout>
-    <Transition name="fade" mode="out-in">
+    <!-- <Transition name="fade" mode="out-in"> -->
       <!-- wrap NuxtPage in a real element and give it a key -->
       <div :key="$route.fullPath">
         <NuxtPage />
       </div>
-    </Transition>
+    <!-- </Transition> -->
   </NuxtLayout>
 </template>
 
