@@ -170,6 +170,26 @@ export const mails = [
     read: false,
     labels: ["personal"],
   },
+  {
+    id: "d67c1842-7f8b-4b4b-9be1-1b3b1ab4611d",
+    name: "Chloe Hall",
+    email: "chloehall@example.com",
+    subject: "Re: Budget Approval",
+    text: "The budget has been approved. We can proceed with the project. I'm delighted to inform you that our budget proposal has received the green light from the finance department. This is a significant milestone, and it means we can move forward with the project as planned.\n\nI've attached the finalized budget for your reference. Let's ensure that we stay on track and deliver the project on time and within budget.\n\nIt's an exciting time for us! Chloe",
+    date: "2022-08-10T16:45:00",
+    read: true,
+    labels: ["work", "budget"],
+  },
+  {
+    id: "6c9a7f94-8329-4d70-95d3-51f68c186ae1",
+    name: "Samuel Turner",
+    email: "samuelturner@example.com",
+    subject: "Weekend Hike",
+    text: "Who's up for a weekend hike in the mountains? I've been craving some outdoor adventure, and a hike in the mountains sounds like the perfect escape. If you're up for the challenge, we can explore some scenic trails and enjoy the beauty of nature.\n\nI've done some research and have a few routes in mind.\n\nLet me know if you're interested, and we can plan the details.\n\nIt's sure to be a memorable experience! Samuel",
+    date: "2022-07-28T17:30:00",
+    read: false,
+    labels: ["personal"],
+  },
 ];
 
 export type Mail = (typeof mails)[number];
