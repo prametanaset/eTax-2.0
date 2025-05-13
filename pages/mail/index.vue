@@ -1,5 +1,5 @@
 <template>
-  <div class="h-[90vh] flex-col md:flex">
+  <div class="h-[93vh] flex-col md:flex">
     <Mail :mails="mails" />
   </div>
 </template>
@@ -10,6 +10,7 @@ import { accounts, mails } from "@/components/Base/Mail/data/mail";
 
 definePageMeta({
   layout: "default",
+  title: "Mail",
 });
 
 const mailStore = useMailStore();

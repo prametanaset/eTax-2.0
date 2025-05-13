@@ -19,6 +19,7 @@ interface MailDisplayProps {
   mail: Mail | undefined;
 }
 
+const device = useDevice();
 const mailStore = useMailStore();
 const props = defineProps<MailDisplayProps>();
 const mailFallbackName = computed(() => {
@@ -32,11 +33,16 @@ const today = new Date();
 </script>
 
 <template>
-  <ScrollArea class="h-screen flex">
-    <div class="flex h-screen flex-col">
-      <div class="flex items-center p-2">
+  <ScrollArea class="h-full flex">
+    <div class="flex h-full flex-col">
+      <div
+        :class="[
+          'flex items-center p-2 ',
+          device.isMobile ? 'bg-white sticky top-0' : '',
+        ]"
+      >
         <div class="flex items-center gap-2">
-          <Tooltip>
+          <Tooltip v-if="device.isMobile">
             <TooltipTrigger as-child>
               <Button
                 size="icon"
@@ -49,7 +55,11 @@ const today = new Date();
             </TooltipTrigger>
             <TooltipContent>ปิด</TooltipContent>
           </Tooltip>
-          <Separator orientation="vertical" class="mx-2 h-6" />
+          <Separator
+            v-if="device.isMobile"
+            orientation="vertical"
+            class="mx-2 h-6"
+          />
           <Tooltip>
             <TooltipTrigger as-child>
               <Button variant="ghost" size="icon" :disabled="!mail">
