@@ -136,7 +136,7 @@ onMounted(() => {
       <!-- Layout.vue -->
       <div
         :class="[
-          'w-full  mx-auto px-4 pt-0',
+          'w-full  mx-auto px-4 pb-6 pt-0',
           route.path == '/mail' ? '' : 'max-w-[1440px]',
         ]"
       >

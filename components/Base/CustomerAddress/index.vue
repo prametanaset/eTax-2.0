@@ -19,6 +19,37 @@ import {
 } from "@/components/ui/select";
 
 import { Plus } from "lucide-vue-next";
+
+const users = ref([
+  {
+    name: 'Olivia Martin',
+    email: 'm@example.com',
+    avatar: '/avatars/01.png',
+  },
+  {
+    name: 'Isabella Nguyen',
+    email: 'isabella.nguyen@email.com',
+    avatar: '/avatars/03.png',
+  },
+  {
+    name: 'Emma Wilson',
+    email: 'emma@example.com',
+    avatar: '/avatars/05.png',
+  },
+  {
+    name: 'Jackson Lee',
+    email: 'lee@example.com',
+    avatar: '/avatars/02.png',
+  },
+  {
+    name: 'William Kim',
+    email: 'will@email.com',
+    avatar: '/avatars/04.png',
+  },
+])
+
+const open = ref(false)
+const selectedUsers = ref<User[]>([])
 </script>
 
 <template>
@@ -34,10 +65,10 @@ import { Plus } from "lucide-vue-next";
         </svg>
         ข้อมูลการติดต่อ
       </h2>
-      <Button size="sm"
-        class="gap-2  text-white hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-400 text-sm rounded-lg">
+      <Button variant="ghost"  @click="open = true"
+        class=" hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-400 rounded-full p-2.5 flex items-center justify-center">
         <Plus class="w-4 h-4" />
-        เพิ่ม
+        <!-- เพิ่ม -->
       </Button>
     </div>
 
@@ -70,5 +101,76 @@ import { Plus } from "lucide-vue-next";
         <a href="tel:+66621896577" class="text-purple-600 dark:text-purple-300 hover:underline">+66 62 189 6577</a>
       </p>
     </div>
+    <Dialog v-model:open="open">
+    <DialogContent class="gap-0 p-0 outline-none">
+      <DialogHeader class="px-4 pb-4 pt-5">
+        <DialogTitle>New message</DialogTitle>
+        <DialogDescription>
+          Invite a user to this thread. This will create a new group
+          message.
+        </DialogDescription>
+      </DialogHeader>
+      <Command class="overflow-hidden rounded-t-none border-t">
+        <CommandInput placeholder="Search user..." />
+        <CommandList>
+          <CommandEmpty>No users found.</CommandEmpty>
+          <CommandGroup class="p-2">
+            <CommandItem
+              v-for="user in users"
+              :key="user.email"
+              :value="user"
+              class="flex items-center px-2"
+              @select="() => {
+                const index = selectedUsers.findIndex(u => u === user)
+                if (index !== -1) {
+                  selectedUsers.splice(index, 1)
+                }
+                else {
+                  selectedUsers.push(user)
+                }
+              }"
+            >
+              <Avatar>
+                <AvatarImage :src="user.avatar" alt="Image" />
+                <AvatarFallback>{{ user.name[0] }}</AvatarFallback>
+              </Avatar>
+              <div class="ml-2">
+                <p class="text-sm font-medium leading-none">
+                  {{ user.name }}
+                </p>
+                <p class="text-sm text-muted-foreground">
+                  {{ user.email }}
+                </p>
+              </div>
+              <Check v-if="selectedUsers.includes(user)" class="ml-auto flex h-5 w-5 text-primary" />
+            </CommandItem>
+          </CommandGroup>
+        </CommandList>
+      </Command>
+      <DialogFooter class="flex items-center border-t p-4 sm:justify-between">
+        <div v-if="selectedUsers.length > 0" class="flex -space-x-2 overflow-hidden">
+          <Avatar
+            v-for="user in selectedUsers"
+            :key="user.email"
+            class="inline-block border-2 border-background"
+          >
+            <AvatarImage :src="user.avatar" />
+            <AvatarFallback>{{ user.name[0] }}</AvatarFallback>
+          </Avatar>
+        </div>
+
+        <p v-else class="text-sm text-muted-foreground">
+          Select users to add to this thread.
+        </p>
+
+        <Button
+          :disabled="selectedUsers.length < 2"
+          @click="open = false"
+        >
+          Continue
+        </Button>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
   </div>
 </template>

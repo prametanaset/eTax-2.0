@@ -14,10 +14,12 @@
               <div class="flex items-center gap-3 text-base mt-2">
                 <!-- Tax Invoice Number -->
                 <div class="flex flex-col w-[24%]">
-                  <span class="font-semibold dark:text-white"
-                    >เลขที่</span
-                  >
-                  <Input type="text" placeholder="กรอกเลขที่ใบกำกับภาษี" class="h-10 font-normal"/>
+                  <span class="font-semibold dark:text-white">เลขที่</span>
+                  <Input
+                    type="text"
+                    placeholder="กรอกเลขที่ใบกำกับภาษี"
+                    class="h-10 font-normal"
+                  />
                 </div>
 
                 <!-- Issue Date -->
@@ -35,7 +37,9 @@
                         "
                         class="w-full bg-[hsl(var(--card))] h-10"
                       >
-                        <CalendarIcon class="mr-2 h-4 w-4 text-base font-normal" />
+                        <CalendarIcon
+                          class="mr-2 h-4 w-4 text-base font-normal"
+                        />
                         {{
                           value
                             ? df.format(value.toDate(getLocalTimeZone()))
@@ -44,17 +48,17 @@
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent class="w-auto p-0">
-                      <Calendar v-model="value" initial-focus />
+                      <Calendar v-model="value" locale="th-TH" initial-focus />
                     </PopoverContent>
                   </Popover>
                 </div>
 
                 <!-- Badge -->
-                <Badge
+                <!-- <Badge
                   class="ml-auto bg-green-100 text-green-700 text-sm px-2 py-1 rounded-full pointer-events-none"
                 >
                   พร้อมใช้งาน
-                </Badge>
+                </Badge> -->
               </div>
             </div>
           </CardTitle>
@@ -67,11 +71,10 @@
             <div class="px-2">
               <!-- <p class="mb-1 text-md font-medium">ข้อมูลลูกค้า</p> -->
               <!-- <BaseCustomer v-model="customer"></BaseCustomer> -->
-                 <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <BaseSellerAddress></BaseSellerAddress>
-                  <BaseCustomerAddress></BaseCustomerAddress>
-
-</div>
+              <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+                <BaseSellerAddress></BaseSellerAddress>
+                <BaseCustomerAddress></BaseCustomerAddress>
+              </div>
             </div>
           </div>
         </CardHeader>

@@ -9,7 +9,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Trash, ChevronDown, Plus } from "lucide-vue-next";
+import { Trash, ChevronDown, Plus, CirclePlus } from "lucide-vue-next";
 import {
   Popover,
   PopoverTrigger,
@@ -114,8 +114,7 @@ onUnmounted(() => {
     <Popover v-if="!(products.length > 0)">
       <PopoverTrigger as-child>
         <Button class="flex items-center rounded-lg justify-between text-left">
-          <Plus />
-          <span>เพิ่มรายการสินค้า</span>
+          <CirclePlus /> <span>เพิ่มรายการสินค้า</span>
         </Button>
       </PopoverTrigger>
       <!--       <PopoverContent class="p-0 w-[var(--reka-popper-anchor-width)]" align="end" >
@@ -149,8 +148,6 @@ onUnmounted(() => {
         </Command>
       </PopoverContent>
     </Popover>
-
-    
 
     <div class="space-y-3">
       <div
@@ -214,18 +211,27 @@ onUnmounted(() => {
                   <div class="grid grid-cols-3 items-center gap-4">
                     <span class="font-semibold">ประเภท</span>
                     <Select v-model="product.discountType">
-                      <SelectTrigger class="col-span-2 h-8 font-light" >
+                      <SelectTrigger class="col-span-2 h-8 font-light">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="%" class="font-light">เปอร์เซ็นต์ (%)</SelectItem>
-                        <SelectItem value="บาท"  class="font-light">บาท (฿)</SelectItem>
+                        <SelectItem value="%" class="font-light"
+                          >เปอร์เซ็นต์ (%)</SelectItem
+                        >
+                        <SelectItem value="บาท" class="font-light"
+                          >บาท (฿)</SelectItem
+                        >
                       </SelectContent>
                     </Select>
                   </div>
                   <div class="grid grid-cols-3 items-center gap-4">
                     <span class="font-semibold">มูลค่า</span>
-                    <Input type="number" v-model="product.discountValue" min="0" class="col-span-2 h-8 text-center" />
+                    <Input
+                      type="number"
+                      v-model="product.discountValue"
+                      min="0"
+                      class="col-span-2 h-8 text-center"
+                    />
                   </div>
                 </div>
               </div>
