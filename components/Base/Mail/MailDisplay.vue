@@ -34,7 +34,7 @@ const today = new Date();
 </script>
 
 <template>
-  <ScrollArea class="h-full flex">
+  <ScrollArea class="h-[95vh] flex">
     <div class="flex h-full flex-col">
       <div
         :class="[

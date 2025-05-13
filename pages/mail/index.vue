@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col md:flex">
+  <div class="h-full flex-col md:flex">
     <Mail :mails="mails" />
   </div>
 </template>

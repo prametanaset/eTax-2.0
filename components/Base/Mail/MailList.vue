@@ -20,8 +20,8 @@ function getBadgeVariantFromLabel(label: string) {
 </script>
 
 <template>
-  <ScrollArea class="h-full flex">
-    <div class="flex-1 flex flex-col gap-2 pt-0 h-[95vh] overflow-auto pb-3">
+  <ScrollArea class="flex-1 h-[85vh] overflow-hidden px-2">
+    <div class="flex-1 flex flex-col gap-2 pt-0 overflow-y-auto pb-3">
       <TransitionGroup name="list" appear>
         <button
           v-for="item of items"
@@ -34,6 +34,7 @@ function getBadgeVariantFromLabel(label: string) {
           "
           @click="(selectedMail = item.id), mailStore.setSelectMail(item)"
         >
+          <!-- Mail content -->
           <div class="flex w-full flex-col gap-1">
             <div class="flex items-center">
               <div class="flex items-center gap-2">
@@ -58,14 +59,15 @@ function getBadgeVariantFromLabel(label: string) {
                 {{ formatThaiDate(new Date()) }}
               </div>
             </div>
-
             <div class="text-xs font-medium">
               {{ item.subject }}
             </div>
           </div>
+
           <div class="line-clamp-2 text-xs text-muted-foreground">
             {{ item.text.substring(0, 300) }}
           </div>
+
           <div class="flex items-center gap-2">
             <Badge
               v-for="label of item.labels"
