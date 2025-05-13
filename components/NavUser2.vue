@@ -67,21 +67,21 @@ const { isMobile } = useSidebar();
         <DropdownMenuTrigger as-child>
           <SidebarMenuButton
             size="lg"
-            class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground px-3"
+            class="data-[state=open]:text-sidebar-accent-foreground hover:bg-transparent hover:opacity-85 active:bg-transparent"
           >
             <!-- <ChevronsUpDown class="ml-auto size-4" /> -->
             <Avatar class="h-8 w-8 rounded-full">
               <AvatarImage :src="user.avatar" :alt="user.name" />
               <AvatarFallback class="rounded-full"> CN </AvatarFallback>
             </Avatar>
-            <div class="grid flex-1 text-left text-sm">
+            <!-- <div class="grid flex-1 text-left text-sm">
               <span class="truncate font-semibold leading-snug">{{
                 user.name
               }}</span>
               <span class="truncate text-xs font-light leading-none">{{
                 user.email
               }}</span>
-            </div>
+            </div> -->
           </SidebarMenuButton>
         </DropdownMenuTrigger>
         <!-- <DropdownMenuContent
@@ -97,16 +97,16 @@ const { isMobile } = useSidebar();
           :side-offset="4"
         >
           <DropdownMenuLabel class="p-0 font-normal">
-            <!-- <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+            <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
               <Avatar class="h-8 w-8 rounded-full">
                 <AvatarImage :src="user.avatar" :alt="user.name" />
                 <AvatarFallback class="rounded-lg"> CN </AvatarFallback>
               </Avatar>
               <div class="grid flex-1 text-left text-sm leading-tight">
                 <span class="truncate font-semibold">{{ user.name }}</span>
-                <span class="truncate text-xs">{{ user.email }}</span>
+                <!-- <span class="truncate text-xs">{{ user.email }}</span> -->
               </div>
-            </div> -->
+            </div>
             <ThemeToggle />
           </DropdownMenuLabel>
           <DropdownMenuSeparator />

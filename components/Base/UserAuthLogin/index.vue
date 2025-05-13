@@ -9,7 +9,7 @@
           <div>
             <!-- <Label for="email">อีเมลผู้ใช้งาน</Label> -->
             <Input name="email" type="email" placeholder="หมายเลขโทรศัพท์ ชื่อผู้ใช้ หรืออีเมล" required
-              v-model="email.value" class="placeholder:font-semibold h-10 font-normal" />
+              v-model="email.value" class="placeholder:font-semibold h-10 font-normal bg-[hsl(var(--card))]" />
             <span class="text-red-500 text-sm font-light">{{
               email.errorMessage
             }}</span>
@@ -17,7 +17,7 @@
           <div>
             <!-- <Label for="password">Password</Label> -->
             <Input name="password" type="password" placeholder="รหัสผ่าน" required v-model="password.value"
-              class="placeholder:font-semibold h-10" />
+              class="placeholder:font-semibold h-10 bg-[hsl(va(--card))]" />
             <span class="text-red-500 text-sm font-light">{{
               password.errorMessage
             }}</span>

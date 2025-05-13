@@ -25,8 +25,8 @@ defineProps({
 
 .ping {
   position: relative;
-  width: 16px;
-  height: 13.5px;
+  width: 20px;
+  height: 14px;
   line-height: 0;
   display: inline-block;
   vertical-align: middle;

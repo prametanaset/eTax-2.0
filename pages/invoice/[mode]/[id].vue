@@ -8,16 +8,53 @@
         <CardHeader class="px-0 pb-0">
           <CardTitle class="px-6">
             <div class="mb-2">
-              <h1 class="text-2xl font-bold text-purple-700">ใบกำกับภาษี</h1>
-              <div class="flex items-center gap-4 text-base text-gray-600 mt-2">
-                <span class="font-medium">เลขที่ใบกำกับภาษี:</span>
-                <span class="text-purple-600">INV-0010</span>
-                <span class="font-medium ml-6">วันที่ออก:</span>
-                <span>10 พฤษภาคม 2568</span>
+              <h1 class="text-2xl font-bold text-purple-700 dark:text-white">
+                ใบกำกับภาษี
+              </h1>
+              <div class="flex items-center gap-3 text-base mt-2">
+                <!-- Tax Invoice Number -->
+                <div class="flex flex-col w-[24%]">
+                  <span class="font-medium dark:text-white"
+                    >เลขที่</span
+                  >
+                  <Input type="text" placeholder="กรอกเลขที่ใบกำกับภาษี" class="h-10 font-normal"/>
+                </div>
+
+                <!-- Issue Date -->
+                <div class="flex flex-col w-[24%]">
+                  <span class="font-medium dark:text-white">วันที่ออก</span>
+                  <Popover>
+                    <PopoverTrigger as-child>
+                      <Button
+                        variant="outline"
+                        :class="
+                          cn(
+                            'justify-start text-left font-normal',
+                            !value && 'text-muted-foreground'
+                          )
+                        "
+                        class="w-full bg-[hsl(var(--card))] h-10"
+                      >
+                        <CalendarIcon class="mr-2 h-4 w-4 text-base font-normal" />
+                        {{
+                          value
+                            ? df.format(value.toDate(getLocalTimeZone()))
+                            : "เลือกวันที่สร้าง"
+                        }}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent class="w-auto p-0">
+                      <Calendar v-model="value" initial-focus />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+
+                <!-- Badge -->
                 <Badge
-                  class="ml-auto bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full"
-                  >พร้อมใช้งาน</Badge
+                  class="ml-auto bg-green-100 text-green-700 text-sm px-2 py-1 rounded-full"
                 >
+                  พร้อมใช้งาน
+                </Badge>
               </div>
             </div>
           </CardTitle>
@@ -57,9 +94,10 @@
       <BaseNotificationCard class="w-full mb-3" />
       <Card class="w-full">
         <div class="grid sm:grid-cols-2 gap-4 p-4">
-          <Button variant="outline" class="bg-[hsl(var(--card))]">
+          <!-- <Button variant="outline" class="bg-[hsl(var(--card))]">
             <Eye />ตัวอย่าง
-          </Button>
+          </Button> -->
+          <BasePreviewInvoice></BasePreviewInvoice>
           <Button variant="outline" class="bg-[hsl(var(--card))]">
             <Save />สร้าง
           </Button>
@@ -106,9 +144,25 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
+import { cn } from "@/lib/utils";
+
 definePageMeta({
   title: "สร้างใบกำกับภาษี",
 });
+
+import {
+  DateFormatter,
+  type DateValue,
+  getLocalTimeZone,
+} from "@internationalized/date";
+import { CalendarIcon } from "lucide-vue-next";
+import { ref } from "vue";
+
+const df = new DateFormatter("en-US", {
+  dateStyle: "long",
+});
+
+const value = ref<DateValue>();
 
 const customer = ref(null);
 const customerAddress = ref("");

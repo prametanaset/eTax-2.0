@@ -2,8 +2,12 @@
   <div>
     <!-- Charts -->
     <!-- Charts -->
-<div
+     <!-- <div
   v-if="!device.isMobile"
+  class="grid gap-4 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-4 mb-[60px]"
+> -->
+<div
+  v-if="true"
   class="grid gap-4 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-4 mb-[60px]"
 >
   <div

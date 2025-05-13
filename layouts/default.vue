@@ -94,7 +94,7 @@ onMounted(() => {
             <p class="text-xl font-semibold opacity-95">{{ route.meta.title }}</p>
           </div>
 
-          <div id="profile" class="flex items-center gap-3">
+          <div id="profile" class="flex items-center">
             <!-- <Badge
               variant="outline"
               class=" text-green-600 border-green-500 px-1 py-2 mr-2 text-sm font-light leading-none rounded-lg whitespace-nowrap"
@@ -102,9 +102,9 @@ onMounted(() => {
               <MailCheck class="h-4 mr-1" />e-Tax พร้อมใช้งาน
             </Badge> -->
 
-            <TooltipProvider :delay-duration="100">
+            <TooltipProvider :delay-duration="100" >
               <Tooltip>
-                <TooltipTrigger as-child>
+                <TooltipTrigger as-child class="mr-2">
                   <BaseDotNoti
                     :color="isOnline ? '#44ec83' : '#facc70'"
                     @click="toggleDotColor"
@@ -127,7 +127,7 @@ onMounted(() => {
               </Tooltip>
             </TooltipProvider>
 
-            <!-- <Separator orientation="vertical" class="h-8 w-px bg-muted-300" /> -->
+            <Separator orientation="vertical" class="h-5 mx-1 w-px bg-muted-300" />
 
             <NavUser2 :user="data.user" />
           </div>
