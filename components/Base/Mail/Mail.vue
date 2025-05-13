@@ -230,7 +230,7 @@ function onExpand() {
       <div
         v-if="device.isMobile"
         :class="[
-          'absolute z-[2] bg-white w-full h-full rounded-md transition-transform duration-200 ease-in-out top-0',
+          'absolute z-[2] bg-background w-full h-full rounded-md transition-transform duration-200 ease-in-out top-0',
           mailStore.selectMail.length !== 0
             ? 'translate-x-0'
             : 'translate-x-full',

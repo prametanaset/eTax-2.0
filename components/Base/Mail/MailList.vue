@@ -9,6 +9,7 @@ interface MailListProps {
 defineProps<MailListProps>();
 const selectedMail = defineModel<string>("selectedMail", { required: false });
 const mailStore = useMailStore();
+const device = useDevice();
 
 function getBadgeVariantFromLabel(label: string) {
   if (["work"].includes(label.toLowerCase())) return "default";
@@ -29,7 +30,9 @@ function getBadgeVariantFromLabel(label: string) {
           :class="
             cn(
               'flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent',
-              selectedMail === item.id && 'bg-muted'
+              selectedMail === item.id && !device.isMobile
+                ? 'border-primary-500 , bg-muted-300 dark:bg-muted-800'
+                : ''
             )
           "
           @click="(selectedMail = item.id), mailStore.setSelectMail(item)"

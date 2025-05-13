@@ -39,7 +39,7 @@ const today = new Date();
       <div
         :class="[
           'flex items-center p-2 ',
-          device.isMobile ? 'bg-white sticky top-0' : '',
+          device.isMobile ? 'bg-background sticky top-0' : '',
         ]"
       >
         <div class="flex items-center gap-2">
