@@ -29,7 +29,7 @@ function getBadgeVariantFromLabel(label: string) {
           :key="item.id"
           :class="
             cn(
-              'flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent',
+              'flex flex-col bg-[hsl(var(--card))] items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent',
               selectedMail === item.id && !device.isMobile
                 ? 'border-primary-500 , bg-muted-300 dark:bg-muted-800'
                 : ''
@@ -46,7 +46,7 @@ function getBadgeVariantFromLabel(label: string) {
                 </div>
                 <span
                   v-if="!item.read"
-                  class="flex h-2 w-2 rounded-full bg-blue-600"
+                  class="flex h-2 w-2 rounded-full bg-primary-500"
                 />
               </div>
               <div
@@ -67,9 +67,9 @@ function getBadgeVariantFromLabel(label: string) {
             </div>
           </div>
 
-          <div class="line-clamp-2 text-xs text-muted-foreground">
+          <!-- <div class="line-clamp-2 text-xs text-muted-foreground">
             {{ item.text.substring(0, 300) }}
-          </div>
+          </div> -->
 
           <div class="flex items-center gap-2">
             <Badge
