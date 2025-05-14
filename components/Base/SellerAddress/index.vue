@@ -1,7 +1,7 @@
 <template>
 
     <div
-      class="bg-white dark:bg-purple-950/60 border border-gray-200 dark:border-purple-700 rounded-lg p-6 shadow-sm transition-colors"
+      class="bg-white dark:bg-purple-950/60 border border-gray-200 dark:border-purple-700 rounded-lg p-6 transition-colors"
     >
       <h2
         class="text-gray-700 dark:text-purple-100 text-md font-semibold flex items-center gap-2 mb-4"

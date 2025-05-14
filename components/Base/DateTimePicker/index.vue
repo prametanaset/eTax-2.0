@@ -26,7 +26,7 @@ const minutes = Array.from({ length: 60 }, (_, i) => i);
 const hourContainer = ref<HTMLElement | null>(null);
 const minuteContainer = ref<HTMLElement | null>(null);
 
-const df = new DateFormatter("th-TH", {
+const df = new DateFormatter("th-TH-u-ca-buddhist", {
   dateStyle: "long",
   timeStyle: "short",
   hour12: false,
@@ -97,23 +97,36 @@ const selectedMinute = computed(() => {
 });
 
 function setToNow() {
-  const now = new Date()
-  value.value = fromDate(now, getLocalTimeZone())
+  const now = new Date();
+  value.value = fromDate(now, getLocalTimeZone());
 
   nextTick(() => {
     const btnHour = hourContainer.value?.querySelector<HTMLButtonElement>(
       "button.bg-purple-300"
-    )
+    );
     const btnMinute = minuteContainer.value?.querySelector<HTMLButtonElement>(
       "button.bg-purple-300"
-    )
-    btnHour?.scrollIntoView({ block: "center", behavior: "smooth" })
-    btnMinute?.scrollIntoView({ block: "center", behavior: "smooth" })
-  })
+    );
+    btnHour?.scrollIntoView({ block: "center", behavior: "smooth" });
+    btnMinute?.scrollIntoView({ block: "center", behavior: "smooth" });
+  });
 }
+watch(isOpen, async (open) => {
+  if (open && selectedHour.value !== "--" && selectedMinute.value !== "--") {
+    await nextTick();
 
+    const btnHour = hourContainer.value?.querySelector<HTMLButtonElement>(
+      "button.bg-purple-300"
+    );
+    const btnMinute = minuteContainer.value?.querySelector<HTMLButtonElement>(
+      "button.bg-purple-300"
+    );
+
+    btnHour?.scrollIntoView({ block: "center" });
+    btnMinute?.scrollIntoView({ block: "center" });
+  }
+});
 </script>
-
 
 <template>
   <Popover v-model:open="isOpen">
@@ -134,13 +147,18 @@ function setToNow() {
       class="w-auto p-4 rounded-xl shadow-lg bg-white dark:bg-zinc-900"
     >
       <div class="flex flex-col sm:flex-row gap-4">
-        <Calendar
-          :model-value="value"
-          @update:modelValue="onDateChange"
-          locale="th-TH"
-          initial-focus
-        />
-
+        <div class="flex flex-col">
+          <Calendar
+            :model-value="value"
+            @update:modelValue="onDateChange"
+            locale="th-TH"
+            ordering="buddhist gregory"
+            initial-focus
+          />
+          <Button variant="secondary" @click="setToNow">
+            <Clock class="w-4 h-4 mr-2" /> ตอนนี้
+          </Button>
+        </div>
         <div class="flex flex-col items-start gap-3 pt-5">
           <div
             class="flex items-center gap-2 text-sm font-medium text-muted-foreground"
@@ -152,90 +170,112 @@ function setToNow() {
             </span>
           </div>
 
-          <div
-            class="grid grid-cols-[auto_auto_auto] gap-4 items-center justify-center"
-          >
-            <!-- Hours -->
-            <div class="flex flex-col gap-2">
-              <ScrollArea class="h-48 w-20 rounded-md border mask-gradient">
-                <!-- bind the inner viewport element to our ref -->
-                <div
-                  class="absolute top-0 left-0 w-full h-6 bg-gradient-to-b from-purple-300 to-transparent z-10 pointer-events-none rounded-t-md"
-                />
-                <div
-                  class="absolute bottom-0 left-0 w-full h-6 bg-gradient-to-t from-purple-300 to-transparent z-10 pointer-events-none rounded-b-md"
-                />
-                <div ref="hourContainer" class="flex flex-col gap-1 p-1">
-                  <Button
-                    v-for="hour in hours"
-                    :key="hour"
-                    variant="ghost"
-                    class="w-full justify-center rounded-md text-sm"
-                    :class="{
-                      'bg-purple-300 ':
-                        value?.toDate(getLocalTimeZone()).getHours() === hour,
-                      'hover:bg-purple-100 text-purple-700':
-                        value?.toDate(getLocalTimeZone()).getHours() !== hour,
-                    }"
-                    @click="handleTimeChange('hour', hour.toString())"
-                  >
-                    {{ hour.toString().padStart(2, "0") }}
-                  </Button>
-                </div>
-              </ScrollArea>
-              <p class="text-sm">ชั่วโมง</p>
-            </div>
-
-            <!-- Separator : -->
+          <div class="flex flex-col gap-4">
             <div
-              class="text-2xl font-semibold text-muted-foreground self-center mb-4"
+              class="grid grid-cols-[auto_auto_auto] gap-4 items-center justify-center"
             >
-              :
-            </div>
-
-            <!-- Minutes -->
-            <div class="flex flex-col gap-2">
-              <ScrollArea class="h-48 w-20 rounded-md border mask-gradient">
-                <div
-                  class="absolute top-0 left-0 w-full h-6 bg-gradient-to-b from-purple-300 to-transparent z-10 pointer-events-none rounded-t-md"
-                />
-                <div
-                  class="absolute bottom-0 left-0 w-full h-6 bg-gradient-to-t from-purple-300 to-transparent z-10 pointer-events-none rounded-b-md"
-                />
-                <div ref="minuteContainer" class="flex flex-col gap-1 p-1">
-                  <Button
-                    v-for="minute in minutes"
-                    :key="minute"
-                    variant="ghost"
-                    class="w-full justify-center rounded-md text-sm"
-                    :class="{
-                      'bg-purple-300 ':
-                        value?.toDate(getLocalTimeZone()).getMinutes() ===
-                        minute,
-                      'hover:bg-purple-100 text-purple-700':
-                        value?.toDate(getLocalTimeZone()).getMinutes() !==
-                        minute,
-                    }"
-                    @click="handleTimeChange('minute', minute.toString())"
+              <!-- Hours -->
+              <div class="flex flex-col gap-3 relative items-center">
+                <ScrollArea class="h-48 w-20 rounded-md overflow-hidden">
+                  <!-- Top Fade -->
+                  <div
+                    :class="[
+                      'absolute top-0 left-0 w-full h-10 bg-gradient-to-b to-transparent z-10 pointer-events-none',
+                      selectedHour === '00' || selectedHour === '01'
+                        ? 'opacity-0'
+                        : 'from-white/90 dark:from-zinc-900/90',
+                    ]"
+                  />
+                  <div
+                    :class="[
+                      'absolute bottom-0 left-0 w-full h-10 bg-gradient-to-t to-transparent z-10 pointer-events-none',
+                      ['22', '23'].includes(selectedHour)
+                        ? 'opacity-0'
+                        : 'from-white/90 dark:from-zinc-900/90',
+                    ]"
+                  />
+                  <div
+                    ref="hourContainer"
+                    class="flex flex-col gap-1 p-1 relative z-0"
                   >
-                    {{ minute.toString().padStart(2, "0") }}
-                  </Button>
-                </div>
-              </ScrollArea>
-              <p class="text-sm">นาที</p>
+                    <Button
+                      v-for="hour in hours"
+                      :key="hour"
+                      variant="ghost"
+                      class="w-full justify-center rounded-md text-sm"
+                      :class="{
+                        'bg-purple-300 ':
+                          value?.toDate(getLocalTimeZone()).getHours() === hour,
+                        'hover:bg-purple-100 text-purple-700':
+                          value?.toDate(getLocalTimeZone()).getHours() !== hour,
+                      }"
+                      @click="handleTimeChange('hour', hour.toString())"
+                    >
+                      {{ hour.toString().padStart(2, "0") }}
+                    </Button>
+                  </div>
+                </ScrollArea>
+                <p class="text-sm">ชั่วโมง</p>
+              </div>
+
+              <!-- Separator : -->
+              <div
+                class="text-2xl font-semibold text-muted-foreground self-center mb-7"
+              >
+                :
+              </div>
+
+              <!-- Minutes -->
+              <div class="flex flex-col gap-3 items-center">
+                <ScrollArea class="h-48 w-20 rounded-md">
+                  <!-- Top Fade -->
+                  <div
+                    :class="[
+                      'absolute top-0 left-0 w-full h-10 bg-gradient-to-b to-transparent z-10 pointer-events-none',
+                      selectedMinute === '00' || selectedMinute === '01'
+                        ? 'opacity-0'
+                        : 'from-white/90 dark:from-zinc-900/90',
+                    ]"
+                  />
+                  <div
+                    :class="[
+                      'absolute bottom-0 left-0 w-full h-10 bg-gradient-to-t to-transparent z-10 pointer-events-none',
+                      ['58', '59'].includes(selectedMinute)
+                        ? 'opacity-0'
+                        : 'from-white/90 dark:from-zinc-900/90',
+                    ]"
+                  />
+                  <div ref="minuteContainer" class="flex flex-col gap-1 p-1">
+                    <Button
+                      v-for="minute in minutes"
+                      :key="minute"
+                      variant="ghost"
+                      class="w-full justify-center rounded-md text-sm"
+                      :class="{
+                        'bg-purple-300 ':
+                          value?.toDate(getLocalTimeZone()).getMinutes() ===
+                          minute,
+                        'hover:bg-purple-100 text-purple-700':
+                          value?.toDate(getLocalTimeZone()).getMinutes() !==
+                          minute,
+                      }"
+                      @click="handleTimeChange('minute', minute.toString())"
+                    >
+                      {{ minute.toString().padStart(2, "0") }}
+                    </Button>
+                  </div>
+                </ScrollArea>
+                <p class="text-sm">นาที</p>
+              </div>
+            </div>
+            <div class="flex justify-end">
+              <Button variant="ghost" @click="isOpen = false">ยกเลิก</Button>
+              <Button variant="default" @click="isOpen = false">ตกลง</Button>
             </div>
           </div>
-
-          <!-- ปุ่ม ยกเลิก / ตกลง -->
-<div class="flex justify-end gap-2 w-full pt-2">
-  <Button variant="secondary" @click="setToNow">
-  <Clock class="w-4 h-4 mr-2" /> ตอนนี้
-</Button>
-  <Button variant="ghost" @click="isOpen = false">ยกเลิก</Button>
-  <Button variant="default" @click="isOpen = false">ตกลง</Button>
-</div>
         </div>
       </div>
+
     </PopoverContent>
   </Popover>
 </template>

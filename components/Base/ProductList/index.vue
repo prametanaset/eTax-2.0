@@ -1,5 +1,5 @@
-<script setup>
-import { ref } from "vue";
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from "vue";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -9,7 +9,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Trash, ChevronDown, Plus, CirclePlus } from "lucide-vue-next";
+import { Trash, Plus, CirclePlus } from "lucide-vue-next";
 import {
   Popover,
   PopoverTrigger,
@@ -25,9 +25,7 @@ import {
 } from "@/components/ui/command";
 import { Label } from "@/components/ui/label";
 
-const [UseTemplate, DiscountForm] = createReusableTemplate();
-
-const availableProducts = [
+const availableProducts = ref([
   {
     id: 1,
     name: "เสื้อยืด",
@@ -46,22 +44,21 @@ const availableProducts = [
     price: 180000,
     image: "/images/products/sneakers.jpg",
   },
-];
+]);
 
-// Initially empty, user selects product first
-const products = ref([]);
+const products = ref<any[]>([]);
 const isPopoverOpen = ref(false);
+const isDialogOpen = ref(false);
 
-const addProduct = (selectedProduct) => {
-  const existingProduct = products.value.find(
-    (product) => product.id === selectedProduct.id
-  );
+const handleNewProductAdded = (product: any) => {
+  availableProducts.value.push(product);
+};
 
-  if (existingProduct) {
-    // If the product already exists, increment its quantity
-    existingProduct.quantity += 1;
+const addProduct = (selectedProduct: any) => {
+  const existing = products.value.find((p) => p.id === selectedProduct.id);
+  if (existing) {
+    existing.quantity += 1;
   } else {
-    // Otherwise, add it as a new product with initial settings
     products.value.push({
       ...selectedProduct,
       quantity: 1,
@@ -70,28 +67,30 @@ const addProduct = (selectedProduct) => {
       tax: "10%",
     });
   }
-
-  isPopoverOpen.value = false; // 👈 Close it manually here
+  isPopoverOpen.value = false;
 };
 
-const removeProduct = (id) => {
-  products.value = products.value.filter((product) => product.id !== id);
+const removeProduct = (id: number) => {
+  products.value = products.value.filter((p) => p.id !== id);
 };
 
-const screenWidth = ref(0); // Start with 0 or a default value
-
+const screenWidth = ref(0);
 const updateWidth = () => {
   screenWidth.value = window.innerWidth;
 };
-
 onMounted(() => {
-  updateWidth(); // Set initial width
+  updateWidth();
   window.addEventListener("resize", updateWidth);
 });
-
 onUnmounted(() => {
   window.removeEventListener("resize", updateWidth);
 });
+
+const currencyFormat = (value: number) =>
+  new Intl.NumberFormat("th-TH", {
+    style: "decimal",
+    minimumFractionDigits: 0,
+  }).format(value);
 </script>
 
 <template>
@@ -113,7 +112,9 @@ onUnmounted(() => {
     <!-- Product Selection Popover -->
     <Popover v-if="!(products.length > 0)">
       <PopoverTrigger as-child>
-        <Button class="flex items-center rounded-lg justify-between px-3 text-left">
+        <Button
+          class="flex items-center rounded-lg justify-between px-3 text-left"
+        >
           <CirclePlus /> <span>เพิ่มรายการสินค้า</span>
         </Button>
       </PopoverTrigger>
@@ -126,6 +127,14 @@ onUnmounted(() => {
             <CommandEmpty>No products found.</CommandEmpty>
             <CommandGroup>
               <CommandItem
+                :value="'new-product'"
+                @select="isDialogOpen = true"
+                class="flex items-center px-4 py-2 cursor-pointer text-blue-600 font-semibold"
+              >
+                <CirclePlus class="w-5 h-5 mr-3" />
+                <span>เพิ่มสินค้าใหม่</span>
+              </CommandItem>
+              <CommandItem
                 v-for="product in availableProducts"
                 :key="product.id"
                 @select="addProduct(product)"
@@ -137,7 +146,7 @@ onUnmounted(() => {
                   class="w-10 h-10 rounded-md object-cover mr-3"
                 />
                 <div>
-                  <p class="font-semibold">{{ product.name }}</p>
+                  <p class="font-medium">{{ product.name }}</p>
                   <p class="text-sm text-gray-500">
                     {{ currencyFormat(product.price) }} บาท
                   </p>
@@ -352,6 +361,13 @@ onUnmounted(() => {
             <CommandEmpty>No products found.</CommandEmpty>
             <CommandGroup>
               <CommandItem
+                @select="isDialogOpen = true"
+                class="flex items-center px-4 py-2 cursor-pointer text-blue-600 font-semibold"
+              >
+                <CirclePlus class="w-5 h-5 mr-3" />
+                <span>เพิ่มสินค้าใหม่</span>
+              </CommandItem>
+              <CommandItem
                 v-for="product in availableProducts"
                 :key="product.id"
                 @select="addProduct(product)"
@@ -374,5 +390,11 @@ onUnmounted(() => {
         </Command>
       </PopoverContent>
     </Popover>
+
+    <!-- เรียก Dialog Component -->
+    <BaseAddProductDialog
+      v-model="isDialogOpen"
+      @product-added="handleNewProductAdded"
+    />
   </div>
 </template>

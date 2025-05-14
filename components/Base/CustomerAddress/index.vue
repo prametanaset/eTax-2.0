@@ -55,7 +55,7 @@ const selectedUsers = ref<User[]>([])
 <template>
   <!-- ข้อมูลลูกค้า -->
   <div
-    class="bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-700 rounded-lg p-6 shadow-sm">
+    class="bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-700 rounded-lg p-6 ">
     <!-- Header with title and button -->
     <div class="flex items-center justify-between mb-4">
       <h2 class="text-purple-700 dark:text-purple-400 text-md font-semibold flex items-center gap-2">
