@@ -41,8 +41,11 @@
         </div>
       </div>
     </div>
-    <div class="md:w-[70%] w-full">
-      <Card class="px-3">
+    <div class="md:w-[70%] w-full h-full relative group">
+      <div
+        class="z-1 absolute top-[50%] right-3 w-[90%] h-full lg:h-[50%] bg-primary-400/50 blur-xl rounded-full img-shadow-animation"
+      ></div>
+      <Card class="px-3 relative z-99">
         <!-- change page -->
         <slot />
       </Card>
@@ -90,4 +93,20 @@ const navLink = [
 ];
 </script>
 
-<style></style>
+<style>
+.img-shadow-animation {
+  animation-name: img-shadow-animation;
+  animation-iteration-count: infinite;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-direction: alternate;
+}
+
+.img-border-animation {
+  animation-name: img-border-animation;
+  animation-iteration-count: infinite;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-direction: alternate;
+}
+</style>
