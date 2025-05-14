@@ -1,13 +1,14 @@
 <template>
   <div>
-    <BaseInvoice></BaseInvoice>
+    <BaseDateTimePicker></BaseDateTimePicker>
+    <BaseDateTimePicker2></BaseDateTimePicker2>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { BaseDateTimePicker2 } from '#components';
+
 
 </script>
 
-<style>
-
-</style>
+<style></style>

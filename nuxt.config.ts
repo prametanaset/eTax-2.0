@@ -20,6 +20,7 @@ export default defineNuxtConfig({
     "@nuxtjs/device",
     "@pinia/nuxt",
   ],
+  // dateFns configuration should be placed in the module options if supported, not in the root config
   shadcn: {
     /**
      * Prefix for all the imported component

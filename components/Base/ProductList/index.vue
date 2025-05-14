@@ -113,7 +113,7 @@ onUnmounted(() => {
     <!-- Product Selection Popover -->
     <Popover v-if="!(products.length > 0)">
       <PopoverTrigger as-child>
-        <Button class="flex items-center rounded-lg justify-between text-left">
+        <Button class="flex items-center rounded-lg justify-between px-3 text-left">
           <CirclePlus /> <span>เพิ่มรายการสินค้า</span>
         </Button>
       </PopoverTrigger>

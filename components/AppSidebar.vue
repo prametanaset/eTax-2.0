@@ -24,6 +24,7 @@ import {
   BetweenHorizontalStart,
   Users,
   Home,
+  Microscope
 } from "lucide-vue-next";
 
 const props = withDefaults(defineProps<SidebarProps>(), {
@@ -139,6 +140,12 @@ const data = {
       ],
       newTab: false
     },
+    {
+      title: "ทดลอง",
+      url: "/test",
+      icon: Microscope,
+      newTab: false
+    },
   ],
   projects: [
     {
@@ -161,7 +168,7 @@ const data = {
 </script>
 
 <template>
-  <Sidebar class="w-[--sidebar-width]" v-bind="props">
+  <Sidebar class="w-[240px]" v-bind="props">
     <SidebarHeader>
       <!-- <TeamSwitcher :teams="data.teams" /> -->
        <SidebarMenuButton

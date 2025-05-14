@@ -25,17 +25,17 @@
                 <!-- Issue Date -->
                 <div class="flex flex-col w-[24%]">
                   <span class="font-semibold dark:text-white">วันที่ออก</span>
-                  <Popover>
+                  <!-- <Popover>
                     <PopoverTrigger as-child>
                       <Button
                         variant="outline"
                         :class="
                           cn(
                             'justify-start text-left font-normal',
-                            !value && 'text-muted-foreground'
+                            !value && 'text-muted-400'
                           )
                         "
-                        class="w-full bg-[hsl(var(--card))] h-10"
+                        class="w-full bg-[hsl(var(--card))] h-10 shadow-none"
                       >
                         <CalendarIcon
                           class="mr-2 h-4 w-4 text-base font-normal"
@@ -50,15 +50,10 @@
                     <PopoverContent class="w-auto p-0">
                       <Calendar v-model="value" locale="th-TH" initial-focus />
                     </PopoverContent>
-                  </Popover>
+                  </Popover> -->
+                  <BaseDateTimePicker></BaseDateTimePicker>
                 </div>
 
-                <!-- Badge -->
-                <!-- <Badge
-                  class="ml-auto bg-green-100 text-green-700 text-sm px-2 py-1 rounded-full pointer-events-none"
-                >
-                  พร้อมใช้งาน
-                </Badge> -->
               </div>
             </div>
           </CardTitle>
@@ -66,11 +61,8 @@
             <div v-if="false" class="mr-1 px-2">
               <p class="mb-1 text-md font-medium">From</p>
               <BaseCustomer v-model="customer"></BaseCustomer>
-              <!-- <BaseCustomerAddress></BaseCustomerAddress> -->
             </div>
             <div class="px-2">
-              <!-- <p class="mb-1 text-md font-medium">ข้อมูลลูกค้า</p> -->
-              <!-- <BaseCustomer v-model="customer"></BaseCustomer> -->
               <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
                 <BaseSellerAddress></BaseSellerAddress>
                 <BaseCustomerAddress></BaseCustomerAddress>
@@ -165,7 +157,7 @@ import {
 import { CalendarIcon } from "lucide-vue-next";
 import { ref } from "vue";
 
-const df = new DateFormatter("en-US", {
+const df = new DateFormatter("th-TH", {
   dateStyle: "long",
 });
 

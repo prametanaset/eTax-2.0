@@ -31,6 +31,7 @@ const route = useRoute();
           as-child
           :tooltip="item.title"
           :is-active="route.path === item.url && !item.newTab"
+          class="rounded-xl"
         >
           <template v-if="item.newTab">
             <a
