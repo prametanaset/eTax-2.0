@@ -1,44 +1,67 @@
 <template>
   <div :class="cn('grid gap-6', $attrs.class ?? '')">
     <div>
-      <p class="text-3xl font-bold font-ibm text-center">เริ่มต้นใช้งาน</p>
+      <p class="text-3xl font-bold font-ibm text-center">ขอต้อนรับกลับมา</p>
     </div>
     <div>
       <Form class="grid gap-4" @submit="onSubmit">
         <div class="grid gap-3">
           <div>
             <!-- <Label for="email">อีเมลผู้ใช้งาน</Label> -->
-            <Input name="email" type="email" placeholder="หมายเลขโทรศัพท์ ชื่อผู้ใช้ หรืออีเมล" required
-              v-model="email.value" class="placeholder:font-semibold h-10 font-normal bg-[hsl(var(--card))]" />
+            <Input
+              name="email"
+              type="email"
+              placeholder="หมายเลขโทรศัพท์ ชื่อผู้ใช้ หรืออีเมล"
+              required
+              v-model="email.value"
+              class="placeholder:font-normal h-10 bg-[hsl(var(--card))]"
+            />
             <span class="text-red-500 text-sm font-light">{{
               email.errorMessage
             }}</span>
           </div>
           <div>
             <!-- <Label for="password">Password</Label> -->
-            <Input name="password" type="password" placeholder="รหัสผ่าน" required v-model="password.value"
-              class="placeholder:font-semibold h-10 bg-[hsl(va(--card))]" />
+            <Input
+              name="password"
+              type="password"
+              placeholder="รหัสผ่าน"
+              required
+              v-model="password.value"
+              class="placeholder:font-normal h-10 bg-[hsl(va(--card))]"
+            />
             <span class="text-red-500 text-sm font-light">{{
               password.errorMessage
             }}</span>
           </div>
         </div>
         <Button class="w-full text-md font-semibold">เข้าสู่ระบบ</Button>
-        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" />
+        <link
+          href="https://fonts.googleapis.com/css?family=Lato"
+          rel="stylesheet"
+        />
       </Form>
       <div class="mt-4 mb-8 text-center text-sm">
         ยังไม่มีบัญชีใช่ไหม?
         <!-- <a href="/register" class="underline">ลงชื่อสมัคร</a> -->
-        <NuxtLink to="/register"><Button variant="link" class="px-0 font-normal">ลงชื่อสมัคร</Button></NuxtLink>
+        <NuxtLink to="/register"
+          ><Button variant="link" class="px-0 font-normal"
+            >ลงชื่อสมัคร</Button
+          ></NuxtLink
+        >
       </div>
-      <Separator label="หรือ" />
+      <Separator />
       <div class="grid gap-2 mt-8 mb-4 text-sm">
         <Button class="w-full bg-white text-muted-800 hover:bg-zinc-200 h-10">
-          <span class="w-6"><img src="@/assets/img/google-logo.png" alt="" class="w-full" /></span>
+          <span class="w-6"
+            ><img src="@/assets/img/google-logo.png" alt="" class="w-full"
+          /></span>
           ดำเนินการต่อด้วย Google
         </Button>
         <Button class="w-full bg-white text-muted-800 hover:text-white h-10">
-          <span class="w-6"><img src="@/assets/img/thaiid-logo.png" alt="" class="w-full" /></span>
+          <span class="w-6"
+            ><img src="@/assets/img/thaiid-logo.png" alt="" class="w-full"
+          /></span>
           ดำเนินการต่อด้วย ThaiID
         </Button>
       </div>
@@ -48,8 +71,7 @@
 
 <script lang="ts" setup>
 import { useForm, useField } from "vee-validate";
-import { cn } from '@/lib/utils'
-
+import { cn } from "@/lib/utils";
 
 const device = useDevice();
 
@@ -69,12 +91,12 @@ const validatePassword = (value: string) => {
 
 // ฟังก์ชันเมื่อกด Submit
 const onSubmit = handleSubmit((tValue, tOutput) => {
-  console.log("tValue:",tValue);
-  console.log("tOutput:",tOutput);
+  console.log("tValue:", tValue);
+  console.log("tOutput:", tOutput);
 
   console.log("Form submitted!"); // all fields passed validation
-  navigateTo('/dashboard')
-})
+  navigateTo("/dashboard");
+});
 // ใช้ useField() สำหรับแต่ละฟิลด์
 const email = useField("email", checkEmailInDB);
 const password = useField("password", validatePassword);
