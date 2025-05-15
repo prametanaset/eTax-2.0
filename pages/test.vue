@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BaseDateTimePicker></BaseDateTimePicker>
+    <BaseDateTimePicker2></BaseDateTimePicker2>
   </div>
 </template>
 
