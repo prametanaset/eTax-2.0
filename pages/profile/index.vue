@@ -1,10 +1,10 @@
 <template>
   <BaseProfile>
     <div class="grid gap-10 m-auto max-w-lg py-5">
-      <p class="text-lg text-primary-500">ข้อมูลส่วนตัว</p>
+      <p class="text-lg font-medium text-primary-500">ข้อมูลส่วนตัว</p>
       <div class="grid gap-10">
         <section class="grid gap-5">
-          <p class="text-md font-light">รูปโปรไฟล์</p>
+          <p class="text-md font-medium">รูปโปรไฟล์</p>
           <div class="picture relative">
             <span
               type="file"
@@ -23,7 +23,7 @@
           </div>
         </section>
         <section class="grid gap-5">
-          <p class="text-md font-light">ข้อมูลส่วนตัว</p>
+          <p class="text-md font-medium">ข้อมูลส่วนตัว</p>
           <Form action="">
             <div class="grid sm:grid-cols-2 sm:gap-5 gap-2">
               <div class="relative items-center">

@@ -179,7 +179,7 @@ function onExpand() {
                 value="unread"
                 class="text-zinc-600 data-[state=active]:text-primary font-medium"
               >
-                ที่ยังไม่อ่าน
+                จาก EDTA
               </TabsTrigger>
             </TabsList>
           </div>
