@@ -53,7 +53,6 @@ const isPopoverOpen = ref(false);
 const isDialogOpen = ref(false);
 const lastAddedProductId = ref<number | null>(null);
 
-
 const handleNewProductAdded = (product: any) => {
   availableProducts.value.push(product);
 };
@@ -80,8 +79,8 @@ const addProduct = (selectedProduct: any) => {
   nextTick(() => {
     const el = document.querySelector(`#product-${lastAddedProductId.value}`);
     el?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center'
+      behavior: "smooth",
+      block: "center",
     });
   });
 };
@@ -174,29 +173,31 @@ const currencyFormat = (value: number) =>
       </PopoverContent>
     </Popover>
 
-<Draggable
-  v-model="products"
-  item-key="id"
-  handle=".drag-handle"
-  tag="div"
-  :animation="150"
-  :ghost-class="'ghost'"
-  class="space-y-3"
->
-  <template #item="{ element: product }">
-    <div
-      :key="product.id"
-      :id="`product-${product.id}`"
-      class="relative grid sm:grid-cols-[1fr_80px_80px_90px_80px_auto] gap-2 items-center p-4 border rounded-lg shadow-sm bg-[hsl(var(--card))]"
-      :class="screenWidth < 640 ? 'grid-cols-2' : ''"
+    <Draggable
+      v-model="products"
+      item-key="id"
+      handle=".drag-handle"
+      tag="div"
+      :animation="150"
+      :ghost-class="'ghost'"
+      class="space-y-3"
     >
-      <div class="absolute left-0 drag-handle cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-700">
-        <GripVertical class="w-4 h-4" />
-      </div>
+      <template #item="{ element: product }">
+        <div
+          :key="product.id"
+          :id="`product-${product.id}`"
+          class="relative grid sm:grid-cols-[1fr_80px_80px_90px_80px_auto] gap-2 items-center border rounded-lg shadow-sm bg-[hsl(var(--card))]"
+          :class="screenWidth < 640 ? 'grid-cols-2' : ''"
+        >
+          <!-- <div
+            class="absolute left-0 drag-handle cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-700"
+          >
+            <GripVertical class="w-4 h-4" />
+          </div> -->
 
           <!-- Product Info -->
           <div
-            class="flex items-center space-x-4 w-full overflow-hidden drag-handle cursor-grab active:cursor-grabbing"
+            class="flex items-center space-x-4 w-full overflow-hidden py-3 pl-4 drag-handle cursor-grab active:cursor-grabbing"
             :class="screenWidth < 640 ? 'col-span-2' : ''"
           >
             <img
@@ -355,7 +356,7 @@ const currencyFormat = (value: number) =>
           <div>
             <Button
               variant="ghost"
-              class="text-red-500 hover:text-red-600 w-full sm:w-auto"
+              class="text-red-500 hover:text-red-600 w-full sm:w-auto mr-4"
               @click="removeProduct(product.id)"
             >
               <Trash class="w-5 h-5 mx-auto sm:mx-0" />
@@ -437,5 +438,4 @@ const currencyFormat = (value: number) =>
 .fade-leave-to {
   opacity: 0;
 }
-
 </style>
