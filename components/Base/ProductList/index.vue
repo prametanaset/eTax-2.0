@@ -113,9 +113,9 @@ const currencyFormat = (value: number) =>
     <!-- Header Row -->
     <div
       v-if="true"
-      class="grid grid-cols-[1fr_80px_80px_100px_50px_50px] gap-4 p-2 py-1 font-semibold border-b text-sm items-center max-sm:hidden"
+      class="grid grid-cols-[1fr_80px_80px_100px_50px_50px] gap-4 p-2 py-1 font-base border-b text-base  items-center max-sm:hidden"
     >
-      <span class="pl-2">รายละเอียด</span>
+      <span>รายละเอียด</span>
       <span class="text-center">จำนวน</span>
       <span class="text-center">ส่วนลด</span>
       <span class="text-center">ภาษี</span>
@@ -128,14 +128,14 @@ const currencyFormat = (value: number) =>
     <Popover v-if="!(products.length > 0)">
       <PopoverTrigger as-child>
         <Button
-          class="flex items-center rounded-lg justify-between px-3 text-left"
+          class="flex items-center rounded-xl justify-between px-3 text-left"
         >
           <CirclePlus /> <span>เพิ่มรายการสินค้า</span>
         </Button>
       </PopoverTrigger>
       <!--       <PopoverContent class="p-0 w-[var(--reka-popper-anchor-width)]" align="end" >
  -->
-      <PopoverContent class="p-0">
+      <PopoverContent class="p-0" align="start">
         <Command>
           <CommandInput placeholder="Search product..." />
           <CommandList>
@@ -186,7 +186,7 @@ const currencyFormat = (value: number) =>
         <div
           :key="product.id"
           :id="`product-${product.id}`"
-          class="relative grid sm:grid-cols-[1fr_80px_80px_90px_80px_auto] gap-2 items-center border rounded-lg shadow-sm bg-[hsl(var(--card))]"
+          class="relative grid sm:grid-cols-[1fr_80px_80px_90px_80px_auto] gap-2 items-center border rounded-lg shadow-none bg-[hsl(var(--card))]"
           :class="screenWidth < 640 ? 'grid-cols-2' : ''"
         >
           <!-- <div
@@ -206,8 +206,8 @@ const currencyFormat = (value: number) =>
               class="w-12 h-12 rounded-xl object-cover"
             />
             <div class="flex-1 min-w-0">
-              <p class="font-normal truncate">{{ product.name }}</p>
-              <p class="text-xs text-gray-500">SKU: SHIRT-001</p>
+              <p class="font-semibold truncate">{{ product.name }}</p>
+              <p class="text-xs font-medium text-gray-500">SKU: SHIRT-001</p>
             </div>
           </div>
 
@@ -378,7 +378,7 @@ const currencyFormat = (value: number) =>
           <!-- <ChevronDown class="h-4 w-4 text-muted-foreground" /> -->
         </Button>
       </PopoverTrigger>
-      <PopoverContent class="p-0 w-72" :data-align="'start'">
+      <PopoverContent class="p-0 w-72" align="start">
         <Command>
           <CommandInput placeholder="Search product..." />
           <CommandList>

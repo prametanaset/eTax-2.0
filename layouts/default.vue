@@ -72,7 +72,7 @@ onMounted(() => {
     >
         <div class="flex items-center justify-between w-full px-4 pr-2">
           <div id="bread-crumb" class="flex items-center">
-            <SidebarTrigger class="-ml-1" />
+            <SidebarTrigger />
             <!-- <Separator v-if="route.name !== 'index'" orientation="vertical" class="mr-2 h-4" /> -->
             <Separator orientation="vertical" class="mr-2 h-4" />
 
@@ -91,10 +91,10 @@ onMounted(() => {
               </BreadcrumbList>
             </Breadcrumb>
 
-            <p class="text-xl font-semibold opacity-95">{{ route.meta.title }}</p>
+            <p class="text-xl font-semibold">{{ route.meta.title }}</p>
           </div>
 
-          <div id="profile" class="flex items-center">
+          <div id="profile" class="flex items-center font-">
             <!-- <Badge
               variant="outline"
               class=" text-green-600 border-green-500 px-1 py-2 mr-2 text-sm font-light leading-none rounded-lg whitespace-nowrap"
@@ -136,7 +136,7 @@ onMounted(() => {
       <!-- Layout.vue -->
       <div
         :class="[
-          'w-full  mx-auto px-4 pb-6 pt-0',
+          'w-full mx-auto px-4 pb-6 pt-0 ',
           route.path == '/mail' ? '' : 'max-w-[1440px]',
         ]"
       >

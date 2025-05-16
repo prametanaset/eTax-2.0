@@ -1,13 +1,13 @@
 <template>
 
     <div
-      class="bg-white dark:bg-purple-950/60 border border-gray-200 dark:border-purple-700 rounded-lg p-6 transition-colors"
+      class="bg-white dark:bg-purple-950/60 border border-gray-200 dark:border-purple-700 rounded-lg p-5 transition-colors"
     >
       <h2
         class="text-gray-700 dark:text-purple-100 text-md font-semibold flex items-center gap-2 mb-4"
       >
         <Store class="w-5 h-5 text-gray-700 dark:text-purple-300" />
-        ผู้ขาย
+        ข้อมูลร้านค้า
       </h2>
 
       <div class="text-sm text-gray-700 dark:text-purple-100 space-y-1">

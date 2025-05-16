@@ -9,7 +9,7 @@
     <div
       v-if="!device.isMobile"
       :class="[
-        'grid gap-4 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-4 mb-[60px]',
+        'grid gap-4 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-4 mb-[60px] mt-1',
       ]"
     >
       <div
@@ -75,7 +75,7 @@
     </div>
 
     <!-- Table -->
-    <div :class="[device.isMobile ? 'w-[92vw]' : 'w-full', 'overflow-hidden']">
+    <div :class="[device.isMobile ? 'w-[92vw]' : 'w-full overflow-visible', 'overflow-hidden']">
       <!-- <BaseInvoiceDataTable
         :data="invoices_100_thai"
         :columns="columns"

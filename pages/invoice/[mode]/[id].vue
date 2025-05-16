@@ -2,55 +2,29 @@
   <div class="grid grid-cols-12 gap-6">
     <div class="col-span-12 lg:col-span-9 relative">
       <div
-        class="absolute top-[5%] right-0 w-[95%] lg:h-[95%] bg-primary-400/50 blur-xl rounded-full img-shadow-animation"
+        class="absolute top-[5%] right-0 w-[98%] lg:h-[95%] bg-primary-400/50 blur-xl rounded-full img-shadow-animation"
       ></div>
       <Card class="w-full rounded-xl pb-6 z-10 relative">
-        <CardHeader class="px-0 py-4">
+        <CardHeader class="px-0 py-4 pt-3">
           <CardTitle class="px-6">
             <div class="mb-2">
-              <h1 class="text-2xl font-bold text-purple-700 dark:text-white">
+              <!-- <h1 class="text-2xl font-bold  dark:text-white">
                 ใบกำกับภาษี
-              </h1>
-              <div class="flex items-center gap-3 text-base mt-2">
+              </h1> -->
+              <div class="flex items-center gap-3 text-[1rem] mt-3">
                 <!-- Tax Invoice Number -->
-                <div class="flex flex-col w-[24%]">
-                  <span class="font-semibold dark:text-white">เลขที่</span>
+                <div class="flex flex-col w-[24%] gap-1">
+                  <span class="font-medium dark:text-white text-black/80">เลขที่</span>
                   <Input
                     type="text"
                     placeholder="กรอกเลขที่ใบกำกับภาษี"
-                    class="h-10 font-normal"
+                    class="h-10 font-normal bg-[hsl(var(--card))]"
                   />
                 </div>
 
                 <!-- Issue Date -->
-                <div class="flex flex-col w-[24%]">
-                  <span class="font-semibold dark:text-white">วันที่ออก</span>
-                  <!-- <Popover>
-                    <PopoverTrigger as-child>
-                      <Button
-                        variant="outline"
-                        :class="
-                          cn(
-                            'justify-start text-left font-normal',
-                            !value && 'text-muted-400'
-                          )
-                        "
-                        class="w-full bg-[hsl(var(--card))] h-10 shadow-none"
-                      >
-                        <CalendarIcon
-                          class="mr-2 h-4 w-4 text-base font-normal"
-                        />
-                        {{
-                          value
-                            ? df.format(value.toDate(getLocalTimeZone()))
-                            : "เลือกวันที่สร้าง"
-                        }}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent class="w-auto p-0">
-                      <Calendar v-model="value" locale="th-TH" initial-focus />
-                    </PopoverContent>
-                  </Popover> -->
+                <div class="flex flex-col w-[24%] gap-1">
+                  <span class="font-medium dark:text-white text-black/80">วันที่สร้าง</span>
                   <BaseDateTimePicker></BaseDateTimePicker>
                 </div>
               </div>
@@ -69,6 +43,7 @@
             </div>
           </div>
         </CardHeader>
+
 
         <CardContent>
           <div class="grid gap-4 overflow-hidden my-4 mt-7 mb-0">

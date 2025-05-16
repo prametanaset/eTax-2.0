@@ -61,7 +61,7 @@ const product = reactive({
               <!-- <Button v-if="product.discountValue > 0" variant="secondary" size="xs" class="w-full sm:w-20 text-center text-sm font-semibold truncate bg-primary/10 text-primary dark:text-primary-light">
                 {{ product.discountValue }} {{ product.discountType }}
               </Button> -->
-              <Button variant="secondary" size="sm" class="w-fit text-center text-sm font-semibold rounded-full truncate bg-primary/10 text-primary-600 dark:text-primary-light">
+              <Button variant="secondary" size="sm" class="w-fit text-center text-sm font-semibold rounded-xl truncate bg-primary/15 text-primary-600 dark:text-primary-light">
                 <CirclePlus /> เพิ่มส่วนลด
               </Button>
             </PopoverTrigger>

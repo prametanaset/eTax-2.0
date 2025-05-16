@@ -96,14 +96,14 @@ const columns: ColumnDef<Payment>[] = [
         "onUpdate:modelValue": (value) =>
           table.toggleAllPageRowsSelected(!!value),
         ariaLabel: "Select all",
-        class: "ml-3 mb-2"
+        class: "ml-3 mb-2",
       }),
     cell: ({ row }) =>
       h(Checkbox, {
         modelValue: row.getIsSelected(),
         "onUpdate:modelValue": (value) => row.toggleSelected(!!value),
         ariaLabel: "Select row",
-        class: "ml-3 mb-2"
+        class: "ml-3 mb-2",
       }),
     enableSorting: false,
     enableHiding: false,
@@ -248,75 +248,99 @@ function getStatusLabel(status) {
 
 <template>
   <div class="w-full">
-    <div class="flex items-center py-4">
-      <div class="relative w-full max-w-sm items-center">
-        <Input
-          id="search"
-          type="text"
-          class="max-w-sm font-medium pl-10 bg-[hsl(var(--card))]"
-          placeholder="ค้นหาใบกำกับภาษี"
-          :model-value="table.getColumn('email')?.getFilterValue() as string"
-          @update:model-value="table.getColumn('email')?.setFilterValue($event)"
-        />
-        <span
-          class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
-        >
-          <Search class="size-6 text-muted-500/75" />
-        </span>
+    <div class="flex flex-wrap justify-between items-center gap-4 py-4">
+      <!-- ซ้าย: Search + Date Picker + Columns -->
+      <div class="flex gap-4">
+        <!-- Search -->
+        <div class="relative w-full flex max-w-xs">
+          <Input
+            id="search"
+            type="text"
+            class="pl-10 font-medium bg-[hsl(var(--card))] w-full placeholder:font-normal"
+            placeholder="ค้นหาลูกค้า"
+            :model-value="table.getColumn('email')?.getFilterValue() as string"
+            @update:model-value="
+              table.getColumn('email')?.setFilterValue($event)
+            "
+          />
+          <span
+            class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
+          >
+            <Search class="text-muted-500/75" />
+          </span>
+        </div>
+
+        <!-- Date Picker -->
+        <BaseDateTimePicker />
+
+        <!-- Columns toggle -->
+        <DropdownMenu>
+          <DropdownMenuTrigger as-child>
+            <Button
+              variant="outline"
+              class="flex items-center gap-1 bg-[hsl(var(--card))]"
+            >
+              <span>คอลัมน์</span>
+              <ChevronDown class="w-4 h-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuCheckboxItem
+              v-for="column in table
+                .getAllColumns()
+                .filter((col) => col.getCanHide())"
+              :key="column.id"
+              class="capitalize"
+              :model-value="column.getIsVisible()"
+              @update:model-value="(value) => column.toggleVisibility(!!value)"
+            >
+              {{ column.id }}
+            </DropdownMenuCheckboxItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
-      <DropdownMenu>
-        <DropdownMenuTrigger as-child>
-          <Button class="ml-auto mr-2">
-            Columns
-            <ChevronDown class="ml-2 h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuCheckboxItem
-            v-for="column in table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())"
-            :key="column.id"
-            class="capitalize"
-            :model-value="column.getIsVisible()"
-            @update:model-value="
-              (value) => {
-                column.toggleVisibility(!!value);
-              }
-            "
-          >
-            {{ column.id }}
-          </DropdownMenuCheckboxItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <!-- ขวา: ปุ่มสร้าง -->
       <NuxtLink to="/invoice/create/invoice">
-        <Button class="font-semibold font-noto"><Plus/>สร้างใบกำกับภาษี</Button>
+        <Button
+          class="font-medium font-noto px-3 text-white hover:bg-purple-600 transition rounded-lg"
+        >
+          <Plus class="-mr-1 w-4 h-4" /> สร้างใบกำกับภาษี
+        </Button>
       </NuxtLink>
     </div>
-    <div class="rounded-md border bg-[hsl(var(--card))]">
-      <Table>
+
+    <div class="rounded-lg border bg-[hsl(var(--card))]">
+      <Table >
         <TableHeader>
           <TableRow
             v-for="headerGroup in table.getHeaderGroups()"
             :key="headerGroup.id"
             class="font-noto"
           >
-            <TableHead v-for="header in headerGroup.headers" :key="header.id" class="font-semibold text-base" >
+            <TableHead
+              v-for="header in headerGroup.headers"
+              :key="header.id"
+              class="font-medium text-base"
+            >
               <FlexRender
                 v-if="!header.isPlaceholder"
                 :render="header.column.columnDef.header"
                 :props="header.getContext()"
-                class="font-semibold text-base"
+                class="font-medium text-base"
               />
             </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           <template v-if="table.getRowModel().rows?.length">
-            <template v-for="row in table.getRowModel().rows" :key="row.id" >
+            <template v-for="row in table.getRowModel().rows" :key="row.id">
               <TableRow :data-state="row.getIsSelected() && 'selected'">
-                <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id" class="py-3">
+                <TableCell
+                  v-for="cell in row.getVisibleCells()"
+                  :key="cell.id"
+                  class="py-3"
+                >
                   <FlexRender
                     :render="cell.column.columnDef.cell"
                     :props="cell.getContext()"

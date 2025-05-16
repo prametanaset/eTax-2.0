@@ -55,7 +55,7 @@ const selectedUsers = ref<User[]>([])
 <template>
   <!-- ข้อมูลลูกค้า -->
   <div
-    class="bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-700 rounded-lg p-6 ">
+    class="bg-purple-10 dark:bg-purple-950/60 border  dark:border-purple-700 rounded-lg p-4 ">
     <!-- Header with title and button -->
     <div class="flex items-center justify-between mb-4">
       <h2 class="text-purple-700 dark:text-purple-400 text-md font-semibold flex items-center gap-2">
@@ -63,13 +63,12 @@ const selectedUsers = ref<User[]>([])
           <path
             d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4s-4 1.79-4 4 1.79 4 4 4zm0 2c-3.33 0-8 1.67-8 5v1h16v-1c0-3.33-4.67-5-8-5z" />
         </svg>
-        ข้อมูลการติดต่อ
+        ข้อมูลลูกค้า
       </h2>
-      <Button variant="ghost"  @click="open = true"
+      <!-- <Button variant="ghost"  @click="open = true"
         class=" hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-400 rounded-full p-2.5 flex items-center justify-center">
         <Plus class="w-4 h-4" />
-        <!-- เพิ่ม -->
-      </Button>
+      </Button> -->
     </div>
 
     <div class="text-sm text-gray-700 dark:text-purple-100 space-y-1">
@@ -77,10 +76,10 @@ const selectedUsers = ref<User[]>([])
         <span class="font-medium text-gray-600 dark:text-purple-300">ชื่อ-สกุล:</span>
         มอร์ตี้ สมิธ
       </p>
-      <p>
+      <!-- <p>
         <span class="font-medium text-gray-600 dark:text-purple-300">ประเภทลูกค้า:</span>
         นิติบุคคล
-      </p>
+      </p> -->
       <p>
         <span class="font-medium text-gray-600 dark:text-purple-300">เลขประจำตัวผู้เสียภาษี:</span>
         1234567890123
