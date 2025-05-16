@@ -91,7 +91,7 @@
     <div class="col-span-12 lg:col-span-3 sticky top-[4.5rem] self-start">
       <BaseNotificationCard class="w-full mb-3" />
       <Card class="w-full">
-        <div class="grid sm:grid-cols-2 gap-4 p-4">
+        <div class="grid sm:grid-cols-2 gap-4 p-4 w-full">
           <!-- <Button variant="outline" class="bg-[hsl(var(--card))]">
             <Eye />ตัวอย่าง
           </Button> -->

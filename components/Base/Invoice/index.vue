@@ -18,7 +18,7 @@ const invoice = {
   taxRate: 0.13,
 };
 
-const itemsPerPage = 15;
+const itemsPerPage = 20;
 
 const pages = computed(() => {
   const result = [];
@@ -33,11 +33,11 @@ const getSubtotal = (items: typeof invoice.items) =>
 </script>
 
 <template>
-  <div class="bg-muted">
+  <div class="bg-background text-black">
     <div
       v-for="(itemsOnPage, pageIndex) in pages"
       :key="pageIndex"
-      class="bg-background shadow-xl w-[794px] h-[1123px] w-full max-w-[794px] mx-auto my-6 px-6 py-4 flex flex-col justify-between page"
+      class="bg-white shadow-xl w-[794px] max-w-[794px] h-[1123px] max-h-[1123px] mx-auto my-6 px-6 py-4 flex flex-col justify-between page"
     >
       <!-- Header -->
       <div>
@@ -69,7 +69,7 @@ const getSubtotal = (items: typeof invoice.items) =>
         <!-- Client Info (only on first page) -->
         <div
           v-if="pageIndex === 0"
-          class="grid grid-cols-1 md:grid-cols-2 gap-6 border-b py-4"
+          class="grid grid-cols-2 gap-6 border-b py-4"
         >
           <div class="flex gap-4 items-start">
             <img
@@ -149,9 +149,9 @@ const getSubtotal = (items: typeof invoice.items) =>
       <!-- Footer (only on last page) -->
       <div
         v-if="pageIndex === pages.length - 1"
-        class="flex flex-col md:flex-row justify-between items-start gap-6 pt-6"
+        class="flex flex-row justify-between items-start gap-6 pt-6"
       >
-        <p class="text-xs text-muted-foreground md:w-2/3">
+        <p class="text-xs text-muted-foreground w-2/3">
           <strong class="text-foreground">Thank you for your business!</strong
           ><br />
           Payment is expected within 31 days. Late payments will incur 5%
