@@ -24,7 +24,7 @@ const newProduct = ref({
   name: '',
   price: 0,
   image: '',
-  taxType: 'include', // include, exclude, exempt
+  taxType: 'include',
 })
 
 const calculatedPrice = computed(() => {
@@ -56,6 +56,7 @@ const handleAddNewProduct = () => {
   newProduct.value = { name: '', price: 0, image: '', taxType: 'include' }
 }
 </script>
+
 
 <template>
   <Dialog :open="modelValue" @update:open="emit('update:modelValue', $event)">
