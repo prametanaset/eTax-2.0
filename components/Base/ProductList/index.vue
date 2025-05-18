@@ -207,7 +207,7 @@ const currencyFormat = (value: number) =>
             />
             <div class="flex-1 min-w-0">
               <p class="font-semibold truncate">{{ product.name }}</p>
-              <p class="text-xs font-medium text-gray-500">SKU: SHIRT-001</p>
+              <p class="text-sm font-medium text-gray-500">SKU: SHIRT-001</p>
             </div>
           </div>
 
@@ -218,7 +218,7 @@ const currencyFormat = (value: number) =>
               type="number"
               v-model="product.quantity"
               min="1"
-              class="text-center w-full border-gray-300 rounded-md"
+              class="text-center w-full rounded-md bg-[hsl(var(--card))]"
             />
           </div>
 
@@ -346,9 +346,9 @@ const currencyFormat = (value: number) =>
             <Label class="block text-xs text-gray-600 sm:hidden">จำนวน</Label>
             <Input
               type="text"
-              v-model="product.quantity"
+              v-model="product.price"
               min="1"
-              class="text-center w-full rounded-md"
+              class="text-center w-full rounded-md bg-[hsl(var(--card))]"
             />
           </div>
 

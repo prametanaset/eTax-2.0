@@ -90,8 +90,12 @@ onMounted(() => {
                 </BreadcrumbItem> -->
               </BreadcrumbList>
             </Breadcrumb>
+<Transition name="fade" mode="out-in">
+  <p class="text-xl font-semibold"  :key="route.meta.title">
+    {{ route.meta.title }}
+  </p>
+</Transition>
 
-            <p class="text-xl font-semibold">{{ route.meta.title }}</p>
           </div>
 
           <div id="profile" class="flex items-center font-">
@@ -166,3 +170,15 @@ onMounted(() => {
     </SidebarInset>
   </SidebarProvider>
 </template>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+</style>

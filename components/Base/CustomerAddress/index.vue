@@ -58,7 +58,7 @@ const selectedUsers = ref<User[]>([])
     class="bg-purple-10 dark:bg-purple-950/60 border  dark:border-purple-700 rounded-lg p-4 ">
     <!-- Header with title and button -->
     <div class="flex items-center justify-between mb-4">
-      <h2 class="text-purple-700 dark:text-purple-400 text-md font-semibold flex items-center gap-2">
+      <h2 class="text-purple-700 dark:text-purple-400 text-lg font-semibold flex items-center gap-2">
         <svg class="w-5 h-5 text-purple-500 dark:text-purple-400" fill="currentColor" viewBox="0 0 24 24">
           <path
             d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4s-4 1.79-4 4 1.79 4 4 4zm0 2c-3.33 0-8 1.67-8 5v1h16v-1c0-3.33-4.67-5-8-5z" />
@@ -71,7 +71,7 @@ const selectedUsers = ref<User[]>([])
       </Button> -->
     </div>
 
-    <div class="text-sm text-gray-700 dark:text-purple-100 space-y-1">
+    <div class="text-base text-gray-700 dark:text-purple-100 space-y-1">
       <p>
         <span class="font-medium text-gray-600 dark:text-purple-300">ชื่อ-สกุล:</span>
         มอร์ตี้ สมิธ

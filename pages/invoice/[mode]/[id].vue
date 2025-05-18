@@ -13,7 +13,7 @@
               </h1> -->
               <div class="flex items-center gap-3 text-[1rem] mt-3">
                 <!-- Tax Invoice Number -->
-                <div class="flex flex-col w-[24%] gap-1">
+                <div class="flex flex-col w-[24%] gap-1.5">
                   <span class="font-medium dark:text-white text-black/80">เลขที่</span>
                   <Input
                     type="text"
@@ -23,7 +23,7 @@
                 </div>
 
                 <!-- Issue Date -->
-                <div class="flex flex-col w-[24%] gap-1">
+                <div class="flex flex-col w-[24%] gap-1.5">
                   <span class="font-medium dark:text-white text-black/80">วันที่สร้าง</span>
                   <BaseDateTimePicker></BaseDateTimePicker>
                 </div>

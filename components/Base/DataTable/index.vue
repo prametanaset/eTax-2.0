@@ -111,7 +111,7 @@ const columns: ColumnDef<Payment>[] = [
   {
     accessorKey: "id",
     header: "เลขที่ใบแจ้งหนี้",
-    cell: ({ row }) => h("div", { class: "font-semibold" }, row.getValue("id")),
+    cell: ({ row }) => h("div", { class: "text-base font-medium" }, row.getValue("id")),
   },
   {
     accessorKey: "email",
@@ -129,7 +129,7 @@ const columns: ColumnDef<Payment>[] = [
       h(
         "div",
         h("div", {}, [
-          h("p", { class: "text-sm font-semibold mb-1" }, row.original.name),
+          h("p", { class: "text-base font-semibold mb-1" }, row.original.name),
           h(
             "p",
             { class: "text-sm text-muted-500 font-normal leading-none" },
