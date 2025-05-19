@@ -1,5 +1,6 @@
 <template>
   <div>
+    <BaseProductList></BaseProductList>
     <Button
       variant="ghost"
       @click="open = true"

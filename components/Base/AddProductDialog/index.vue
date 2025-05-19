@@ -47,142 +47,92 @@ const newProduct = ref({
 const calculatedPrice = computed(() => {
   const vatRate = 0.07;
   const price = newProduct.value.price;
-  switch (newProduct.value.taxType) {
-    case "include":
-      return price;
-    case "exclude":
-      return price * (1 + vatRate);
-    case "exempt":
-      return price;
-    default:
-      return price;
-  }
+  return newProduct.value.taxType === "exclude" ? price * (1 + vatRate) : price;
 });
 
-const handleAddNewProduct = () => {
-  const product = {
+function handleAddNewProduct() {
+  emit("product-added", {
     id: Date.now(),
     name: newProduct.value.name,
     price: parseFloat(calculatedPrice.value.toFixed(2)),
     image: newProduct.value.image || "/images/products/default.jpg",
     taxType: newProduct.value.taxType,
-  };
-
-  emit("product-added", product);
+  });
   emit("update:modelValue", false);
   newProduct.value = { name: "", price: 0, image: "", taxType: "include" };
-};
+}
 </script>
 
 <template>
   <Dialog :open="modelValue" @update:open="emit('update:modelValue', $event)">
     <DialogContent class="sm:max-w-[600px]">
       <DialogHeader>
-        <DialogTitle class="text-purple-700 dark:text-purple-300"
-          >เพิ่มสินค้าใหม่</DialogTitle
-        >
-        <DialogDescription class="text-gray-600 dark:text-gray-400">
-          กรอกรายละเอียดสินค้า เลือกรูปแบบภาษี และตรวจสอบราคาสุทธิ
+        <DialogTitle>เพิ่มสินค้าใหม่</DialogTitle>
+        <DialogDescription>
+          กรอกรายละเอียดสินค้า เลือกรูปแบบภาษี แล้วตรวจสอบราคาสุทธิ
         </DialogDescription>
       </DialogHeader>
 
-      <Card
-        class="border border-purple-200 dark:border-purple-700 shadow-sm rounded-lg"
-      >
+      <Card class="border shadow-sm rounded-lg">
         <CardContent class="py-6 px-4 space-y-5">
-          <div class="grid grid-cols-4 items-center gap-4">
-            <Label
-              for="name"
-              class="text-right text-purple-800 dark:text-purple-200"
-              >ชื่อสินค้า</Label
-            >
-            <Input id="name" v-model="newProduct.name" class="col-span-3" />
+          <!-- ชื่อสินค้า -->
+          <div class="space-y-2">
+            <Label for="name">ชื่อสินค้า</Label>
+            <Input id="name" v-model="newProduct.name" />
           </div>
-          <div class="grid grid-cols-4 items-center gap-4">
-            <Label
-              for="price"
-              class="text-right text-purple-800 dark:text-purple-200"
-              >ราคาขาย</Label
-            >
+
+          <!-- ราคาขาย -->
+          <div class="space-y-2">
+            <Label for="price">ราคาขาย</Label>
             <Input
               id="price"
               type="number"
-              v-model="newProduct.price"
-              class="col-span-3"
               placeholder="ระบุราคาสินค้า"
+              v-model="newProduct.price"
             />
           </div>
-          <div class="grid grid-cols-4 items-center gap-4">
-            <Label class="text-right text-purple-800 dark:text-purple-200"
-              >ประเภทภาษี</Label
-            >
+
+          <!-- ประเภทภาษี -->
+          <div class="space-y-2">
+            <Label>ประเภทภาษี</Label>
             <Select v-model="newProduct.taxType">
-              <SelectTrigger class="col-span-3 shadow-none">
-                <SelectValue />
+              <SelectTrigger class="shadow-none w-full">
+                <SelectValue placeholder="เลือกภาษี" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="include">รวม VAT 7%</SelectItem>
-                <SelectItem value="exclude"
-                  >ไม่รวม VAT (เพิ่มภายหลัง)</SelectItem
-                >
+                <SelectItem value="exclude">ไม่รวม VAT (บวกภายหลัง)</SelectItem>
                 <SelectItem value="exempt">ยกเว้นภาษี</SelectItem>
               </SelectContent>
             </Select>
           </div>
-          <div class="grid grid-cols-4 items-center gap-4">
-            <Label
-              for="image"
-              class="text-right text-purple-800 dark:text-purple-200"
-              >ลิงก์รูป</Label
-            >
-            <Input id="image" v-model="newProduct.image" class="col-span-3" />
+
+          <!-- ลิงก์รูป -->
+          <div class="space-y-2">
+            <Label for="image">ลิงก์รูป</Label>
+            <Input id="image" v-model="newProduct.image" />
           </div>
 
-          <!-- 🖼 Widget ตัวอย่างรูปสินค้า -->
+          <!-- ตัวอย่างรูป -->
           <div class="flex justify-center">
             <div v-if="newProduct.image" class="w-32 h-32">
               <img
                 :src="newProduct.image"
                 alt="preview"
-                class="w-32 h-32 object-cover rounded-md border border-purple-300 dark:border-purple-700 shadow"
+                class="w-32 h-32 object-cover rounded-md border shadow"
               />
             </div>
             <div
               v-else
-              class="w-32 h-32 flex items-center justify-center text-center text-sm text-purple-500 bg-purple-50 dark:bg-purple-900/40 rounded-md border border-dashed border-purple-300 dark:border-purple-700 shadow"
+              class="w-32 h-32 flex items-center justify-center text-center text-sm text-gray-500 bg-gray-50 rounded-md border border-dashed shadow"
             >
-              <div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="mx-auto mb-1 h-6 w-6 text-purple-400 dark:text-purple-300"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v16a1 1 0 01-1 1H4a1 1 0 01-1-1V4z"
-                  />
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M8 11l4 4 4-4m0 0V7m0 4H8"
-                  />
-                </svg>
-                <span class="block">ยังไม่มีรูปสินค้า</span>
-              </div>
+              ยังไม่มีรูปสินค้า
             </div>
           </div>
 
-          <!-- 💰 ราคาสุทธิ + Badge -->
+          <!-- ราคาสุทธิ -->
           <div class="text-center mt-4">
-            <Badge
-              variant="outline"
-              class="text-purple-800 bg-purple-100 border-purple-300 dark:bg-purple-700 dark:text-white dark:border-purple-500"
-            >
+            <Badge variant="outline">
               {{
                 newProduct.taxType === "include"
                   ? "รวม VAT"
@@ -191,9 +141,7 @@ const handleAddNewProduct = () => {
                   : "ยกเว้นภาษี"
               }}
             </Badge>
-            <div
-              class="mt-2 text-lg font-bold text-purple-900 dark:text-purple-200"
-            >
+            <div class="mt-2 text-lg font-bold">
               ราคาสุทธิ:
               {{
                 calculatedPrice.toLocaleString("th-TH", {
@@ -210,12 +158,7 @@ const handleAddNewProduct = () => {
         <DialogClose as-child>
           <Button type="button" variant="outline">ยกเลิก</Button>
         </DialogClose>
-        <Button
-          @click="handleAddNewProduct"
-          class="bg-purple-600 hover:bg-purple-700 text-white"
-        >
-          เพิ่มสินค้า
-        </Button>
+        <Button @click="handleAddNewProduct">เพิ่มสินค้า</Button>
       </DialogFooter>
     </DialogContent>
   </Dialog>

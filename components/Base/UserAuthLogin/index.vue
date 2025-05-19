@@ -4,7 +4,7 @@
       <p class="text-3xl font-bold font-ibm text-center">ขอต้อนรับกลับมา</p>
     </div>
     <div>
-      <Form class="grid gap-4" @submit="onSubmit">
+      <Form class="grid gap-4" @submit="(e) => onSubmit(e)">
         <div class="grid gap-3">
           <div>
             <!-- <Label for="email">อีเมลผู้ใช้งาน</Label> -->
@@ -13,7 +13,7 @@
               type="email"
               placeholder="หมายเลขโทรศัพท์ ชื่อผู้ใช้ หรืออีเมล"
               required
-              v-model="email.value"
+              v-model="email.value.value"
               class="placeholder:font-normal h-10 bg-[hsl(var(--card))]"
             />
             <span class="text-red-500 text-sm font-light">{{
@@ -27,8 +27,8 @@
               type="password"
               placeholder="รหัสผ่าน"
               required
-              v-model="password.value"
-              class="placeholder:font-normal h-10 bg-[hsl(va(--card))]"
+              v-model="password.value.value"
+              class="placeholder:font-normal h-10 bg-[hsl(var(--card))]"
             />
             <span class="text-red-500 text-sm font-light">{{
               password.errorMessage
@@ -90,9 +90,9 @@ const validatePassword = (value: string) => {
 };
 
 // ฟังก์ชันเมื่อกด Submit
-const onSubmit = handleSubmit((tValue, tOutput) => {
-  console.log("tValue:", tValue);
-  console.log("tOutput:", tOutput);
+const onSubmit = handleSubmit((values, actions) => {
+  console.log("Form values:", values);
+  console.log("Form actions:", actions);
 
   console.log("Form submitted!"); // all fields passed validation
   navigateTo("/dashboard");
