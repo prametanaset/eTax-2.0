@@ -6,7 +6,7 @@ const isLogin = ref(true);
 
 <template>
   <div
-    class="container relative flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0 bg-white"
+    class="container relative flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0 bg-white dark:bg-[#0f1729]"
   >
     <div class="absolute right-4 top-4 md:right-8 md:top-8 flex items-center">
       <!-- ✅ ปุ่มที่คลิกได้ -->

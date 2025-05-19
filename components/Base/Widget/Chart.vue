@@ -2,10 +2,8 @@
   <div>
     <ClientOnly>
       <ApexChart
-        class="dark:text-black"
+        class="dark:text-black h-full w-full"
         type="area"
-        :height="'100'"
-        :width="'100%'"
         :options="chartOptions1"
         :series="areaChart1.series"
       >
@@ -15,6 +13,11 @@
 </template>
 
 <script lang="ts" setup>
+
+const props = defineProps<{
+  color: string;
+}>();
+
 // chart 1
 const chartOptions1 = computed(() => {
   return {
@@ -28,7 +31,7 @@ const chartOptions1 = computed(() => {
     dataLabels: {
       enabled: false,
     },
-    colors: ["#af38ff"],
+    colors: [props.color],
     fill: {
       type: "gradient",
       opacity: 0.9,
@@ -41,7 +44,7 @@ const chartOptions1 = computed(() => {
     },
     stroke: {
       curve: "smooth",
-      width: 1,
+      width: 1.2,
     },
     tooltip: {
       fixed: {

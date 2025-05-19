@@ -9,7 +9,7 @@
     <div
       v-if="!device.isMobile"
       :class="[
-        'grid gap-4 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-4 mb-[60px] mt-1',
+        'grid gap-4 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-4 mb-[50px] mt-1',
       ]"
     >
       <div
@@ -26,7 +26,7 @@
           class="absolute top-[60%] right-3 w-[90%] h-12 lg:h-[50%] bg-primary-400/50 blur-xl rounded-full img-shadow-animation"
         ></div>
         <Card
-          class="z-10 relative rounded-md leading-none border img-border-animation p-3 w-full"
+          class="z-10 relative rounded-lg shadow-xl/30 leading-none border img-border-animation p-3 w-full"
           :class="index === widgets.length - 1 ? '!border-primary-500' : ''"
         >
           <BaseWidget
@@ -57,7 +57,7 @@
             class="absolute top-[60%] right-3 w-[90%] h-[50%] lg:h-[50%] bg-primary-400/50 blur-xl rounded-full img-shadow-animation"
           ></div>
           <Card
-            class="z-10 relative rounded-lg leading-none border img-border-animation h-40 min-w-[20rem] p-4"
+            class="z-10 relative rounded-lg shadow-xl/30 leading-none border img-border-animation h-40 min-w-[20rem] p-4"
           >
             <BaseWidget
               class="w-full"
@@ -73,6 +73,7 @@
       <!-- spacer ขวา -->
       <!-- <div class="shrink-0 w-1" /> -->
     </div>
+
 
     <!-- Table -->
     <div :class="[device.isMobile ? 'w-[92vw]' : 'w-full overflow-visible', 'overflow-hidden']">

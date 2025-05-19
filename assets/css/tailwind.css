@@ -39,9 +39,9 @@
 
     --destructive-foreground: 0 0% 98%;
 
-    --border: 270, 4%, 90%;
+    --border: 214 32% 91%;
 
-    --input: 270, 4%, 90%;
+    --input: 214 32% 91%;
 
     --ring: 276 100% 61%;
 
@@ -106,7 +106,7 @@
     /* --primary: 0 0% 98%; */
     --primary: 276 100% 61%;
 
-    --primary-foreground: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
 
     --secondary: 0 0% 14.9%;
 

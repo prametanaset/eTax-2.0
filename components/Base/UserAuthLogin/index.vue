@@ -52,13 +52,13 @@
       </div>
       <Separator />
       <div class="grid gap-2 mt-8 mb-4 text-sm">
-        <Button class="w-full bg-white text-muted-800 hover:bg-zinc-200 h-10">
+        <Button class="w-full text-muted-800 bg-[hsl(var(--card))] shadow-md dark:text-white hover:bg-zinc-200 h-10">
           <span class="w-6"
             ><img src="@/assets/img/google-logo.png" alt="" class="w-full"
           /></span>
           ดำเนินการต่อด้วย Google
         </Button>
-        <Button class="w-full bg-white text-muted-800 hover:text-white h-10">
+        <Button class="w-full bg-[hsl(var(--card))] shadow-md text-muted-800 dark:text-white hover:text-white h-10">
           <span class="w-6"
             ><img src="@/assets/img/thaiid-logo.png" alt="" class="w-full"
           /></span>

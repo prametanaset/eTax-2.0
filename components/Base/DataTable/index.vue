@@ -45,6 +45,7 @@ export interface Payment {
   status: 0 | 1 | 2 | 3;
   email: string;
   name: string;
+  date: string;
 }
 
 const data: Payment[] = [
@@ -54,6 +55,7 @@ const data: Payment[] = [
     status: 0,
     email: "ken99@yahoo.com",
     name: "กิตติพงศ์ จันทร์ทอง",
+    date: "2025-05-19T12:00:00",
   },
   {
     id: "INV-0002",
@@ -61,6 +63,7 @@ const data: Payment[] = [
     status: 0,
     email: "Abe45@gmail.com",
     name: "ศราวุฒิ แก้วล้ำ",
+    date: "2025-05-18T14:30:00",
   },
   {
     id: "INV-0003",
@@ -68,6 +71,7 @@ const data: Payment[] = [
     status: 1,
     email: "Monserrat44@gmail.com",
     name: "มนัสวี ศรีสง่า",
+    date: "2025-05-18T14:30:00",
   },
   {
     id: "INV-0004",
@@ -75,6 +79,7 @@ const data: Payment[] = [
     status: 0,
     email: "Silas22@gmail.com",
     name: "ธีรภัทร วงศ์ประเสริฐ",
+    date: "2025-05-18T14:30:00",
   },
   {
     id: "INV-0005",
@@ -82,6 +87,7 @@ const data: Payment[] = [
     status: 2,
     email: "carmella@hotmail.com",
     name: "จารุวรรณ ดำรงธรรม",
+    date: "2025-05-18T14:30:00",
   },
 ];
 
@@ -110,8 +116,9 @@ const columns: ColumnDef<Payment>[] = [
   },
   {
     accessorKey: "id",
-    header: "เลขที่ใบแจ้งหนี้",
-    cell: ({ row }) => h("div", { class: "text-base font-medium" }, row.getValue("id")),
+    header: "เลขที่",
+    cell: ({ row }) =>
+      h("div", { class: "text-base font-suk" }, row.getValue("id")),
   },
   {
     accessorKey: "email",
@@ -139,42 +146,56 @@ const columns: ColumnDef<Payment>[] = [
       ),
   },
   {
+    accessorKey: "date",
+    header: () => h("div", { class: "text-left" }, "วันที่"),
+    cell: ({ row }) => {
+      const raw = row.getValue("date");
+      const formatted = new Intl.DateTimeFormat("th-TH", {
+        dateStyle: "medium",
+        timeStyle: "short",
+      }).format(new Date(raw));
+
+      return h("div", { class: "text-left font-medium" }, formatted);
+    },
+  },
+  {
     accessorKey: "status",
     header: "สถานะ",
     cell: ({ row }) => {
       const status = row.getValue("status") as keyof typeof statusClasses;
 
       const statusClasses = {
-        0: "bg-green-50 text-green-700 border-green-100",
-        1: "bg-yellow-50 text-yellow-800 border-yellow-100",
-        2: "bg-red-50 text-red-700 border-red-100",
-        3: "bg-purple-50 text-purple-700 border-purple-100",
-      };
+  0: "bg-green-50 text-green-700 dark:bg-green-700/20 dark:text-green-300 text-sm font-medium rounded-lg",
+  1: "bg-yellow-50 text-yellow-800 dark:bg-yellow-600/20 dark:text-yellow-200 text-sm font-medium rounded-lg",
+  2: "bg-red-50 text-red-700 dark:bg-red-700/20 dark:text-red-300 text-sm font-medium rounded-lg",
+  3: "bg-purple-50 text-purple-700 dark:bg-purple-700/20 dark:text-purple-300 text-sm font-medium rounded-lg",
+};
+
 
       return h("div", { class: "capitalize" }, [
         h(
           Badge,
-          { variant: "outline", class: statusClasses[status] || "" },
+          { variant: "secondary", class: statusClasses[status] || "" },
           () => getStatusLabel(status)
         ),
       ]);
     },
   },
-  {
-    accessorKey: "amount",
-    header: () => h("div", { class: "text-right" }, "จำนวนเงิน"),
-    cell: ({ row }) => {
-      const amount = Number.parseFloat(row.getValue("amount"));
+  // {
+  //   accessorKey: "amount",
+  //   header: () => h("div", { class: "text-right" }, "จำนวนเงิน"),
+  //   cell: ({ row }) => {
+  //     const amount = Number.parseFloat(row.getValue("amount"));
 
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
+  //     // Format the amount as a dollar amount
+  //     const formatted = new Intl.NumberFormat("en-US", {
+  //       style: "currency",
+  //       currency: "USD",
+  //     }).format(amount);
 
-      return h("div", { class: "text-right font-medium" }, formatted);
-    },
-  },
+  //     return h("div", { class: "text-right font-medium" }, formatted);
+  //   },
+  // },
   {
     id: "actions",
     enableHiding: false,
@@ -311,7 +332,7 @@ function getStatusLabel(status) {
     </div>
 
     <div class="rounded-lg border bg-[hsl(var(--card))]">
-      <Table >
+      <Table>
         <TableHeader>
           <TableRow
             v-for="headerGroup in table.getHeaderGroups()"

@@ -172,29 +172,22 @@ const currencyFormat = (value: number) =>
         </Command>
       </PopoverContent>
     </Popover>
-
-    <Draggable
-      v-model="products"
-      item-key="id"
-      handle=".drag-handle"
-      tag="div"
-      :animation="150"
-      :ghost-class="'ghost'"
-      class="space-y-3"
-    >
-      <template #item="{ element: product }">
-        <div
-          :key="product.id"
-          :id="`product-${product.id}`"
-          class="relative grid sm:grid-cols-[1fr_80px_80px_90px_80px_auto] gap-2 items-center border rounded-lg shadow-none bg-[hsl(var(--card))]"
-          :class="screenWidth < 640 ? 'grid-cols-2' : ''"
-        >
-          <!-- <div
-            class="absolute left-0 drag-handle cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-700"
-          >
-            <GripVertical class="w-4 h-4" />
-          </div> -->
-
+<Draggable
+  v-model="products"
+  item-key="id"
+  tag="div"
+  :animation="150"
+  :ghost-class="'ghost'"
+  class="space-y-3"
+>
+  <template #item="{ element: product }">
+    <transition name="fade-slide" mode="out-in" appear>
+      <div
+        :key="product.id"
+        :id="`product-${product.id}`"
+        class="transition-all duration-300 ease-in-out relative grid sm:grid-cols-[1fr_80px_80px_90px_80px_auto] gap-2 drag-handle items-center border rounded-lg bg-[hsl(var(--card))]"
+        :class="screenWidth < 640 ? 'grid-cols-2' : ''"
+      >
           <!-- Product Info -->
           <div
             class="flex items-center space-x-4 w-full overflow-hidden py-3 pl-4 drag-handle cursor-grab active:cursor-grabbing"
@@ -363,9 +356,9 @@ const currencyFormat = (value: number) =>
             </Button>
           </div>
         </div>
+        </transition>
       </template>
     </Draggable>
-
     <!-- Product Selection Popover -->
     <Popover v-if="products.length" v-model:open="isPopoverOpen">
       <PopoverTrigger as-child>
@@ -427,15 +420,17 @@ const currencyFormat = (value: number) =>
 .custom-shadow {
   filter: drop-shadow(0 10px 15px rgba(6, 182, 212, 0.5)); /* cyan-500/50 */
 }
-.fade-move {
-  transition: transform 0.3s ease;
+
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.3s ease;
 }
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s;
-}
-.fade-enter-from,
-.fade-leave-to {
+.fade-slide-enter-from {
   opacity: 0;
+  transform: translateY(-10px);
+}
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
 }
 </style>
