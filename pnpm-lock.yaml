@@ -71,6 +71,9 @@ importers:
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.17)
+      thai-baht-text:
+        specifier: ^2.0.5
+        version: 2.0.5
       three:
         specifier: ^0.175.0
         version: 0.175.0
@@ -3831,6 +3834,9 @@ packages:
 
   text-decoder@1.2.3:
     resolution: {integrity: sha512-3/o9z3X0X0fTupwsYvR03pJ/DjWuqqrfwBgTQzdWDiQSm9KitAyz/9WqsT2JQW7KV2m+bC2ol/zqpW37NHxLaA==}
+
+  thai-baht-text@2.0.5:
+    resolution: {integrity: sha512-xTb1marcZhO7PFm2mBPKDJgtMg3crT8uCNHZIbPaV+B/R9LNWS1wBPg4DULtSgZSllsdmEObPzefxOeKAb6X+Q==}
 
   thenify-all@1.6.0:
     resolution: {integrity: sha512-RNxQH/qI8/t3thXJDwcstUO4zeqo64+Uy/+sNVRBx4Xn2OX+OZ9oP+iJnNFqplFra2ZUVeKCSa2oVWi3T4uVmA==}
@@ -8599,6 +8605,8 @@ snapshots:
   text-decoder@1.2.3:
     dependencies:
       b4a: 1.6.7
+
+  thai-baht-text@2.0.5: {}
 
   thenify-all@1.6.0:
     dependencies:
