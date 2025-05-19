@@ -10,6 +10,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Eye } from "lucide-vue-next";
+
+const device = useDevice();
 </script>
 
 <template>
@@ -29,7 +31,7 @@ import { Eye } from "lucide-vue-next";
 
       <!-- Scrollable A4 Content -->
       <div class="overflow-auto">
-        <div style="zoom: 50%">
+        <div :style="{ zoom: device.isMobile ? '50%' : '80%' }">
           <BaseInvoice />
         </div>
       </div>

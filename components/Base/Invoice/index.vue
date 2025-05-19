@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { item } from "@unovis/ts/components/bullet-legend/style";
 import thaiBaht from "thai-baht-text";
 
 const invoice = {
@@ -36,25 +37,29 @@ const store_data = {
 };
 
 const itemsPerPage = computed(() => {
-  return invoice.items.length > 18 ? 18 : 10;
+  return invoice.items.length > 9 ? 17 : 9;
 });
 
 const pages = computed(() => {
   const result: Array<(typeof invoice.items)[0][]> = [];
   const perPage = itemsPerPage.value;
+  const totalItems = invoice.items.length;
 
-  for (let i = 0; i < invoice.items.length; i += perPage) {
+  for (let i = 0; i < totalItems; i += perPage) {
     result.push(invoice.items.slice(i, i + perPage));
   }
 
-  // เพิ่มหน้าใหม่ถ้าหน้าสุดท้ายมีจำนวน item เท่ากับ perPage
-  const lastPage = result[result.length - 1];
-  if (lastPage && lastPage.length === perPage) {
-    result.push([]); // หน้าสำหรับ footer
+  // กรณีที่จำนวน item มากกว่า 10 และพอดีกับ perPage → เพิ่มหน้า footer
+  const shouldAddEmptyPage = totalItems > 9 && result.length === 1;
+
+  if (shouldAddEmptyPage) {
+    result.push([]); // หน้าใหม่สำหรับ footer
   }
 
   return result;
 });
+
+console.log(pages);
 </script>
 
 <template>
@@ -62,11 +67,14 @@ const pages = computed(() => {
     <div
       v-for="(itemsOnPage, pageIndex) in pages"
       :key="pageIndex"
-      class="bg-white shadow-xl w-[794px] max-w-[794px] h-[1123px] max-h-[1123px] mx-auto my-6 px-6 py-4 flex flex-col justify-between page"
+      class="relative bg-white shadow-xl w-[794px] max-w-[794px] h-[1123px] max-h-[1123px] mx-auto my-6 px-6 py-4 flex flex-col justify-between page"
     >
       <!-- Header -->
       <div>
-        <div class="flex justify-between items-start border-b pb-2 py-5">
+        <div
+          v-if="pageIndex === 0"
+          class="flex justify-between items-start border-b pb-2 py-5"
+        >
           <div class="flex gap-1 max-w-[50%]">
             <div class="">
               <svg
@@ -126,6 +134,7 @@ const pages = computed(() => {
           </div>
         </div>
         <div
+          v-if="pageIndex === 0"
           class="grid grid-cols-2 items-start border-b pb-2 py-5 gap-4 text-sm"
         >
           <div class="w-[110%] flex p-2">
@@ -209,117 +218,118 @@ const pages = computed(() => {
                   {{ currencyFormat((item.qty * item.price).toFixed(2)) }}
                 </td>
               </tr>
+            </tbody>
+          </table>
+          <table v-if="pageIndex === pages.length - 1" class="w-full">
+            <thead>
+              <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="font-bold">
+                <td class="p-2 border border-muted-800">
+                  จำนวนเงินรวมทั้งสิ้น
+                </td>
+                <td class="p-2 border border-muted-800 text-right" colspan="2">
+                  {{
+                    thaiBaht(
+                      invoice.items.reduce(
+                        (sum, item) => sum + item.qty * item.price,
+                        0
+                      ) +
+                        invoice.items.reduce(
+                          (sum, item) => sum + item.qty * item.price,
+                          0
+                        ) *
+                          invoice.taxRate
+                    )
+                  }}
+                </td>
 
-              <!-- Total & Tax (only on last page) -->
-              <template v-if="pageIndex === pages.length - 1">
-                <tr>
-                  <td
-                    class="p-2 border border-muted-800 text-sm align-top"
-                    colspan="3"
-                  >
-                    <p>หมายเหตุ/Remark</p>
-                    <p>-</p>
-                  </td>
-                  <td
-                    class="p-2 border border-muted-800 text-right"
-                    colspan="2"
-                  >
-                    <div class="flex justify-between py-1">
-                      <p>ยอดเงินรวม</p>
-                      <p>
-                        {{
-                          currencyFormat(
-                            invoice.items
-                              .reduce(
-                                (sum, item) => sum + item.qty * item.price,
-                                0
-                              )
-                              .toFixed(2)
-                          )
-                        }}
-                      </p>
-                    </div>
-                    <div class="flex justify-between py-1">
-                      <p>ส่วนลด</p>
-                      <p>-</p>
-                    </div>
-                    <div class="flex justify-between py-1">
-                      <p>ยอดก่อนภาษี</p>
-                      <p>
-                        {{
-                          currencyFormat(
-                            invoice.items
-                              .reduce(
-                                (sum, item) => sum + item.qty * item.price,
-                                0
-                              )
-                              .toFixed(2)
-                          )
-                        }}
-                      </p>
-                    </div>
-                    <div class="flex justify-between py-1">
-                      <p>ภาษีมูลค่าเพิ่ม</p>
-                      <p>
-                        {{
-                          currencyFormat(
-                            (
-                              invoice.items.reduce(
-                                (sum, item) => sum + item.qty * item.price,
-                                0
-                              ) * invoice.taxRate
-                            ).toFixed(2)
-                          )
-                        }}
-                      </p>
-                    </div>
-                  </td>
-                </tr>
-                <tr class="font-bold">
-                  <td class="p-2 border border-muted-800">
-                    จำนวนเงินรวมทั้งสิ้น
-                  </td>
-                  <td
-                    class="p-2 border border-muted-800 text-right"
-                    colspan="2"
-                  >
-                    {{
-                      thaiBaht(
+                <td class="p-2 border border-muted-800 text-right" colspan="2">
+                  {{
+                    currencyFormat(
+                      (
                         invoice.items.reduce(
                           (sum, item) => sum + item.qty * item.price,
                           0
                         ) +
-                          invoice.items.reduce(
-                            (sum, item) => sum + item.qty * item.price,
-                            0
-                          ) *
-                            invoice.taxRate
-                      )
-                    }}
-                  </td>
-
-                  <td
-                    class="p-2 border border-muted-800 text-right"
-                    colspan="2"
-                  >
-                    {{
-                      currencyFormat(
-                        (
-                          invoice.items.reduce(
-                            (sum, item) => sum + item.qty * item.price,
-                            0
-                          ) +
-                          invoice.items.reduce(
-                            (sum, item) => sum + item.qty * item.price,
-                            0
-                          ) *
-                            invoice.taxRate
-                        ).toFixed(2)
-                      )
-                    }}
-                  </td>
-                </tr>
-              </template>
+                        invoice.items.reduce(
+                          (sum, item) => sum + item.qty * item.price,
+                          0
+                        ) *
+                          invoice.taxRate
+                      ).toFixed(2)
+                    )
+                  }}
+                </td>
+              </tr>
+              <!-- Total & Tax (only on last page) -->
+              <tr v-if="pageIndex === pages.length - 1">
+                <td
+                  class="p-2 border border-muted-800 text-sm align-top"
+                  colspan="3"
+                >
+                  <p>หมายเหตุ/Remark</p>
+                  <p>-</p>
+                </td>
+                <td class="p-2 border border-muted-800 text-right" colspan="2">
+                  <div class="flex justify-between py-1">
+                    <p>ยอดเงินรวม</p>
+                    <p>
+                      {{
+                        currencyFormat(
+                          invoice.items
+                            .reduce(
+                              (sum, item) => sum + item.qty * item.price,
+                              0
+                            )
+                            .toFixed(2)
+                        )
+                      }}
+                    </p>
+                  </div>
+                  <div class="flex justify-between py-1">
+                    <p>ส่วนลด</p>
+                    <p>-</p>
+                  </div>
+                  <div class="flex justify-between py-1">
+                    <p>ยอดก่อนภาษี</p>
+                    <p>
+                      {{
+                        currencyFormat(
+                          invoice.items
+                            .reduce(
+                              (sum, item) => sum + item.qty * item.price,
+                              0
+                            )
+                            .toFixed(2)
+                        )
+                      }}
+                    </p>
+                  </div>
+                  <div class="flex justify-between py-1">
+                    <p>ภาษีมูลค่าเพิ่ม</p>
+                    <p>
+                      {{
+                        currencyFormat(
+                          (
+                            invoice.items.reduce(
+                              (sum, item) => sum + item.qty * item.price,
+                              0
+                            ) * invoice.taxRate
+                          ).toFixed(2)
+                        )
+                      }}
+                    </p>
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
           <div
@@ -342,8 +352,7 @@ const pages = computed(() => {
 
       <!-- Footer (only on last page) -->
       <div
-        v-if="pages.length > 1"
-        class="flex flex-row justify-end items-start gap-6 pt-6"
+        class="absolute right-5 bottom-5 flex flex-row justify-end items-start gap-6 pt-6"
       >
         {{ `${pageIndex + 1}/${pages.length}` }}
       </div>
