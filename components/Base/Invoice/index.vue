@@ -13,7 +13,7 @@ const invoice = {
     address: "1/226 หมู่ที่ 16 ตำบลบ้านเป็ด อำเภอเมืองขอนแก่น จ.ขอนแก่น 40000",
     taxId: "0123456789123",
   },
-  items: Array.from({ length: 11 }, (_, i) => ({
+  items: Array.from({ length: 9 }, (_, i) => ({
     id: `P-00${i + 1}`,
     desc: `สินค้า-Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, vero.${
       i + 1
