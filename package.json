@@ -31,6 +31,7 @@
     "shadcn-nuxt": "1.0.3",
     "tailwind-merge": "^3.0.2",
     "tailwindcss-animate": "^1.0.7",
+    "thai-baht-text": "^2.0.5",
     "three": "^0.175.0",
     "vaul-vue": "^0.4.1",
     "vee-validate": "^4.15.0",
