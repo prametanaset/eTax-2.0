@@ -14,7 +14,7 @@ const invoice = {
     address: "1/226 หมู่ที่ 16 ตำบลบ้านเป็ด อำเภอเมืองขอนแก่น จ.ขอนแก่น 40000",
     taxId: "0123456789123",
   },
-  items: Array.from({ length: 9 }, (_, i) => ({
+  items: Array.from({ length: 30 }, (_, i) => ({
     id: `P-00${i + 1}`,
     desc: `สินค้า-Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, vero.${
       i + 1
@@ -37,7 +37,7 @@ const store_data = {
 };
 
 const itemsPerPage = computed(() => {
-  return invoice.items.length > 9 ? 17 : 9;
+  return invoice.items.length > 18 ? 25 : 18;
 });
 
 const pages = computed(() => {
@@ -50,7 +50,7 @@ const pages = computed(() => {
   }
 
   // กรณีที่จำนวน item มากกว่า 10 และพอดีกับ perPage → เพิ่มหน้า footer
-  const shouldAddEmptyPage = totalItems > 9 && result.length === 1;
+  const shouldAddEmptyPage = totalItems > 19 && result.length === 1;
 
   if (shouldAddEmptyPage) {
     result.push([]); // หน้าใหม่สำหรับ footer
@@ -58,8 +58,6 @@ const pages = computed(() => {
 
   return result;
 });
-
-console.log(pages);
 </script>
 
 <template>
@@ -67,7 +65,7 @@ console.log(pages);
     <div
       v-for="(itemsOnPage, pageIndex) in pages"
       :key="pageIndex"
-      class="relative bg-white shadow-xl w-[794px] max-w-[794px] h-[1123px] max-h-[1123px] mx-auto my-6 px-6 py-4 flex flex-col justify-between page"
+      class="relative bg-white shadow-xl w-[794px] max-w-[794px] h-[1123px] max-h-[1123px] mx-auto my-6 px-6 py-1 flex flex-col justify-between page"
     >
       <!-- Header -->
       <div>
@@ -119,26 +117,28 @@ console.log(pages);
                 </g>
               </svg>
             </div>
-            <div class="grid gap-1">
-              <CardTitle>{{ store_data.storeNameTH }}</CardTitle>
-              <p class="font-bold text-md">{{ store_data.storeNameEN }}</p>
+            <div class="grid text-[10px]">
+              <CardTitle class="text-lg">{{
+                store_data.storeNameTH
+              }}</CardTitle>
+              <p class="font-bold text-sm">{{ store_data.storeNameEN }}</p>
               <p>{{ store_data.storeAddress }}</p>
               <p>โทรศัพท์ {{ store_data.phone }}</p>
               <p>เลขประจำตัวผู้เสียภาษี {{ store_data.taxNo }}</p>
             </div>
           </div>
-          <div class="text-right max-w-[50%] grid gap-1">
-            <CardTitle>ใบเสร็จรับเงิน/ใบกำกับภาษี</CardTitle>
-            <CardTitle>Receipt/Tax Invoice </CardTitle>
-            <p>(ต้นฉบับ/Original)</p>
+          <div class="text-right max-w-[50%]">
+            <CardTitle class="text-lg">ใบเสร็จรับเงิน/ใบกำกับภาษี</CardTitle>
+            <CardTitle class="text-lg">Receipt/Tax Invoice </CardTitle>
+            <p class="text-sm">(ต้นฉบับ/Original)</p>
           </div>
         </div>
         <div
           v-if="pageIndex === 0"
-          class="grid grid-cols-2 items-start border-b pb-2 py-5 gap-4 text-sm"
+          class="grid grid-cols-2 items-start border-b pb-2 py-5 gap-4 text-[10px]"
         >
           <div class="w-[110%] flex p-2">
-            <div class="flex flex-col text-sm gap-2">
+            <div class="flex flex-col gap-2">
               <div class="flex gap-4">
                 <p class="font-semibold min-w-[7rem] max-w-[7rem]">
                   ลูกค้า/Customer
@@ -160,7 +160,7 @@ console.log(pages);
             </div>
           </div>
           <div class="w-[90%] h-full p-2 ml-10">
-            <div class="flex flex-col text-sm gap-2">
+            <div class="flex flex-col gap-2">
               <div class="flex gap-4">
                 <p class="font-semibold min-w-[8rem] max-w-[8rem]">
                   เลขที่ใบกำกับภาษี/Tax Invoice NO.
@@ -169,7 +169,7 @@ console.log(pages);
               </div>
               <div class="flex gap-4">
                 <p class="font-semibold min-w-[8rem] max-w-[8rem]">
-                  เลขที่อ้างอิง/Ref Invoice NO.
+                  เลขที่อ้างอิง/Ref NO.
                 </p>
                 <p>{{ invoice.number }}</p>
               </div>
@@ -190,14 +190,12 @@ console.log(pages);
         ></div> -->
 
         <!-- Table -->
-        <div class="overflow-x-auto py-4">
-          <table
-            v-if="itemsOnPage.length > 0"
-            class="w-full text-sm rounded-md"
-          >
+        <div class="overflow-x-auto py-4 text-[10px]">
+          <table v-if="itemsOnPage.length > 0" class="w-full rounded-md">
             <thead class="bg-muted-200">
               <tr>
-                <th class="p-2 border border-muted-800">รหัส</th>
+                <th class="p-2 border border-muted-800 text-start">ลำดับ</th>
+                <th class="p-2 border border-muted-800 text-start">รหัส</th>
                 <th class="p-2 border border-muted-800 text-start">คำอธิบาย</th>
                 <th class="p-2 border border-muted-800 text-center">จำนวน</th>
                 <th class="p-2 border border-muted-800 text-right">หน่วย</th>
@@ -208,6 +206,7 @@ console.log(pages);
             </thead>
             <tbody>
               <tr v-for="(item, i) in itemsOnPage" :key="i">
+                <td class="p-2">{{ i + 1 }}</td>
                 <td class="p-2">{{ item.id }}</td>
                 <td class="p-2 max-w-[15rem] text-overflow-ellipsis">
                   {{ item.desc }}
@@ -332,39 +331,52 @@ console.log(pages);
               </tr>
             </tbody>
           </table>
-          <div
-            v-if="pageIndex === pages.length - 1"
-            class="flex flex-row justify-end items-start gap-20 pt-5"
-          >
-            <div class="flex flex-col gap-4">
-              <p class="pb-5 font-semibold">อนุมัติโดย/Approved by</p>
-              <p>________________________</p>
-              <p>วันที่/Date ______________</p>
-            </div>
-            <div class="flex flex-col gap-4">
-              <p class="pb-5 font-semibold">ผู้รับใบกำกับภาษี/Recipient</p>
-              <p>________________________</p>
-              <p>วันที่/Date ______________</p>
-            </div>
+          <div v-if="pageIndex === pages.length - 1" class="mt-5">
+            <p>
+              ใบเสร็จรับเงิน/ใบกํากับภาษีฉบับนี้ได้จัดทําขึ้นอย่างสมบูรณ์แล้วโดยไม่ต้องมีลายเซ็นของเจ้าหน้าที่บริษัทแต่อย่างใด
+            </p>
+            <p>
+              เอกสารนี้ได้จัดทำและส่งข้อมูลให้แก่กรมสรรพาการด้วยวิธีการทางอิเล็กทรอนิกส์
+            </p>
           </div>
         </div>
       </div>
 
       <!-- Footer (only on last page) -->
       <div
-        class="absolute right-5 bottom-5 flex flex-row justify-end items-start gap-6 pt-6"
+        class="absolute right-5 bottom-5 flex flex-row justify-end items-start gap-6 pt-6 text-[12px]"
       >
-        {{ `${pageIndex + 1}/${pages.length}` }}
+        หน้าที่ {{ `${pageIndex + 1}/${pages.length}` }}
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.page {
+  width: 21cm;
+  min-height: 29.7cm;
+  border: 1px #d3d3d3 solid;
+  border-radius: 5px;
+  background: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
 @media print {
   .page {
+    margin: 0;
+    border: initial;
+    border-radius: initial;
+    width: initial;
+    min-height: initial;
+    box-shadow: initial;
+    background: initial;
     page-break-after: always;
-    break-after: page;
   }
 }
 </style>

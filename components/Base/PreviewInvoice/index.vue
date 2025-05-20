@@ -10,6 +10,15 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Eye } from "lucide-vue-next";
+import printComponent from "@/utils/printComponent";
+
+const printSection = ref<HTMLElement | null>(null);
+const htmlInvoice = `
+  <h4>เอกสารนี้ได้จัดทำและส่งข้อมูลให้แก่กรมสรรพากรด้วยวิธีการทางอิเล็กทรอนิกส์</h4>
+
+  <h1>Invoice Test Drive</h1>
+      <p>This is the content to print.</p>
+`;
 
 const device = useDevice();
 </script>
@@ -25,14 +34,17 @@ const device = useDevice();
       class="p-0 max-w-[850px] md:aspect-[210/297] grid grid-rows-[auto_1fr_auto] max-h-[90dvh] overflow-hidden rounded-lg"
     >
       <!-- Header -->
-      <DialogHeader class="pb-0">
+      <DialogHeader class="pb-0 p-2">
         <DialogTitle class="text-base text-center">ตัวอย่าง</DialogTitle>
+        <div class="flex">
+          <Button v-print="'#invoice'">Print</Button>
+        </div>
       </DialogHeader>
 
       <!-- Scrollable A4 Content -->
       <div class="overflow-auto">
-        <div :style="{ zoom: device.isMobile ? '50%' : '80%' }">
-          <BaseInvoice />
+        <div :style="{ zoom: device.isMobile ? '48%' : '80%' }">
+          <BaseInvoice id="invoice" />
         </div>
       </div>
 

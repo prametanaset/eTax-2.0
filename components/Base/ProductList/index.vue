@@ -54,8 +54,8 @@ const isDialogOpen = ref(false);
 const lastAddedProductId = ref<number | null>(null);
 
 const handleNewProductAdded = (product: any) => {
-   availableProducts.value.push(product);
-   addProduct(product);
+  availableProducts.value.push(product);
+  addProduct(product);
 };
 
 const addProduct = (selectedProduct: any) => {
@@ -114,7 +114,7 @@ const currencyFormat = (value: number) =>
     <!-- Header Row -->
     <div
       v-if="true"
-      class="grid grid-cols-[1fr_80px_80px_100px_50px_50px] gap-4 p-2 py-1 font-base border-b text-base  items-center max-sm:hidden"
+      class="grid grid-cols-[1fr_80px_80px_100px_50px_50px] gap-4 p-2 py-1 font-base border-b text-base items-center max-sm:hidden"
     >
       <span>รายละเอียด</span>
       <span class="text-center">จำนวน</span>
@@ -139,13 +139,13 @@ const currencyFormat = (value: number) =>
       <PopoverContent class="p-0" align="start">
         <Command>
           <CommandInput placeholder="Search product..." />
-<CommandList >
+          <CommandList>
             <CommandEmpty>No products found.</CommandEmpty>
             <CommandGroup class="max-h-[300px] overflow-y-auto relative">
               <CommandItem
                 :value="'new-product'"
                 @select="isDialogOpen = true"
-  class="sticky -top-1 z-10 bg-white dark:bg-[hsl(var(--popover))] shadow-sm px-4 py-2 flex items-center text-blue-600 font-semibold cursor-pointer"
+                class="sticky -top-1 z-10 bg-white dark:bg-[hsl(var(--popover))] shadow-sm px-4 py-2 flex items-center text-blue-600 font-semibold cursor-pointer"
               >
                 <CirclePlus class="w-5 h-5 mr-3" />
                 <span>เพิ่มสินค้าใหม่</span>
@@ -173,88 +173,134 @@ const currencyFormat = (value: number) =>
         </Command>
       </PopoverContent>
     </Popover>
-<Draggable
-  v-model="products"
-  item-key="id"
-  tag="div"
-  :animation="150"
-  :ghost-class="'ghost'"
-  class="space-y-3"
->
-  <template #item="{ element: product }">
-    <transition name="fade-slide" mode="out-in" appear>
-      <div
-        :key="product.id"
-        :id="`product-${product.id}`"
-        class="transition-all duration-300 ease-in-out relative grid sm:grid-cols-[1fr_80px_80px_90px_80px_auto] gap-2 drag-handle items-center border rounded-lg bg-[hsl(var(--card))]"
-        :class="screenWidth < 640 ? 'grid-cols-2' : ''"
-      >
-          <!-- Product Info -->
+    <Draggable
+      v-model="products"
+      item-key="id"
+      tag="div"
+      :animation="150"
+      :ghost-class="'ghost'"
+      class="space-y-3"
+    >
+      <template #item="{ element: product }">
+        <transition name="fade-slide" mode="out-in" appear>
           <div
-            class="flex items-center space-x-4 w-full overflow-hidden py-3 pl-4 drag-handle cursor-grab active:cursor-grabbing"
-            :class="screenWidth < 640 ? 'col-span-2' : ''"
+            :key="product.id"
+            :id="`product-${product.id}`"
+            class="transition-all duration-300 ease-in-out relative grid sm:grid-cols-[1fr_80px_80px_90px_80px_auto] gap-2 drag-handle items-center border rounded-lg bg-[hsl(var(--card))]"
+            :class="screenWidth < 640 ? 'grid-cols-2' : ''"
           >
-            <img
-              :src="product.image"
-              :alt="product.name"
-              class="w-12 h-12 rounded-xl object-cover"
-            />
-            <div class="flex-1 min-w-0">
-              <p class="font-semibold truncate">{{ product.name }}</p>
-              <p class="text-sm font-medium text-gray-500">SKU: SHIRT-001</p>
+            <!-- Product Info -->
+            <div
+              class="flex items-center space-x-4 w-full overflow-hidden py-3 pl-4 drag-handle cursor-grab active:cursor-grabbing"
+              :class="screenWidth < 640 ? 'col-span-2' : ''"
+            >
+              <img
+                :src="product.image"
+                :alt="product.name"
+                class="w-12 h-12 rounded-xl object-cover"
+              />
+              <div class="flex-1 min-w-0">
+                <p class="font-semibold truncate">{{ product.name }}</p>
+                <p class="text-sm font-medium text-gray-500">SKU: SHIRT-001</p>
+              </div>
             </div>
-          </div>
 
-          <!-- Quantity Input -->
-          <div class="w-full sm:w-16 mx-auto">
-            <Label class="block text-xs text-gray-600 sm:hidden">จำนวน</Label>
-            <Input
-              type="number"
-              v-model="product.quantity"
-              min="1"
-              class="text-center w-full rounded-md bg-[hsl(var(--card))]"
-            />
-          </div>
+            <!-- Quantity Input -->
+            <div class="w-full sm:w-16 mx-auto">
+              <Label class="block text-xs text-gray-600 sm:hidden">จำนวน</Label>
+              <Input
+                type="number"
+                v-model="product.quantity"
+                min="1"
+                class="text-center w-full rounded-md bg-[hsl(var(--card))]"
+              />
+            </div>
 
-          <!-- Discount Popover -->
-          <div>
-            <Label class="block text-xs text-gray-600 sm:hidden">ส่วนลด</Label>
-            <Popover v-if="screenWidth > 640">
-              <PopoverTrigger as-child>
-                <Button
-                  variant="outline"
-                  class="w-full sm:w-20 text-center text-sm truncate bg-[hsl(var(--card))]"
-                >
-                  {{ product.discountValue }} {{ product.discountType }}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent class="w-80">
-                <div class="grid gap-4">
-                  <div class="space-y-2">
-                    <h4 class="font-bold leading-none">เพิ่มส่วนลด</h4>
-                    <p class="text-sm text-muted-foreground font-medium">
-                      กรุณาเลือกประเภทและมูลค่าของส่วนลด
-                    </p>
+            <!-- Discount Popover -->
+            <div>
+              <Label class="block text-xs text-gray-600 sm:hidden"
+                >ส่วนลด</Label
+              >
+              <Popover v-if="screenWidth > 640">
+                <PopoverTrigger as-child>
+                  <Button
+                    variant="outline"
+                    class="w-full sm:w-20 text-center text-sm truncate bg-[hsl(var(--card))]"
+                  >
+                    {{ product.discountValue }} {{ product.discountType }}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent class="w-80">
+                  <div class="grid gap-4">
+                    <div class="space-y-2">
+                      <h4 class="font-bold leading-none">เพิ่มส่วนลด</h4>
+                      <p class="text-sm text-muted-foreground font-medium">
+                        กรุณาเลือกประเภทและมูลค่าของส่วนลด
+                      </p>
+                    </div>
+                    <div class="grid gap-2">
+                      <div class="grid grid-cols-3 items-center gap-4">
+                        <span class="font-semibold">ประเภท</span>
+                        <Select v-model="product.discountType">
+                          <SelectTrigger class="col-span-2 h-8 font-light">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="%" class="font-light"
+                              >เปอร์เซ็นต์ (%)</SelectItem
+                            >
+                            <SelectItem value="บาท" class="font-light"
+                              >บาท (฿)</SelectItem
+                            >
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div class="grid grid-cols-3 items-center gap-4">
+                        <span class="font-semibold">มูลค่า</span>
+                        <Input
+                          type="number"
+                          v-model="product.discountValue"
+                          min="0"
+                          class="col-span-2 h-8 text-center"
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <div class="grid gap-2">
+                </PopoverContent>
+              </Popover>
+
+              <!-- Mobile Discount -->
+              <Drawer v-else>
+                <DrawerTrigger as-child>
+                  <Button
+                    variant="outline"
+                    class="w-full sm:w-20 text-center text-sm truncate"
+                  >
+                    {{ product.discountValue }} {{ product.discountType }}
+                  </Button>
+                </DrawerTrigger>
+                <DrawerContent>
+                  <DrawerHeader class="text-left">
+                    <DrawerTitle>เพิ่มส่วนลด</DrawerTitle>
+                    <DrawerDescription
+                      >กรุณาเลือกประเภทและมูลค่าของส่วนลด</DrawerDescription
+                    >
+                  </DrawerHeader>
+                  <form class="grid gap-4 px-4 py-2">
                     <div class="grid grid-cols-3 items-center gap-4">
-                      <span class="font-semibold">ประเภท</span>
+                      <Label>ประเภท</Label>
                       <Select v-model="product.discountType">
-                        <SelectTrigger class="col-span-2 h-8 font-light">
+                        <SelectTrigger class="col-span-2 h-8">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="%" class="font-light"
-                            >เปอร์เซ็นต์ (%)</SelectItem
-                          >
-                          <SelectItem value="บาท" class="font-light"
-                            >บาท (฿)</SelectItem
-                          >
+                          <SelectItem value="%">%</SelectItem>
+                          <SelectItem value="บาท">บาท</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     <div class="grid grid-cols-3 items-center gap-4">
-                      <span class="font-semibold">มูลค่า</span>
+                      <Label>มูลค่า</Label>
                       <Input
                         type="number"
                         v-model="product.discountValue"
@@ -262,101 +308,57 @@ const currencyFormat = (value: number) =>
                         class="col-span-2 h-8 text-center"
                       />
                     </div>
-                  </div>
-                </div>
-              </PopoverContent>
-            </Popover>
+                    <DrawerClose type="button">
+                      <Button class="w-full"> บันทึก </Button>
+                    </DrawerClose>
+                  </form>
+                  <DrawerFooter class="pt-2">
+                    <DrawerClose as-child>
+                      <Button variant="outline">ยกเลิก</Button>
+                    </DrawerClose>
+                  </DrawerFooter>
+                </DrawerContent>
+              </Drawer>
+            </div>
 
-            <!-- Mobile Discount -->
-            <Drawer v-else>
-              <DrawerTrigger as-child>
-                <Button
-                  variant="outline"
-                  class="w-full sm:w-20 text-center text-sm truncate"
-                >
-                  {{ product.discountValue }} {{ product.discountType }}
-                </Button>
-              </DrawerTrigger>
-              <DrawerContent>
-                <DrawerHeader class="text-left">
-                  <DrawerTitle>เพิ่มส่วนลด</DrawerTitle>
-                  <DrawerDescription
-                    >กรุณาเลือกประเภทและมูลค่าของส่วนลด</DrawerDescription
-                  >
-                </DrawerHeader>
-                <form class="grid gap-4 px-4 py-2">
-                  <div class="grid grid-cols-3 items-center gap-4">
-                    <Label>ประเภท</Label>
-                    <Select v-model="product.discountType">
-                      <SelectTrigger class="col-span-2 h-8">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="%">%</SelectItem>
-                        <SelectItem value="บาท">บาท</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div class="grid grid-cols-3 items-center gap-4">
-                    <Label>มูลค่า</Label>
-                    <Input
-                      type="number"
-                      v-model="product.discountValue"
-                      min="0"
-                      class="col-span-2 h-8 text-center"
-                    />
-                  </div>
-                  <DrawerClose type="button">
-                    <Button class="w-full"> บันทึก </Button>
-                  </DrawerClose>
-                </form>
-                <DrawerFooter class="pt-2">
-                  <DrawerClose as-child>
-                    <Button variant="outline">ยกเลิก</Button>
-                  </DrawerClose>
-                </DrawerFooter>
-              </DrawerContent>
-            </Drawer>
-          </div>
+            <!-- Tax Dropdown -->
+            <div>
+              <Label class="block text-xs text-gray-600 sm:hidden">ภาษี</Label>
+              <Select v-model="product.tax">
+                <SelectTrigger class="w-full sm:w-20 mx-auto">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="0%">0%</SelectItem>
+                  <SelectItem value="5%">5%</SelectItem>
+                  <SelectItem value="10%">10%</SelectItem>
+                  <SelectItem value="15%">15%</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-          <!-- Tax Dropdown -->
-          <div>
-            <Label class="block text-xs text-gray-600 sm:hidden">ภาษี</Label>
-            <Select v-model="product.tax">
-              <SelectTrigger class="w-full sm:w-20 mx-auto">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="0%">0%</SelectItem>
-                <SelectItem value="5%">5%</SelectItem>
-                <SelectItem value="10%">10%</SelectItem>
-                <SelectItem value="15%">15%</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+            <!-- Subtotal Input -->
+            <div class="w-full mx-auto">
+              <Label class="block text-xs text-gray-600 sm:hidden">จำนวน</Label>
+              <Input
+                type="text"
+                v-model="product.price"
+                min="1"
+                class="text-center w-full rounded-md bg-[hsl(var(--card))]"
+              />
+            </div>
 
-          <!-- Subtotal Input -->
-          <div class="w-full mx-auto">
-            <Label class="block text-xs text-gray-600 sm:hidden">จำนวน</Label>
-            <Input
-              type="text"
-              v-model="product.price"
-              min="1"
-              class="text-center w-full rounded-md bg-[hsl(var(--card))]"
-            />
+            <!-- Delete Button -->
+            <div>
+              <Button
+                variant="ghost"
+                class="text-red-500 hover:text-red-600 w-full sm:w-auto mr-4"
+                @click="removeProduct(product.id)"
+              >
+                <Trash class="w-5 h-5 mx-auto sm:mx-0" />
+              </Button>
+            </div>
           </div>
-
-          <!-- Delete Button -->
-          <div>
-            <Button
-              variant="ghost"
-              class="text-red-500 hover:text-red-600 w-full sm:w-auto mr-4"
-              @click="removeProduct(product.id)"
-            >
-              <Trash class="w-5 h-5 mx-auto sm:mx-0" />
-            </Button>
-          </div>
-        </div>
         </transition>
       </template>
     </Draggable>
@@ -381,7 +383,7 @@ const currencyFormat = (value: number) =>
               <CommandItem
                 :value="'new-product'"
                 @select="isDialogOpen = true"
-  class="sticky -top-1 z-10 bg-white dark:bg-[hsl(var(--popover))] shadow-sm px-4 py-2 flex items-center text-blue-600 font-semibold cursor-pointer"
+                class="sticky -top-1 z-10 bg-white dark:bg-[hsl(var(--popover))] shadow-sm px-4 py-2 flex items-center text-blue-600 font-semibold cursor-pointer"
               >
                 <CirclePlus class="w-5 h-5 mr-3" />
                 <span>เพิ่มสินค้าใหม่</span>
