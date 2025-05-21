@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Eye } from "lucide-vue-next";
+import { Eye, Printer } from "lucide-vue-next";
 import printComponent from "@/utils/printComponent";
 
 const printSection = ref<HTMLElement | null>(null);
@@ -34,10 +34,10 @@ const device = useDevice();
       class="p-0 max-w-[850px] md:aspect-[210/297] grid grid-rows-[auto_1fr_auto] max-h-[90dvh] overflow-hidden rounded-lg"
     >
       <!-- Header -->
-      <DialogHeader class="pb-0 p-2">
+      <DialogHeader class="pb-0 pt-2">
         <DialogTitle class="text-base text-center">ตัวอย่าง</DialogTitle>
-        <div class="flex">
-          <Button v-print="'#invoice'">Print</Button>
+        <div class="flex justify-end pr-4 pt-2">
+          <Button v-print="'#invoice'"><Printer /></Button>
         </div>
       </DialogHeader>
 

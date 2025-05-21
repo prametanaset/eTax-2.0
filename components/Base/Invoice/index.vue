@@ -3,6 +3,8 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { item } from "@unovis/ts/components/bullet-legend/style";
 import thaiBaht from "thai-baht-text";
 
+const productStore = useProductStore();
+
 const invoice = {
   number: "INV1069",
   issued: "May 27, 2015",
@@ -14,15 +16,7 @@ const invoice = {
     address: "1/226 หมู่ที่ 16 ตำบลบ้านเป็ด อำเภอเมืองขอนแก่น จ.ขอนแก่น 40000",
     taxId: "0123456789123",
   },
-  items: Array.from({ length: 30 }, (_, i) => ({
-    id: `P-00${i + 1}`,
-    desc: `สินค้า-Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, vero.${
-      i + 1
-    }`,
-    qty: 2 + (i % 5),
-    unit: "ชิ้น",
-    price: 200,
-  })),
+  items: productStore.selectProductList,
   taxRate: 0.13,
 };
 
@@ -37,13 +31,13 @@ const store_data = {
 };
 
 const itemsPerPage = computed(() => {
-  return invoice.items.length > 18 ? 25 : 18;
+  return productStore.selectProductList.length > 18 ? 25 : 18;
 });
 
 const pages = computed(() => {
-  const result: Array<(typeof invoice.items)[0][]> = [];
+  const result = [];
   const perPage = itemsPerPage.value;
-  const totalItems = invoice.items.length;
+  const totalItems = productStore.selectProductList.length;
 
   for (let i = 0; i < totalItems; i += perPage) {
     result.push(invoice.items.slice(i, i + perPage));
@@ -55,6 +49,8 @@ const pages = computed(() => {
   if (shouldAddEmptyPage) {
     result.push([]); // หน้าใหม่สำหรับ footer
   }
+
+  console.log(result);
 
   return result;
 });
@@ -209,12 +205,12 @@ const pages = computed(() => {
                 <td class="p-2">{{ i + 1 }}</td>
                 <td class="p-2">{{ item.id }}</td>
                 <td class="p-2 max-w-[15rem] text-overflow-ellipsis">
-                  {{ item.desc }}
+                  {{ item.name }}
                 </td>
-                <td class="p-2 text-center">{{ item.qty }}</td>
+                <td class="p-2 text-center">{{ item.quantity }}</td>
                 <td class="p-2 text-right">{{ item.unit }}</td>
                 <td class="p-2 text-right">
-                  {{ currencyFormat((item.qty * item.price).toFixed(2)) }}
+                  {{ currencyFormat((item.quantity * item.price).toFixed(2)) }}
                 </td>
               </tr>
             </tbody>
@@ -238,11 +234,11 @@ const pages = computed(() => {
                   {{
                     thaiBaht(
                       invoice.items.reduce(
-                        (sum, item) => sum + item.qty * item.price,
+                        (sum, item) => sum + item.quantity * item.price,
                         0
                       ) +
                         invoice.items.reduce(
-                          (sum, item) => sum + item.qty * item.price,
+                          (sum, item) => sum + item.quantity * item.price,
                           0
                         ) *
                           invoice.taxRate
@@ -255,11 +251,11 @@ const pages = computed(() => {
                     currencyFormat(
                       (
                         invoice.items.reduce(
-                          (sum, item) => sum + item.qty * item.price,
+                          (sum, item) => sum + item.quantity * item.price,
                           0
                         ) +
                         invoice.items.reduce(
-                          (sum, item) => sum + item.qty * item.price,
+                          (sum, item) => sum + item.quantity * item.price,
                           0
                         ) *
                           invoice.taxRate
@@ -270,10 +266,7 @@ const pages = computed(() => {
               </tr>
               <!-- Total & Tax (only on last page) -->
               <tr v-if="pageIndex === pages.length - 1">
-                <td
-                  class="p-2 border border-muted-800 text-sm align-top"
-                  colspan="3"
-                >
+                <td class="p-2 border border-muted-800 align-top" colspan="3">
                   <p>หมายเหตุ/Remark</p>
                   <p>-</p>
                 </td>
@@ -285,7 +278,7 @@ const pages = computed(() => {
                         currencyFormat(
                           invoice.items
                             .reduce(
-                              (sum, item) => sum + item.qty * item.price,
+                              (sum, item) => sum + item.quantity * item.price,
                               0
                             )
                             .toFixed(2)
@@ -304,7 +297,7 @@ const pages = computed(() => {
                         currencyFormat(
                           invoice.items
                             .reduce(
-                              (sum, item) => sum + item.qty * item.price,
+                              (sum, item) => sum + item.quantity * item.price,
                               0
                             )
                             .toFixed(2)
@@ -319,7 +312,7 @@ const pages = computed(() => {
                         currencyFormat(
                           (
                             invoice.items.reduce(
-                              (sum, item) => sum + item.qty * item.price,
+                              (sum, item) => sum + item.quantity * item.price,
                               0
                             ) * invoice.taxRate
                           ).toFixed(2)

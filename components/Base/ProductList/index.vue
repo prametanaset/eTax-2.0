@@ -33,18 +33,21 @@ const availableProducts = ref([
     name: "เสื้อยืด",
     price: 125000,
     image: "/images/products/shirt.jpg",
+    taxType: "exempt",
   },
   {
     id: 2,
     name: "กางเกงยีน",
     price: 250000,
     image: "/images/products/jeans.jpg",
+    taxType: "include",
   },
   {
     id: 3,
     name: "รองเท้าผ้าใบ",
     price: 180000,
     image: "/images/products/sneakers.jpg",
+    taxType: "exclude",
   },
 ]);
 
@@ -52,6 +55,8 @@ const products = ref<any[]>([]);
 const isPopoverOpen = ref(false);
 const isDialogOpen = ref(false);
 const lastAddedProductId = ref<number | null>(null);
+
+const productStore = useProductStore();
 
 const handleNewProductAdded = (product: any) => {
   availableProducts.value.push(product);
@@ -70,6 +75,7 @@ const addProduct = (selectedProduct: any) => {
       discountValue: 0,
       discountType: "%",
       tax: "10%",
+      unit: "ชิ้น",
     };
     products.value.push(newProduct);
     lastAddedProductId.value = newProduct.id;
@@ -89,6 +95,14 @@ const addProduct = (selectedProduct: any) => {
 const removeProduct = (id: number) => {
   products.value = products.value.filter((p) => p.id !== id);
 };
+
+watch(
+  products,
+  (newVal) => {
+    productStore.setSelectProductList(newVal);
+  },
+  { deep: true, immediate: true }
+);
 
 const screenWidth = ref(0);
 const updateWidth = () => {

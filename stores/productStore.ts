@@ -15,6 +15,7 @@ export const useProductStore = defineStore("productStore", () => {
   }
 
   const products = ref<Array<Product>>([]);
+  const selectProductList = ref([]);
   const productsToEdit = ref<Array<Product>>([]);
   const productsToDelete = ref<Array<Product>>([]);
   const { getProducts } = useProductService();
@@ -41,6 +42,10 @@ export const useProductStore = defineStore("productStore", () => {
     productsToDelete.value = newProducts;
   };
 
+  const setSelectProductList = (newProduct: any) => {
+    selectProductList.value = newProduct;
+  };
+
   const clearProductToEdit = () => {
     productsToEdit.value = null;
   };
@@ -62,6 +67,7 @@ export const useProductStore = defineStore("productStore", () => {
     products,
     productsToEdit,
     productsToDelete,
+    selectProductList,
     addProduct,
     removeProduct,
     setProducts,
@@ -70,5 +76,6 @@ export const useProductStore = defineStore("productStore", () => {
     clearProductToEdit,
     clearProductStore,
     setProductToDelete,
+    setSelectProductList,
   };
 });
