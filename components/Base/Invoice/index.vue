@@ -39,6 +39,8 @@ const pages = computed(() => {
   const perPage = itemsPerPage.value;
   const totalItems = productStore.selectProductList.length;
 
+  if (totalItems === 0) return [[]];
+
   for (let i = 0; i < totalItems; i += perPage) {
     result.push(invoice.items.slice(i, i + perPage));
   }
@@ -49,8 +51,6 @@ const pages = computed(() => {
   if (shouldAddEmptyPage) {
     result.push([]); // หน้าใหม่สำหรับ footer
   }
-
-  console.log(result);
 
   return result;
 });
