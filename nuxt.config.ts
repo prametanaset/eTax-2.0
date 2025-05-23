@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: false },
   app: {
-    pageTransition: { name: 'page', mode: 'out-in' }
+    pageTransition: { name: "page", mode: "out-in" },
   },
   modules: [
     "@nuxtjs/tailwindcss",
@@ -22,7 +22,18 @@ export default defineNuxtConfig({
     "unplugin-icons/nuxt",
     "@nuxtjs/device",
     "@pinia/nuxt",
+    "@sidebase/nuxt-auth",
   ],
+  auth: {
+    isEnabled: true,
+    disableServerSideAuth: false,
+    baseURL: "http://localhost:3000/api/auth",
+    provider: { type: "authjs" },
+    sessionRefresh: {
+      enablePeriodically: true,
+      enableOnWindowFocus: true,
+    },
+  },
   // dateFns configuration should be placed in the module options if supported, not in the root config
   shadcn: {
     /**
