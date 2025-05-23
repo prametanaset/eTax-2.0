@@ -478,7 +478,7 @@ const columns: ColumnDef<Payment>[] = [
     accessorKey: "id",
     header: "เลขที่",
     cell: ({ row }) =>
-      h("div", { class: "text-base font-suk" }, row.getValue("id")),
+      h("div", { class: "text-base font-semibold font-suk" }, row.getValue("id")),
   },
   {
     accessorKey: "email",
@@ -496,7 +496,7 @@ const columns: ColumnDef<Payment>[] = [
       h(
         "div",
         h("div", {}, [
-          h("p", { class: "text-base font-semibold mb-1" }, row.original.name),
+          h("p", { class: "text-base font-medium mb-1" }, row.original.name),
           h(
             "p",
             { class: "text-sm text-muted-500 font-normal leading-none" },
@@ -515,7 +515,7 @@ const columns: ColumnDef<Payment>[] = [
         timeStyle: "short",
       }).format(new Date(raw));
 
-      return h("div", { class: "text-left font-medium" }, formatted);
+      return h("div", { class: "text-left text-base font-medium" }, formatted);
     },
   },
   {
@@ -691,7 +691,7 @@ function getStatusLabel(status) {
       </NuxtLink>
     </div>
 
-    <div class="rounded-lg border bg-[hsl(var(--card))]">
+    <div class="rounded-lg border bg-[hsl(var(--card))] overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow
@@ -702,7 +702,7 @@ function getStatusLabel(status) {
             <TableHead
               v-for="header in headerGroup.headers"
               :key="header.id"
-              class="font-medium text-base"
+              class="font-medium text-base dark:bg-[hsl(var(--card))]"
             >
               <FlexRender
                 v-if="!header.isPlaceholder"

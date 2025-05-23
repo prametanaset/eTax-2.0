@@ -19,6 +19,7 @@ export default {
       fontFamily: {
         sans: ["Noto Sans Thai",'SukhumvitSet', "sans-serif"],
         suk: ['SukhumvitSet', "sans-serif"],
+        sarabun: ["Sarabun", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",

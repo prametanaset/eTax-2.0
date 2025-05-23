@@ -74,7 +74,7 @@ const addProduct = (selectedProduct: any) => {
       quantity: 1,
       discountValue: 0,
       discountType: "%",
-      tax: "10%",
+      taxType: selectedProduct.taxType || "include", // default
       unit: "ชิ้น",
     };
     products.value.push(newProduct);
@@ -121,6 +121,17 @@ const currencyFormat = (value: number) =>
     style: "decimal",
     minimumFractionDigits: 0,
   }).format(value);
+
+watch(
+  products,
+  (newVal) => {
+    newVal.forEach((p) => {
+      p.tax = p.taxType === "exempt" ? "0%" : "7%";
+    });
+    productStore.setSelectProductList(newVal);
+  },
+  { deep: true }
+);
 </script>
 
 <template>
@@ -128,7 +139,7 @@ const currencyFormat = (value: number) =>
     <!-- Header Row -->
     <div
       v-if="true"
-      class="grid grid-cols-[1fr_80px_80px_100px_50px_50px] gap-4 p-2 py-1 font-base border-b text-base items-center max-sm:hidden"
+      class="grid grid-cols-[1fr_95px_40px_190px_50px_50px] gap-4 p-2 py-1 font-base border-b text-base items-center max-sm:hidden"
     >
       <span>รายละเอียด</span>
       <span class="text-center">จำนวน</span>
@@ -200,7 +211,7 @@ const currencyFormat = (value: number) =>
           <div
             :key="product.id"
             :id="`product-${product.id}`"
-            class="transition-all duration-300 ease-in-out relative grid sm:grid-cols-[1fr_80px_80px_90px_80px_auto] gap-2 drag-handle items-center border rounded-lg bg-[hsl(var(--card))]"
+            class="transition-all duration-300 ease-in-out relative grid sm:grid-cols-[1fr_75px_80px_155px_80px_auto] gap-2 drag-handle items-center border rounded-lg bg-[hsl(var(--card))]"
             :class="screenWidth < 640 ? 'grid-cols-2' : ''"
           >
             <!-- Product Info -->
@@ -338,15 +349,22 @@ const currencyFormat = (value: number) =>
             <!-- Tax Dropdown -->
             <div>
               <Label class="block text-xs text-gray-600 sm:hidden">ภาษี</Label>
-              <Select v-model="product.tax">
-                <SelectTrigger class="w-full sm:w-20 mx-auto">
-                  <SelectValue />
+              <Select v-model="product.taxType">
+                <SelectTrigger class="w-36 sm:w-36 mx-auto h-10">
+                  <SelectValue
+                    :placeholder="
+                      {
+                        exempt: 'ยกเว้นภาษี (0%)',
+                        include: 'รวม VAT 7%',
+                        exclude: 'ไม่รวม VAT 7%',
+                      }[product.taxType]
+                    "
+                  />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="0%">0%</SelectItem>
-                  <SelectItem value="5%">5%</SelectItem>
-                  <SelectItem value="10%">10%</SelectItem>
-                  <SelectItem value="15%">15%</SelectItem>
+                  <SelectItem value="exempt">ยกเว้นภาษี (0%)</SelectItem>
+                  <SelectItem value="include">รวม VAT (7%)</SelectItem>
+                  <SelectItem value="exclude">ไม่รวม VAT (7%)</SelectItem>
                 </SelectContent>
               </Select>
             </div>

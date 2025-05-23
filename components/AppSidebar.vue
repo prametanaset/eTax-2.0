@@ -69,23 +69,23 @@ const data = {
       ],
       newTab: false
     },
-    {
-      title: "ใบกำกับภาษี",
-      url: "/invoice",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: "รายงานใบกำกับภาษี",
-          url: "/invoice",
-        },
-        {
-          title: "สร้างใบกำกับภาษี",
-          url: "/invoice/create/invoice",
-        },
-      ],
-      newTab: false
-    },
+    // {
+    //   title: "ใบกำกับภาษี",
+    //   url: "/invoice",
+    //   icon: SquareTerminal,
+    //   isActive: true,
+    //   items: [
+    //     {
+    //       title: "รายงานใบกำกับภาษี",
+    //       url: "/invoice",
+    //     },
+    //     {
+    //       title: "สร้างใบกำกับภาษี",
+    //       url: "/invoice/create/invoice",
+    //     },
+    //   ],
+    //   newTab: false
+    // },
     {
       title: "จัดการสินค้า",
       url: "/category",
@@ -116,33 +116,33 @@ const data = {
       icon: Mail,
       newTab: false
     },
-    {
-      title: "ตั้งค่า",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-      newTab: false
-    },
+    // {
+    //   title: "ตั้งค่า",
+    //   url: "#",
+    //   icon: Settings2,
+    //   items: [
+    //     {
+    //       title: "General",
+    //       url: "#",
+    //     },
+    //     {
+    //       title: "Team",
+    //       url: "#",
+    //     },
+    //     {
+    //       title: "Billing",
+    //       url: "#",
+    //     },
+    //     {
+    //       title: "Limits",
+    //       url: "#",
+    //     },
+    //   ],
+    //   newTab: false
+    // },
     {
       title: "ทดลอง",
-      url: "/test",
+      url: "/test2",
       icon: Microscope,
       newTab: false
     },

@@ -67,7 +67,7 @@ onMounted(() => {
     <header
       :class="[
         'sticky top-0 flex h-14 shrink-0 z-50 bg-[hsl(var(--background))] items-center gap-2 transition-all',
-        isStuck ? 'border-b border-gray-150 ' : ''
+        isStuck ? 'shadow-sm ' : ''
       ]"
     >
         <div class="flex items-center justify-between w-full px-4 pr-2">

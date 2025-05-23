@@ -8,13 +8,14 @@
         <CardHeader class="px-0 py-4 pt-3">
           <CardTitle class="px-6">
             <div class="mb-2">
-              <!-- <h1 class="text-2xl font-bold  dark:text-white">
-                ใบกำกับภาษี
-              </h1> -->
-              <div class="flex items-center gap-3 text-[1rem] mt-3">
+              <div
+                class="flex flex-col md:flex-row md:items-center gap-3 text-[1rem] mt-3"
+              >
                 <!-- Tax Invoice Number -->
-                <div class="flex flex-col w-[24%] gap-1.5">
-                  <span class="font-medium dark:text-white text-black/80">เลขที่</span>
+                <div class="flex flex-col w-full md:w-[24%] gap-1.5">
+                  <span class="font-medium dark:text-white text-black/80"
+                    >เลขที่</span
+                  >
                   <Input
                     type="text"
                     placeholder="กรอกเลขที่ใบกำกับภาษี"
@@ -23,13 +24,16 @@
                 </div>
 
                 <!-- Issue Date -->
-                <div class="flex flex-col w-[24%] gap-1.5">
-                  <span class="font-medium dark:text-white text-black/80">วันที่สร้าง</span>
-                  <BaseDateTimePicker></BaseDateTimePicker>
+                <div class="flex flex-col w-full md:w-[24%] gap-1.5">
+                  <span class="font-medium dark:text-white text-black/80"
+                    >วันที่สร้าง</span
+                  >
+                  <BaseDateTimePicker />
                 </div>
               </div>
             </div>
           </CardTitle>
+
           <div class="z-999 grid sm:grid-cols-1 gap-2 px-4">
             <div v-if="false" class="mr-1 px-2">
               <p class="mb-1 text-md font-medium">From</p>
@@ -43,7 +47,6 @@
             </div>
           </div>
         </CardHeader>
-
 
         <CardContent>
           <div class="grid gap-4 overflow-hidden my-4 mt-7 mb-0">
