@@ -19,3 +19,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.invisible-scrollbar::-webkit-scrollbar {
+  display: none;
+}

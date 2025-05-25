@@ -1,58 +1,30 @@
 <script setup lang="ts">
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-} from "@/components/ui/tabs";
-import { Separator } from "@/components/ui/separator";
-import { Card } from "@/components/ui/card";
-import { ref } from "vue";
 
-const activeTab = ref("account");
+
+const props = defineProps<{
+  open: boolean;
+}>();
+
+
 </script>
 
 <template>
   <div>
-    <Tabs v-model="activeTab" class="w-full">
-      <TabsList>
-        <TabsTrigger value="account">รายละเอียด</TabsTrigger>
-        <TabsTrigger value="status">สถานะ</TabsTrigger>
-        <TabsTrigger value="history">ประวัติ</TabsTrigger>
-      </TabsList>
-
-      <Separator class="my-4" />
-
-      <transition name="slide-fade" mode="out-in">
-        <component :is="'div'" :key="activeTab">
-          <TabsContent value="account">
-            <BaseInvoiceDetailTest />
-          </TabsContent>
-
-          <TabsContent value="status">
-            <BaseInvoice />
-          </TabsContent>
-
-          <TabsContent value="history">
-            <BaseInvoiceDetailTest2 />
-          </TabsContent>
-        </component>
-      </transition>
-    </Tabs>
+    <Dialog v-model:open="props.open">
+    <DialogContent
+      class="w-full flex flex-col"
+    >
+      <DialogHeader>
+        <DialogTitle>รายละเอียดการชำระเงิน</DialogTitle>
+      </DialogHeader>
+      <DialogContent class="max-h-[90dvh] max-w-[850px]">
+        <BaseInvoiceDetailTabs class="h-full" />
+      </DialogContent>
+      <DialogFooter class="flex justify-end gap-2 print:hidden">
+        <Button variant="outline">พิมพ์</Button>
+        <Button>ดาวน์โหลด PDF</Button>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
   </div>
 </template>
-
-<style scoped>
-.slide-fade-enter-active,
-.slide-fade-leave-active {
-  transition: all 0.2s ease;
-}
-.slide-fade-enter-from {
-  opacity: 0;
-  transform: translateX(20px);
-}
-.slide-fade-leave-to {
-  opacity: 0;
-  transform: translateX(-20px);
-}
-</style>

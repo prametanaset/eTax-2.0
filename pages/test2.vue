@@ -1,6 +1,8 @@
 <template>
   <div>
-    <BaseInvoiceDetail></BaseInvoiceDetail>
+    <!-- <Button @click="openDialog = true">ดูรายละเอียด</Button>
+    <BaseInvoiceDetail :open="openDialog"></BaseInvoiceDetail> -->
+    <BaseDateRangePicker></BaseDateRangePicker>
   </div>
 </template>
 
@@ -8,6 +10,7 @@
 definePageMeta({
   title: "รายละเอียดใบกำกับภาษี",
 });
+const openDialog = ref(false);
 
 </script>
 

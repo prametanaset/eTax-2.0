@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
-import { Calendar, CheckCircle, FileText, XCircle, Send } from 'lucide-vue-next'
+import { Calendar, CheckCircle, FileText, XCircle, Send, Circle, Download } from 'lucide-vue-next'
 
 const timeline = ref([
   {
@@ -10,42 +10,48 @@ const timeline = ref([
     title: 'สร้างใบแจ้งหนี้',
     date: '1 พฤษภาคม 2568',
     description: 'ระบบได้สร้างใบแจ้งหนี้เรียบร้อยแล้ว และบันทึกลงฐานข้อมูล.',
-    icon: FileText,
+    icon: Circle,
   },
   {
     id: 2,
     title: 'ส่งใบแจ้งหนี้ให้ลูกค้า',
     date: '1 พฤษภาคม 2568 - 10:30 น.',
     description: 'ระบบได้ส่งใบแจ้งหนี้ให้ลูกค้าทางอีเมลเรียบร้อยแล้ว.',
-    icon: Send,
+    icon: Circle,
   },
   {
     id: 3,
     title: 'ได้รับชำระเงิน',
     date: '3 พฤษภาคม 2568 - 14:15 น.',
     description: 'ลูกค้าได้ชำระเงินเรียบร้อยแล้วผ่านการโอนเงินผ่านธนาคาร.',
-    icon: CheckCircle,
+    icon: Circle,
   },
   {
     id: 4,
     title: 'ปิดใบแจ้งหนี้',
     date: '4 พฤษภาคม 2568',
     description: 'สถานะใบแจ้งหนี้ถูกอัปเดตเป็น "ปิดบัญชี" เรียบร้อยแล้ว.',
-    icon: Calendar,
+    icon: Circle,
   },
   {
     id: 5,
     title: 'ดำเนินการคืนเงิน (ถ้ามี)',
+    tag: 'Latest',
     date: '6 พฤษภาคม 2568',
     description: 'มีการคืนเงินบางส่วนให้กับลูกค้า เนื่องจากมีการชำระเงินเกิน.',
-    icon: XCircle,
+    icon: Circle,
+    button: {
+      label: 'Download ZIP',
+      icon: Download,
+      href: '#',
+    },
   },
 ])
 </script>
 
 <template>
-  <Card>
-    <CardContent class="pt-6 pb-8 pl-20">
+  <Card class="bg-background border-none">
+    <CardContent class="pt-6 pb-8 pl-[10rem]">
       <ol class="relative border-s border-muted space-y-10">
         <li
           v-for="item in timeline"
@@ -54,9 +60,9 @@ const timeline = ref([
         >
           <!-- Icon -->
           <div
-            class="absolute -start-9 top-1 w-6 h-6 flex items-center justify-center bg-background ring-4 ring-white dark:ring-gray-900 rounded-full border"
+            class="absolute -start-9 top-0 w-6 h-6 flex items-center justify-center bg-background ring-4 ring-white dark:ring-gray-900 rounded-full border"
           >
-            <component :is="item.icon" class="w-4 h-4 text-primary" />
+            <component :is="item.icon" class="w-4 h-4 stroke-[3] text-primary" />
           </div>
 
           <!-- Title & Tag -->

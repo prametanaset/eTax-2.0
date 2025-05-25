@@ -43,7 +43,7 @@ const device = useDevice();
 
       <!-- Scrollable A4 Content -->
       <div class="overflow-auto">
-        <div :style="{ zoom: device.isMobile ? '48%' : '80%' }">
+        <div :style="{ zoom: device.isMobile ? '48%' : '90%' }">
           <BaseInvoice id="invoice" />
         </div>
       </div>

@@ -11,12 +11,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
+  DialogFooter,
 } from "@/components/ui/dialog";
 import { MoreHorizontal } from "lucide-vue-next";
+import { LazyBaseInvoiceDetailTabs } from "#components";
 
 defineProps<{
   payment: {
@@ -33,6 +35,8 @@ const openDialog = ref(false);
 function copy(id: string) {
   navigator.clipboard.writeText(id);
 }
+
+const activeTab = ref("account");
 </script>
 
 <template>
@@ -48,15 +52,17 @@ function copy(id: string) {
 
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
+
           <DropdownMenuItem class="cursor-pointer" @click="openDialog = true">
             ดูรายละเอียด
           </DropdownMenuItem>
+
           <DropdownMenuItem>ดาวน์โหลดไฟล์ PDF</DropdownMenuItem>
 
           <!-- Optional actions -->
           <!--
-          <DropdownMenuItem @click="copy(payment.id)">Copy payment ID</DropdownMenuItem>
-          <DropdownMenuItem @click="$emit('expand')">Expand</DropdownMenuItem>
+            <DropdownMenuItem @click="copy(payment.id)">Copy payment ID</DropdownMenuItem>
+            <DropdownMenuItem @click="$emit('expand')">Expand</DropdownMenuItem>
           -->
 
           <DropdownMenuSeparator />
@@ -68,11 +74,30 @@ function copy(id: string) {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <DialogContent class="sm:max-w-[50%] h-[90%] flex flex-col overflow-hidden">
-        <DialogHeader>
-          <DialogTitle>รายละเอียดการชำระเงิน</DialogTitle>
+      <DialogContent class="sm:max-w-[850px] h-[95dvh] overflow-y-auto">
+        <DialogHeader class="gap-y-0">
+          <DialogTitle>รายละเอียดใบแจ้งหนี้</DialogTitle>
+          <DialogDescription>
+            ตัวอย่างเนื้อหา Dialog แบบ scrollable
+          </DialogDescription>
+          <div class="flex gap-2">
+            <Button variant="secondary" size="sm" class="hover:bg-gray-300/60" @click="activeTab = 'account'">รายละเอียด</Button>
+            <Button variant="secondary" size="sm" class="hover:bg-gray-300/60"  @click="activeTab = 'status'">ใบแจ้งหนี้</Button>
+            <Button variant="secondary" size="sm" class="hover:bg-gray-300/60" @click="activeTab = 'history'">ประวัติ</Button>
+          </div>
         </DialogHeader>
-        <BaseInvoiceDetail></BaseInvoiceDetail>
+        <!-- 👇 เฉพาะส่วนนี้ที่ scroll ได้ -->
+        <div class="overflow-y-auto overflow-x-hidden max-h-[70vh]">
+            <!-- <div class="h-[300dvh]"> -->
+            <div>
+              <BaseInvoiceDetailTabs
+                v-model="activeTab"
+              ></BaseInvoiceDetailTabs>
+            </div>
+        </div>
+        <DialogFooter>
+          <Button type="button" @click="openDialog = false">ปิด</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   </div>

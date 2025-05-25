@@ -42,7 +42,7 @@
 
     <div
       v-else
-      class="snap-x snap-mandatory flex gap-4 w-[92vw] overflow-x-auto"
+      class="snap-x snap-mandatory flex gap-4 w-[100vw] pl-4 -ml-4 -mr-4 pb-12 overflow-x-auto invisible-scrollbar"
     >
       <!-- spacer ซ้าย -->
 
@@ -50,11 +50,11 @@
       <div
         v-for="(widget, index) in widgets"
         :key="index"
-        class="snap-center snap-always"
+        class="snap-center snap-always "
       >
-        <div class="relative group">
+        <div class="relative group ">
           <div
-            class="absolute top-[60%] right-3 w-[90%] h-[50%] lg:h-[50%] bg-primary-400/50 blur-xl rounded-full img-shadow-animation"
+            class="absolute top-[60%] right-3 w-[90%] h-[40%] lg:h-[50%] bg-primary-400/50 blur-xl rounded-full img-shadow-animation"
           ></div>
           <Card
             class="z-10 relative rounded-lg shadow-xl/30 leading-none border img-border-animation h-40 min-w-[20rem] p-4"
@@ -69,6 +69,7 @@
           </Card>
         </div>
       </div>
+      <div class="shrink-0"><div class="w-0 shrink-0"></div></div>
 
       <!-- spacer ขวา -->
       <!-- <div class="shrink-0 w-1" /> -->
