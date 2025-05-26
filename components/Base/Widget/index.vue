@@ -25,11 +25,11 @@
     <div class="min-w-[70%] flex flex-col items-end justify-between md:col-span-2 lg:col-span-1">
       <!-- Filter Tabs -->
       <Tabs v-model="selectedRange" class="mb-2 self-end">
-        <TabsList>
-          <TabsTrigger value="today">วันนี้</TabsTrigger>
-          <TabsTrigger value="week">สัปดาห์</TabsTrigger>
-          <TabsTrigger value="month">เดือน</TabsTrigger>
-          <TabsTrigger value="year">ปี</TabsTrigger>
+        <TabsList class="bg-[hsl(var(--card))]">
+          <TabsTrigger value="today" class="data-[state=active]:shadow-md">วันนี้</TabsTrigger>
+          <TabsTrigger value="week" class="data-[state=active]:shadow-md">สัปดาห์</TabsTrigger>
+          <TabsTrigger value="month" class="data-[state=active]:shadow-md">เดือน</TabsTrigger>
+          <TabsTrigger value="year" class="data-[state=active]:shadow-md">ปี</TabsTrigger>
         </TabsList>
       </Tabs>
 

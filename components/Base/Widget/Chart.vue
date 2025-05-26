@@ -17,7 +17,7 @@ const chartOptions1 = computed(() => ({
     opacity: 0.9,
     gradient: {
       shadeIntensity: 1,
-      opacityFrom: 0.45,
+      opacityFrom: 0.60,
       opacityTo: 0,
       stops: [0, 100],
     },
@@ -25,7 +25,7 @@ const chartOptions1 = computed(() => ({
   stroke: { curve: 'smooth', width: 1.2 },
   tooltip: {
     x: { show: false },
-    y: { title: { formatter: () => 'Sales :' } },
+    y: { title: { formatter: () => 'ใบแจ้งหนี้ :' } },
   },
 }))
 
