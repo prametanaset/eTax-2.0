@@ -87,19 +87,19 @@ const data = {
     //   newTab: false
     // },
     {
-      title: "จัดการสินค้า",
+      title: "แคตตาล็อกสินค้า",
       url: "/category",
       icon: BetweenHorizontalStart,
       items: [
         {
-          title: "รายการสินค้า",
+          title: "แคตตาล็อกสินค้า",
           url: "/category",
         },
       ],
       newTab: false
     },
     {
-      title: "จัดการลูกค้า",
+      title: "ลูกค้า",
       url: "/customers",
       icon: Users,
       items: [

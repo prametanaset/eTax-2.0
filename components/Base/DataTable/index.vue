@@ -34,7 +34,7 @@ import {
   getSortedRowModel,
   useVueTable,
 } from "@tanstack/vue-table";
-import { ArrowUpDown, ChevronDown, Search, Plus } from "lucide-vue-next";
+import { ArrowUpDown, ChevronDown, Search, Plus, ArrowUpFromLine, Clock, CircleCheck, HelpCircle, X } from "lucide-vue-next";
 import { h, ref } from "vue";
 import DropdownAction from "./DataTableDemoColumn.vue";
 import { Badge } from "@/components/ui/badge";
@@ -478,7 +478,11 @@ const columns: ColumnDef<Payment>[] = [
     accessorKey: "id",
     header: "เลขที่",
     cell: ({ row }) =>
-      h("div", { class: "text-base font-semibold font-suk" }, row.getValue("id")),
+      h(
+        "div",
+        { class: "text-base font-suk" },
+        row.getValue("id")
+      ),
   },
   {
     accessorKey: "email",
@@ -496,7 +500,7 @@ const columns: ColumnDef<Payment>[] = [
       h(
         "div",
         h("div", {}, [
-          h("p", { class: "text-base font-medium mb-1" }, row.original.name),
+          h("p", { class: "text-base mb-1" }, row.original.name),
           h(
             "p",
             { class: "text-sm text-muted-500 font-normal leading-none" },
@@ -515,7 +519,7 @@ const columns: ColumnDef<Payment>[] = [
         timeStyle: "short",
       }).format(new Date(raw));
 
-      return h("div", { class: "text-left text-base font-medium" }, formatted);
+      return h("div", { class: "text-left text-base" }, formatted);
     },
   },
   {
@@ -525,12 +529,11 @@ const columns: ColumnDef<Payment>[] = [
       const status = row.getValue("status") as keyof typeof statusClasses;
 
       const statusClasses = {
-  0: "bg-green-50 text-green-700 dark:bg-green-700/20 dark:text-green-300 text-sm font-medium rounded-lg",
-  1: "bg-yellow-50 text-yellow-800 dark:bg-yellow-600/20 dark:text-yellow-200 text-sm font-medium rounded-lg",
-  2: "bg-red-50 text-red-700 dark:bg-red-700/20 dark:text-red-300 text-sm font-medium rounded-lg",
-  3: "bg-purple-50 text-purple-700 dark:bg-purple-700/20 dark:text-purple-300 text-sm font-medium rounded-lg",
-};
-
+        0: "bg-green-50 text-green-700 dark:bg-green-700/20 dark:text-green-300 text-sm font-medium rounded-lg p-1 px-2",
+        1: "bg-yellow-50 text-yellow-800 dark:bg-yellow-600/20 dark:text-yellow-200 text-sm font-medium rounded-lg p-1 px-2",
+        2: "bg-red-50 text-red-700 dark:bg-red-700/20 dark:text-red-300 text-sm font-medium rounded-lg p-1 px-2",
+        3: "bg-purple-50 text-purple-700 dark:bg-purple-700/20 dark:text-purple-300 text-sm font-medium rounded-lg p-1 px-2",
+      };
 
       return h("div", { class: "capitalize" }, [
         h(
@@ -612,18 +615,26 @@ const table = useVueTable({
 });
 
 function getStatusLabel(status) {
-  switch (status) {
-    case 0:
-      return "ส่งแล้ว";
-    case 1:
-      return "รอดำเนินการ";
-    case 2:
-      return "ยกเลิก";
-    case 3:
-      return "รอตรวจสอบ";
-    default:
-      return "ไม่ทราบสถานะ";
-  }
+  const icons = {
+    0: CircleCheck,
+    1: Clock,
+    2: X,
+    3: HelpCircle,
+  };
+
+  const labels = {
+    0: "ส่งแล้ว",
+    1: "รอดำเนินการ",
+    2: "ยกเลิก",
+    3: "รอตรวจสอบ",
+  };
+
+  const IconComponent = icons[status];
+
+  return h("div", { class: "flex items-center gap-1" }, [
+    h(IconComponent, { class: "w-4 h-4" }),
+    labels[status] || "ไม่ทราบสถานะ",
+  ]);
 }
 </script>
 
@@ -652,7 +663,9 @@ function getStatusLabel(status) {
         </div>
 
         <!-- Date Picker -->
-        <BaseDateTimePicker />
+        <!-- <BaseDateTimePicker /> -->
+        
+        <BaseDateRangePicker></BaseDateRangePicker>
 
         <!-- Columns toggle -->
         <DropdownMenu>
@@ -681,6 +694,13 @@ function getStatusLabel(status) {
         </DropdownMenu>
       </div>
 
+      <div class="flex gap-2">
+        <Button
+          variant="outline"
+          class="font-medium font-noto px-3   transition rounded-lg"
+        >
+          <ArrowUpFromLine class="-mr-1 w-4 h-4" /> Export
+        </Button>
       <!-- ขวา: ปุ่มสร้าง -->
       <NuxtLink to="/invoice/create/invoice">
         <Button
@@ -689,6 +709,7 @@ function getStatusLabel(status) {
           <Plus class="-mr-1 w-4 h-4" /> สร้างใบกำกับภาษี
         </Button>
       </NuxtLink>
+      </div>
     </div>
 
     <div class="rounded-lg border bg-[hsl(var(--card))] overflow-hidden">
