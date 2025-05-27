@@ -4,7 +4,7 @@
       <p class="text-3xl font-bold font-ibm text-center">ขอต้อนรับกลับมา</p>
     </div>
     <div>
-      <Form class="grid gap-4" @submit="(e) => onSubmit(e)">
+      <Form class="grid gap-4">
         <div class="grid gap-3">
           <div>
             <!-- <Label for="email">อีเมลผู้ใช้งาน</Label> -->
@@ -33,7 +33,9 @@
             }}</span>
           </div>
         </div>
-        <Button class="w-full text-md font-semibold">เข้าสู่ระบบ</Button>
+        <Button class="w-full text-md font-semibold" @click="onLogin"
+          >เข้าสู่ระบบ</Button
+        >
         <link
           href="https://fonts.googleapis.com/css?family=Lato"
           rel="stylesheet"
@@ -58,14 +60,14 @@
           /></span>
           ดำเนินการต่อด้วย Google
         </Button>
-        <Button
+        <!-- <Button
           class="w-full bg-[hsl(var(--card))] shadow-md text-muted-800 dark:text-white hover:text-white h-10"
         >
           <span class="w-6"
             ><img src="@/assets/img/thaiid-logo.png" alt="" class="w-full"
           /></span>
           ดำเนินการต่อด้วย ThaiID
-        </Button>
+        </Button> -->
       </div>
     </div>
   </div>
@@ -74,6 +76,8 @@
 <script lang="ts" setup>
 import { useForm, useField } from "vee-validate";
 import { cn } from "@/lib/utils";
+
+const { signIn } = useAuth();
 
 const device = useDevice();
 
@@ -91,17 +95,34 @@ const validatePassword = (value: string) => {
   return true;
 };
 
-// ฟังก์ชันเมื่อกด Submit
-const onSubmit = handleSubmit((values, actions) => {
-  console.log("Form values:", values);
-  console.log("Form actions:", actions);
+// // ฟังก์ชันเมื่อกด Submit
+// const onSubmit = handleSubmit((values, actions) => {
+//   console.log("Form values:", values);
+//   console.log("Form actions:", actions);
 
-  console.log("Form submitted!"); // all fields passed validation
-  navigateTo("/dashboard");
-});
+//   console.log("Form submitted!"); // all fields passed validation
+//   navigateTo("/dashboard");
+// });
 // ใช้ useField() สำหรับแต่ละฟิลด์
 const email = useField("email", checkEmailInDB);
 const password = useField("password", validatePassword);
+
+// กดปุ่มแล้วใช้ validate + login
+const onLogin = handleSubmit(async () => {
+  const result = await signIn("credentials", {
+    email: email.value.value,
+    password: password.value.value,
+    redirect: false,
+    callbackUrl: "/dashboard",
+  });
+
+  if (result?.error) {
+    console.error("Login failed:", result.error);
+    // แจ้งเตือน user ได้เลย เช่น Toast, Modal, etc.
+  } else {
+    navigateTo("/dashboard"); // ไปหน้าหลักหลังล็อกอินสำเร็จ
+  }
+});
 </script>
 
 <style scoped>

@@ -27,12 +27,9 @@ export default defineNuxtConfig({
   auth: {
     isEnabled: true,
     disableServerSideAuth: false,
-    baseURL: "http://localhost:3000/api/auth",
+    baseURL: "/api/auth",
+    globalAppMiddleware: false,
     provider: { type: "authjs" },
-    sessionRefresh: {
-      enablePeriodically: true,
-      enableOnWindowFocus: true,
-    },
   },
   // dateFns configuration should be placed in the module options if supported, not in the root config
   shadcn: {
@@ -73,5 +70,8 @@ export default defineNuxtConfig({
     public: {
       $http: process.env.PUBLIC_HTTP || "http://localhost:8080/v1", // API base URL
     },
+    authSecret: process.env.AUTH_SECRET,
+    apiKey: "klihlifjlsdhfsfhuaskasdhf",
+    apiUrl: process.env.PUBLIC_HTTP || "http://localhost:8080/v1",
   },
 });

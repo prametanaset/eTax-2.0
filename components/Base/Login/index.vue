@@ -10,25 +10,19 @@ const isLogin = ref(true);
   >
     <div class="absolute right-4 top-4 md:right-8 md:top-8 flex items-center">
       <!-- ✅ ปุ่มที่คลิกได้ -->
-       <p class="text-sm text-muted-foreground">
-      {{ isLogin ? "ยังไม่มีบัญชีใช่ไหม?" : "มีบัญชีอยู่แล้ว?" }}
-    </p>
-    <Button
-      variant="link"
-      href="#"
-      @click.prevent="isLogin = !isLogin"
-      :class="
-        cn(
-          buttonVariants({ variant: 'link' }),
-        )
-      "
-      class="pl-1"
-    >
-      {{ isLogin ? "สร้างบัญชี" : "เข้าสู่ระบบ" }}
-    </Button>
-
+      <p class="text-sm text-muted-foreground">
+        {{ isLogin ? "ยังไม่มีบัญชีใช่ไหม?" : "มีบัญชีอยู่แล้ว?" }}
+      </p>
+      <Button
+        variant="link"
+        href="#"
+        @click.prevent="isLogin = !isLogin"
+        :class="cn(buttonVariants({ variant: 'link' }))"
+        class="pl-1"
+      >
+        {{ isLogin ? "สร้างบัญชี" : "เข้าสู่ระบบ" }}
+      </Button>
     </div>
-
 
     <div
       class="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex"

@@ -58,6 +58,17 @@ const linkData = [
 ];
 
 const { isMobile } = useSidebar();
+const { signOut } = useAuth();
+const logOutHandler = async () => {
+  try {
+    // Logout from server
+
+    await signOut({ callbackUrl: "/", redirect: false });
+    await navigateTo("/");
+  } catch (e) {
+    console.log(e);
+  }
+};
 </script>
 
 <template>
@@ -125,12 +136,13 @@ const { isMobile } = useSidebar();
           </DropdownMenuGroup>
 
           <DropdownMenuSeparator />
-          <NuxtLink to="/">
-            <DropdownMenuItem class="cursor-pointer font-semibold">
-              <LogOut />
-              ลงชื่อออก
-            </DropdownMenuItem>
-          </NuxtLink>
+          <DropdownMenuItem
+            class="cursor-pointer font-semibold"
+            @click="signOut({ callbackUrl: '/' })"
+          >
+            <LogOut />
+            ลงชื่อออก
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </SidebarMenuItem>

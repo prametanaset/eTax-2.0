@@ -4,7 +4,6 @@
   </div>
 </template>
 
-
 <script lang="ts" setup>
 import { useForm, useField } from "vee-validate";
 const device = useDevice();
@@ -29,12 +28,12 @@ const validatePassword = (value: string) => {
 
 // ฟังก์ชันเมื่อกด Submit
 const onSubmit = handleSubmit((tValue, tOutput) => {
-  console.log("tValue:",tValue);
-  console.log("tOutput:",tOutput);
+  console.log("tValue:", tValue);
+  console.log("tOutput:", tOutput);
 
   console.log("Form submitted!"); // all fields passed validation
-  navigateTo('/')
-})
+  navigateTo("/");
+});
 // ใช้ useField() สำหรับแต่ละฟิลด์
 const email = useField("email", checkEmailInDB);
 const password = useField("password", validatePassword);
