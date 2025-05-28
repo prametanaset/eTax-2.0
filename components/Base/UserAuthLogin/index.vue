@@ -113,7 +113,7 @@ const onLogin = handleSubmit(async () => {
     email: email.value.value,
     password: password.value.value,
     redirect: false,
-    callbackUrl: "/dashboard",
+    callbackUrl: "/",
   });
 
   if (result?.error) {

@@ -109,12 +109,7 @@ export default defineNuxtRouteMiddleware((to) => {
   }
 
   if (authConfig.provider.type === "authjs") {
-    if (to.path !== "/") {
-      return navigateTo("/");
-    } else {
-      // ปล่อยผ่าน ไม่ต้อง redirect ซ้ำ
-      return;
-    }
+    return navigateTo("/auth/login");
     // const signInOptions: Parameters<typeof signIn>[1] = {
     //   error: "SessionRequired",
     //   callbackUrl: determineCallbackUrl(authConfig, () => to.fullPath),

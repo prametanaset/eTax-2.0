@@ -40,10 +40,10 @@ export const useCustomerStore = defineStore("customerStore", () => {
   }
 
   function cleaCustomerToUpdate() {
-    customerToUpdate.value = null;
+    customerToUpdate.value = [];
   }
   function cleaCustomerToDelete() {
-    customerToUpdate.value = null;
+    customerToUpdate.value = [];
   }
 
   return {

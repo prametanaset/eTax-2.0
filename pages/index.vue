@@ -1,46 +1,44 @@
 <template>
-  <div class="flex h-screen">
-    <BaseLogin></BaseLogin>
+  <div>
+    <!-- main page -->
   </div>
 </template>
 
-<script lang="ts" setup>
-import { useForm, useField } from "vee-validate";
-const device = useDevice();
+<script setup>
+// import liff from "@line/liff";
 
 definePageMeta({
-  layout: false,
+  key: (route) => route.fullPath,
+  layout: "blank",
 });
+useHead({
+  title: "หน้าหลัก",
+});
+// const route = useRoute();
+const checkAuth = () => {
+  // router.replace({ path: "/auth/login" });
+  navigateTo("/auth/login");
 
-// ใช้ useForm() สำหรับจัดการฟอร์ม
-const { handleSubmit, validate, meta } = useForm();
-
-const checkEmailInDB = (email: string) => {
-  if (!email) return "กรุณากรอกอีเมล";
-  return true;
+  //   const isLoggedIn = status.value === "authenticated";
+  //   console.log(status.value, lineStore.isLoggedIn);
+  //   if (lineStore.isLoggedIn) {
+  //     if (window.location.search.startsWith("liff.state")) {
+  //       //
+  //     } else if (!(localStorage.getItem("syncToken") || localStorage.getItem("redirectUrl"))) {
+  //       if (isLoggedIn && route.path === "/") {
+  //         router.replace({ path: "/profile" });
+  //       } else {
+  //         router.replace({ path: "/auth/signin" });
+  //       }
+  //     } else if (localStorage.getItem("syncToken") || localStorage.getItem("redirectUrl")) {
+  //       router.replace({ path: "/auth/sync" });
+  //     }
+  //   } else {
+  //     router.replace({ path: "/auth/signin" });
+  //   }
 };
 
-const validatePassword = (value: string) => {
-  if (!value) return "กรุณากรอกรหัสผ่าน";
-  if (value.length < 6) return "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร";
-  return true;
-};
-
-// ฟังก์ชันเมื่อกด Submit
-const onSubmit = handleSubmit((tValue, tOutput) => {
-  console.log("tValue:", tValue);
-  console.log("tOutput:", tOutput);
-
-  console.log("Form submitted!"); // all fields passed validation
-  navigateTo("/");
+onNuxtReady(() => {
+  checkAuth();
 });
-// ใช้ useField() สำหรับแต่ละฟิลด์
-const email = useField("email", checkEmailInDB);
-const password = useField("password", validatePassword);
 </script>
-
-<style scoped>
-.font-ibm {
-  font-family: "Noto Sans Thai";
-}
-</style>

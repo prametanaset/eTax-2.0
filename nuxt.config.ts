@@ -1,3 +1,5 @@
+import Google from "next-auth/providers/google";
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
@@ -27,9 +29,11 @@ export default defineNuxtConfig({
   auth: {
     isEnabled: true,
     disableServerSideAuth: false,
-    baseURL: "/api/auth",
+    baseURL: process.env.NUXT_AUTH_ORIGIN,
     globalAppMiddleware: false,
-    provider: { type: "authjs" },
+    provider: {
+      type: "authjs",
+    },
   },
   // dateFns configuration should be placed in the module options if supported, not in the root config
   shadcn: {
@@ -69,9 +73,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       $http: process.env.PUBLIC_HTTP || "http://localhost:8080/v1", // API base URL
+      apiKey: "klihlifjlsdhfsfhuaskasdhf",
+      apiUrl: process.env.PUBLIC_HTTP || "http://localhost:8080/v1",
     },
-    authSecret: process.env.AUTH_SECRET,
-    apiKey: "klihlifjlsdhfsfhuaskasdhf",
-    apiUrl: process.env.PUBLIC_HTTP || "http://localhost:8080/v1",
   },
+  plugins: [{ src: "~/plugins/error-handler.ts" }],
 });

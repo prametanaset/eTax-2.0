@@ -19,10 +19,11 @@ export const useAuthService = () => {
   };
 
   const getAccessToken = async (token: string) => {
-    const response = await api.post("/auth/token/refresh", {
-      token: token,
-    });
-    return response.data;
+    // const response = await api.post("/auth/token/refresh", {
+    //   token: token,
+    // });
+    // return response.data;
+    return "iokjlsdhjfuishoikajf;ish;jsklf";
   };
 
   const getMe = async (token: string) => {

@@ -15,7 +15,7 @@ export const useProductStore = defineStore("productStore", () => {
   }
 
   const products = ref<Array<Product>>([]);
-  const selectProductList = ref([]);
+  const selectProductList = ref<Product[]>([]);
   const productsToEdit = ref<Array<Product>>([]);
   const productsToDelete = ref<Array<Product>>([]);
   const { getProducts } = useProductService();
@@ -47,10 +47,10 @@ export const useProductStore = defineStore("productStore", () => {
   };
 
   const clearProductToEdit = () => {
-    productsToEdit.value = null;
+    productsToEdit.value = [];
   };
   const clearProductStore = () => {
-    products.value = null;
+    products.value = [];
   };
 
   // ✅ โหลดสินค้าจาก API และบันทึกลง Store
