@@ -4,6 +4,7 @@ import axios from "axios";
 import { useAuthService } from "~/composables/useAuthService";
 
 const { login, getAccessToken, getMe } = useAuthService();
+const config = useRuntimeConfig();
 
 async function refreshAccessToken(token: any) {
   try {
@@ -28,7 +29,7 @@ async function refreshAccessToken(token: any) {
 }
 
 export default NuxtAuthHandler({
-  secret: process.env.AUTH_SECRET,
+  secret: config.authSecret,
   session: {
     strategy: "jwt",
   },
@@ -63,7 +64,7 @@ export default NuxtAuthHandler({
         const password = credentials?.password;
 
         // ✅ จำลองข้อมูลผู้ใช้ (Mock)
-        if (email === "test@example.com" && password === "123456") {
+        if (email === "test" && password === "123456") {
           const user = {
             userId: "123",
             name: "Bas",

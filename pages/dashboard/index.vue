@@ -50,9 +50,9 @@
       <div
         v-for="(widget, index) in widgets"
         :key="index"
-        class="snap-center snap-always "
+        class="snap-center snap-always"
       >
-        <div class="relative group ">
+        <div class="relative group">
           <div
             class="absolute top-[60%] right-3 w-[90%] h-[40%] lg:h-[50%] bg-primary-400/50 blur-xl rounded-full img-shadow-animation"
           ></div>
@@ -75,9 +75,13 @@
       <!-- <div class="shrink-0 w-1" /> -->
     </div>
 
-
     <!-- Table -->
-    <div :class="[device.isMobile ? 'w-[92vw]' : 'w-full overflow-visible', 'overflow-hidden']">
+    <div
+      :class="[
+        device.isMobile ? 'w-[92vw]' : 'w-full overflow-visible',
+        'overflow-hidden',
+      ]"
+    >
       <!-- <BaseInvoiceDataTable
         :data="invoices_100_thai"
         :columns="columns"
@@ -95,6 +99,7 @@ import invoices_100_thai from "@/public/data/invoices_100_thai.json";
 definePageMeta({
   title: "รายงานใบกำกับภาษี",
 });
+
 const widgets = [
   { title: "ส่งแล้ว", count: 10, percent: -7.5, status: "success" },
   { title: "รอดำเนินการ", count: 5, percent: 7.5, status: "warning" },

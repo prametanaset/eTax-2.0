@@ -1,44 +1,43 @@
 <template>
-  <div>
-    <!-- main page -->
+  <div class="h-screen">
+    <BaseLogin></BaseLogin>
   </div>
 </template>
 
 <script setup>
-// import liff from "@line/liff";
+// // import liff from "@line/liff";
 
 definePageMeta({
-  key: (route) => route.fullPath,
-  layout: "blank",
+  layout: false,
 });
-useHead({
-  title: "หน้าหลัก",
-});
-// const route = useRoute();
-const checkAuth = () => {
-  // router.replace({ path: "/auth/login" });
-  navigateTo("/auth/login");
+// useHead({
+//   title: "หน้าหลัก",
+// });
+// // const route = useRoute();
+// const checkAuth = () => {
+//   // router.replace({ path: "/auth/login" });
+//   navigateTo("/auth/login");
 
-  //   const isLoggedIn = status.value === "authenticated";
-  //   console.log(status.value, lineStore.isLoggedIn);
-  //   if (lineStore.isLoggedIn) {
-  //     if (window.location.search.startsWith("liff.state")) {
-  //       //
-  //     } else if (!(localStorage.getItem("syncToken") || localStorage.getItem("redirectUrl"))) {
-  //       if (isLoggedIn && route.path === "/") {
-  //         router.replace({ path: "/profile" });
-  //       } else {
-  //         router.replace({ path: "/auth/signin" });
-  //       }
-  //     } else if (localStorage.getItem("syncToken") || localStorage.getItem("redirectUrl")) {
-  //       router.replace({ path: "/auth/sync" });
-  //     }
-  //   } else {
-  //     router.replace({ path: "/auth/signin" });
-  //   }
-};
+//   //   const isLoggedIn = status.value === "authenticated";
+//   //   console.log(status.value, lineStore.isLoggedIn);
+//   //   if (lineStore.isLoggedIn) {
+//   //     if (window.location.search.startsWith("liff.state")) {
+//   //       //
+//   //     } else if (!(localStorage.getItem("syncToken") || localStorage.getItem("redirectUrl"))) {
+//   //       if (isLoggedIn && route.path === "/") {
+//   //         router.replace({ path: "/profile" });
+//   //       } else {
+//   //         router.replace({ path: "/auth/signin" });
+//   //       }
+//   //     } else if (localStorage.getItem("syncToken") || localStorage.getItem("redirectUrl")) {
+//   //       router.replace({ path: "/auth/sync" });
+//   //     }
+//   //   } else {
+//   //     router.replace({ path: "/auth/signin" });
+//   //   }
+// };
 
-onNuxtReady(() => {
-  checkAuth();
-});
+// onNuxtReady(() => {
+//   checkAuth();
+// });
 </script>

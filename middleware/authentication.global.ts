@@ -87,14 +87,6 @@ export default defineNuxtRouteMiddleware((to) => {
     }
   }
 
-  /**
-   * We do not want to enforce protection on `404` pages (unless the user opts out of it by setting `allow404WithoutAuth: false`).
-   *
-   * This is to:
-   * - improve UX and DX: Having to log-in to see a `404` is not pleasent,
-   * - avoid the `Error [ERR_HTTP_HEADERS_SENT]`-error that occurs when we redirect to the sign-in page when the original to-page does not exist. Likely related to https://github.com/nuxt/framework/issues/9438
-   *
-   */
   const globalAppMiddleware = authConfig.globalAppMiddleware;
   if (
     globalAppMiddleware === true ||
@@ -109,16 +101,11 @@ export default defineNuxtRouteMiddleware((to) => {
   }
 
   if (authConfig.provider.type === "authjs") {
-    return navigateTo("/auth/login");
-    // const signInOptions: Parameters<typeof signIn>[1] = {
-    //   error: "SessionRequired",
-    //   callbackUrl: determineCallbackUrl(authConfig, () => to.fullPath),
-    // };
-    // // eslint-disable-next-line ts/ban-ts-comment
-    // // @ts-ignore This is valid for a backend-type of `authjs`, where sign-in accepts a provider as a first argument
-    // return signIn(undefined, signInOptions) as ReturnType<
-    //   typeof navigateToAuthPages
-    // >;
+    if (to.path !== "/") {
+      return navigateTo("/");
+    } else {
+      return;
+    }
   } else if (
     typeof metaAuth === "object" &&
     metaAuth.navigateUnauthenticatedTo

@@ -28,11 +28,12 @@ export default defineNuxtConfig({
   ],
   auth: {
     isEnabled: true,
-    disableServerSideAuth: false,
-    baseURL: process.env.NUXT_AUTH_ORIGIN,
-    globalAppMiddleware: false,
+    baseURL: process.env.AUTH_ORIGIN,
     provider: {
       type: "authjs",
+    },
+    globalAppMiddleware: {
+      isEnabled: false,
     },
   },
   // dateFns configuration should be placed in the module options if supported, not in the root config
@@ -76,6 +77,7 @@ export default defineNuxtConfig({
       apiKey: "klihlifjlsdhfsfhuaskasdhf",
       apiUrl: process.env.PUBLIC_HTTP || "http://localhost:8080/v1",
     },
+    authSecret: "mySuperSecretString123",
   },
   plugins: [{ src: "~/plugins/error-handler.ts" }],
 });
