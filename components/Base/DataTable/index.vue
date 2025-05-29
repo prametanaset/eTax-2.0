@@ -636,6 +636,27 @@ function getStatusLabel(status) {
     labels[status] || "ไม่ทราบสถานะ",
   ]);
 }
+
+async function exportPayments() {
+  try {
+    const res = await fetch('/api/export', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(data),
+    })
+    const blob = await res.blob()
+    const url  = URL.createObjectURL(blob)
+    const a    = document.createElement('a')
+    a.href     = url
+    a.download = 'Payments.xlsx'
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    URL.revokeObjectURL(url)
+  } catch (err) {
+    console.error('Export failed', err)
+  }
+}
 </script>
 
 <template>
@@ -696,8 +717,9 @@ function getStatusLabel(status) {
 
       <div class="flex gap-2">
         <Button
+        @click="exportPayments"
           variant="outline"
-          class="font-medium font-noto px-3   transition rounded-lg"
+          class="font-medium font-noto px-3 bg-[hsl(var(--card))]  transition rounded-lg"
         >
           <ArrowUpFromLine class="-mr-1 w-4 h-4" /> Export
         </Button>

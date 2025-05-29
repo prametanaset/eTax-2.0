@@ -65,7 +65,7 @@ const product = reactive({
                 <CirclePlus /> เพิ่มส่วนลด
               </Button>
             </PopoverTrigger>
-            <PopoverContent class="w-80">
+            <PopoverContent class="w-80" align="start">
               <div class="grid gap-4">
                 <div class="space-y-2">
                   <h4 class="font-bold leading-none">เพิ่มส่วนลด</h4>

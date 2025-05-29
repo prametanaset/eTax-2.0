@@ -103,7 +103,7 @@ watch(secondMonthPlaceholder, (_secondMonthPlaceholder) => {
         variant="outline"
         :class="
           cn(
-            'w-[280px] justify-start text-left font-normal',
+            'w-[280px] justify-start text-left font-normal bg-[hsl(var(--card))]',
             !value && 'text-muted-foreground',
           )
         "

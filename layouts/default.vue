@@ -20,6 +20,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { MailCheck } from "lucide-vue-next";
+import { truncateSync } from "node:fs";
 
 const route = useRoute();
 
@@ -45,6 +46,8 @@ const tooltipClass = computed(() =>
 
 const isStuck = ref(false);
 const sentinel = ref<HTMLElement | null>(null);
+const open = ref(true);
+const isLg = useMediaQuery("(min-width: 1457px)");
 
 onMounted(() => {
   const observer = new IntersectionObserver(
@@ -56,11 +59,24 @@ onMounted(() => {
   if (sentinel.value) {
     observer.observe(sentinel.value);
   }
+
+  // ตั้งค่าครั้งแรกตามขนาดจริงบน client
+  open.value = isLg.value
+
+  // ฟังการเปลี่ยนแปลงครั้งต่อ ๆ ไป
+  watch(isLg, (val) => {
+    open.value = val
+  })
+
 });
+
+
+// เปิด/ปิดตามขนาดจอ
+// watch(isLg, (val) => open.value = val, { immediate: true });
 </script>
 
 <template>
-  <SidebarProvider>
+  <SidebarProvider  v-model:open="open">
     <AppSidebar />
     <SidebarInset>
      <div ref="sentinel" class="h-1"></div> <!-- Invisible marker -->

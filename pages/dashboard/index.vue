@@ -6,40 +6,32 @@
   v-if="!device.isMobile"
   class="grid gap-4 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-4 mb-[60px]"
 > -->
+  <div
+    v-if="!device.isMobile"
+    class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-4 mb-[50px] mt-1"
+  >
     <div
-      v-if="!device.isMobile"
-      :class="[
-        'grid gap-4 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-4 mb-[50px] mt-1',
-      ]"
+      v-for="(widget, index) in widgets"
+      :key="index"
+      class="relative group"
     >
       <div
-        v-for="(widget, index) in widgets"
-        :key="index"
-        class="relative group"
-        :class="
-          index === widgets.length - 1
-            ? 'sm:col-span-1 md:col-span-3 xl:col-span-1'
-            : ''
-        "
+        class="absolute top-[60%] right-3 w-[90%] h-12 lg:h-[50%] bg-primary-400/50 blur-xl rounded-full img-shadow-animation"
+      ></div>
+      <Card
+        class="z-10 relative rounded-lg shadow-xl/30 leading-none border img-border-animation p-3 w-full"
+        :class="index === widgets.length - 1 ? '!border-primary-500' : ''"
       >
-        <div
-          class="absolute top-[60%] right-3 w-[90%] h-12 lg:h-[50%] bg-primary-400/50 blur-xl rounded-full img-shadow-animation"
-        ></div>
-        <Card
-          class="z-10 relative rounded-lg shadow-xl/30 leading-none border img-border-animation p-3 w-full"
-          :class="index === widgets.length - 1 ? '!border-primary-500' : ''"
-        >
-          <BaseWidget
-            class="w-full"
-            :title="widget.title"
-            :count-number="widget.count"
-            :percen-last-month="widget.percent"
-            :status="widget.status"
-          />
-        </Card>
-      </div>
+        <BaseWidget
+          class="w-full"
+          :title="widget.title"
+          :count-number="widget.count"
+          :percen-last-month="widget.percent"
+          :status="widget.status"
+        />
+      </Card>
     </div>
-
+  </div>
     <div
       v-else
       class="snap-x snap-mandatory flex gap-4 w-[100vw] pl-4 -ml-4 -mr-4 pb-12 overflow-x-auto invisible-scrollbar"
@@ -104,7 +96,7 @@ const widgets = [
   { title: "ส่งแล้ว", count: 10, percent: -7.5, status: "success" },
   { title: "รอดำเนินการ", count: 5, percent: 7.5, status: "warning" },
   { title: "ยกเลิก", count: 0, percent: -7.5, status: "cancel" },
-  { title: "รายงานทั้งหมด", count: 1330, percent: 7.5, status: "money" },
+  { title: "ทั้งหมด", count: 1330, percent: 7.5, status: "money" },
 ];
 
 const device = useDevice();

@@ -1,35 +1,46 @@
 <template>
-  <div class="grid grid-cols-2 gap-2">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
     <!-- ข้อมูล Summary -->
-    <div class="min-w-[30%] flex flex-col justify-between py-1 gap-4 md:col-span-2 lg:col-span-1">
-      <h3 class="font-semibold text-base mb-1 text-muted-700 dark:text-white">{{ props.title }}</h3>
+    <div class="flex flex-col justify-between py-1 gap-4">
+      <h3 class="font-semibold text-base mb-1 text-muted-700 dark:text-white">
+        {{ props.title }}
+      </h3>
       <h4
         :class="props.status == 'money'
-            ? 'text-4xl flex items-center gap-2 font-bold tracking-tight text-primary-500/100 dark:text-white'
-            : 'text-4xl font-bold tracking-tight text-gray-800 dark:text-white'"
+          ? 'text-4xl flex items-center gap-2 font-bold tracking-tight text-primary-500/100 dark:text-white'
+          : 'text-4xl font-bold tracking-tight text-gray-800 dark:text-white'"
       >
         <Newspaper v-if="props.status == 'money'" />
         {{ props.countNumber.toLocaleString() }}
       </h4>
-      <div>
-        <p class="text-muted-500 text-sm font-medium ml-1 dark:text-[#B4B4B4]">
-          <span class="text-gray-700 font-semibold dark:text-white">
-            {{ Math.abs(percenLastMonth) }}
-          </span>
-          ใบกำกับภาษี
-        </p>
-      </div>
+      <p class="text-muted-500 text-sm font-medium ml-1 dark:text-[#B4B4B4]">
+        <span class="text-gray-700 font-semibold dark:text-white">
+          {{ Math.abs(percenLastMonth) }}
+        </span>
+        ใบกำกับภาษี
+      </p>
     </div>
 
-    <!-- กราฟ -->
-    <div class="min-w-[70%] flex flex-col items-end justify-between md:col-span-2 lg:col-span-1">
+    <!-- กราฟ + Filter Tabs -->
+    <div class="flex flex-col justify-between">
       <!-- Filter Tabs -->
-      <Tabs v-model="selectedRange" class="mb-2 self-end">
+      <Tabs
+        v-model="selectedRange"
+        class="mb-2 self-start md:self-center lg:self-end"
+      >
         <TabsList class="bg-[hsl(var(--card))]">
-          <TabsTrigger value="today" class="data-[state=active]:shadow-md">วันนี้</TabsTrigger>
-          <TabsTrigger value="week" class="data-[state=active]:shadow-md">สัปดาห์</TabsTrigger>
-          <TabsTrigger value="month" class="data-[state=active]:shadow-md">เดือน</TabsTrigger>
-          <TabsTrigger value="year" class="data-[state=active]:shadow-md">ปี</TabsTrigger>
+          <TabsTrigger value="today" class="data-[state=active]:font-semibold">
+            วันนี้
+          </TabsTrigger>
+          <TabsTrigger value="week" class="data-[state=active]:font-semibold">
+            สัปดาห์
+          </TabsTrigger>
+          <TabsTrigger value="month" class="data-[state=active]:font-semibold">
+            เดือน
+          </TabsTrigger>
+          <TabsTrigger value="year" class="data-[state=active]:font-semibold">
+            ปี
+          </TabsTrigger>
         </TabsList>
       </Tabs>
 
