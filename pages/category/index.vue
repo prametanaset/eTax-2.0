@@ -21,6 +21,17 @@ onMounted(() => {
 definePageMeta({
   title: "รายการสินค้า",
 });
+
+useHead({
+  title: "e-Tax - แคตตาล็อคสินค้า",
+  meta: [
+    {
+      name: "description",
+      content:
+        "ระบบจัดการใบกำกับภาษีอิเล็กทรอนิกส์สำหรับธุรกิจไทย ใช้งานง่าย ปลอดภัย และถูกต้องตามกฎหมาย",
+    },
+  ],
+});
 </script>
 
 <style></style>

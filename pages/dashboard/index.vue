@@ -92,6 +92,17 @@ definePageMeta({
   title: "รายงานใบกำกับภาษี",
 });
 
+useHead({
+  title: "e-Tax - หน้าแรก",
+  meta: [
+    {
+      name: "description",
+      content:
+        "ระบบจัดการใบกำกับภาษีอิเล็กทรอนิกส์สำหรับธุรกิจไทย ใช้งานง่าย ปลอดภัย และถูกต้องตามกฎหมาย",
+    },
+  ],
+});
+
 const widgets = [
   { title: "ส่งแล้ว", count: 10, percent: -7.5, status: "success" },
   { title: "รอดำเนินการ", count: 5, percent: 7.5, status: "warning" },

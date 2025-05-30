@@ -62,7 +62,6 @@ const { signOut } = useAuth();
 const logOutHandler = async () => {
   try {
     // Logout from server
-
     await signOut({ callbackUrl: "/", redirect: false });
     await navigateTo("/");
   } catch (e) {

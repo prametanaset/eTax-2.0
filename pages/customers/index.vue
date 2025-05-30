@@ -21,6 +21,17 @@ const customerData = computed(() => customerStore.customerList);
 onMounted(() => {
   customerStore.getCustomer();
 });
+
+useHead({
+  title: "e-Tax - ลูกค้า",
+  meta: [
+    {
+      name: "description",
+      content:
+        "ระบบจัดการใบกำกับภาษีอิเล็กทรอนิกส์สำหรับธุรกิจไทย ใช้งานง่าย ปลอดภัย และถูกต้องตามกฎหมาย",
+    },
+  ],
+});
 </script>
 
 <style></style>

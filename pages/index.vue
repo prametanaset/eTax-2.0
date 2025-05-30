@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen">
+  <div class="flex h-screen">
     <BaseLogin></BaseLogin>
   </div>
 </template>
@@ -10,34 +10,15 @@
 definePageMeta({
   layout: false,
 });
-// useHead({
-//   title: "หน้าหลัก",
-// });
-// // const route = useRoute();
-// const checkAuth = () => {
-//   // router.replace({ path: "/auth/login" });
-//   navigateTo("/auth/login");
 
-//   //   const isLoggedIn = status.value === "authenticated";
-//   //   console.log(status.value, lineStore.isLoggedIn);
-//   //   if (lineStore.isLoggedIn) {
-//   //     if (window.location.search.startsWith("liff.state")) {
-//   //       //
-//   //     } else if (!(localStorage.getItem("syncToken") || localStorage.getItem("redirectUrl"))) {
-//   //       if (isLoggedIn && route.path === "/") {
-//   //         router.replace({ path: "/profile" });
-//   //       } else {
-//   //         router.replace({ path: "/auth/signin" });
-//   //       }
-//   //     } else if (localStorage.getItem("syncToken") || localStorage.getItem("redirectUrl")) {
-//   //       router.replace({ path: "/auth/sync" });
-//   //     }
-//   //   } else {
-//   //     router.replace({ path: "/auth/signin" });
-//   //   }
-// };
-
-// onNuxtReady(() => {
-//   checkAuth();
-// });
+useHead({
+  title: "e-Tax - ระบบจัดการใบกำกับภาษีอิเล็กทรอนิกส์สำหรับธุรกิจไทย",
+  meta: [
+    {
+      name: "description",
+      content:
+        "ระบบจัดการใบกำกับภาษีอิเล็กทรอนิกส์สำหรับธุรกิจไทย ใช้งานง่าย ปลอดภัย และถูกต้องตามกฎหมาย",
+    },
+  ],
+});
 </script>

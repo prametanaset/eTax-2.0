@@ -14,7 +14,10 @@
               placeholder="หมายเลขโทรศัพท์ ชื่อผู้ใช้ หรืออีเมล"
               required
               v-model="email.value.value"
-              class="placeholder:font-normal h-10 bg-[hsl(var(--card))]"
+              :class="[
+                'placeholder:font-normal h-10 bg-[hsl(var(--card))]',
+                errorLogin ? 'border-sm border-red-500' : '',
+              ]"
             />
             <span class="text-red-500 text-sm">{{ email.errorMessage }}</span>
           </div>
@@ -26,13 +29,19 @@
               placeholder="รหัสผ่าน"
               required
               v-model="password.value.value"
-              class="placeholder:font-normal h-10 bg-[hsl(var(--card))]"
+              :class="[
+                'placeholder:font-normal h-10 bg-[hsl(var(--card))]',
+                errorLogin ? 'border-sm border-red-500' : '',
+              ]"
             />
             <span class="text-red-500 text-sm">{{
               password.errorMessage
             }}</span>
           </div>
         </div>
+        <span v-if="errorLogin" class="text-red-500 text-sm"
+          >หมายเลขโทรศัพท์ ชื่อผู้ใช้ อีเมล หรือรหัสผ่าน ไม่ถูกต้อง</span
+        >
         <Button class="w-full text-md font-semibold" @click="onLogin"
           >เข้าสู่ระบบ</Button
         >
@@ -78,6 +87,7 @@ import { useForm, useField } from "vee-validate";
 import { cn } from "@/lib/utils";
 
 const { signIn } = useAuth();
+const errorLogin = ref(false);
 
 const device = useDevice();
 
@@ -85,11 +95,13 @@ const device = useDevice();
 const { handleSubmit, validate, meta } = useForm();
 
 const checkEmailInDB = (email: string) => {
+  errorLogin.value = false;
   if (!email) return "กรุณากรอกอีเมล";
   return true;
 };
 
 const validatePassword = (value: string) => {
+  errorLogin.value = false;
   if (!value) return "กรุณากรอกรหัสผ่าน";
   if (value.length < 6) return "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร";
   return true;
@@ -117,8 +129,7 @@ const onLogin = handleSubmit(async () => {
   });
 
   if (result?.error) {
-    console.error("Login failed:", result.error);
-    // แจ้งเตือน user ได้เลย เช่น Toast, Modal, etc.
+    errorLogin.value = true;
   } else {
     navigateTo("/dashboard"); // ไปหน้าหลักหลังล็อกอินสำเร็จ
   }
