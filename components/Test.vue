@@ -30,4 +30,5 @@ function handleSelect(customer: any) {
     :customerType="customerType"
     @select-customer="handleSelect"
   />
+
 </template>

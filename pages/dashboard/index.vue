@@ -28,6 +28,7 @@
           :count-number="widget.count"
           :percen-last-month="widget.percent"
           :status="widget.status"
+          :average-time="widget.averageTime"
         />
       </Card>
     </div>
@@ -57,6 +58,7 @@
               :count-number="widget.count"
               :percen-last-month="widget.percent"
               :status="widget.status"
+              :average-time="widget.averageTime"
             />
           </Card>
         </div>
@@ -104,10 +106,10 @@ useHead({
 });
 
 const widgets = [
-  { title: "ส่งแล้ว", count: 10, percent: -7.5, status: "success" },
-  { title: "รอดำเนินการ", count: 5, percent: 7.5, status: "warning" },
-  { title: "ยกเลิก", count: 0, percent: -7.5, status: "cancel" },
-  { title: "ทั้งหมด", count: 1330, percent: 7.5, status: "money" },
+  { title: "ส่งแล้ว", count: 10, percent: -7.5, status: "success", averageTime: 10 },
+  { title: "รอดำเนินการ", count: 5, percent: 7.5, status: "warning", averageTime: 5 },
+  { title: "ยกเลิก", count: 0, percent: -7.5, status: "cancel", averageTime: 0 },
+  { title: "ทั้งหมด", count: 1330, percent: 7.5, status: "money", averageTime: 15 },
 ];
 
 const device = useDevice();

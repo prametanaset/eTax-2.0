@@ -5,6 +5,9 @@
   >
     Export Payments
   </button>
+
+    <BaseExportExcelDialog></BaseExportExcelDialog>
+
 </template>
 
 <script setup lang="ts">

@@ -452,35 +452,40 @@ const data: Payment[] = [
 ];
 
 const columns: ColumnDef<Payment>[] = [
-  {
-    id: "select",
-    header: ({ table }) =>
-      h(Checkbox, {
-        modelValue:
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate"),
-        "onUpdate:modelValue": (value) =>
-          table.toggleAllPageRowsSelected(!!value),
-        ariaLabel: "Select all",
-        class: "ml-3 mb-2",
-      }),
-    cell: ({ row }) =>
-      h(Checkbox, {
-        modelValue: row.getIsSelected(),
-        "onUpdate:modelValue": (value) => row.toggleSelected(!!value),
-        ariaLabel: "Select row",
-        class: "ml-3 mb-2",
-      }),
-    enableSorting: false,
-    enableHiding: false,
-  },
+  // {
+  //   id: "select",
+  //   header: ({ table }) =>
+  //     h(Checkbox, {
+  //       modelValue:
+  //         table.getIsAllPageRowsSelected() ||
+  //         (table.getIsSomePageRowsSelected() && "indeterminate"),
+  //       "onUpdate:modelValue": (value) =>
+  //         table.toggleAllPageRowsSelected(!!value),
+  //       ariaLabel: "Select all",
+  //       class: "ml-3 mb-2",
+  //     }),
+  //   cell: ({ row }) =>
+  //     h(Checkbox, {
+  //       modelValue: row.getIsSelected(),
+  //       "onUpdate:modelValue": (value) => row.toggleSelected(!!value),
+  //       ariaLabel: "Select row",
+  //       class: "ml-3 mb-2",
+  //     }),
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
   {
     accessorKey: "id",
-    header: "เลขที่",
+    header: () =>
+    h(
+      "div",
+      { class: "ml-5" }, // ← เพิ่ม class ml-3 ที่นี่
+      "เลขที่"
+    ),
     cell: ({ row }) =>
       h(
         "div",
-        { class: "text-base font-suk" },
+        { class: "ml-5 text-base font-suk" },
         row.getValue("id")
       ),
   },
@@ -493,7 +498,7 @@ const columns: ColumnDef<Payment>[] = [
           variant: "ghost",
           onClick: () => column.toggleSorting(column.getIsSorted() === "asc"),
         },
-        () => ["ลูกค้า", h(ArrowUpDown, { class: "ml-2 h-4 w-4" })]
+        () => ["ลูกค้า", h(ArrowUpDown, { class: "h-4 w-4" })]
       );
     },
     cell: ({ row }) =>
@@ -511,7 +516,7 @@ const columns: ColumnDef<Payment>[] = [
   },
   {
     accessorKey: "date",
-    header: () => h("div", { class: "text-left" }, "วันที่"),
+    header: () => h("div", { class: "text-left" }, "วันที่สร้าง"),
     cell: ({ row }) => {
       const raw = row.getValue("date");
       const formatted = new Intl.DateTimeFormat("th-TH", {
@@ -677,9 +682,9 @@ async function exportPayments() {
             "
           />
           <span
-            class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
+            class="absolute start-0 inset-y-0 flex items-center justify-center px-3"
           >
-            <Search class="text-muted-500/75" />
+            <Search class="size-4 text-muted-foreground" />
           </span>
         </div>
 
