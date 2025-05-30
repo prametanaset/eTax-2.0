@@ -20,7 +20,6 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { MailCheck } from "lucide-vue-next";
-import { truncateSync } from "node:fs";
 
 const route = useRoute();
 
