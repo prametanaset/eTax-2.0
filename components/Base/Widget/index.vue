@@ -1,5 +1,7 @@
 <template>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+  <div 
+    :class="!device.isMobile ? 'grid grid-cols-1 md:grid-cols-2 gap-2': 'grid grid-cols-2 md:grid-cols-2 gap-2'"
+  >
     <!-- ข้อมูล Summary -->
     <div class="flex flex-col justify-between py-1 gap-4">
       <h3 class="font-semibold text-base mb-1 text-muted-700 dark:text-white">
@@ -27,6 +29,7 @@
       <Tabs
         v-model="selectedRange"
         class="mb-2 self-start md:self-center lg:self-end"
+        :class="!device.isMobile ? '' : '-ml-14 -mt-1'"
       >
         <TabsList class="bg-[hsl(var(--card))]">
           <TabsTrigger value="today" class="data-[state=active]:font-semibold">
@@ -55,6 +58,8 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
 import { Newspaper } from 'lucide-vue-next'
+
+const device = useDevice();
 
 const props = defineProps<{
   title: string

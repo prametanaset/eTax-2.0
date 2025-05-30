@@ -36,7 +36,7 @@ const value = ref({
   end: new CalendarDate(2022, 1, 20).add({ days: 20 }),
 }) as Ref<DateRange>
 
-const locale = ref('en-US')
+const locale = ref('th-TH')
 const formatter = useDateFormatter(locale.value)
 
 const placeholder = ref(value.value.start) as Ref<DateValue>
