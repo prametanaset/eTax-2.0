@@ -36,6 +36,7 @@ const device = useDevice();
       <!-- Header -->
       <DialogHeader class="pb-0 pt-2">
         <DialogTitle class="text-base text-center">ตัวอย่าง</DialogTitle>
+        <DialogDescription class="sr-only">ดูตัวอย่างเอกสารใบกำกับภาษี</DialogDescription>
         <div class="flex justify-end pr-4 pt-2">
           <Button v-print="'#invoice'"><Printer /></Button>
         </div>

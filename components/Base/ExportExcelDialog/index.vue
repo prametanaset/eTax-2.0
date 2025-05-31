@@ -23,7 +23,7 @@ const customEndDate = ref(new Date('2025-05-31'))
       </DialogHeader>
       <div class="space-y-6">
         <!-- ... timezone และช่วงวันที่ ... -->
-        <div>``
+        <div>
           <Label class="font-medium">เขตเวลา</Label>
           <RadioGroup v-model="timezone" class="flex gap-6 mt-2">
             <div class="flex items-center space-x-2">

@@ -1,5 +1,6 @@
 <template>
-  <button
+  <div>
+    <button
     @click="exportPayments"
     class="px-4 py-2 bg-green-600 text-white rounded"
   >
@@ -7,6 +8,7 @@
   </button>
 
     <BaseExportExcelDialog></BaseExportExcelDialog>
+  </div>
 
 </template>
 
