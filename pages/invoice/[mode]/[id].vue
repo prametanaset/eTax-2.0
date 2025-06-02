@@ -9,7 +9,7 @@
           <CardTitle class="px-6">
             <div class="mb-2">
               <div
-                class="flex flex-col gap-3 mt-3 md:flex-row md:flex-nowrap md:items-center text-[1rem]"
+                class="flex flex-col gap-4 mt-3 md:flex-row md:flex-nowrap md:items-center text-[1rem]"
               >
                 <!-- Tax Invoice Number -->
                 <div class="flex flex-col w-full md:w-1/4 gap-1.5">
@@ -155,7 +155,7 @@ import {
 import { cn } from "@/lib/utils";
 
 definePageMeta({
-  title: "สร้างใบกำกับภาษี",
+  title: "ออกใบกำกับภาษี",
 });
 
 import {

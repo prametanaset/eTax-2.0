@@ -302,7 +302,7 @@ async function exportPayments() {
         <BaseExportExcelDialog></BaseExportExcelDialog>
         <NuxtLink to="/invoice/create/invoice">
           <Button class="font-medium font-noto px-3 text-white hover:bg-purple-600">
-            <Plus class="-mr-1 w-4 h-4" /> สร้างใบกำกับภาษี
+            <Plus class="-mr-1 w-4 h-4" /> ออกใบกำกับภาษี
           </Button>
         </NuxtLink>
       </div>
@@ -377,7 +377,7 @@ async function exportPayments() {
           :disabled="!table.getCanPreviousPage()"
           @click="table.previousPage()"
         >
-          Previous
+          ก่อน
         </Button>
         <Button
           variant="outline"
@@ -385,7 +385,7 @@ async function exportPayments() {
           :disabled="!table.getCanNextPage()"
           @click="table.nextPage()"
         >
-          Next
+          ถัดไป
         </Button>
       </div>
     </div>
