@@ -1,7 +1,7 @@
 <template>
   <div
     :class="
-      !device.isMobile
+      !isMobile
         ? 'grid grid-cols-1 md:grid-cols-2 gap-2'
         : 'grid grid-cols-2 md:grid-cols-2 gap-2'
     "
@@ -23,7 +23,7 @@
       </h4>
       <p class="text-muted-500 text-sm font-medium ml-1 dark:text-[#B4B4B4]">
         <span class="text-gray-700 font-semibold dark:text-white">
-          {{ props.averageTime.toFixed(1) }}
+          {{ props.averageTime.toFixed(0) }}
         </span>
         {{ unitLabel }}
       </p>
@@ -35,7 +35,7 @@
       <Tabs
         v-model="selectedRange"
         class="mb-2 self-start md:-ml-7 lg:-mt-1 lg:m-0 md:self-center lg:self-end"
-        :class="!device.isMobile ? '' : '-ml-14 -mt-1'"
+        :class="!isMobile ? '' : '-ml-14 -mt-1'"
       >
         <TabsList class="bg-[hsl(var(--card))]">
           <TabsTrigger value="today" class="data-[state=active]:font-semibold">
@@ -54,7 +54,7 @@
       </Tabs>
 
       <!-- Chart -->
-      <div class="w-full mb-2">
+      <div class="w-full mb-2 relative overflow-hidden blur-sides">
         <BaseWidgetChart :color="statusColor" :range="selectedRange" />
       </div>
     </div>
@@ -66,6 +66,7 @@ import { ref, computed } from "vue";
 import { Newspaper } from "lucide-vue-next";
 
 const device = useDevice();
+const isMobile = useMediaQuery('(max-width: 768px)')
 
 const props = defineProps<{
   title: string;
@@ -102,3 +103,36 @@ const statusColor = computed(() => {
   }
 });
 </script>
+
+<style scoped>
+.blur-sides {
+  /* ต้องมี overflow-hidden เพื่อไม่ให้เบลอเลยออกมานอกกล่อง */
+  position: relative;
+  overflow: hidden;
+}
+
+/* สร้างแผ่นซ้อนที่ขอบซ้ายและขวา แล้วเบลอให้ฟุ้ง */
+.blur-sides::before,
+.blur-sides::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;               /* ปรับความกว้างแถบเบลอตามต้องการ */
+  background-color: white;   /* ใช้สีเดียวกับพื้นหลังข้างหลัง */
+  filter: blur(1px);        /* ค่าเบลอ ปรับแต่งได้ตามต้องการ */
+  z-index: 10;               /* ให้อยู่เหนือกราฟ แต่ใต้เนื้อหาอื่นๆ ถ้ามี */
+}
+
+/* แผ่นเบลอฝั่งซ้าย */
+.blur-sides::before {
+  left: 0;
+  transform: translateX(-50%); /* ขยับครึ่งหนึ่งของความกว้าง ให้มีความฟุ้งทีเดียวทั้งขอบ */
+}
+
+/* แผ่นเบลอฝั่งขวา */
+.blur-sides::after {
+  right: 0;
+  transform: translateX(50%);
+}
+</style>l

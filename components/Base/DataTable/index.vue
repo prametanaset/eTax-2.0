@@ -1,3 +1,188 @@
+<template>
+  <div class="w-full">
+    <!-- แถว 1: Tab Filter + Date Range + ปุ่มออกใบกำกับ -->
+    <div class="flex flex-wrap items-center gap-4 mb-4 border-b">
+      <!-- 1. Tab Filter (ประเภทเอกสาร) -->
+      <!-- <div class="flex space-x-2">
+        <button
+          @click="activeStatus = null"
+          :class="['px-4 py-2 rounded-md font-medium', activeStatus === null ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300']"
+        >
+          ทั้งหมด
+        </button>
+        <button
+          @click="activeStatus = 'invoice'"
+          :class="['px-4 py-2 rounded-md font-medium', activeStatus === 'invoice' ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300']"
+        >
+          ใบกำกับภาษี
+        </button>
+        <button
+          @click="activeStatus = 'credit_note'"
+          :class="['px-4 py-2 rounded-md font-medium', activeStatus === 'credit_note' ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300']"
+        >
+          ใบลดหนี้
+        </button>
+        <button
+          @click="activeStatus = 'debit_note'"
+          :class="['px-4 py-2 rounded-md font-medium', activeStatus === 'debit_note' ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300']"
+        >
+          ใบเพิ่มหนี้
+        </button>
+      </div> -->
+
+      <Tabs v-model="activeStatus">
+        <TabsList class="w-full justify-start rounded-none bg-transparent p-0">
+          <TabsTrigger
+            value="all"
+            class="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
+          >
+            ทั้งหมด
+          </TabsTrigger>
+          <TabsTrigger
+            value="0"
+            class="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
+          >
+            ส่งแล้ว
+          </TabsTrigger>
+          <TabsTrigger
+            value="1"
+            class="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
+          >
+            รอดำเนินการ
+          </TabsTrigger>
+          <TabsTrigger
+            value="2"
+            class="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
+          >
+            ยกเลิก
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
+    </div>
+
+    <!-- แถว 2: Search + Export Excel -->
+<div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
+  <!-- ฝั่งซ้าย: Search + DatePicker -->
+  <div class="flex flex-col sm:flex-row items-center gap-2 w-full md:w-auto">
+    <div class="relative flex-1 md:min-w-[200px] lg:min-w-[400px]">
+      <Input
+        id="search"
+        type="text"
+        v-model="searchTerm"
+        class="w-full pl-10 bg-[hsl(var(--card))] font-medium placeholder:font-normal rounded-md border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+        placeholder="ค้นหาเลขที่ / ชื่อ / อีเมล"
+      />
+      <span class="absolute inset-y-0 left-3 flex items-center">
+        <Search class="w-4 h-4 text-muted-foreground" />
+      </span>
+    </div>
+
+    <BaseDateRangePicker class="w-full sm:w-auto" />
+  </div>
+
+  <!-- ฝั่งขวา: Export Excel + ปุ่มออก Invoice -->
+  <div class="flex flex-col sm:flex-row items-center gap-2 w-full md:w-auto">
+    <BaseExportExcelDialog class="w-full sm:w-auto" />
+
+    <NuxtLink to="/invoice/create/invoice" class="w-full sm:w-auto">
+      <Button
+        class="w-full sm:w-auto font-medium font-noto px-4 py-2 text-white bg-purple-600 hover:bg-purple-700 rounded-md flex items-center justify-center gap-2"
+      >
+        <Plus class="-mr-1 w-5 h-5" /> ออกใบกำกับภาษี
+      </Button>
+    </NuxtLink>
+  </div>
+</div>
+
+
+    <!-- ----- ตารางแสดงผล ----- -->
+    <div class="rounded-lg border bg-[hsl(var(--card))] overflow-hidden">
+      <Table>
+        <TableHeader>
+          <TableRow
+            v-for="hg in table.getHeaderGroups()"
+            :key="hg.id"
+            class="font-noto bg-gray-100 dark:bg-gray-800"
+          >
+            <TableHead
+              v-for="header in hg.headers"
+              :key="header.id"
+              class="font-medium text-sm  px-4"
+            >
+              <FlexRender
+                v-if="!header.isPlaceholder"
+                :render="header.column.columnDef.header"
+                :props="header.getContext()"
+              />
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+
+        <TableBody>
+          <template v-if="table.getRowModel().rows.length">
+            <template v-for="row in table.getRowModel().rows" :key="row.id">
+              <TableRow
+                :data-state="row.getIsSelected() && 'selected'"
+                class="hover:bg-gray-50 dark:hover:bg-gray-700"
+              >
+                <TableCell
+                  v-for="cell in row.getVisibleCells()"
+                  :key="cell.id"
+                  class="py-3 px-4 text-sm"
+                >
+                  <FlexRender
+                    :render="cell.column.columnDef.cell"
+                    :props="cell.getContext()"
+                  />
+                </TableCell>
+              </TableRow>
+              <TableRow v-if="row.getIsExpanded()">
+                <TableCell :colspan="row.getAllCells().length" class="p-4">
+                  <pre class="text-xs bg-gray-50 p-2 rounded">
+                    {{ JSON.stringify(row.original, null, 2) }}
+                  </pre>
+                </TableCell>
+              </TableRow>
+            </template>
+          </template>
+
+          <TableRow v-else>
+            <TableCell :colspan="columns.length" class="h-24 text-center">
+              ไม่มีข้อมูลที่ตรงกัน
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </div>
+
+    <!-- ----- Pagination + Selected ----- -->
+    <div class="flex items-center justify-end gap-2 py-4">
+      <div class="flex-1 text-sm text-muted-foreground font-semibold">
+        {{ table.getFilteredSelectedRowModel().rows.length }} /
+        {{ table.getFilteredRowModel().rows.length }} แถวที่เลือก
+      </div>
+      <div class="space-x-2">
+        <Button
+          variant="outline"
+          size="sm"
+          :disabled="!table.getCanPreviousPage()"
+          @click="table.previousPage()"
+        >
+          ก่อน
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          :disabled="!table.getCanNextPage()"
+          @click="table.nextPage()"
+        >
+          ถัดไป
+        </Button>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
 import type {
   ColumnDef,
@@ -18,19 +203,19 @@ import {
 } from "@tanstack/vue-table";
 import {
   ArrowUpDown,
-  ChevronDown,
-  Search,
-  Plus,
-  ArrowUpFromLine,
-  Clock,
   CircleCheck,
+  Clock,
   HelpCircle,
+  Plus,
   X,
+  Search,
 } from "lucide-vue-next";
 import { h, ref, watch } from "vue";
+import { useMediaQuery } from "@vueuse/core";
 import DropdownAction from "./DataTableDemoColumn.vue";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "~/components/ui/button";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export interface Payment {
   id: string;
@@ -56,7 +241,79 @@ const data: Payment[] = [
     id: "INV-0002",
     amount: 658,
     status: 0,
-    email: "thnmphlkrangrathphngs@gmail.com",
+    email: "thnmphลkrangrathphngs@gmail.com",
+    name: "ธมน ตั้งกุลงาม",
+    date: "2025-05-20T03:12:00",
+    documentType: "credit_note",
+  },
+  {
+    id: "INV-0003",
+    amount: 949,
+    status: 1,
+    email: "wthnadraksaa@namthiphy-paansuwrrn.in.th",
+    name: "มณียา วะคีมัน",
+    date: "2025-05-20T02:00:00",
+    documentType: "debit_note",
+  },
+  {
+    id: "INV-0002",
+    amount: 658,
+    status: 0,
+    email: "thnmphลkrangrathphngs@gmail.com",
+    name: "ธมน ตั้งกุลงาม",
+    date: "2025-05-20T03:12:00",
+    documentType: "credit_note",
+  },
+  {
+    id: "INV-0003",
+    amount: 949,
+    status: 1,
+    email: "wthnadraksaa@namthiphy-paansuwrrn.in.th",
+    name: "มณียา วะคีมัน",
+    date: "2025-05-20T02:00:00",
+    documentType: "debit_note",
+  },
+  {
+    id: "INV-0002",
+    amount: 658,
+    status: 0,
+    email: "thnmphลkrangrathphngs@gmail.com",
+    name: "ธมน ตั้งกุลงาม",
+    date: "2025-05-20T03:12:00",
+    documentType: "credit_note",
+  },
+  {
+    id: "INV-0003",
+    amount: 949,
+    status: 1,
+    email: "wthnadraksaa@namthiphy-paansuwrrn.in.th",
+    name: "มณียา วะคีมัน",
+    date: "2025-05-20T02:00:00",
+    documentType: "debit_note",
+  },
+  {
+    id: "INV-0002",
+    amount: 658,
+    status: 0,
+    email: "thnmphลkrangrathphngs@gmail.com",
+    name: "ธมน ตั้งกุลงาม",
+    date: "2025-05-20T03:12:00",
+    documentType: "credit_note",
+  },
+  {
+    id: "INV-0003",
+    amount: 949,
+    status: 1,
+    email: "wthnadraksaa@namthiphy-paansuwrrn.in.th",
+    name: "มณียา วะคีมัน",
+    date: "2025-05-20T02:00:00",
+    documentType: "debit_note",
+  },
+  {
+    id: "INV-0002",
+    amount: 658,
+    status: 0,
+    email: "thnmphลkrangrathphngs@gmail.com",
     name: "ธมน ตั้งกุลงาม",
     date: "2025-05-20T03:12:00",
     documentType: "credit_note",
@@ -114,6 +371,7 @@ const columns: ColumnDef<Payment>[] = [
         typeLabels[row.getValue("documentType")] ?? "ไม่ทราบประเภท"
       );
     },
+    filterFn: "equals",
   },
   {
     accessorKey: "date",
@@ -147,7 +405,7 @@ const columns: ColumnDef<Payment>[] = [
       const Icon = icons[status];
       return h(
         Badge,
-        { variant: "secondary", class: `${classes[status]} text-[14px] ` },
+        { variant: "secondary", class: `${classes[status]} text-[14px]` },
         () =>
           h("div", { class: "flex items-center gap-1" }, [
             h(Icon, { class: "w-4 h-4" }),
@@ -155,6 +413,7 @@ const columns: ColumnDef<Payment>[] = [
           ])
       );
     },
+    filterFn: "equals",
   },
   {
     id: "actions",
@@ -172,8 +431,23 @@ const columnVisibility = ref<VisibilityState>({});
 const rowSelection = ref({});
 const expanded = ref<ExpandedState>({});
 
+// Tab Filter สำหรับ “ประเภทเอกสาร”
+const activeStatus = ref<string>("all");
+
 const searchTerm = ref("");
 const globalFilter = ref("");
+
+const isMobile = useMediaQuery("(max-width: 768px)");
+watch(isMobile, (mobile) => {
+  if (mobile) {
+    columnVisibility.value = {
+      email: false,
+      documentType: false,
+    };
+  } else {
+    columnVisibility.value = {};
+  }
+});
 
 const table = useVueTable({
   data,
@@ -184,7 +458,6 @@ const table = useVueTable({
   getFilteredRowModel: getFilteredRowModel(),
   getExpandedRowModel: getExpandedRowModel(),
 
-  // --- ตัวกรองรวมทุกคอลัมน์ที่ต้องการ ---
   globalFilterFn: (row, _colIds, value) => {
     const q = String(value).toLowerCase();
     return (
@@ -194,17 +467,18 @@ const table = useVueTable({
     );
   },
   onGlobalFilterChange: (u) => valueUpdater(u, globalFilter),
-
-  // --- ตัวอัปเดต state อื่น ๆ ---
+  onColumnFiltersChange: (u) => valueUpdater(u, columnVisibility),
   onSortingChange: (u) => valueUpdater(u, sorting),
   onColumnVisibilityChange: (u) => valueUpdater(u, columnVisibility),
   onRowSelectionChange: (u) => valueUpdater(u, rowSelection),
   onExpandedChange: (u) => valueUpdater(u, expanded),
 
-  // --- state getter ---
   state: {
     get sorting() {
       return sorting.value;
+    },
+    get columnFilters() {
+      return columnVisibility.value;
     },
     get columnVisibility() {
       return columnVisibility.value;
@@ -221,176 +495,24 @@ const table = useVueTable({
   },
 });
 
-// อัปเดต Global Filter ทุกครั้งที่ช่องค้นหาเปลี่ยน
+// เมื่อเปลี่ยน searchTerm => อัปเดต global filter
 watch(searchTerm, (term) => table.setGlobalFilter(term));
 
-// Export to Excel (เหมือนเดิม)
-async function exportPayments() {
-  try {
-    const res = await fetch("/api/export", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    const a = Object.assign(document.createElement("a"), {
-      href: url,
-      download: "Payments.xlsx",
-    });
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-  } catch (err) {
-    console.error("Export failed", err);
-  }
-}
+// เมื่อเปลี่ยน Tab Filter (ประเภทเอกสาร) => อัปเดต column filter
+watch(
+  activeStatus,
+  (status) => {
+    if (status !== "all") {
+      // แปลง string เป็น number ก่อนกรอง
+      const num = Number(status);
+      table.setColumnFilters([{ id: "status", value: num }]);
+    } else {
+      table.setColumnFilters([]);
+    }
+  },
+  { immediate: true }
+);
 </script>
-
-<template>
-  <div class="w-full">
-    <div class="flex flex-wrap justify-between items-center gap-4 py-4">
-      <!-- ซ้าย: Search / DateRange / Columns -->
-      <div class="flex gap-4">
-        <!-- ช่องค้นหา -->
-        <div class="relative flex w-full max-w-xs">
-          <Input
-            id="search"
-            type="text"
-            v-model="searchTerm"
-            class="w-full pl-10 bg-[hsl(var(--card))] font-medium placeholder:font-normal"
-            placeholder="ค้นหาใบกำกับ / ลูกค้า / อีเมล"
-          />
-          <span class="absolute inset-y-0 start-0 flex items-center px-3">
-            <Search class="size-4 text-muted-foreground" />
-          </span>
-        </div>
-
-        <BaseDateRangePicker />
-
-        <!-- เลือกคอลัมน์ -->
-        <DropdownMenu>
-          <DropdownMenuTrigger as-child>
-            <Button variant="outline" class="flex items-center gap-1 bg-[hsl(var(--card))]">
-              <span>คอลัมน์</span><ChevronDown class="w-4 h-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start">
-            <DropdownMenuCheckboxItem
-              v-for="col in table.getAllColumns().filter((c) => c.getCanHide())"
-              :key="col.id"
-              class="capitalize"
-              :model-value="col.getIsVisible()"
-              @update:model-value="(val) => col.toggleVisibility(!!val)"
-            >
-              {{ col.id }}
-            </DropdownMenuCheckboxItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-
-      <!-- ขวา: Export / สร้างใบกำกับ -->
-      <div class="flex gap-2">
-        <!-- <Button
-          variant="outline"
-          class="font-medium font-noto px-3 bg-[hsl(var(--card))]"
-          @click="exportPayments"
-        >
-          <ArrowUpFromLine class="-mr-1 w-4 h-4" /> Export
-        </Button> -->
-        <BaseExportExcelDialog></BaseExportExcelDialog>
-        <NuxtLink to="/invoice/create/invoice">
-          <Button class="font-medium font-noto px-3 text-white hover:bg-purple-600">
-            <Plus class="-mr-1 w-4 h-4" /> ออกใบกำกับภาษี
-          </Button>
-        </NuxtLink>
-      </div>
-    </div>
-
-    <!-- Table -->
-    <div class="rounded-lg border bg-[hsl(var(--card))] overflow-hidden">
-      <Table>
-        <TableHeader>
-          <TableRow
-            v-for="hg in table.getHeaderGroups()"
-            :key="hg.id"
-            class="font-noto"
-          >
-            <TableHead
-              v-for="header in hg.headers"
-              :key="header.id"
-              class="font-medium dark:bg-[hsl(var(--card))]"
-            >
-              <FlexRender
-                v-if="!header.isPlaceholder"
-                :render="header.column.columnDef.header"
-                :props="header.getContext()"
-              />
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-
-        <TableBody>
-          <template v-if="table.getRowModel().rows.length">
-            <template v-for="row in table.getRowModel().rows" :key="row.id">
-              <TableRow :data-state="row.getIsSelected() && 'selected'">
-                <TableCell
-                  v-for="cell in row.getVisibleCells()"
-                  :key="cell.id"
-                  class="py-3"
-                >
-                  <FlexRender
-                    :render="cell.column.columnDef.cell"
-                    :props="cell.getContext()"
-                  />
-                </TableCell>
-              </TableRow>
-              <TableRow v-if="row.getIsExpanded()">
-                <TableCell :colspan="row.getAllCells().length">
-                  {{ JSON.stringify(row.original, null, 2) }}
-                </TableCell>
-              </TableRow>
-            </template>
-          </template>
-
-          <TableRow v-else>
-            <TableCell :colspan="columns.length" class="h-24 text-center">
-              ไม่มีข้อมูลที่ตรงกัน
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </div>
-
-    <!-- Pagination + Selected -->
-    <div class="flex items-center justify-end gap-2 py-4">
-      <div class="flex-1 text-sm text-muted-foreground font-semibold">
-        {{ table.getFilteredSelectedRowModel().rows.length }} / {{
-          table.getFilteredRowModel().rows.length
-        }} แถวที่เลือก
-      </div>
-      <div class="space-x-2">
-        <Button
-          variant="outline"
-          size="sm"
-          :disabled="!table.getCanPreviousPage()"
-          @click="table.previousPage()"
-        >
-          ก่อน
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          :disabled="!table.getCanNextPage()"
-          @click="table.nextPage()"
-        >
-          ถัดไป
-        </Button>
-      </div>
-    </div>
-  </div>
-</template>
 
 <style scoped>
 .font-noto {

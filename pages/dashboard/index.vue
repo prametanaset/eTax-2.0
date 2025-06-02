@@ -7,7 +7,7 @@
   class="grid gap-4 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-4 mb-[60px]"
 > -->
   <div
-    v-if="!device.isMobile"
+    v-if="!isMobile"
     class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-4 mb-[50px] mt-1"
   >
     <div
@@ -72,7 +72,7 @@
     <!-- Table -->
     <div
       :class="[
-        device.isMobile ? 'w-[92vw]' : 'w-full overflow-visible',
+        device.isMobile ? 'w-[92vw]' : 'w-full overflow-visible pt-7',
         'overflow-hidden',
       ]"
     >
@@ -104,6 +104,9 @@ useHead({
     },
   ],
 });
+
+const isMobile = useMediaQuery('(max-width: 768px)')
+
 
 const widgets = [
   { title: "ส่งแล้ว", count: 10, percent: -7.5, status: "success", averageTime: 10 },
