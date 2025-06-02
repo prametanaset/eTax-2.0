@@ -1,110 +1,131 @@
 <script setup lang="ts">
-import { ArrowUpFromLine } from "lucide-vue-next";
+import { ref, computed } from "vue";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { ArrowUpFromLine, CornerUpRight } from "lucide-vue-next";
 
+const dateRange = ref<"today" | "this-month" | "last-7-days" | "last-4-weeks" | "last-month" | "all" | "custom">("today");
 
-
-const timezone = ref('GMT+7')
-const dateRange = ref('today')
-const columnOption = ref('default')
-
-// วันที่เริ่มต้นและสิ้นสุดเมื่อเลือกกำหนดเอง
-const customStartDate = ref(new Date('2025-01-01'))
-const customEndDate = ref(new Date('2025-05-31'))
+// หากต้องการคำนวณข้อความแสดงช่วงวันที่อัตโนมัติ (เช่น วันนี้, เดือนนี้ ฯลฯ)
+// สามารถใส่ logic เพิ่มเติมที่นี่ แล้ว bind ไปใน template แทนการ hardcode
+const labelOverrides = computed(() => {
+  return {
+    today: `วันนี้ (${new Date().getDate()} ${new Intl.DateTimeFormat("th-TH", { month: "short" }).format(new Date())})`,
+    "this-month": `เดือนนี้ (1 ${new Intl.DateTimeFormat("th-TH", { month: "short" }).format(new Date())} – ${new Date().getDate()} ${new Intl.DateTimeFormat("th-TH", { month: "short" }).format(new Date() )})`,
+    "last-7-days": `7 วันที่ผ่านมา (${new Intl.DateTimeFormat("th-TH", { day: "numeric", month: "short" }).format(new Date(Date.now() - 6 * 24 * 60 * 60 * 1000))} – ${new Date().getDate()} ${new Intl.DateTimeFormat("th-TH", { month: "short" }).format(new Date())})`,
+    "last-4-weeks": `4 สัปดาห์ที่ผ่านมา (${new Intl.DateTimeFormat("th-TH", { day: "numeric", month: "short" }).format(new Date(Date.now() - 27 * 24 * 60 * 60 * 1000))} – ${new Date().getDate()} ${new Intl.DateTimeFormat("th-TH", { month: "short" }).format(new Date())})`,
+    "last-month": (() => {
+      const now = new Date();
+      const firstDayLast = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const lastDayLast = new Date(now.getFullYear(), now.getMonth(), 0);
+      return `เดือนที่ผ่านมา (${new Intl.DateTimeFormat("th-TH", { day: "numeric", month: "short" }).format(firstDayLast)} – ${new Intl.DateTimeFormat("th-TH", { day: "numeric", month: "short" }).format(lastDayLast)})`;
+    })(),
+    all: "ทั้งหมด",
+    custom: "กำหนดเอง",
+  };
+});
 </script>
 
 <template>
   <Dialog>
     <DialogTrigger as-child>
-      <Button variant="outline"><ArrowUpFromLine class="-mr-1 w-4 h-4" /> ส่งออก</Button>
+      <Button variant="outline" class="flex items-center gap-1">
+        <CornerUpRight class="w-4 h-4" /> ส่งออก
+      </Button>
     </DialogTrigger>
-    <DialogContent class="max-w-2xl">
+    <DialogContent class="w-full max-w-lg p-6">
       <DialogHeader>
-        <DialogTitle>ส่งออกในช่วงวันที่</DialogTitle>
+        <DialogTitle class="text-lg font-medium">ส่งออกในช่วงวันที่</DialogTitle>
       </DialogHeader>
-      <div class="space-y-6">
-        <!-- ... timezone และช่วงวันที่ ... -->
-        <div>
-          <Label class="font-medium">เขตเวลา</Label>
-          <RadioGroup v-model="timezone" class="flex gap-6 mt-2">
-            <div class="flex items-center space-x-2">
-              <RadioGroupItem id="gmt7" value="GMT+7" />
-              <Label for="gmt7">GMT+7 (UTC +07:00)</Label>
-            </div>
-            <div class="flex items-center space-x-2">
-              <RadioGroupItem id="utc" value="UTC" />
-              <Label for="utc">UTC</Label>
-            </div>
-          </RadioGroup>
-        </div>
 
-        <!-- Date Range -->
+      <div class="mt-4 space-y-4">
+        <!-- ส่วนเลือกช่วงวันที่ -->
         <div>
           <Label class="font-medium">ช่วงวันที่</Label>
-          <RadioGroup v-model="dateRange" class="space-y-2 mt-2">
-            <!-- ... options อื่นๆ ... -->
+
+          <!-- แสดง RadioGroup ในรูปแบบ grid สองคอลัมน์บนจอใหญ่ -->
+          <RadioGroup v-model="dateRange" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div class="flex items-center space-x-2">
               <RadioGroupItem id="today" value="today" />
-              <Label for="today">วันนี้ <span class="text-gray-500 ml-1">31 พ.ค.</span></Label>
+              <Label for="today" class="text-sm">
+                {{ labelOverrides.today }}
+              </Label>
             </div>
+
             <div class="flex items-center space-x-2">
               <RadioGroupItem id="this-month" value="this-month" />
-              <Label for="this-month">เดือนนี้ <span class="text-gray-500 ml-1">1 พ.ค. – 31 พ.ค.</span></Label>
+              <Label for="this-month" class="text-sm">
+                {{ labelOverrides["this-month"] }}
+              </Label>
             </div>
+
             <div class="flex items-center space-x-2">
               <RadioGroupItem id="last-7-days" value="last-7-days" />
-              <Label for="last-7-days">7 วันที่ผ่านมา <span class="text-gray-500 ml-1">25 พ.ค. – 31 พ.ค.</span></Label>
+              <Label for="last-7-days" class="text-sm">
+                {{ labelOverrides["last-7-days"] }}
+              </Label>
             </div>
+
             <div class="flex items-center space-x-2">
               <RadioGroupItem id="last-4-weeks" value="last-4-weeks" />
-              <Label for="last-4-weeks">4 สัปดาห์ที่ผ่านมา <span class="text-gray-500 ml-1">4 พ.ค. – 31 พ.ค.</span></Label>
+              <Label for="last-4-weeks" class="text-sm">
+                {{ labelOverrides["last-4-weeks"] }}
+              </Label>
             </div>
+
             <div class="flex items-center space-x-2">
               <RadioGroupItem id="last-month" value="last-month" />
-              <Label for="last-month">เดือนที่ผ่านมา <span class="text-gray-500 ml-1">1 เม.ย. – 30 เม.ย.</span></Label>
+              <Label for="last-month" class="text-sm">
+                {{ labelOverrides["last-month"] }}
+              </Label>
             </div>
+
             <div class="flex items-center space-x-2">
               <RadioGroupItem id="all" value="all" />
-              <Label for="all">ทั้งหมด</Label>
+              <Label for="all" class="text-sm">
+                {{ labelOverrides.all }}
+              </Label>
             </div>
 
             <div class="flex items-center space-x-2">
               <RadioGroupItem id="custom" value="custom" />
-              <Label for="custom">กำหนดเอง</Label>
-            </div>
-
-            <!-- แสดงปุ่มช่วงวันที่เมื่อเลือกกำหนดเอง -->
-            <div v-if="dateRange === 'custom'" class="ml-6 mt-2">
-                <BaseDateRangePicker></BaseDateRangePicker>
+              <Label for="custom" class="text-sm">
+                {{ labelOverrides.custom }}
+              </Label>
             </div>
           </RadioGroup>
-        </div>
 
-        <!-- Column Option -->
-        <div>
-          <Label class="font-medium">คอลัมน์</Label>
-          <Select v-model="columnOption">
-            <SelectTrigger class="mt-2 w-full">
-              <SelectValue placeholder="ค่าเริ่มต้น (19)" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="default">ค่าเริ่มต้น (19)</SelectItem>
-              <SelectItem value="all">ทั้งหมด</SelectItem>
-            </SelectContent>
-          </Select>
-          <div class="text-sm text-gray-500 mt-2">
-            ID, Amount Due, Billing, Closed, ...
+          <!-- เมื่อเลือก “กำหนดเอง” ให้โชว์ DateRangePicker -->
+          <div v-if="dateRange === 'custom'" class="mt-4 pl-4 sm:pl-6">
+            <BaseDateRangePicker />
           </div>
         </div>
       </div>
 
-      <DialogFooter class="mt-6">
+      <DialogFooter class="mt-6 flex flex-wrap justify-end gap-2">
         <DialogClose as-child>
-          <Button type="button" variant="secondary">
+          <Button type="button" variant="outline" class="w-full sm:w-auto">
             ยกเลิก
           </Button>
         </DialogClose>
-        <Button type="submit">ส่งออก</Button>
+        <Button type="button" class="w-full sm:w-auto">
+          ส่งออก
+        </Button>
       </DialogFooter>
     </DialogContent>
   </Dialog>
 </template>
+
+<style scoped>
+/* ถ้าต้องการกำหนด custom CSS เพิ่มเติม ก็ใส่ที่นี่ */
+</style>
