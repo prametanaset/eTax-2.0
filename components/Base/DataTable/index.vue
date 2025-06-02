@@ -292,13 +292,14 @@ async function exportPayments() {
 
       <!-- ขวา: Export / สร้างใบกำกับ -->
       <div class="flex gap-2">
-        <Button
+        <!-- <Button
           variant="outline"
           class="font-medium font-noto px-3 bg-[hsl(var(--card))]"
           @click="exportPayments"
         >
           <ArrowUpFromLine class="-mr-1 w-4 h-4" /> Export
-        </Button>
+        </Button> -->
+        <BaseExportExcelDialog></BaseExportExcelDialog>
         <NuxtLink to="/invoice/create/invoice">
           <Button class="font-medium font-noto px-3 text-white hover:bg-purple-600">
             <Plus class="-mr-1 w-4 h-4" /> สร้างใบกำกับภาษี

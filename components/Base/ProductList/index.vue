@@ -163,7 +163,7 @@ watch(
  -->
       <PopoverContent class="p-0" align="start">
         <Command>
-          <CommandInput placeholder="Search product..." />
+          <CommandInput placeholder="ค้นหาสินค้า" />
           <CommandList>
             <CommandEmpty>No products found.</CommandEmpty>
             <CommandGroup class="max-h-[300px] overflow-y-auto relative">
@@ -408,7 +408,7 @@ watch(
       </PopoverTrigger>
       <PopoverContent class="p-0 w-72" align="start">
         <Command>
-          <CommandInput placeholder="Search product..." />
+          <CommandInput placeholder="ค้นหาสินค้า" />
           <CommandList>
             <CommandEmpty>No products found.</CommandEmpty>
             <CommandGroup class="max-h-[300px] overflow-y-auto relative">

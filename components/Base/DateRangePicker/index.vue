@@ -132,6 +132,7 @@ watch(secondMonthPlaceholder, (_secondMonthPlaceholder) => {
       <RangeCalendarRoot
         v-slot="{ weekDays }"
         v-model="value"
+        :locale="locale"
         v-model:placeholder="placeholder"
         class="p-3"
       >
