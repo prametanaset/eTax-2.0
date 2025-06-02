@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import type {
   ColumnDef,
-  ColumnFiltersState,
-  ExpandedState,
   SortingState,
+  ExpandedState,
   VisibilityState,
 } from "@tanstack/vue-table";
 import { valueUpdater } from "@/utils";
-
 
 import {
   FlexRender,
@@ -18,8 +16,18 @@ import {
   getSortedRowModel,
   useVueTable,
 } from "@tanstack/vue-table";
-import { ArrowUpDown, ChevronDown, Search, Plus, ArrowUpFromLine, Clock, CircleCheck, HelpCircle, X } from "lucide-vue-next";
-import { h, ref } from "vue";
+import {
+  ArrowUpDown,
+  ChevronDown,
+  Search,
+  Plus,
+  ArrowUpFromLine,
+  Clock,
+  CircleCheck,
+  HelpCircle,
+  X,
+} from "lucide-vue-next";
+import { h, ref, watch } from "vue";
 import DropdownAction from "./DataTableDemoColumn.vue";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -64,172 +72,108 @@ const data: Payment[] = [
   },
 ];
 
-
 const columns: ColumnDef<Payment>[] = [
-  // {
-  //   id: "select",
-  //   header: ({ table }) =>
-  //     h(Checkbox, {
-  //       modelValue:
-  //         table.getIsAllPageRowsSelected() ||
-  //         (table.getIsSomePageRowsSelected() && "indeterminate"),
-  //       "onUpdate:modelValue": (value) =>
-  //         table.toggleAllPageRowsSelected(!!value),
-  //       ariaLabel: "Select all",
-  //       class: "ml-3 mb-2",
-  //     }),
-  //   cell: ({ row }) =>
-  //     h(Checkbox, {
-  //       modelValue: row.getIsSelected(),
-  //       "onUpdate:modelValue": (value) => row.toggleSelected(!!value),
-  //       ariaLabel: "Select row",
-  //       class: "ml-3 mb-2",
-  //     }),
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // },
   {
     accessorKey: "id",
-    header: () =>
-    h(
-      "div",
-      { class: "ml-5" }, // ← เพิ่ม class ml-3 ที่นี่
-      "เลขที่"
-    ),
-    cell: ({ row }) =>
-      h(
-        "div",
-        { class: "ml-5   font-suk" },
-        row.getValue("id")
-      ),
+    header: () => h("div", { class: "ml-5" }, "เลขที่"),
+    cell: ({ row }) => h("div", { class: "ml-5 font-suk" }, row.getValue("id")),
   },
   {
     accessorKey: "email",
-    header: ({ column }) => {
-      return h(
+    header: ({ column }) =>
+      h(
         Button,
         {
           variant: "ghost",
           onClick: () => column.toggleSorting(column.getIsSorted() === "asc"),
         },
         () => ["ลูกค้า", h(ArrowUpDown, { class: "h-4 w-4" })]
-      );
-    },
-    cell: ({ row }) =>
-      h(
-        "div",
-        h("div", {}, [
-          h("p", { class: "  mb-1" }, row.original.name),
-          h(
-            "p",
-            { class: "text-sm text-muted-500 font-normal leading-none" },
-            row.getValue("email")
-          ),
-        ])
       ),
+    cell: ({ row }) =>
+      h("div", [
+        h("p", { class: "mb-1" }, row.original.name),
+        h(
+          "p",
+          { class: "text-sm text-muted-500 font-normal leading-none" },
+          row.getValue("email")
+        ),
+      ]),
   },
   {
-  accessorKey: "documentType",
-  header: () =>
-    h("div", { class: "text-left ml-5" }, "ประเภทเอกสาร"),
-  cell: ({ row }) => {
-    const docType = row.getValue("documentType");
-
-    const typeLabels: Record<string, string> = {
-      invoice: "ใบแจ้งหนี้",
-      credit_note: "ใบลดหนี้",
-      debit_note: "ใบเพิ่มหนี้",
-    };
-
-    const badgeClasses: Record<string, string> = {
-      invoice: "bg-blue-50 text-blue-700 dark:bg-blue-700/20 dark:text-blue-300",
-      credit_note: "bg-emerald-50 text-emerald-700 dark:bg-emerald-700/20 dark:text-emerald-300",
-      debit_note: "bg-orange-50 text-orange-700 dark:bg-orange-700/20 dark:text-orange-300",
-    };
-
-    return h(
-      "div",
-      { class: "ml-5" },
-      h(
-        Badge,
-        {
-          variant: "secondary",
-          class: `${badgeClasses[docType] || ""} text-sm font-medium rounded-lg p-1 px-2`,
-        },
-        () => typeLabels[docType] || "ไม่ทราบประเภท"
-      )
-    );
+    accessorKey: "documentType",
+    header: () => h("div", { class: "text-left ml-5" }, "ประเภทเอกสาร"),
+    cell: ({ row }) => {
+      const typeLabels: Record<string, string> = {
+        invoice: "ใบกำกับภาษี",
+        credit_note: "ใบลดหนี้",
+        debit_note: "ใบเพิ่มหนี้",
+      };
+      return h(
+        "div",
+        { class: "ml-5 text-sm font-medium" },
+        typeLabels[row.getValue("documentType")] ?? "ไม่ทราบประเภท"
+      );
+    },
   },
-},
   {
     accessorKey: "date",
     header: () => h("div", { class: "text-left" }, "วันที่สร้าง"),
     cell: ({ row }) => {
-      const raw = row.getValue("date");
       const formatted = new Intl.DateTimeFormat("th-TH", {
         dateStyle: "medium",
         timeStyle: "short",
-      }).format(new Date(raw));
-
-      return h("div", { class: "text-left  " }, formatted);
+      }).format(new Date(row.getValue("date")));
+      return h("div", { class: "text-left" }, formatted);
     },
   },
   {
     accessorKey: "status",
     header: "สถานะ",
     cell: ({ row }) => {
-      const status = row.getValue("status") as keyof typeof statusClasses;
-
-      const statusClasses = {
-        0: "bg-green-50 text-green-700 dark:bg-green-700/20 dark:text-green-300 text-sm font-medium rounded-lg p-1 px-2",
-        1: "bg-yellow-50 text-yellow-800 dark:bg-yellow-600/20 dark:text-yellow-200 text-sm font-medium rounded-lg p-1 px-2",
-        2: "bg-red-50 text-red-700 dark:bg-red-700/20 dark:text-red-300 text-sm font-medium rounded-lg p-1 px-2",
-        3: "bg-purple-50 text-purple-700 dark:bg-purple-700/20 dark:text-purple-300 text-sm font-medium rounded-lg p-1 px-2",
+      const status = row.getValue("status") as 0 | 1 | 2 | 3;
+      const classes = {
+        0: "bg-green-50 text-green-700 dark:bg-green-700/20 dark:text-green-300",
+        1: "bg-yellow-50 text-yellow-800 dark:bg-yellow-600/20 dark:text-yellow-200",
+        2: "bg-red-50 text-red-700 dark:bg-red-700/20 dark:text-red-300",
+        3: "bg-purple-50 text-purple-700 dark:bg-purple-700/20 dark:text-purple-300",
       };
-
-      return h("div", { class: "capitalize" }, [
-        h(
-          Badge,
-          { variant: "secondary", class: statusClasses[status] || "" },
-          () => getStatusLabel(status)
-        ),
-      ]);
+      const labels = {
+        0: "ส่งแล้ว",
+        1: "รอดำเนินการ",
+        2: "ยกเลิก",
+        3: "รอตรวจสอบ",
+      };
+      const icons = { 0: CircleCheck, 1: Clock, 2: X, 3: HelpCircle };
+      const Icon = icons[status];
+      return h(
+        Badge,
+        { variant: "secondary", class: `${classes[status]} text-sm p-1 px-2` },
+        () =>
+          h("div", { class: "flex items-center gap-1" }, [
+            h(Icon, { class: "w-4 h-4" }),
+            labels[status],
+          ])
+      );
     },
   },
-  // {
-  //   accessorKey: "amount",
-  //   header: () => h("div", { class: "text-right" }, "จำนวนเงิน"),
-  //   cell: ({ row }) => {
-  //     const amount = Number.parseFloat(row.getValue("amount"));
-
-  //     // Format the amount as a dollar amount
-  //     const formatted = new Intl.NumberFormat("en-US", {
-  //       style: "currency",
-  //       currency: "USD",
-  //     }).format(amount);
-
-  //     return h("div", { class: "text-right font-medium" }, formatted);
-  //   },
-  // },
   {
     id: "actions",
     enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original;
-
-      return h(DropdownAction, {
-        payment,
+    cell: ({ row }) =>
+      h(DropdownAction, {
+        payment: row.original,
         onExpand: row.toggleExpanded,
-      });
-    },
+      }),
   },
 ];
 
 const sorting = ref<SortingState>([]);
-const columnFilters = ref<ColumnFiltersState>([]);
 const columnVisibility = ref<VisibilityState>({});
 const rowSelection = ref({});
 const expanded = ref<ExpandedState>({});
+
+const searchTerm = ref("");
+const globalFilter = ref("");
 
 const table = useVueTable({
   data,
@@ -239,20 +183,28 @@ const table = useVueTable({
   getSortedRowModel: getSortedRowModel(),
   getFilteredRowModel: getFilteredRowModel(),
   getExpandedRowModel: getExpandedRowModel(),
-  onSortingChange: (updaterOrValue) => valueUpdater(updaterOrValue, sorting),
-  onColumnFiltersChange: (updaterOrValue) =>
-    valueUpdater(updaterOrValue, columnFilters),
-  onColumnVisibilityChange: (updaterOrValue) =>
-    valueUpdater(updaterOrValue, columnVisibility),
-  onRowSelectionChange: (updaterOrValue) =>
-    valueUpdater(updaterOrValue, rowSelection),
-  onExpandedChange: (updaterOrValue) => valueUpdater(updaterOrValue, expanded),
+
+  // --- ตัวกรองรวมทุกคอลัมน์ที่ต้องการ ---
+  globalFilterFn: (row, _colIds, value) => {
+    const q = String(value).toLowerCase();
+    return (
+      row.original.id.toLowerCase().includes(q) ||
+      row.original.name.toLowerCase().includes(q) ||
+      row.original.email.toLowerCase().includes(q)
+    );
+  },
+  onGlobalFilterChange: (u) => valueUpdater(u, globalFilter),
+
+  // --- ตัวอัปเดต state อื่น ๆ ---
+  onSortingChange: (u) => valueUpdater(u, sorting),
+  onColumnVisibilityChange: (u) => valueUpdater(u, columnVisibility),
+  onRowSelectionChange: (u) => valueUpdater(u, rowSelection),
+  onExpandedChange: (u) => valueUpdater(u, expanded),
+
+  // --- state getter ---
   state: {
     get sorting() {
       return sorting.value;
-    },
-    get columnFilters() {
-      return columnFilters.value;
     },
     get columnVisibility() {
       return columnVisibility.value;
@@ -263,50 +215,35 @@ const table = useVueTable({
     get expanded() {
       return expanded.value;
     },
+    get globalFilter() {
+      return globalFilter.value;
+    },
   },
 });
 
-function getStatusLabel(status) {
-  const icons = {
-    0: CircleCheck,
-    1: Clock,
-    2: X,
-    3: HelpCircle,
-  };
+// อัปเดต Global Filter ทุกครั้งที่ช่องค้นหาเปลี่ยน
+watch(searchTerm, (term) => table.setGlobalFilter(term));
 
-  const labels = {
-    0: "ส่งแล้ว",
-    1: "รอดำเนินการ",
-    2: "ยกเลิก",
-    3: "รอตรวจสอบ",
-  };
-
-  const IconComponent = icons[status];
-
-  return h("div", { class: "flex items-center gap-1" }, [
-    h(IconComponent, { class: "w-4 h-4" }),
-    labels[status] || "ไม่ทราบสถานะ",
-  ]);
-}
-
+// Export to Excel (เหมือนเดิม)
 async function exportPayments() {
   try {
-    const res = await fetch('/api/export', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(data),
-    })
-    const blob = await res.blob()
-    const url  = URL.createObjectURL(blob)
-    const a    = document.createElement('a')
-    a.href     = url
-    a.download = 'Payments.xlsx'
-    document.body.appendChild(a)
-    a.click()
-    a.remove()
-    URL.revokeObjectURL(url)
+    const res = await fetch("/api/export", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = Object.assign(document.createElement("a"), {
+      href: url,
+      download: "Payments.xlsx",
+    });
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
   } catch (err) {
-    console.error('Export failed', err)
+    console.error("Export failed", err);
   }
 }
 </script>
@@ -314,90 +251,75 @@ async function exportPayments() {
 <template>
   <div class="w-full">
     <div class="flex flex-wrap justify-between items-center gap-4 py-4">
-      <!-- ซ้าย: Search + Date Picker + Columns -->
+      <!-- ซ้าย: Search / DateRange / Columns -->
       <div class="flex gap-4">
-        <!-- Search -->
-        <div class="relative w-full flex max-w-xs">
+        <!-- ช่องค้นหา -->
+        <div class="relative flex w-full max-w-xs">
           <Input
             id="search"
             type="text"
-            class="pl-10 font-medium bg-[hsl(var(--card))] w-full placeholder:font-normal"
-            placeholder="ค้นหาลูกค้า"
-            :model-value="table.getColumn('email')?.getFilterValue() as string"
-            @update:model-value="
-              table.getColumn('email')?.setFilterValue($event)
-            "
+            v-model="searchTerm"
+            class="w-full pl-10 bg-[hsl(var(--card))] font-medium placeholder:font-normal"
+            placeholder="ค้นหาใบกำกับ / ลูกค้า / อีเมล"
           />
-          <span
-            class="absolute start-0 inset-y-0 flex items-center justify-center px-3"
-          >
+          <span class="absolute inset-y-0 start-0 flex items-center px-3">
             <Search class="size-4 text-muted-foreground" />
           </span>
         </div>
 
-        <!-- Date Picker -->
-        <!-- <BaseDateTimePicker /> -->
-        
-        <BaseDateRangePicker></BaseDateRangePicker>
+        <BaseDateRangePicker />
 
-        <!-- Columns toggle -->
+        <!-- เลือกคอลัมน์ -->
         <DropdownMenu>
           <DropdownMenuTrigger as-child>
-            <Button
-              variant="outline"
-              class="flex items-center gap-1 bg-[hsl(var(--card))]"
-            >
-              <span>คอลัมน์</span>
-              <ChevronDown class="w-4 h-4" />
+            <Button variant="outline" class="flex items-center gap-1 bg-[hsl(var(--card))]">
+              <span>คอลัมน์</span><ChevronDown class="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuCheckboxItem
-              v-for="column in table
-                .getAllColumns()
-                .filter((col) => col.getCanHide())"
-              :key="column.id"
+              v-for="col in table.getAllColumns().filter((c) => c.getCanHide())"
+              :key="col.id"
               class="capitalize"
-              :model-value="column.getIsVisible()"
-              @update:model-value="(value) => column.toggleVisibility(!!value)"
+              :model-value="col.getIsVisible()"
+              @update:model-value="(val) => col.toggleVisibility(!!val)"
             >
-              {{ column.id }}
+              {{ col.id }}
             </DropdownMenuCheckboxItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
 
+      <!-- ขวา: Export / สร้างใบกำกับ -->
       <div class="flex gap-2">
         <Button
-        @click="exportPayments"
           variant="outline"
-          class="font-medium font-noto px-3 bg-[hsl(var(--card))]  transition rounded-lg"
+          class="font-medium font-noto px-3 bg-[hsl(var(--card))]"
+          @click="exportPayments"
         >
           <ArrowUpFromLine class="-mr-1 w-4 h-4" /> Export
         </Button>
-      <!-- ขวา: ปุ่มสร้าง -->
-      <NuxtLink to="/invoice/create/invoice">
-        <Button
-          class="font-medium font-noto px-3 text-white hover:bg-purple-600 transition rounded-lg"
-        >
-          <Plus class="-mr-1 w-4 h-4" /> สร้างใบกำกับภาษี
-        </Button>
-      </NuxtLink>
+        <NuxtLink to="/invoice/create/invoice">
+          <Button class="font-medium font-noto px-3 text-white hover:bg-purple-600">
+            <Plus class="-mr-1 w-4 h-4" /> สร้างใบกำกับภาษี
+          </Button>
+        </NuxtLink>
       </div>
     </div>
 
+    <!-- Table -->
     <div class="rounded-lg border bg-[hsl(var(--card))] overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow
-            v-for="headerGroup in table.getHeaderGroups()"
-            :key="headerGroup.id"
+            v-for="hg in table.getHeaderGroups()"
+            :key="hg.id"
             class="font-noto"
           >
             <TableHead
-              v-for="header in headerGroup.headers"
+              v-for="header in hg.headers"
               :key="header.id"
-              class="font-medium   dark:bg-[hsl(var(--card))]"
+              class="font-medium dark:bg-[hsl(var(--card))]"
             >
               <FlexRender
                 v-if="!header.isPlaceholder"
@@ -407,8 +329,9 @@ async function exportPayments() {
             </TableHead>
           </TableRow>
         </TableHeader>
+
         <TableBody>
-          <template v-if="table.getRowModel().rows?.length">
+          <template v-if="table.getRowModel().rows.length">
             <template v-for="row in table.getRowModel().rows" :key="row.id">
               <TableRow :data-state="row.getIsSelected() && 'selected'">
                 <TableCell
@@ -424,7 +347,7 @@ async function exportPayments() {
               </TableRow>
               <TableRow v-if="row.getIsExpanded()">
                 <TableCell :colspan="row.getAllCells().length">
-                  {{ JSON.stringify(row.original) }}
+                  {{ JSON.stringify(row.original, null, 2) }}
                 </TableCell>
               </TableRow>
             </template>
@@ -432,17 +355,19 @@ async function exportPayments() {
 
           <TableRow v-else>
             <TableCell :colspan="columns.length" class="h-24 text-center">
-              No results.
+              ไม่มีข้อมูลที่ตรงกัน
             </TableCell>
           </TableRow>
         </TableBody>
       </Table>
     </div>
 
-    <div class="flex items-center justify-end space-x-2 py-4">
+    <!-- Pagination + Selected -->
+    <div class="flex items-center justify-end gap-2 py-4">
       <div class="flex-1 text-sm text-muted-foreground font-semibold">
-        {{ table.getFilteredSelectedRowModel().rows.length }} of
-        {{ table.getFilteredRowModel().rows.length }} row(s) selected.
+        {{ table.getFilteredSelectedRowModel().rows.length }} / {{
+          table.getFilteredRowModel().rows.length
+        }} แถวที่เลือก
       </div>
       <div class="space-x-2">
         <Button

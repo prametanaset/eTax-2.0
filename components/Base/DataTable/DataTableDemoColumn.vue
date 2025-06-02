@@ -18,7 +18,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { MoreHorizontal } from "lucide-vue-next";
-import { LazyBaseInvoiceDetailTabs } from "#components";
+import { LazyBaseInvoiceDetailTabs, NuxtLink } from "#components";
 
 defineProps<{
   payment: {
@@ -57,7 +57,7 @@ const activeTab = ref("account");
             ดูรายละเอียด
           </DropdownMenuItem>
 
-          <DropdownMenuItem>ดาวน์โหลดไฟล์ PDF</DropdownMenuItem>
+          <DropdownMenuItem class="cursor-pointer">ดาวน์โหลดไฟล์ PDF</DropdownMenuItem>
 
           <!-- Optional actions -->
           <!--
@@ -67,8 +67,10 @@ const activeTab = ref("account");
 
           <DropdownMenuSeparator />
           <DropdownMenuLabel>Edit</DropdownMenuLabel>
-          <DropdownMenuItem>เพิ่มหนี้</DropdownMenuItem>
-          <DropdownMenuItem>ลดหนี้</DropdownMenuItem>
+          <DropdownMenuItem class="cursor-pointer">เพิ่มหนี้</DropdownMenuItem>
+          <NuxtLink to="/credit_notes">
+            <DropdownMenuItem class="cursor-pointer">ลดหนี้</DropdownMenuItem>
+          </NuxtLink>
           <DropdownMenuSeparator />
           <DropdownMenuItem class="text-red-500">ยกเลิก</DropdownMenuItem>
         </DropdownMenuContent>
