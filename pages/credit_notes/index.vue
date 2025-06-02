@@ -22,25 +22,27 @@
                     class="h-10 font-normal bg-[hsl(var(--card))]"
                   />
                 </div>
-                <!-- Document Type Select -->
-                <div class="flex flex-col w-full md:w-1/4 gap-1.5">
-                  <span class="font-medium dark:text-white text-black/80"
-                    >ประเภทเอกสาร</span
-                  >
-                  <Select v-model="documentType">
-                    <SelectTrigger class="h-10 bg-[hsl(var(--card))]">
-                      <SelectValue placeholder="เลือกประเภทเอกสาร" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="ใบกำกับภาษี">ใบกำกับภาษี</SelectItem>
-                        <SelectItem value="ใบเสร็จรับเงิน/ใบกำกับภาษี">
-                          ใบเสร็จรับเงิน/ใบกำกับภาษี
-                        </SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </div>
+                <!-- Credit Note Reason -->
+<div class="flex flex-col w-full md:w-1/4 gap-1.5">
+  <span class="font-medium dark:text-white text-black/80">
+    เหตุผลการลดหนี้
+  </span>
+  <Select v-model="creditNoteReason">
+    <SelectTrigger class="h-10 bg-[hsl(var(--card))]">
+      <SelectValue placeholder="เลือกเหตุผล" />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectGroup>
+        <SelectItem value="คืนสินค้า">คืนสินค้า</SelectItem>
+        <SelectItem value="ให้ส่วนลดภายหลัง">ให้ส่วนลดภายหลัง</SelectItem>
+        <SelectItem value="พิมพ์ผิด">พิมพ์ผิด</SelectItem>
+        <SelectItem value="ยกเลิกใบกำกับภาษีเดิม">ยกเลิกใบกำกับภาษีเดิม</SelectItem>
+        <SelectItem value="อื่นๆ">อื่นๆ</SelectItem>
+      </SelectGroup>
+    </SelectContent>
+  </Select>
+</div>
+
 
                 <!-- Issue Date -->
                 <div class="flex flex-col w-full md:w-1/4 gap-1.5">
@@ -50,14 +52,14 @@
                   <BaseDateTimePicker />
                 </div>
 
-                <!-- Ref No -->
+                <!-- Ref to Original Invoice -->
                 <div class="flex flex-col w-full md:w-1/4 gap-1.5">
                   <span class="font-medium dark:text-white text-black/80"
-                    >เลขอ้างอิง</span
+                    >เลขที่ใบกำกับภาษีต้นฉบับ</span
                   >
                   <Input
                     type="text"
-                    placeholder="กรอกเลขอ้างอิง (Ref No.)"
+                    placeholder="กรอกเลขที่ใบกำกับภาษีต้นฉบับ"
                     class="h-10 font-normal bg-[hsl(var(--card))]"
                   />
                 </div>
@@ -82,7 +84,7 @@
 
         <CardContent>
           <div class="grid gap-4 overflow-hidden my-4 mt-7 mb-0">
-            <p class="text-xl font-semibold">รายการสินค้า</p>
+            <p class="text-xl font-semibold">รายการที่ต้องลดหนี้</p>
             <!-- product table form -->
             <BaseProductList></BaseProductList>
           </div>
@@ -107,9 +109,11 @@
           </Button> -->
           <BasePreviewInvoice class="p-6"></BasePreviewInvoice>
           <Button variant="outline" class="bg-[hsl(var(--card))]">
-            <Save />สร้าง
+            <Save />สร้างใบลดหนี้
           </Button>
-          <Button class="col-span-2"> <Send />สร้าง และ ส่ง </Button>
+          <Button class="col-span-2"> 
+            <Send />สร้างและส่งใบลดหนี้ 
+          </Button>
         </div>
       </Card>
     </div>
@@ -155,7 +159,7 @@ import {
 import { cn } from "@/lib/utils";
 
 definePageMeta({
-  title: "สร้างใบกำกับภาษี",
+  title: "ออกใบลดหนี้",
 });
 
 import {
@@ -173,7 +177,7 @@ const df = new DateFormatter("th-TH", {
 const value = ref<DateValue>();
 
 const customer = ref(null);
-const documentType = ref("");
+const documentType = ref("ใบลดหนี้");
 const customerAddress = ref("");
 
 const storeApi = reactive({

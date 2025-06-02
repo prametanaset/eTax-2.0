@@ -34,7 +34,7 @@
       <!-- Filter Tabs -->
       <Tabs
         v-model="selectedRange"
-        class="mb-2 self-start md:self-center lg:self-end"
+        class="mb-2 self-start md:-ml-7 lg:-mt-1 lg:m-0 md:self-center lg:self-end"
         :class="!device.isMobile ? '' : '-ml-14 -mt-1'"
       >
         <TabsList class="bg-[hsl(var(--card))]">
