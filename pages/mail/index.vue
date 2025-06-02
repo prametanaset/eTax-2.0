@@ -1,11 +1,11 @@
 <template>
   <div class="h-full flex-col md:flex">
-    <Mail :mails="mails" />
+    <MailGoogle :mails="mails" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import Mail from "~/components/Base/Mail/Mail.vue";
+import MailGoogle from "~/components/Base/MailGoogle/Mail.vue";
 import { accounts, mails } from "@/components/Base/Mail/data/mail";
 
 definePageMeta({

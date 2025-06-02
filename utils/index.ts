@@ -1,5 +1,6 @@
 import type { Updater } from "@tanstack/vue-table";
 import type { Ref } from "vue";
+import dayjs from "dayjs";
 
 export const convertToBuddhistYear = (date: any) => {
   const year = date.getFullYear();
@@ -30,6 +31,17 @@ export const formatThaiDate = (date: any) => {
 
   return `${day} ${month} ${year}`;
 };
+
+export function formatMailDate(input: string | Date): string {
+  const now = dayjs();
+  const date = dayjs(input);
+
+  if (date.isSame(now, "day")) {
+    return date.format("HH:mm");
+  }
+
+  return formatThaiDate(date);
+}
 
 export const currencyFormat = (number: any) => {
   return Number(number).toLocaleString("th-TH", {
