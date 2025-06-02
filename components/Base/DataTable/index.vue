@@ -147,7 +147,7 @@ const columns: ColumnDef<Payment>[] = [
       const Icon = icons[status];
       return h(
         Badge,
-        { variant: "secondary", class: `${classes[status]} text-sm p-1 px-2` },
+        { variant: "secondary", class: `${classes[status]} text-[14px] ` },
         () =>
           h("div", { class: "flex items-center gap-1" }, [
             h(Icon, { class: "w-4 h-4" }),
