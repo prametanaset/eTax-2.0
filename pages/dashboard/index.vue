@@ -35,7 +35,7 @@
   </div>
     <div
       v-else
-      class="snap-x snap-mandatory flex gap-4 w-[100vw] pl-4 -ml-4 -mr-4 pb-12 overflow-x-auto invisible-scrollbar"
+      class="snap-x snap-mandatory flex gap-4 w-[100vw] pl-4 -mx-4 pb-12 overflow-x-auto invisible-scrollbar"
     >
       <!-- spacer ซ้าย -->
 
@@ -72,7 +72,7 @@
     <!-- Table -->
     <div
       :class="[
-        device.isMobile ? 'w-[92vw]' : 'w-full overflow-visible pt-7',
+        isMobile ? 'w-[92vw]' : 'w-full overflow-visible pt-7',
         'overflow-hidden',
       ]"
     >

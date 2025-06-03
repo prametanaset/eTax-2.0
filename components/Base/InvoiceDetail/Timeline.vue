@@ -10,28 +10,28 @@ const timeline = ref([
     title: 'สร้างใบแจ้งหนี้',
     date: '1 พฤษภาคม 2568',
     description: 'ระบบได้สร้างใบแจ้งหนี้เรียบร้อยแล้ว และบันทึกลงฐานข้อมูล.',
-    icon: Circle,
+    icon: Calendar,
   },
   {
     id: 2,
     title: 'ส่งใบแจ้งหนี้ให้ลูกค้า',
     date: '1 พฤษภาคม 2568 - 10:30 น.',
     description: 'ระบบได้ส่งใบแจ้งหนี้ให้ลูกค้าทางอีเมลเรียบร้อยแล้ว.',
-    icon: Circle,
+    icon: CheckCircle,
   },
   {
     id: 3,
     title: 'ได้รับชำระเงิน',
     date: '3 พฤษภาคม 2568 - 14:15 น.',
     description: 'ลูกค้าได้ชำระเงินเรียบร้อยแล้วผ่านการโอนเงินผ่านธนาคาร.',
-    icon: Circle,
+    icon: FileText,
   },
   {
     id: 4,
     title: 'ปิดใบแจ้งหนี้',
     date: '4 พฤษภาคม 2568',
     description: 'สถานะใบแจ้งหนี้ถูกอัปเดตเป็น "ปิดบัญชี" เรียบร้อยแล้ว.',
-    icon: Circle,
+    icon: XCircle,
   },
   {
     id: 5,
@@ -39,7 +39,7 @@ const timeline = ref([
     tag: 'Latest',
     date: '6 พฤษภาคม 2568',
     description: 'มีการคืนเงินบางส่วนให้กับลูกค้า เนื่องจากมีการชำระเงินเกิน.',
-    icon: Circle,
+    icon: Send,
     button: {
       label: 'Download ZIP',
       icon: Download,
@@ -51,7 +51,7 @@ const timeline = ref([
 
 <template>
   <Card class="bg-background border-none">
-    <CardContent class="pt-6 pb-8 pl-[10rem]">
+    <CardContent class="pt-6 pb-8 px-4 sm:px-8 lg:px-[5rem] xl:px-[10rem]">
       <ol class="relative border-s border-muted space-y-10">
         <li
           v-for="item in timeline"
@@ -66,11 +66,13 @@ const timeline = ref([
           </div>
 
           <!-- Title & Tag -->
-          <div class="flex items-center gap-2">
+          <div class="flex flex-wrap items-center gap-2">
             <h3 class="text-base font-semibold text-foreground">
               {{ item.title }}
             </h3>
-            <Badge v-if="item.tag">{{ item.tag }}</Badge>
+            <Badge v-if="item.tag" class="text-xs px-2 py-0.5">
+              {{ item.tag }}
+            </Badge>
           </div>
 
           <!-- Date -->
@@ -87,7 +89,7 @@ const timeline = ref([
           <a
             v-if="item.button"
             :href="item.button.href"
-            class="inline-flex items-center text-sm mt-2 gap-2 text-primary hover:underline"
+            class="inline-flex items-center text-sm mt-2 gap-2 text-primary hover:underline transition-colors"
           >
             <component :is="item.button.icon" class="w-4 h-4" />
             {{ item.button.label }}

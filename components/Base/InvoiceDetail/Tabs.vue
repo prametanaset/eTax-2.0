@@ -9,8 +9,12 @@ import { Separator } from "@/components/ui/separator";
 import { Card } from "@/components/ui/card";
 import { ref } from "vue";
 
+const invoiceRef = ref<HTMLElement | null>(null)
 
 const modelValue = defineModel<string>() 
+const props = defineProps<{
+  printTargetId?: string
+}>();
 </script>
 
 <template>
@@ -23,13 +27,13 @@ const modelValue = defineModel<string>()
       </TabsList> -->
 
       <transition name="slide-fade" mode="out-in">
-        <component :is="'div'" :key="modelValue">
+        <component :is="'div'" :key="modelValue" >
           <TabsContent value="account">
             <BaseInvoiceDetailInfo />
           </TabsContent>
 
-          <TabsContent value="status">
-            <BaseInvoice style="zoom: 90%;" />
+          <TabsContent value="status" >
+            <BaseInvoice  style="zoom: 90%;" />
           </TabsContent>
 
           <TabsContent value="history">

@@ -17,7 +17,13 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { MoreHorizontal } from "lucide-vue-next";
+import {
+  MoreHorizontal,
+  Mail,
+  Printer,
+  FileDown,
+  TriangleAlert,
+} from "lucide-vue-next";
 import { LazyBaseInvoiceDetailTabs, NuxtLink } from "#components";
 
 defineProps<{
@@ -37,6 +43,8 @@ function copy(id: string) {
 }
 
 const activeTab = ref("account");
+const invoiceRef = ref(null)
+
 </script>
 
 <template>
@@ -57,7 +65,9 @@ const activeTab = ref("account");
             ดูรายละเอียด
           </DropdownMenuItem>
 
-          <DropdownMenuItem class="cursor-pointer">ดาวน์โหลดไฟล์ PDF</DropdownMenuItem>
+          <DropdownMenuItem class="cursor-pointer"
+            >ดาวน์โหลดไฟล์ PDF</DropdownMenuItem
+          >
 
           <!-- Optional actions -->
           <!--
@@ -76,29 +86,54 @@ const activeTab = ref("account");
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <DialogContent class="sm:max-w-[850px] h-[95dvh] overflow-y-auto">
-        <DialogHeader class="gap-y-0">
+      <DialogContent class="sm:max-w-[850px] h-[95dvh] overflow-y-auto gap-0 p-0 outline-none">
+        <DialogHeader class="px-4 pb-4 pt-5">
           <DialogTitle>รายละเอียดใบแจ้งหนี้</DialogTitle>
           <DialogDescription>
-            ตัวอย่างเนื้อหา Dialog แบบ scrollable
+            <br />
           </DialogDescription>
-          <div class="flex gap-2">
-            <Button variant="secondary" size="sm" class="hover:bg-gray-300/60" @click="activeTab = 'account'">รายละเอียด</Button>
-            <Button variant="secondary" size="sm" class="hover:bg-gray-300/60"  @click="activeTab = 'status'">ใบแจ้งหนี้</Button>
-            <Button variant="secondary" size="sm" class="hover:bg-gray-300/60" @click="activeTab = 'history'">ประวัติ</Button>
-          </div>
+          <Tabs v-model="activeTab">
+            <TabsList class="inline-flex space-x-2 p-0 bg-transparent">
+              <TabsTrigger
+                class="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
+                value="account"
+                >รายละเอียด</TabsTrigger
+              >
+              <TabsTrigger
+                class="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
+                value="status"
+                >ใบแจ้งหนี้</TabsTrigger
+              >
+              <TabsTrigger
+                class="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
+                value="history"
+                >ประวัติ</TabsTrigger
+              >
+            </TabsList>
+          </Tabs>
         </DialogHeader>
         <!-- 👇 เฉพาะส่วนนี้ที่ scroll ได้ -->
-        <div class="overflow-y-auto overflow-x-hidden max-h-[70vh]">
-            <!-- <div class="h-[300dvh]"> -->
-            <div>
-              <BaseInvoiceDetailTabs
-                v-model="activeTab"
-              ></BaseInvoiceDetailTabs>
-            </div>
+        <div class="overflow-y-auto overflow-x-hidden h-[70vh]">
+          <!-- <div class="h-[300dvh]"> -->
+          <div>
+            <BaseInvoiceDetailTabs v-model="activeTab" :print-target="invoiceRef"></BaseInvoiceDetailTabs>
+          </div>
         </div>
-        <DialogFooter>
-          <Button type="button" @click="openDialog = false">ปิด</Button>
+        <DialogFooter class="flex items-center border-t sm:justify-between p-4 py-1">
+          <!-- Action Buttons -->
+          <p class="flex items-center gap-2 text-sm text-gray-500">
+            <TriangleAlert class="w-5 h-5 mb-1" /> ไฟล์ PDF/A-3
+            นี้ไม่ใช่ฉบับประทับตราเวลา
+          </p>
+
+          <div class="flex flex-wrap gap-2">
+            <Button variant="outline"  v-print="'invoice-to-print'"><Printer /> พิมพ์ </Button>
+            <Button variant="outline"> <Mail /> ส่งอีเมล </Button>
+            <Button variant="outline"> <FileDown /> ดาวน์โหลด PDF </Button>
+          </div>
+
+          <!-- Close Button -->
+          <!-- <Button type="button" @click="openDialog = false"> ปิด </Button> -->
         </DialogFooter>
       </DialogContent>
     </Dialog>

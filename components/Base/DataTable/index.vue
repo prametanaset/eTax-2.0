@@ -1,96 +1,75 @@
 <template>
   <div class="w-full">
     <!-- แถว 1: Tab Filter + Date Range + ปุ่มออกใบกำกับ -->
-    <div class="flex flex-wrap items-center gap-4 mb-4 border-b">
-      <!-- 1. Tab Filter (ประเภทเอกสาร) -->
-      <!-- <div class="flex space-x-2">
-        <button
-          @click="activeStatus = null"
-          :class="['px-4 py-2 rounded-md font-medium', activeStatus === null ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300']"
+<!-- ROW 1: Tabs (no wrap, horizontal scroll on small screens) -->
+<div class="overflow-x-auto border-b mb-2">
+  <div class="inline-flex whitespace-nowrap">
+    <Tabs v-model="activeStatus">
+      <TabsList class="inline-flex space-x-2 p-0 bg-transparent">
+        <TabsTrigger
+          value="all"
+          class="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
         >
           ทั้งหมด
-        </button>
-        <button
-          @click="activeStatus = 'invoice'"
-          :class="['px-4 py-2 rounded-md font-medium', activeStatus === 'invoice' ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300']"
+        </TabsTrigger>
+        <TabsTrigger
+          value="0"
+          class="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
         >
-          ใบกำกับภาษี
-        </button>
-        <button
-          @click="activeStatus = 'credit_note'"
-          :class="['px-4 py-2 rounded-md font-medium', activeStatus === 'credit_note' ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300']"
+          ส่งแล้ว
+        </TabsTrigger>
+        <TabsTrigger
+          value="1"
+          class="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
         >
-          ใบลดหนี้
-        </button>
-        <button
-          @click="activeStatus = 'debit_note'"
-          :class="['px-4 py-2 rounded-md font-medium', activeStatus === 'debit_note' ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300']"
+          รอดำเนินการ
+        </TabsTrigger>
+        <TabsTrigger
+          value="2"
+          class="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
         >
-          ใบเพิ่มหนี้
-        </button>
-      </div> -->
+          ยกเลิก
+        </TabsTrigger>
+      </TabsList>
+    </Tabs>
+  </div>
+</div>
 
-      <Tabs v-model="activeStatus">
-        <TabsList class="w-full justify-start rounded-none bg-transparent p-0">
-          <TabsTrigger
-            value="all"
-            class="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
-          >
-            ทั้งหมด
-          </TabsTrigger>
-          <TabsTrigger
-            value="0"
-            class="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
-          >
-            ส่งแล้ว
-          </TabsTrigger>
-          <TabsTrigger
-            value="1"
-            class="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
-          >
-            รอดำเนินการ
-          </TabsTrigger>
-          <TabsTrigger
-            value="2"
-            class="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
-          >
-            ยกเลิก
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
-    </div>
-
-    <!-- แถว 2: Search + Export Excel -->
-<div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
-  <!-- ฝั่งซ้าย: Search + DatePicker -->
-  <div class="flex flex-col sm:flex-row items-center gap-2 w-full md:w-auto">
-    <div class="relative flex-1 md:min-w-[200px] lg:min-w-[400px]">
+<!-- ROW 2: Search + Date + Export + Button (stacked on mobile, but minimal vertical padding) -->
+<div class="flex flex-col lg:flex-row justify-between items-center gap-2 mb-2">
+  <!-- Left: Search + DatePicker -->
+  <div class="flex flex-col sm:flex-row items-center gap-2 w-full lg:w-auto">
+    <div class="relative flex-1 min-w-0 lg:min-w-[200px]">
       <Input
         id="search"
         type="text"
         v-model="searchTerm"
-        class="w-full pl-10 bg-[hsl(var(--card))] font-medium placeholder:font-normal rounded-md border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+        class="w-full pl-10 rounded-md border border-gray-300 bg-white text-sm placeholder:text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent h-9"
         placeholder="ค้นหาเลขที่ / ชื่อ / อีเมล"
       />
       <span class="absolute inset-y-0 left-3 flex items-center">
-        <Search class="w-4 h-4 text-muted-foreground" />
+        <Search class="w-4 h-4 text-muted-foreground " />
       </span>
     </div>
-
-    <BaseDateRangePicker class="w-full sm:w-auto" />
+    <div class="w-full sm:w-auto">
+      <BaseDateRangePicker class="w-full sm:w-auto h-9" />
+    </div>
   </div>
 
-  <!-- ฝั่งขวา: Export Excel + ปุ่มออก Invoice -->
-  <div class="flex flex-col sm:flex-row items-center gap-2 w-full md:w-auto">
-    <BaseExportExcelDialog class="w-full sm:w-auto" />
-
-    <NuxtLink to="/invoice/create/invoice" class="w-full sm:w-auto">
-      <Button
-        class="w-full sm:w-auto font-medium font-noto px-4 py-2 text-white bg-purple-600 hover:bg-purple-700 rounded-md flex items-center justify-center gap-2"
-      >
-        <Plus class="-mr-1 w-5 h-5" /> ออกใบกำกับภาษี
-      </Button>
-    </NuxtLink>
+  <!-- Right: Export + Create Invoice -->
+  <div class="flex flex-col sm:flex-row items-center gap-2 w-full lg:w-auto">
+    <div class="w-full sm:w-auto">
+      <BaseExportExcelDialog class="w-full sm:w-auto h-9" />
+    </div>
+    <div class="w-full sm:w-auto">
+      <NuxtLink to="/invoice/create/invoice" class="w-full sm:w-auto">
+        <Button
+          class="w-full sm:w-auto text-sm font-medium px-3 h-9 text-white bg-purple-600 hover:bg-purple-700 rounded-md flex items-center justify-center gap-1"
+        >
+          <Plus class="w-4 h-4" /> ออกใบกำกับภาษี
+        </Button>
+      </NuxtLink>
+    </div>
   </div>
 </div>
 
@@ -107,7 +86,7 @@
             <TableHead
               v-for="header in hg.headers"
               :key="header.id"
-              class="font-medium text-sm  px-4"
+              class="font-medium "
             >
               <FlexRender
                 v-if="!header.isPlaceholder"
@@ -128,7 +107,7 @@
                 <TableCell
                   v-for="cell in row.getVisibleCells()"
                   :key="cell.id"
-                  class="py-3 px-4 text-sm"
+                  class="py-3"
                 >
                   <FlexRender
                     :render="cell.column.columnDef.cell"
@@ -137,8 +116,8 @@
                 </TableCell>
               </TableRow>
               <TableRow v-if="row.getIsExpanded()">
-                <TableCell :colspan="row.getAllCells().length" class="p-4">
-                  <pre class="text-xs bg-gray-50 p-2 rounded">
+                <TableCell :colspan="row.getAllCells().length" >
+                  <pre class="bg-gray-50 rounded">
                     {{ JSON.stringify(row.original, null, 2) }}
                   </pre>
                 </TableCell>
@@ -232,7 +211,7 @@ const data: Payment[] = [
     id: "INV-0001",
     amount: 321,
     status: 2,
-    email: "suchintrakuulbuy@naakhphanthu-thnmphlkrang.or.th",
+    email: "suchintrakuulbuy@thnmphlkrang.or.th",
     name: "ปัตถพงษ์ ตระกูลไม้เรียง",
     date: "2025-05-19T20:42:00",
     documentType: "invoice",
@@ -250,7 +229,7 @@ const data: Payment[] = [
     id: "INV-0003",
     amount: 949,
     status: 1,
-    email: "wthnadraksaa@namthiphy-paansuwrrn.in.th",
+    email: "wthnadraksaa@paansuwrrn.in.th",
     name: "มณียา วะคีมัน",
     date: "2025-05-20T02:00:00",
     documentType: "debit_note",
@@ -268,7 +247,7 @@ const data: Payment[] = [
     id: "INV-0003",
     amount: 949,
     status: 1,
-    email: "wthnadraksaa@namthiphy-paansuwrrn.in.th",
+    email: "wthnadraksaa@paansuwrrn.in.th",
     name: "มณียา วะคีมัน",
     date: "2025-05-20T02:00:00",
     documentType: "debit_note",
@@ -286,7 +265,7 @@ const data: Payment[] = [
     id: "INV-0003",
     amount: 949,
     status: 1,
-    email: "wthnadraksaa@namthiphy-paansuwrrn.in.th",
+    email: "wthnadraksaa@paansuwrrn.in.th",
     name: "มณียา วะคีมัน",
     date: "2025-05-20T02:00:00",
     documentType: "debit_note",
@@ -304,7 +283,7 @@ const data: Payment[] = [
     id: "INV-0003",
     amount: 949,
     status: 1,
-    email: "wthnadraksaa@namthiphy-paansuwrrn.in.th",
+    email: "wthnadraksaa@paansuwrrn.in.th",
     name: "มณียา วะคีมัน",
     date: "2025-05-20T02:00:00",
     documentType: "debit_note",
@@ -322,7 +301,7 @@ const data: Payment[] = [
     id: "INV-0003",
     amount: 949,
     status: 1,
-    email: "wthnadraksaa@namthiphy-paansuwrrn.in.th",
+    email: "wthnadraksaa@paansuwrrn.in.th",
     name: "มณียา วะคีมัน",
     date: "2025-05-20T02:00:00",
     documentType: "debit_note",
@@ -358,7 +337,7 @@ const columns: ColumnDef<Payment>[] = [
   },
   {
     accessorKey: "documentType",
-    header: () => h("div", { class: "text-left ml-5" }, "ประเภทเอกสาร"),
+    header: () => h("div", { class: "text-left ml-5" }, "ประเภท"),
     cell: ({ row }) => {
       const typeLabels: Record<string, string> = {
         invoice: "ใบกำกับภาษี",

@@ -78,7 +78,7 @@ function handleAddNewProduct() {
           <!-- ชื่อสินค้า -->
           <div class="space-y-2">
             <Label for="name">ชื่อสินค้า</Label>
-            <Input id="name" v-model="newProduct.name" />
+            <Input id="name" v-model="newProduct.name" class="bg-[hsl(var(--card))]"/>
           </div>
 
           <!-- ราคาขาย -->
@@ -89,6 +89,7 @@ function handleAddNewProduct() {
               type="number"
               placeholder="ระบุราคาสินค้า"
               v-model="newProduct.price"
+              class="bg-[hsl(var(--card))]"
             />
           </div>
 
@@ -110,7 +111,7 @@ function handleAddNewProduct() {
           <!-- ลิงก์รูป -->
           <div class="space-y-2">
             <Label for="image">ลิงก์รูป</Label>
-            <Input id="image" v-model="newProduct.image" />
+            <Input id="image" v-model="newProduct.image" class="bg-[hsl(var(--card))]"/>
           </div>
 
           <!-- ตัวอย่างรูป -->
