@@ -22,8 +22,12 @@ import {
   Bell,
   ChevronsUpDown,
   CreditCard,
+  CreditCardIcon,
   LogOut,
+  Settings,
   Sparkles,
+  Store,
+  User,
 } from "lucide-vue-next";
 
 const props = defineProps<{
@@ -41,9 +45,9 @@ const linkData = [
     link: "",
   },
   {
-    title: "โปรไฟล์",
-    icon: BadgeCheck,
-    link: "/profile",
+    title: "ตั้งค่า",
+    icon: Settings,
+    link: "",
   },
   {
     title: "ดูบริการ",
@@ -57,6 +61,25 @@ const linkData = [
   },
 ];
 
+const tabTriggerData = [
+  {
+    title: "โปรไฟล์",
+    icon: User,
+    value: "profile",
+  },
+  {
+    title: "ร้านค้า",
+    icon: Store,
+    value: "store",
+  },
+  {
+    title: "ช่องทางชำระเงิน",
+    icon: CreditCardIcon,
+    value: "payment",
+  },
+];
+
+const showDialog = ref(false);
 const { isMobile } = useSidebar();
 const { signOut } = useAuth();
 const logOutHandler = async () => {
@@ -121,19 +144,28 @@ const logOutHandler = async () => {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <NuxtLink
-              v-for="(data, index) in linkData"
-              :key="index"
-              :to="data.link"
-              class="no-underline"
-            >
-              <DropdownMenuItem class="cursor-pointer font-normal flex gap-2">
+            <template v-for="(data, index) in linkData" :key="index">
+              <NuxtLink
+                v-if="data.title !== 'ตั้งค่า'"
+                :to="data.link"
+                class="no-underline"
+              >
+                <DropdownMenuItem class="cursor-pointer font-normal flex gap-2">
+                  <component :is="data.icon" v-if="data.icon" class="w-4" />
+                  {{ data.title }}
+                </DropdownMenuItem>
+              </NuxtLink>
+
+              <DropdownMenuItem
+                @click.stop="showDialog = true"
+                v-else
+                class="cursor-pointer font-normal flex gap-2"
+              >
                 <component :is="data.icon" v-if="data.icon" class="w-4" />
                 {{ data.title }}
               </DropdownMenuItem>
-            </NuxtLink>
+            </template>
           </DropdownMenuGroup>
-
           <DropdownMenuSeparator />
           <DropdownMenuItem
             class="cursor-pointer font-semibold"
@@ -146,4 +178,7 @@ const logOutHandler = async () => {
       </DropdownMenu>
     </SidebarMenuItem>
   </SidebarMenu>
+
+  <!-- แสดง Dialog  -->
+  <SettingsDialog v-model="showDialog" :tabTriggerData="tabTriggerData" />
 </template>

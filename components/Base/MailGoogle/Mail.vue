@@ -91,13 +91,11 @@ const links: LinkProp[] = [
 ];
 </script>
 <template>
-  <div class="flex gap-3">
+  <div class="flex gap-3 h-full">
     <!-- ✅ แสดง Nav บนหน้าจอ sm ขึ้นไป -->
     <Nav class="hidden lg:block" :links="links" />
 
-    <div
-      class="w-full h-screen flex flex-col gap-4 relative overflow-hidden overflow-y-auto"
-    >
+    <div class="w-full h-fit gap-4 relative overflow-hidden">
       <div
         class="flex gap-2 max-w-[30rem] bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 pt-2"
       >
@@ -126,15 +124,16 @@ const links: LinkProp[] = [
         </form>
       </div>
 
-      <!-- ✅ รายการเมล -->
-      <MailList
-        v-model:selected-mail="selectedMail"
-        :items="filteredMailList"
-      />
-
+      <div class="">
+        <!-- ✅ รายการเมล -->
+        <MailList
+          v-model:selected-mail="selectedMail"
+          :items="filteredMailList"
+        />
+      </div>
       <div
         :class="[
-          'absolute z-[2] bg-background w-full h-full rounded-md transition-transform duration-200 ease-in-out top-0',
+          'absolute z-[2] bg-background w-full  rounded-md transition-transform duration-200 ease-in-out top-0 overflow-y-auto',
           mailStore.selectMail.length !== 0
             ? 'translate-x-0'
             : 'translate-x-full',

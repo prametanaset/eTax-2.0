@@ -6,7 +6,7 @@
 
 <script lang="ts" setup>
 import MailGoogle from "~/components/Base/MailGoogle/Mail.vue";
-import { accounts, mails } from "@/components/Base/Mail/data/mail";
+import { accounts, mails } from "@/components/Base/MailGoogle/data/mail";
 
 definePageMeta({
   layout: "default",

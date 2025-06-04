@@ -22,7 +22,7 @@ function getBadgeVariantFromLabel(label: string) {
 </script>
 
 <template>
-  <div class="lg:bg-[hsl(var(--card))] lg:rounded-md overflow-hidden px-1">
+  <div class="h-full lg:bg-[hsl(var(--card))] lg:rounded-md overflow-hidden">
     <!-- ------------------mobile layout-------------------- -->
     <div class="lg:hidden">
       <div
