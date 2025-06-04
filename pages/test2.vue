@@ -1,16 +1,47 @@
 <template>
-  <div>
-    <button
-    @click="exportPayments"
-    class="px-4 py-2 bg-green-600 text-white rounded"
-  >
-    Export Payments
-  </button>
-    <Test></Test>
-    <BaseExportExcelDialog></BaseExportExcelDialog>
-  </div>
+  <div class="flex flex-col lg:flex-row w-full max-w-4xl mx-auto bg-white rounded-lg shadow p-6 mt-8">
+    <!-- Sidebar เหมือนเดิม -->
+    <aside class="w-full lg:w-1/4 mb-6 lg:mb-0">
+      <!-- ... เหมือนตัวอย่างบน ... -->
+    </aside>
 
+    <!-- Content -->
+    <section class="flex-1 space-y-6">
+      <div class="flex justify-between items-center">
+        <h2 class="text-xl font-semibold">ข้อมูลร้านค้า</h2>
+        <button class="text-purple-600 hover:underline text-sm">
+          <IconEdit class="inline w-4 h-4 mr-1" /> แก้ไขข้อมูลร้านค้า
+        </button>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <img src="https://i.pravatar.cc/100" class="w-12 h-12 rounded border" />
+        <div class="font-semibold text-lg">Nvidia Corporation</div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <label class="text-sm text-gray-500">หมายเลขผู้เสียภาษี</label>
+          <div class="text-base">0123456789123</div>
+        </div>
+        <div>
+          <label class="text-sm text-gray-500">อีเมลร้านค้า</label>
+          <div class="text-base">prametanaset147@gmail.com</div>
+        </div>
+        <div>
+          <label class="text-sm text-gray-500">เบอร์ติดต่อ</label>
+          <div class="text-base">098-765-321</div>
+        </div>
+        <div class="sm:col-span-2">
+          <label class="text-sm text-gray-500">ที่อยู่</label>
+          <div class="text-base">3801 Chalk Butte Rd, Cut Bank, MT 59427, United States</div>
+        </div>
+      </div>
+    </section>
+  </div>
 </template>
+
+
 
 <script setup lang="ts">
 

@@ -39,7 +39,7 @@ const labelOverrides = computed(() => {
 <template>
   <Dialog>
     <DialogTrigger as-child>
-      <Button variant="outline" class="flex items-center gap-1 h-9">
+      <Button variant="outline" class="flex items-center gap-1 h-9 bg-white dark:bg-transparent">
         <CornerUpRight class="w-4 h-4" /> ส่งออก
       </Button>
     </DialogTrigger>

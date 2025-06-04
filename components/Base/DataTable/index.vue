@@ -44,7 +44,7 @@
         id="search"
         type="text"
         v-model="searchTerm"
-        class="w-full pl-10 rounded-md border border-gray-300 bg-white text-sm placeholder:text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent h-9"
+        class="w-full pl-10 rounded-md border  bg-white dark:bg-transparent text-sm placeholder:text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent h-9"
         placeholder="ค้นหาเลขที่ / ชื่อ / อีเมล"
       />
       <span class="absolute inset-y-0 left-3 flex items-center">

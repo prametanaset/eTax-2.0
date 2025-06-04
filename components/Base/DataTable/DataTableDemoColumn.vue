@@ -119,11 +119,11 @@ const invoiceRef = ref(null)
             <BaseInvoiceDetailTabs v-model="activeTab" :print-target="invoiceRef"></BaseInvoiceDetailTabs>
           </div>
         </div>
-        <DialogFooter class="flex items-center border-t sm:justify-between p-4 py-1">
+        <DialogFooter class="flex items-center border-t sm:justify-between p-4 py-1 bg-slate-100">
           <!-- Action Buttons -->
-          <p class="flex items-center gap-2 text-sm text-gray-500">
-            <TriangleAlert class="w-5 h-5 mb-1" /> ไฟล์ PDF/A-3
-            นี้ไม่ใช่ฉบับประทับตราเวลา
+          <p class="flex items-center gap-2 font-medium text-xs text-gray-700">
+            <TriangleAlert class="w-5 h-5" /> ไฟล์นี้เป็น PDF/A-3 ยังไม่ได้ประทับเวลาหรือ Timestamp<br />
+            (สำหรับเอกสารทางกฎหมาย กรุณาตรวจสอบสถานะประทับเวลาก่อนใช้งาน)
           </p>
 
           <div class="flex flex-wrap gap-2">
