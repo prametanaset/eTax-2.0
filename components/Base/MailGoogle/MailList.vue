@@ -22,18 +22,18 @@ function getBadgeVariantFromLabel(label: string) {
 </script>
 
 <template>
-  <div class="h-full lg:bg-[hsl(var(--card))] lg:rounded-md overflow-hidden">
+  <div class="overflow-hidden">
     <!-- ------------------mobile layout-------------------- -->
-    <div class="lg:hidden">
+    <ScrollArea class="xl:hidden overflow-y-auto h-[87dvh]">
       <div
         v-for="item of items"
         :key="item.id"
-        class="cursor-pointer hover:bg-accent relative p-2 flex gap-3"
+        class="cursor-pointer hover:bg-accent relative p-2 flex gap-3 border-b"
         @click="(selectedMail = item.id), mailStore.setSelectMail(item)"
         :class="{
-          'bg-muted-300 dark:bg-muted-800 border-primary-500':
+          'bg-muted-300 dark:bg-muted-800 border-primary-500 ':
             selectedMail === item.id && !device.isMobile,
-          'bg-[hsl(var(--card))]': !item.read,
+          'bg-[hsl(var(--card))] rounded-sm overflow-hidden': !item.read,
         }"
       >
         <!-- profile img -->
@@ -80,15 +80,14 @@ function getBadgeVariantFromLabel(label: string) {
           </div>
         </div>
       </div>
-    </div>
+    </ScrollArea>
 
     <!-- ------------------desktop layout-------------------- -->
-    <table class="table-auto w-full hidden lg:block">
+    <table
+      class="table-auto w-full h-full overflow-hidden hidden xl:block mt-2 border lg:border-muted-200 dark:lg:border-muted-800 lg:bg-[hsl(var(--card))] lg:rounded-lg"
+    >
       <thead>
         <tr>
-          <th class="text-start">
-            <Checkbox id="mails" />
-          </th>
           <th class="py-3 flex gap-2">
             <TooltipProvider>
               <Tooltip>
@@ -123,75 +122,60 @@ function getBadgeVariantFromLabel(label: string) {
           <th></th>
         </tr>
       </thead>
-      <tbody>
-        <TransitionGroup name="list" appear>
-          <tr
-            v-for="item of items"
-            :key="item.id"
-            :class="[
-              'cursor-pointer hover:bg-accent',
-              !item.read ? 'bg-[hsl(var(--card))]' : 'bg-background',
-            ]"
-            @click="(selectedMail = item.id), mailStore.setSelectMail(item)"
-          >
-            <!-- action -->
-            <td class="py-2 flex items-center gap-1">
-              <Checkbox id="mails" />
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger as-child>
-                    <span
-                      class="inline-flex items-center justify-center p-1 cursor-pointer rounded-sm hover:bg-muted-200 dark:hover:bg-muted-800"
-                    >
-                      <Star class="w-5 h-5 text-xs" />
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>ติดดาว</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </td>
-            <!-- ชื่อผู้ส่ง -->
-            <td
+
+      <ScrollArea class="h-[calc(81dvh-1.5rem)]">
+        <tbody>
+          <TransitionGroup name="list" appear>
+            <tr
+              v-for="item of items"
+              :key="item.id"
               :class="[
-                'w-[15rem] px-4 py-2',
-                item.read ? 'font-normal' : 'font-semibold',
+                'cursor-pointer hover:bg-accent',
+                !item.read ? 'bg-[hsl(var(--card))]' : 'bg-background',
               ]"
+              @click="(selectedMail = item.id), mailStore.setSelectMail(item)"
             >
-              {{ item.name }}
-            </td>
-
-            <!-- หัวข้อ + เนื้อหา -->
-            <td
-              class="w-full max-w-[800px] px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis truncate"
-            >
-              <span :class="item.read ? 'font-normal' : 'font-semibold'">
-                {{ item.subject }}
-              </span>
-              -
-              <span
-                class="text-muted-800 dark:text-muted-400"
-                :title="item.text"
+              <!-- ชื่อผู้ส่ง -->
+              <td
+                :class="[
+                  'w-[15rem] px-4 py-2',
+                  item.read ? 'font-normal' : 'font-semibold',
+                ]"
               >
-                {{ item.text }}
-              </span>
-            </td>
+                {{ item.name }}
+              </td>
 
-            <!-- วันที่ -->
-            <td
-              class="px-4 py-2 text-xs text-end min-w-[6rem]"
-              :class="
-                selectedMail === item.id
-                  ? 'text-foreground'
-                  : 'text-muted-foreground'
-              "
-            >
-              {{ formatMailDate(new Date()) }}
-            </td>
-          </tr>
-        </TransitionGroup>
-      </tbody>
+              <!-- หัวข้อ + เนื้อหา -->
+              <td
+                class="w-full max-w-[800px] px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis truncate"
+              >
+                <span :class="item.read ? 'font-normal' : 'font-semibold'">
+                  {{ item.subject }}
+                </span>
+                -
+                <span
+                  class="text-muted-800 dark:text-muted-400"
+                  :title="item.text"
+                >
+                  {{ item.text }}
+                </span>
+              </td>
+
+              <!-- วันที่ -->
+              <td
+                class="px-4 py-2 text-xs text-end min-w-[6rem]"
+                :class="
+                  selectedMail === item.id
+                    ? 'text-foreground'
+                    : 'text-muted-foreground'
+                "
+              >
+                {{ formatMailDate(new Date()) }}
+              </td>
+            </tr>
+          </TransitionGroup>
+        </tbody>
+      </ScrollArea>
     </table>
   </div>
 </template>

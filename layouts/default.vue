@@ -60,31 +60,30 @@ onMounted(() => {
   }
 
   // ตั้งค่าครั้งแรกตามขนาดจริงบน client
-  open.value = isLg.value
+  open.value = isLg.value;
 
   // ฟังการเปลี่ยนแปลงครั้งต่อ ๆ ไป
   watch(isLg, (val) => {
-    open.value = val
-  })
-
+    open.value = val;
+  });
 });
-
 
 // เปิด/ปิดตามขนาดจอ
 // watch(isLg, (val) => open.value = val, { immediate: true });
 </script>
 
 <template>
-  <SidebarProvider  v-model:open="open">
+  <SidebarProvider v-model:open="open">
     <AppSidebar />
     <SidebarInset>
-     <div ref="sentinel" class="h-1"></div> <!-- Invisible marker -->
-    <header
-      :class="[
-        'sticky top-0 flex h-14 shrink-0 z-50 bg-[hsl(var(--background))] items-center gap-2 transition-all',
-        isStuck ? 'shadow-sm ' : ''
-      ]"
-    >
+      <div ref="sentinel" class="h-1"></div>
+      <!-- Invisible marker -->
+      <header
+        :class="[
+          'sticky top-0  flex h-14 shrink-0 z-50 bg-[hsl(var(--background))] items-center gap-2 transition-all',
+          isStuck ? 'shadow-sm ' : '',
+        ]"
+      >
         <div class="flex items-center justify-between w-full px-4 pr-2">
           <div id="bread-crumb" class="flex items-center">
             <SidebarTrigger />
@@ -105,12 +104,11 @@ onMounted(() => {
                 </BreadcrumbItem> -->
               </BreadcrumbList>
             </Breadcrumb>
-<Transition name="fade" mode="out-in">
-  <p class="text-xl font-semibold"  :key="route.meta.title">
-    {{ route.meta.title }}
-  </p>
-</Transition>
-
+            <Transition name="fade" mode="out-in">
+              <p class="text-xl font-semibold" :key="route.meta.title">
+                {{ route.meta.title }}
+              </p>
+            </Transition>
           </div>
 
           <div id="profile" class="flex items-center font-">
@@ -121,7 +119,7 @@ onMounted(() => {
               <MailCheck class="h-4 mr-1" />e-Tax พร้อมใช้งาน
             </Badge> -->
 
-            <TooltipProvider :delay-duration="100" >
+            <TooltipProvider :delay-duration="100">
               <Tooltip>
                 <TooltipTrigger as-child class="mr-2">
                   <BaseDotNoti
@@ -146,7 +144,10 @@ onMounted(() => {
               </Tooltip>
             </TooltipProvider>
 
-            <Separator orientation="vertical" class="h-5 mx-1 w-px bg-muted-300" />
+            <Separator
+              orientation="vertical"
+              class="h-5 mx-1 w-px bg-muted-300"
+            />
 
             <NavUser2 :user="data.user" />
           </div>
@@ -195,5 +196,4 @@ onMounted(() => {
 .fade-leave-to {
   opacity: 0;
 }
-
 </style>

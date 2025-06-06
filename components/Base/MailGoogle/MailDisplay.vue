@@ -34,7 +34,7 @@ const today = new Date();
 </script>
 
 <template>
-  <ScrollArea class="h-[95vh] flex">
+  <ScrollArea class="h-full">
     <div class="flex h-full flex-col">
       <div
         :class="[
@@ -50,7 +50,7 @@ const today = new Date();
                 :disabled="!mail"
                 @click="mailStore.clearSelectMailStore()"
               >
-                <ChevronLeft class="size-4" />
+                <ChevronRight class="size-4" />
                 <span class="sr-only">กลับ</span>
               </Button>
             </TooltipTrigger>

@@ -1,6 +1,6 @@
 <template>
-  <div class="h-full flex-col md:flex">
-    <MailGoogle :mails="mails" />
+  <div class="">
+    <MailGoogle :mails="mails" class="flex-1" />
   </div>
 </template>
 

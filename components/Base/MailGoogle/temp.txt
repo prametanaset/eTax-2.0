@@ -16,6 +16,7 @@ interface MailProps {
 
 const props = withDefaults(defineProps<MailProps>(), {});
 
+const isCollapsed = ref(props.defaultCollapsed);
 const selectedMail = ref<string | undefined>();
 const searchValue = ref("");
 const debouncedSearch = refDebounced(searchValue, 250);
@@ -90,16 +91,15 @@ const links: LinkProp[] = [
 ];
 </script>
 <template>
-  <div class="flex gap-6 lg:h-[calc(97dvh-3.5rem)] overflow-hidden">
-    <!-- Sidebar mail -->
-    <div class="hidden xl:block w-64 h-full">
-      <Nav class="h-full" :links="links" />
-    </div>
+  <div class="flex gap-3">
+    <!-- ✅ แสดง Nav บนหน้าจอ sm ขึ้นไป -->
+    <Nav class="hidden lg:block" :links="links" />
 
-    <!-- Main content -->
-    <div class="flex flex-col h-full w-full gap-3 relative">
+    <div
+      class="w-full h-screen gap-4 relative overflow-x-hidden overflow-y-auto"
+    >
       <div
-        class="flex gap-2 lg:max-w-[30rem] bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 pt-2"
+        class="flex gap-2 md:max-w-[30rem] bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 pt-2"
       >
         <!-- ✅ แสดง Nav ใน Drawer (เฉพาะจอเล็ก) -->
         <Sheet>
@@ -125,7 +125,8 @@ const links: LinkProp[] = [
           </div>
         </form>
       </div>
-      <div class="h-full">
+
+      <div class="">
         <!-- ✅ รายการเมล -->
         <MailList
           v-model:selected-mail="selectedMail"
@@ -134,10 +135,10 @@ const links: LinkProp[] = [
       </div>
       <div
         :class="[
-          'absolute z-[2] bg-background w-full xl:w-[50%] h-full xl:border border-muted-400 rounded-md transition-transform duration-200 ease-in-out top-0 overflow-y-auto',
+          'absolute z-[2] bg-background w-full  rounded-md transition-transform duration-200 ease-in-out top-0 overflow-y-auto',
           mailStore.selectMail.length !== 0
-            ? 'translate-x-0 xl:translate-x-[100%] '
-            : 'translate-x-full xl:translate-x-[200%]',
+            ? 'translate-x-0'
+            : 'translate-x-full',
         ]"
       >
         <MailDisplay :mail="selectedMailData" />
