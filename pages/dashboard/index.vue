@@ -16,7 +16,7 @@
       class="relative group"
     >
       <div
-        class="absolute top-[60%] right-3 w-[90%] h-12 lg:h-[50%] bg-primary-400/50 blur-xl rounded-full img-shadow-animation"
+        class="absolute top-[60%] right-3 w-[90%] h-12 lg:h-[35%] bg-primary-400 blur-xl rounded-full img-shadow-animation"
       ></div>
       <Card
         class="z-10 relative rounded-lg shadow-xl/30 leading-none border img-border-animation p-3 w-full"
@@ -72,7 +72,7 @@
     <!-- Table -->
     <div
       :class="[
-        isMobile ? 'w-[92vw]' : 'w-full overflow-visible pt-7',
+        isMobile ? 'w-[92vw]' : 'w-full overflow-visible pt-2',
         'overflow-hidden',
       ]"
     >

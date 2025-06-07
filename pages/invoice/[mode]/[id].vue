@@ -28,8 +28,8 @@
                     >ประเภทเอกสาร</span
                   >
                   <Select v-model="documentType">
-                    <SelectTrigger class="h-10 bg-[hsl(var(--card))]">
-                      <SelectValue placeholder="เลือกประเภทเอกสาร" />
+                    <SelectTrigger class="h-10 bg-[hsl(var(--card))]" >
+                      <SelectValue placeholder="เลือกประเภทเอกสาร" :class="documentType !== null? '': 'text-[#a1a8b3] font-normal'" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
@@ -173,7 +173,7 @@ const df = new DateFormatter("th-TH", {
 const value = ref<DateValue>();
 
 const customer = ref(null);
-const documentType = ref("");
+const documentType = ref(null);
 const customerAddress = ref("");
 
 const storeApi = reactive({

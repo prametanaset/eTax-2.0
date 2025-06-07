@@ -2,7 +2,7 @@
   <div class="w-full">
     <!-- แถว 1: Tab Filter + Date Range + ปุ่มออกใบกำกับ -->
 <!-- ROW 1: Tabs (no wrap, horizontal scroll on small screens) -->
-<div class="overflow-x-auto border-b mb-2">
+<div class="overflow-x-auto mb-2">
   <div class="inline-flex whitespace-nowrap">
     <Tabs v-model="activeStatus">
       <TabsList class="inline-flex space-x-2 p-0 bg-transparent">
@@ -81,7 +81,7 @@
           <TableRow
             v-for="hg in table.getHeaderGroups()"
             :key="hg.id"
-            class="font-noto bg-gray-100 dark:bg-gray-800"
+            class="font-noto bg-gray-50 dark:bg-gray-800"
           >
             <TableHead
               v-for="header in hg.headers"

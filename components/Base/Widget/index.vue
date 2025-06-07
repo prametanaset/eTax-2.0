@@ -2,13 +2,13 @@
   <div
     :class="
       !isMobile
-        ? 'grid grid-cols-1 md:grid-cols-2 gap-2'
+        ? 'grid grid-cols-1 md:grid-cols-[40%_60%] gap-2'
         : 'grid grid-cols-2 md:grid-cols-2 gap-2'
     "
   >
     <!-- ข้อมูล Summary -->
-    <div class="flex flex-col justify-between py-1 gap-4">
-      <h3 class="font-semibold text-base mb-1 text-muted-700 dark:text-white">
+    <div class="flex flex-col justify-between py-1 gap-1">
+      <h3 class="font-medium text-[15px] mb-1  dark:text-white">
         {{ props.title }}
       </h3>
       <h4
@@ -21,8 +21,8 @@
         <Newspaper v-if="props.status == 'money'" />
         {{ props.countNumber.toLocaleString() }}
       </h4>
-      <p class="text-muted-500 text-sm font-medium ml-1 dark:text-[#B4B4B4]">
-        <span class="text-gray-700 font-semibold dark:text-white">
+      <p class=" text-sm font-medium ml-1 dark:text-[#B4B4B4]">
+        <span class=" font-semibold dark:text-white">
           {{ props.averageTime.toFixed(0) }}
         </span>
         {{ unitLabel }}
@@ -30,33 +30,36 @@
     </div>
 
     <!-- กราฟ + Filter Tabs -->
-    <div class="flex flex-col justify-between">
+    <div class="flex flex-col justify-between ">
       <!-- Filter Tabs -->
       <Tabs
         v-model="selectedRange"
-        class="mb-2 self-start md:-ml-7 lg:-mt-1 lg:m-0 md:self-center lg:self-end"
+        class="mb-2 self-start md:-ml-7 lg:-mt-2 lg:m-0 md:self-center lg:self-end"
         :class="!isMobile ? '' : '-ml-14 -mt-1'"
       >
         <TabsList class="bg-[hsl(var(--card))]">
-          <TabsTrigger value="today" class="data-[state=active]:font-semibold">
+          <TabsTrigger value="today" class="data-[state=active]:font-semibold data-[state=active]:bg-[hsl(var(--card))] data-[state=active]:shadow-none">
             วันนี้
           </TabsTrigger>
-          <TabsTrigger value="week" class="data-[state=active]:font-semibold">
+          <TabsTrigger value="week" class="data-[state=active]:font-semibold data-[state=active]:bg-[hsl(var(--card))] data-[state=active]:shadow-none">
             สัปดาห์
           </TabsTrigger>
-          <TabsTrigger value="month" class="data-[state=active]:font-semibold">
+          <TabsTrigger value="month" class="data-[state=active]:font-semibold data-[state=active]:bg-[hsl(var(--card))] data-[state=active]:shadow-none">
             เดือน
           </TabsTrigger>
-          <TabsTrigger value="year" class="data-[state=active]:font-semibold">
+          <TabsTrigger value="year" class="data-[state=active]:font-semibold data-[state=active]:bg-[hsl(var(--card))] data-[state=active]:shadow-none">
             ปี
           </TabsTrigger>
         </TabsList>
       </Tabs>
 
       <!-- Chart -->
-      <div class="w-full mb-2 relative overflow-hidden blur-sides">
+      <div class="w-full mb-2 relative blur-sides">
+      <!-- <div> -->
         <BaseWidgetChart :color="statusColor" :range="selectedRange" />
       </div>
+        
+      <!-- </div> -->
     </div>
   </div>
 </template>
@@ -134,5 +137,11 @@ const statusColor = computed(() => {
 .blur-sides::after {
   right: 0;
   transform: translateX(50%);
+}
+
+/* Dark mode background for blurred sides */
+.dark .blur-sides::before,
+.dark .blur-sides::after {
+  background-color: #1d283a; /* หรือใช้ theme: dark:bg-gray-900 */
 }
 </style>l

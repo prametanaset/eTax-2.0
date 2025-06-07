@@ -40,12 +40,50 @@ const areaChart1 = computed(() => {
   }
 })
 
+const chartOptions2 = computed(() => {
+  return {
+    chart: {
+      type: 'bar',
+      height: 100,
+      fontFamily: `inherit`,
+      sparkline: {
+        enabled: true
+      }
+    },
+    dataLabels: {
+      enabled: false
+    },
+    colors: [props.color],
+    stroke: {
+      curve: 'smooth',
+      width: 0
+    },
+    tooltip: {
+      fixed: {
+        enabled: false
+      },
+      x: {
+        show: false
+      },
+      y: {
+        title: {
+          formatter: () => 'Users : $'
+        }
+      }
+    }
+  };
+});
+
+
 const chartOptions1 = computed(() => ({
   chart: {
-    type: 'area',
-    fontFamily: 'inherit',
-    sparkline: { enabled: true },
-  },
+      type: 'area',
+      height: 100,
+      fontFamily: `inherit`,
+      sparkline: {
+        enabled: true
+      }
+    },
   dataLabels: { enabled: false },
   colors: [props.color],
   fill: {
@@ -58,7 +96,7 @@ const chartOptions1 = computed(() => ({
       stops: [0, 100],
     },
   },
-  stroke: { curve: 'smooth', width: 1.2 },
+  stroke: { curve: 'smooth', width: 0 },
   tooltip: {
     shared: true,
     x: {
@@ -94,10 +132,17 @@ const chartOptions1 = computed(() => ({
   <ClientOnly>
     <ApexChart
       class="dark:text-black h-full w-full"
-      type="area"
-      :options="chartOptions1"
-      :series="areaChart1.series"
-      height="90"
+      type="bar"
+      :options="chartOptions2"
+      :series="[
+    {
+      name: 'Users',
+      data: [
+        220, 0, 240, 220, 225, 215, 205, 195, 185, 150, 185, 195, 80, 205, 215, 225, 240, 225, 215, 205, 80, 215, 225, 240, 215, 210, 190
+      ]
+    }
+  ]"
+      height="80px"
     />
   </ClientOnly>
 </template>
