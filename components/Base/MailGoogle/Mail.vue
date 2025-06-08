@@ -134,9 +134,9 @@ const links: LinkProp[] = [
       </div>
       <div
         :class="[
-          'absolute z-[2] bg-background w-full xl:w-[50%] h-full xl:border border-muted-400 rounded-md transition-transform duration-200 ease-in-out top-0 overflow-y-auto',
+          'absolute z-[2] bg-background w-full xl:w-[50%] h-full xl:border border-muted-800 rounded-md transition-transform duration-200 ease-in-out top-0 overflow-y-auto',
           mailStore.selectMail.length !== 0
-            ? 'translate-x-0 xl:translate-x-[100%] '
+            ? 'translate-x-0 xl:translate-x-[101%] '
             : 'translate-x-full xl:translate-x-[200%]',
         ]"
       >
