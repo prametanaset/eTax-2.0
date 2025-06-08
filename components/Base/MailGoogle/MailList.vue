@@ -31,7 +31,7 @@ function getBadgeVariantFromLabel(label: string) {
         class="cursor-pointer hover:bg-accent relative p-2 flex gap-3 border-b"
         @click="(selectedMail = item.id), mailStore.setSelectMail(item)"
         :class="{
-          'bg-muted-300 dark:bg-muted-800 border-primary-500 ':
+          'bg-muted-300 dark:bg-muted-800 ':
             selectedMail === item.id && !device.isMobile,
           'bg-[hsl(var(--card))] rounded-sm overflow-hidden': !item.read,
         }"
