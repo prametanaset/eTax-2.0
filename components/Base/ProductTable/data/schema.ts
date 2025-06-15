@@ -5,13 +5,12 @@ import type { description } from "~/layouts/default.vue";
 // IRL, you will have a schema for your data models.
 
 export const productSchema = z.object({
-  ID: z.string(),
-  ProductCode: z.string(),
-  Name: z.string(),
-  Description: z.string(),
-  Price: z.number(),
-  Vat: z.boolean(),
-  VatRate: z.number(),
+  id: z.number(), // uint
+  sku: z.string(), // Sku
+  name: z.string(), // Name
+  price: z.number(), // float64
+  vat_type: z.string(), // included / excluded
+  vat_rate: z.number(), // int
 });
 
 export type Product = z.infer<typeof productSchema>;

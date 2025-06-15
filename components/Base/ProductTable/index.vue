@@ -4,7 +4,7 @@
     <div class="rounded-md border bg-[hsl(var(--card))]">
       <!-- hsl(var(--card)); -->
       <Table class=" ">
-        <TableHeader>
+        <TableHeader class="bg-[hsl(var(--card))]">
           <TableRow
             v-for="headerGroup in table.getHeaderGroups()"
             :key="headerGroup.id"

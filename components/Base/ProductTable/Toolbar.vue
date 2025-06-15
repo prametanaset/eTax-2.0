@@ -2,20 +2,20 @@
   <div class="flex items-center justify-between">
     <div class="flex flex-1 items-center space-x-2">
       <Input
-        placeholder="Filter Products..."
-        :model-value="(table.getColumn('Name')?.getFilterValue() as string) ?? ''"
+        placeholder="ค้นหา สินค้า"
+        :model-value="(table.getColumn('name')?.getFilterValue() as string) ?? ''"
         class="h-8 w-[150px] lg:w-[250px] bg-[hsl(var(--card))]"
-        @input="table.getColumn('Name')?.setFilterValue($event.target.value)"
+        @input="table.getColumn('name')?.setFilterValue($event.target.value)"
       />
       <DataTableFacetedFilter
-        v-if="table.getColumn('Vat')"
-        :column="table.getColumn('Vat')"
+        v-if="table.getColumn('vat_type')"
+        :column="table.getColumn('vat_type')"
         title="สถานะ"
         :options="statuses"
       />
       <DataTableFacetedFilter
-        v-if="table.getColumn('VatRate')"
-        :column="table.getColumn('VatRate')"
+        v-if="table.getColumn('vat_rate')"
+        :column="table.getColumn('vat_rate')"
         title="อัตราภาษี"
         :options="rates"
       />

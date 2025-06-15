@@ -1,24 +1,14 @@
+import type { UUID } from "crypto";
 import { defineStore } from "pinia";
+import type { Product, ProductPayload } from "~/types/product";
 import { ref, computed } from "vue";
 
 import useProductService from "~/composables/useProductService";
 
 export const useProductStore = defineStore("productStore", () => {
-  interface Product {
-    ID: number;
-    StoreId: number;
-    ProductCode: string;
-    Name: string;
-    Price: number;
-    Vat: boolean;
-    VatRate: number;
-  }
-
   const products = ref<Array<Product>>([]);
   const selectProductList = ref<Product[]>([]);
-  const productsToEdit = ref<Array<Product>>([]);
-  const productsToDelete = ref<Array<Product>>([]);
-  const { getProducts } = useProductService();
+  const { getProducts, getProductById, deleteProduct } = useProductService();
 
   // ✅ Action: เพิ่มสินค้า
   const addProduct = (product: Product) => {
@@ -34,21 +24,10 @@ export const useProductStore = defineStore("productStore", () => {
     products.value = newProducts;
   };
 
-  const setProductToEdit = (newProducts: Array<Product>) => {
-    productsToEdit.value = newProducts;
+  const setProductIdToDelete = (id: Number) => {
+    deleteProduct(id);
   };
 
-  const setProductToDelete = (newProducts: Array<Product>) => {
-    productsToDelete.value = newProducts;
-  };
-
-  const setSelectProductList = (newProduct: any) => {
-    selectProductList.value = newProduct;
-  };
-
-  const clearProductToEdit = () => {
-    productsToEdit.value = [];
-  };
   const clearProductStore = () => {
     products.value = [];
   };
@@ -63,19 +42,25 @@ export const useProductStore = defineStore("productStore", () => {
     }
   };
 
+  // ✅ โหลดสินค้าจาก API และบันทึกลง Store
+  const getProductFromId = async (id: Number) => {
+    try {
+      const response = await getProductById(id);
+      return response;
+    } catch (error) {
+      console.error("❌ Failed to load products:", error);
+    }
+  };
+
   return {
     products,
-    productsToEdit,
-    productsToDelete,
     selectProductList,
     addProduct,
     removeProduct,
     setProducts,
     getProduct,
-    setProductToEdit,
-    clearProductToEdit,
     clearProductStore,
-    setProductToDelete,
-    setSelectProductList,
+    setProductIdToDelete,
+    getProductFromId,
   };
 });

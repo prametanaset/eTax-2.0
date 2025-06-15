@@ -1,21 +1,16 @@
 import useAxios from "@/composables/useAxios";
-import type { Customer } from "~/types/customer";
+import type { ProductPayload, Product } from "~/types/product";
 
 export default function useProducts() {
   const $axios = useAxios(); // ดึง Axios จาก composable
 
-  interface Product {
-    ProductCode: string;
-    Name: string;
-    Description: string;
-    Price: number;
-    Vat: boolean;
-    VatRate: number;
-  }
+  const storeId = "a3f2b4e1-8f17-4f55-b6c0-1b758e2f34cd";
 
   const getProducts = async () => {
     try {
-      const response = await $axios.get("/products");
+      const response = await $axios.get("/products", {
+        params: { store_id: storeId },
+      });
       return response.data;
     } catch (error) {
       console.error("❌ Error fetching products:", error);
@@ -23,9 +18,32 @@ export default function useProducts() {
     }
   };
 
-  const createProduct = async (product: Product) => {
+  const getProductById = async (id: Number) => {
     try {
-      const response = await $axios.post("/products", product, {
+      const response = await $axios.get(`/products/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error("❌ Error fetching products:", error);
+      throw error;
+    }
+  };
+
+  const createProduct = async (product: any) => {
+    try {
+      const payload = {
+        product: {
+          store_id: storeId,
+          name: product.name,
+          price: product.price,
+          vat_type: product.taxType,
+        },
+        product_image: [
+          {
+            url: product.image,
+          },
+        ],
+      };
+      const response = await $axios.post("/products", payload, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -42,12 +60,28 @@ export default function useProducts() {
     }
   };
 
-  const updateProduct = async (product: Product) => {
+  const updateProduct = async (product: any) => {
     try {
-      const response = await $axios.put(`/products/${product.ID}`, product, {
+      const payload = {
+        product: {
+          id: product.id,
+          sku: product.sku,
+          store_id: storeId,
+          name: product.name,
+          price: product.price,
+          vat_type: product.taxType,
+        },
+        product_image: [
+          {
+            url: product.image,
+          },
+        ],
+      };
+      const response = await $axios.put(`/products/`, payload, {
         headers: {
           "Content-Type": "application/json",
         },
+        params: { id: product.id },
       });
       return response.data; // ✅ ส่งกลับเฉพาะข้อมูลที่สำคัญ
     } catch (error: any) {
@@ -61,9 +95,9 @@ export default function useProducts() {
     }
   };
 
-  const deleteProduct = async (product: Product) => {
+  const deleteProduct = async (id: Number) => {
     try {
-      const response = await $axios.delete(`/products/${product.ID}`);
+      const response = await $axios.delete(`/products/${id}`);
       return response.data; // ✅ ส่งกลับเฉพาะข้อมูลที่สำคัญ
     } catch (error: any) {
       console.error(
@@ -76,5 +110,11 @@ export default function useProducts() {
     }
   };
 
-  return { getProducts, createProduct, updateProduct, deleteProduct };
+  return {
+    getProducts,
+    getProductById,
+    createProduct,
+    updateProduct,
+    deleteProduct,
+  };
 }

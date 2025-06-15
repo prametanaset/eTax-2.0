@@ -1,5 +1,8 @@
 <template>
-  <div v-if="column.getCanSort()" :class="cn('flex items-center space-x-2', $attrs.class ?? '')">
+  <div
+    v-if="column.getCanSort()"
+    :class="cn('flex items-center space-x-2', $attrs.class ?? '')"
+  >
     <DropdownMenu>
       <DropdownMenuTrigger as-child>
         <Button
@@ -8,8 +11,14 @@
           class="-ml-3 h-8 data-[state=open]:bg-accent"
         >
           <span>{{ title }}</span>
-          <ArrowDownIcon v-if="column.getIsSorted() === 'desc'" class="ml-2 h-4 w-4" />
-          <ArrowUpIcon v-else-if=" column.getIsSorted() === 'asc'" class="ml-2 h-4 w-4" />
+          <ArrowDownIcon
+            v-if="column.getIsSorted() === 'desc'"
+            class="ml-2 h-4 w-4"
+          />
+          <ArrowUpIcon
+            v-else-if="column.getIsSorted() === 'asc'"
+            class="ml-2 h-4 w-4"
+          />
           <CaretSortIcon v-else class="ml-2 h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
@@ -37,36 +46,34 @@
 </template>
 
 <script lang="ts" setup>
-import type { Column } from '@tanstack/vue-table'
-import type { Product } from './data/schema'
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
+import type { Column } from "@tanstack/vue-table";
+import type { Product } from "./data/schema";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import ArrowDownIcon from '~icons/radix-icons/arrow-down'
+} from "@/components/ui/dropdown-menu";
+import ArrowDownIcon from "~icons/radix-icons/arrow-down";
 
-import ArrowUpIcon from '~icons/radix-icons/arrow-up'
-import CaretSortIcon from '~icons/radix-icons/caret-sort'
-import EyeNoneIcon from '~icons/radix-icons/eye-none'
+import ArrowUpIcon from "~icons/radix-icons/arrow-up";
+import CaretSortIcon from "~icons/radix-icons/caret-sort";
+import EyeNoneIcon from "~icons/radix-icons/eye-none";
 interface DataTableColumnHeaderProps {
-  column: Column<Product, any>
-  title: string
+  column: Column<Product, any>;
+  title: string;
 }
 
-defineProps<DataTableColumnHeaderProps>()
+defineProps<DataTableColumnHeaderProps>();
 </script>
 
 <script lang="ts">
 export default {
   inheritAttrs: false,
-}
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { ref, computed } from "vue";
 import {
   Dialog,
   DialogContent,
@@ -21,21 +21,9 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import type { ProductPayload } from "~/types/product";
 
-const props = defineProps<{
-  modelValue: boolean;
-  mode: "create" | "edit";
-  product?: {
-    id: number;
-    name: string;
-    sku: string;
-    price: number;
-    image: string;
-    taxType: string;
-  };
-}>();
-
+const props = defineProps<{ modelValue: boolean }>();
+const { productsToEdit } = useProductStore();
 const emit = defineEmits<{
   (e: "update:modelValue", value: boolean): void;
   (
@@ -48,79 +36,39 @@ const emit = defineEmits<{
       taxType: string;
     }
   ): void;
-  (
-    e: "product-updated",
-    product: {
-      id: number;
-      name: string;
-      sku: string;
-      price: number;
-      image: string;
-      taxType: string;
-    }
-  ): void;
 }>();
 
-const newProduct = ref({
-  id: 0,
-  name: "",
-  sku: "",
-  price: 0,
-  image: "",
-  taxType: "include",
+const editProduct = ref({
+  id: productsToEdit.ID,
+  name: productsToEdit.Name,
+  price: productsToEdit.Price,
+  image: productsToEdit.Img,
+  taxType: productsToEdit.VatType,
 });
-
-watch(
-  () => props.product,
-  (product) => {
-    if (props.mode === "edit" && product) {
-      newProduct.value = {
-        id: product.id,
-        sku: product.sku,
-        name: product.name,
-        price: product.price,
-        image: product.image || "",
-        taxType: product.taxType || "include",
-      };
-    } else {
-      resetForm();
-    }
-  },
-  { immediate: true }
-);
 
 const calculatedPrice = computed(() => {
   const vatRate = 0.07;
-  const price = newProduct.value.price;
-  return newProduct.value.taxType === "exclude" ? price * (1 + vatRate) : price;
+  const price = editProduct.value.price;
+  return editProduct.value.taxType === "exclude"
+    ? price * (1 + vatRate)
+    : price;
 });
 
-function resetForm() {
-  newProduct.value = {
-    id: 0,
+function handleEditProduct() {
+  emit("product-added", {
+    id: Date.now(),
+    name: editProduct.value.name,
+    price: parseFloat(calculatedPrice.value.toFixed(2)),
+    image: editProduct.value.image || "/images/products/default.jpg",
+    taxType: editProduct.value.taxType,
+  });
+  emit("update:modelValue", false);
+  editProduct.value = {
     name: "",
-    sku: "",
     price: 0,
     image: "",
     taxType: "include",
   };
-}
-
-function handleSave() {
-  const payload = {
-    ...newProduct.value,
-    price: parseFloat(calculatedPrice.value.toFixed(2)),
-    image: newProduct.value.image || "/images/products/default.jpg",
-  };
-
-  if (props.mode === "edit") {
-    emit("product-updated", payload);
-  } else {
-    emit("product-added", payload);
-  }
-
-  emit("update:modelValue", false);
-  resetForm();
 }
 </script>
 
@@ -128,9 +76,7 @@ function handleSave() {
   <Dialog :open="modelValue" @update:open="emit('update:modelValue', $event)">
     <DialogContent class="sm:max-w-[600px]">
       <DialogHeader>
-        <DialogTitle>
-          {{ mode === "edit" ? "แก้ไขสินค้า" : "เพิ่มสินค้าใหม่" }}
-        </DialogTitle>
+        <DialogTitle>แก้ไขสินค้า</DialogTitle>
         <DialogDescription>
           กรอกรายละเอียดสินค้า เลือกรูปแบบภาษี แล้วตรวจสอบราคาสุทธิ
         </DialogDescription>
@@ -138,33 +84,38 @@ function handleSave() {
 
       <Card class="border shadow-sm rounded-lg">
         <CardContent class="py-6 px-4 space-y-5">
-          <!-- รหัส -->
-          <div v-if="props.mode == 'edit'" class="space-y-2">
-            <Label for="name">รหัสสินค้า</Label>
-            <Input id="name" disabled v-model="newProduct.sku" />
-          </div>
           <!-- ชื่อสินค้า -->
           <div class="space-y-2">
             <Label for="name">ชื่อสินค้า</Label>
-            <Input id="name" v-model="newProduct.name" />
+            <Input
+              id="name"
+              v-model="newProduct.name"
+              class="bg-[hsl(var(--card))]"
+            />
           </div>
 
           <!-- ราคาขาย -->
           <div class="space-y-2">
             <Label for="price">ราคาขาย</Label>
-            <Input id="price" type="number" v-model="newProduct.price" />
+            <Input
+              id="price"
+              type="number"
+              placeholder="ระบุราคาสินค้า"
+              v-model="newProduct.price"
+              class="bg-[hsl(var(--card))]"
+            />
           </div>
 
           <!-- ประเภทภาษี -->
           <div class="space-y-2">
             <Label>ประเภทภาษี</Label>
             <Select v-model="newProduct.taxType">
-              <SelectTrigger class="w-full">
+              <SelectTrigger class="shadow-none w-full">
                 <SelectValue placeholder="เลือกภาษี" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="include">รวม VAT 7%</SelectItem>
-                <SelectItem value="exclude">ไม่รวม VAT</SelectItem>
+                <SelectItem value="exclude">ไม่รวม VAT (บวกภายหลัง)</SelectItem>
                 <SelectItem value="exempt">ยกเว้นภาษี</SelectItem>
               </SelectContent>
             </Select>
@@ -173,10 +124,14 @@ function handleSave() {
           <!-- ลิงก์รูป -->
           <div class="space-y-2">
             <Label for="image">ลิงก์รูป</Label>
-            <Input id="image" v-model="newProduct.image" />
+            <Input
+              id="image"
+              v-model="newProduct.image"
+              class="bg-[hsl(var(--card))]"
+            />
           </div>
 
-          <!-- รูปภาพ -->
+          <!-- ตัวอย่างรูป -->
           <div class="flex justify-center">
             <div v-if="newProduct.image" class="w-32 h-32">
               <img
@@ -187,7 +142,7 @@ function handleSave() {
             </div>
             <div
               v-else
-              class="w-32 h-32 flex items-center justify-center text-gray-500 bg-gray-50 rounded-md border border-dashed"
+              class="w-32 h-32 flex items-center justify-center text-center text-sm text-gray-500 bg-gray-50 rounded-md border border-dashed shadow"
             >
               ยังไม่มีรูปสินค้า
             </div>
@@ -221,9 +176,7 @@ function handleSave() {
         <DialogClose as-child>
           <Button type="button" variant="outline">ยกเลิก</Button>
         </DialogClose>
-        <Button @click="handleSave">
-          {{ mode === "edit" ? "บันทึกการแก้ไข" : "เพิ่มสินค้า" }}
-        </Button>
+        <Button @click="handleEditProduct">แก้ไข</Button>
       </DialogFooter>
     </DialogContent>
   </Dialog>

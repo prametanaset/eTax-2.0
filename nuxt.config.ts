@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   ssr: true,
   nitro: {
-    preset: 'node-server'
+    preset: "node-server",
   },
   app: {
     pageTransition: { name: "page", mode: "out-in" },
@@ -77,9 +77,9 @@ export default defineNuxtConfig({
   css: ["@/assets/css/fonts.css", "@/assets/css/main.css"],
   runtimeConfig: {
     public: {
-      $http: process.env.PUBLIC_HTTP || "http://localhost:8080/v1", // API base URL
+      $http: process.env.PUBLIC_HTTP || "http://localhost:8080", // API base URL
       apiKey: "klihlifjlsdhfsfhuaskasdhf",
-      apiUrl: process.env.PUBLIC_HTTP || "http://localhost:8080/v1",
+      apiUrl: process.env.PUBLIC_HTTP || "http://localhost:8080",
     },
     authSecret: "mySuperSecretString123",
   },
