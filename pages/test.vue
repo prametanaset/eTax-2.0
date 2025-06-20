@@ -14,7 +14,7 @@
           <DialogTitle>New message</DialogTitle>
           <DialogDescription>
             Invite a user to this thread. This will create a new group message.
-              <Button @click="newCustomerOpen = true">+ ลูกค้าใหม่</Button>
+            <Button @click="newCustomerOpen = true">+ ลูกค้าใหม่</Button>
           </DialogDescription>
         </DialogHeader>
         <Command class="overflow-hidden rounded-t-none border-t">
@@ -50,10 +50,7 @@
           </CommandList>
         </Command>
         <DialogFooter class="flex items-center border-t p-4 sm:justify-between">
-          <div
-            v-if="selectedUser"
-            class="flex items-center gap-2"
-          >
+          <div v-if="selectedUser" class="flex items-center gap-2">
             <Avatar class="border-2 border-background">
               <AvatarImage :src="selectedUser.avatar" />
               <AvatarFallback>{{ selectedUser.name[0] }}</AvatarFallback>
@@ -70,33 +67,39 @@
         </DialogFooter>
       </DialogContent>
     </Dialog>
-    <BaseAddCustomerForm  v-model:open="newCustomerOpen"
-    @customer-added="handleCustomerAdded"></BaseAddCustomerForm>
+    <BaseAddCustomerForm
+      v-model="newCustomerOpen"
+      @customer-added="handleCustomerAdded"
+    ></BaseAddCustomerForm>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref } from "vue";
 
 type User = {
-  name: string
-  email: string
-  avatar: string
-}
+  name: string;
+  email: string;
+  avatar: string;
+};
 
-const open = ref(false)
-const selectedUser = ref<User | null>(null)
+const open = ref(false);
+const selectedUser = ref<User | null>(null);
 const users = ref<User[]>([
   { name: "Olivia Martin", email: "m@example.com", avatar: "/avatars/01.png" },
-  { name: "Isabella Nguyen", email: "isabella.nguyen@email.com", avatar: "/avatars/03.png" },
+  {
+    name: "Isabella Nguyen",
+    email: "isabella.nguyen@email.com",
+    avatar: "/avatars/03.png",
+  },
   { name: "Emma Wilson", email: "emma@example.com", avatar: "/avatars/05.png" },
   { name: "Jackson Lee", email: "lee@example.com", avatar: "/avatars/02.png" },
   { name: "William Kim", email: "will@email.com", avatar: "/avatars/04.png" },
-])
+]);
 
-const newCustomerOpen = ref(false)
+const newCustomerOpen = ref(false);
 function handleCustomerAdded(customer: User) {
-  users.value.push(customer)
-  selectedUser.value = customer
+  users.value.push(customer);
+  selectedUser.value = customer;
 }
 </script>

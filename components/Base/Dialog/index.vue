@@ -13,16 +13,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { description } from "~/layouts/default.vue";
 
-const props = defineProps({
-  text: String,
-  title: String,
-  description: String,
-  bgButton: String,
-});
+const props = defineProps<{
+  modelValue: boolean;
+  text?: String;
+  title?: String;
+  description?: String;
+  bgButton?: String;
+}>();
+
+const emit = defineEmits<{
+  (e: "update:modelValue", value: boolean): void;
+}>();
 </script>
 
 <template>
-  <Dialog>
+  <Dialog :open="modelValue" @update:open="emit('update:modelValue', $event)">
     <DialogTrigger as-child>
       <Button variant="outline" :class="bgButton" class="text-white">
         {{ props.text }}

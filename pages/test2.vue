@@ -1,13 +1,31 @@
 <template>
-<div>
-  <BaseWidgetBar :color="statusColor" :range="selectedRange"/>
-</div>
+  <div>
+    <BaseWidgetBar :color="statusColor" :range="selectedRange" />
+    <Button @click="isDialogOpen = true">เพิ่มข้อมูลลูกค้า</Button>
+    <BaseAddCustomerForm v-model="isDialogOpen" />
+    <BaseDropdown
+      v-model="selectedProvince"
+      type="province"
+      @selected-data="onProvinceSelected"
+    />
+
+    <BaseDropdown
+      v-model="selectedDistrict"
+      type="district"
+      :id="selectedProvince?.value"
+      @selected-data="onDistrictSelected"
+    />
+
+    <BaseDropdown
+      v-model="selectedSubDistrict"
+      type="subdistrict"
+      :id="selectedDistrict?.value"
+      @selected-data="onSubDistrictSelected"
+    />
+  </div>
 </template>
 
-
-
 <script setup lang="ts">
-
 export interface Payment {
   id: string;
   amount: number;
@@ -16,6 +34,39 @@ export interface Payment {
   name: string;
   date: string;
 }
+
+interface Dropdown {
+  value: number;
+  label: string;
+}
+
+const selectedProvince = ref<Dropdown | null>(null);
+const selectedDistrict = ref<Dropdown | null>(null);
+const selectedSubDistrict = ref<Dropdown | null>(null);
+
+// เมื่อเลือกจังหวัดใหม่
+const onProvinceSelected = (province: Dropdown) => {
+  selectedProvince.value = province;
+
+  // reset อำเภอและตำบล
+  selectedDistrict.value = null;
+  selectedSubDistrict.value = null;
+};
+
+// เมื่อเลือกอำเภอใหม่
+const onDistrictSelected = (district: Dropdown) => {
+  selectedDistrict.value = district;
+
+  // reset ตำบล
+  selectedSubDistrict.value = null;
+};
+
+// เมื่อเลือกตำบล
+const onSubDistrictSelected = (subdistrict: Dropdown) => {
+  selectedSubDistrict.value = subdistrict;
+};
+
+const isDialogOpen = ref(false);
 const selectedRange = ref<"today" | "week" | "month" | "year">("week");
 const statusColor = computed(() => {
   switch ("success") {
@@ -435,22 +486,22 @@ const data: Payment[] = [
 ];
 async function exportPayments() {
   try {
-    const res = await fetch('/api/export', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(data),
-    })
-    const blob = await res.blob()
-    const url  = URL.createObjectURL(blob)
-    const a    = document.createElement('a')
-    a.href     = url
-    a.download = 'Payments.xlsx'
-    document.body.appendChild(a)
-    a.click()
-    a.remove()
-    URL.revokeObjectURL(url)
+    const res = await fetch("/api/export", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "Payments.xlsx";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
   } catch (err) {
-    console.error('Export failed', err)
+    console.error("Export failed", err);
   }
 }
 </script>

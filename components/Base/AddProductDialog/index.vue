@@ -70,6 +70,11 @@ const newProduct = ref({
   taxType: "include",
 });
 
+const isPriceModified = ref(false);
+const isTaxTypeModified = ref(false);
+const originalPrice = ref(0);
+const originalTaxType = ref("include");
+
 watch(
   () => props.product,
   (product) => {
@@ -82,6 +87,10 @@ watch(
         image: product.image || "",
         taxType: product.taxType || "include",
       };
+      originalPrice.value = product.price;
+      originalTaxType.value = product.taxType || "include";
+      isPriceModified.value = false;
+      isTaxTypeModified.value = false;
     } else {
       resetForm();
     }
@@ -89,10 +98,42 @@ watch(
   { immediate: true }
 );
 
+watch(
+  () => newProduct.value.price,
+  (newVal) => {
+    if (props.mode === "edit") {
+      isPriceModified.value = newVal !== originalPrice.value;
+    }
+  }
+);
+
+watch(
+  () => newProduct.value.taxType,
+  (newVal) => {
+    if (props.mode === "edit") {
+      isTaxTypeModified.value = newVal !== originalTaxType.value;
+    }
+  }
+);
+
 const calculatedPrice = computed(() => {
   const vatRate = 0.07;
   const price = newProduct.value.price;
-  return newProduct.value.taxType === "exclude" ? price * (1 + vatRate) : price;
+
+  // กรณี edit: ต้องเปลี่ยนอย่างน้อย price หรือ taxType
+  if (
+    props.mode === "edit" &&
+    !isPriceModified.value &&
+    !isTaxTypeModified.value
+  ) {
+    return price;
+  }
+
+  if (newProduct.value.taxType === "exclude") {
+    return price * (1 + vatRate);
+  }
+
+  return price;
 });
 
 function resetForm() {

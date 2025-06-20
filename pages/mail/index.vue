@@ -1,12 +1,13 @@
 <template>
   <div class="">
-    <MailGoogle :mails="mails" class="flex-1" />
+    <MailNotion :mails="mails" class="flex-1" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import MailGoogle from "~/components/Base/MailGoogle/Mail.vue";
-import { accounts, mails } from "@/components/Base/MailGoogle/data/mail";
+import MailNotion from "~/components/Base/MailNotion/Mail.vue";
+import { accounts, mails } from "@/components/Base/MailNotion/data/mail";
 
 definePageMeta({
   layout: "default",

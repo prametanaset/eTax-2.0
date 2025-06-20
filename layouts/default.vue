@@ -156,8 +156,8 @@ onMounted(() => {
       <!-- Layout.vue -->
       <div
         :class="[
-          'w-full mx-auto px-4 pb-6 pt-0 ',
-          route.path == '/mail' ? '' : 'max-w-[1440px]',
+          'w-full mx-auto   pt-0 ',
+          route.path == '/mail' ? '' : 'max-w-[1440px] px-4 pb-6',
         ]"
       >
         <div v-if="false" class="flex items-center gap-2">

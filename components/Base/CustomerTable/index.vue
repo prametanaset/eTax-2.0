@@ -4,7 +4,7 @@
     <div class="rounded-md border bg-[hsl(var(--card))]">
       <!-- hsl(var(--card)); -->
       <Table class=" ">
-        <TableHeader>
+        <TableHeader class="bg-[hsl(var(--card))]">
           <TableRow
             v-for="headerGroup in table.getHeaderGroups()"
             :key="headerGroup.id"
@@ -80,8 +80,8 @@ import DataTablePagination from "./Pagination.vue";
 import DataTableToolbar from "./Toolbar.vue";
 
 interface DataTableProps {
-  columns: ColumnDef<Product, any>[];
-  data: Product[];
+  columns: ColumnDef<Customer, any>[];
+  data: Customer[];
 }
 const props = defineProps<DataTableProps>();
 
