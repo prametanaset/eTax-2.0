@@ -92,6 +92,9 @@ import invoices_100_thai from "@/public/data/invoices_100_thai.json";
 
 definePageMeta({
   title: "รายงานใบกำกับภาษี",
+  auth: {
+    unauthenticatedOnly: false,
+  }
 });
 
 useHead({

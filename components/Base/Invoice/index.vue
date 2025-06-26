@@ -61,7 +61,7 @@ const pages = computed(() => {
     <div
       v-for="(itemsOnPage, pageIndex) in pages"
       :key="pageIndex"
-      class="relative bg-white w-[794px] max-w-[794px] h-[1123px] max-h-[1123px] mx-auto my-6 px-6 py-1 flex flex-col justify-between page"
+      class="relative bg-white w-[794px] max-w-[794px] h-[1123px] max-h-[1123px] mx-auto px-6  flex flex-col justify-between page"
     >
       <!-- Header -->
       <div>

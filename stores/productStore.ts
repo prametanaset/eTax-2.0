@@ -1,27 +1,27 @@
-import type { UUID } from "crypto";
 import { defineStore } from "pinia";
-import type { Product, ProductPayload } from "~/types/product";
 import { ref, computed } from "vue";
-
+import type { Product } from "~/types/product";
 import useProductService from "~/composables/useProductService";
 
 export const useProductStore = defineStore("productStore", () => {
-  const products = ref<Array<Product>>([]);
+  const products = ref<Product[]>([]);
   const selectProductList = ref<Product[]>([]);
   const { getProducts, getProductById, deleteProduct } = useProductService();
 
-  // ✅ Action: เพิ่มสินค้า
   const addProduct = (product: Product) => {
     products.value.push(product);
   };
 
-  // ✅ Action: ลบสินค้า
   const removeProduct = (id: number) => {
     products.value = products.value.filter((product) => product.ID !== id);
   };
 
-  const setProducts = (newProducts: Array<Product>) => {
+  const setProducts = (newProducts: Product[]) => {
     products.value = newProducts;
+  };
+
+  const setSelectProductList = (productList: Product[]) => {
+    selectProductList.value = productList;
   };
 
   const setProductIdToDelete = (id: Number) => {
@@ -30,19 +30,18 @@ export const useProductStore = defineStore("productStore", () => {
 
   const clearProductStore = () => {
     products.value = [];
+    selectProductList.value = [];
   };
 
-  // ✅ โหลดสินค้าจาก API และบันทึกลง Store
   const getProduct = async () => {
     try {
       const response = await getProducts();
-      products.value = response; // อัปเดต State
+      products.value = response;
     } catch (error) {
       console.error("❌ Failed to load products:", error);
     }
   };
 
-  // ✅ โหลดสินค้าจาก API และบันทึกลง Store
   const getProductFromId = async (id: Number) => {
     try {
       const response = await getProductById(id);
@@ -51,6 +50,35 @@ export const useProductStore = defineStore("productStore", () => {
       console.error("❌ Failed to load products:", error);
     }
   };
+
+  // ✅ คำนวณยอดรวม
+  const subtotal = computed(() => {
+    return selectProductList.value.reduce((sum, product: any) => {
+      return sum + product.price * product.quantity;
+    }, 0);
+  });
+
+  const totalTax = computed(() => {
+    return selectProductList.value.reduce((sum, product: any) => {
+      const price = product.price * product.quantity;
+      const discount =
+        product.discountType === "%"
+          ? (price * product.discountValue) / 100
+          : product.discountValue;
+
+      const taxableAmount = price - discount;
+      if (product.taxType === "include") {
+        return sum + (taxableAmount * 7) / 107;
+      } else if (product.taxType === "exclude") {
+        return sum + (taxableAmount * 7) / 100;
+      }
+      return sum;
+    }, 0);
+  });
+
+  const total = computed(() => {
+    return subtotal.value + totalTax.value;
+  });
 
   return {
     products,
@@ -62,5 +90,9 @@ export const useProductStore = defineStore("productStore", () => {
     clearProductStore,
     setProductIdToDelete,
     getProductFromId,
+    setSelectProductList,
+    subtotal,
+    totalTax,
+    total,
   };
 });

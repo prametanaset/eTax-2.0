@@ -61,6 +61,9 @@ import { useForm, useField } from "vee-validate";
 
 definePageMeta({
   layout: false,
+  auth: {
+    unauthenticatedOnly: true,
+  }
 });
 
 // ใช้ useForm() สำหรับจัดการฟอร์ม

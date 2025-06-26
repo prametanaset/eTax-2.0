@@ -33,6 +33,7 @@
     "pinia": "^3.0.1",
     "reka-ui": "^2.1.0",
     "shadcn-nuxt": "1.0.3",
+    "sweetalert2": "^11.22.0",
     "tailwind-merge": "^3.0.2",
     "tailwindcss-animate": "^1.0.7",
     "thai-baht-text": "^2.0.5",

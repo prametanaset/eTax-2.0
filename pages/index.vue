@@ -9,6 +9,10 @@
 
 definePageMeta({
   layout: false,
+  auth: {
+    unauthenticatedOnly: true,
+    navigateAuthenticatedTo: '/dashboard'
+  }
 });
 
 useHead({

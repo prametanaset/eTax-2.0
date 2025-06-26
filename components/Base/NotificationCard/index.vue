@@ -13,6 +13,11 @@ import { Switch } from "@/components/ui/switch";
 // import { Bell, Check } from 'lucide-vue-next'
 import { Plus, Pencil, Eye, Send, Save, ChevronDown, CirclePlus } from "lucide-vue-next";
 
+const productStore = useProductStore();
+
+const { subtotal, totalTax, total } = storeToRefs(productStore);
+
+
 const notifications = [
   {
     title: "Your call has been confirmed.",
@@ -99,20 +104,20 @@ const product = reactive({
       <div class="border-muted-200 dark:border-muted-800/80 border-b pb-4">
         <div class="flex justify-between w-full">
           <p class="text-base font-normal">ยอดก่อนภาษี</p>
-          <p>฿1,200.00</p>
+          <p>฿{{ currencyFormat(subtotal) }}</p>
         </div>
         <div class="flex justify-between w-full">
           <p class="text-base font-normal">ส่วนลด</p>
-          <p>-฿100.00</p>
+          <p>฿0.00</p>
         </div>
         <div class="flex justify-between w-full">
           <p class="text-base font-normal">ภาษี (7%)</p>
-          <p>฿74.00</p>
+          <p>฿{{ currencyFormat(totalTax) }}</p>
         </div>
       </div>
       <div class="flex justify-between w-full text-xl">
         <p class="text-lg font-suk">รวมทั้งหมด</p>
-        <p class="font-bold">฿1,074.00</p>
+        <p class="font-bold">฿{{ currencyFormat(total) }}</p>
       </div>
       <div v-if="false" class="flex items-center space-x-4 rounded-md border p-4">
         <!-- <Bell /> -->

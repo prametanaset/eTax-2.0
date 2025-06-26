@@ -160,6 +160,9 @@ import { cn } from "@/lib/utils";
 
 definePageMeta({
   title: "ออกใบลดหนี้",
+  auth: {
+    unauthenticatedOnly: false,
+  }
 });
 
 import {

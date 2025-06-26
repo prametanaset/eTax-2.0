@@ -85,12 +85,27 @@ const { signOut } = useAuth();
 const logOutHandler = async () => {
   try {
     // Logout from server
-    await signOut({ callbackUrl: "/", redirect: false });
-    await navigateTo("/");
+    await signOut({ callbackUrl: "/" });
   } catch (e) {
     console.log(e);
   }
 };
+
+
+const loading = ref(false)
+const error = ref('')
+
+const handleSignOut = async () => {
+  loading.value = true
+  error.value = ''
+  try {
+    await signOut({ callbackUrl: '/' })
+  } catch (e: any) {
+    error.value = e?.message || 'Logout failed'
+  } finally {
+    loading.value = false
+  }
+}
 </script>
 
 <template>
@@ -169,7 +184,7 @@ const logOutHandler = async () => {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             class="cursor-pointer font-semibold"
-            @click="signOut({ callbackUrl: '/' })"
+            @click="handleSignOut"
           >
             <LogOut />
             ลงชื่อออก

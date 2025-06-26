@@ -2,8 +2,6 @@
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 const isLogin = ref(true);
-
-const { status } = useAuth();
 </script>
 
 <template>
@@ -30,9 +28,12 @@ const { status } = useAuth();
       class="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex"
     >
       <ClientOnly>
-        <BaseThreeLinesEffect class="absolute inset-0 overflow-hidden" />
+        <!-- <BaseThreeLinesEffect class="absolute inset-0 overflow-hidden" />
         <div
-          class="absolute inset-0 bg-gradient-to-b from-black/50 to-black/30"
+          class="absolute inset-0 bg-gradient-to-b from-black-500/50 to-black-500/30"
+        ></div> -->
+        <div
+          class="absolute inset-0 bg-black"
         ></div>
       </ClientOnly>
       <div
@@ -87,8 +88,7 @@ const { status } = useAuth();
             &ldquo;โปรแกรม e-Tax ช่วยให้การออกใบกำกับภาษีรวดเร็ว มืออาชีพ
             และพร้อมส่งให้ลูกค้าได้ทันที ประหยัดทั้งเวลาและลดข้อผิดพลาด&rdquo;
           </p>
-          <footer class="text-sm">เอมิ ฟุคะดะ</footer>
-          <p>Authentication: {{ status }}</p>
+          <footer class="text-sm"></footer>
         </blockquote>
       </div>
     </div>

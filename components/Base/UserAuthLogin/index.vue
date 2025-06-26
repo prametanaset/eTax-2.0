@@ -1,143 +1,111 @@
 <template>
-  <div :class="cn('grid gap-6', $attrs.class ?? '')">
-    <div>
-      <p class="text-3xl font-bold font-ibm text-center">ขอต้อนรับกลับมา</p>
+   <div :class="cn('grid gap-6', $attrs.class ?? '')">
+    <div class="flex flex-col space-y-2 text-center">
+      <h1 class="text-2xl font-semibold tracking-tight">ขอต้อนรับกลับมา</h1>
+      <p class="text-sm text-muted-foreground">
+        Enter your email below to login your account
+      </p>
     </div>
-    <div>
-      <Form class="grid gap-4">
-        <div class="grid gap-3">
-          <div>
-            <!-- <Label for="email">อีเมลผู้ใช้งาน</Label> -->
-            <Input
-              name="email"
-              type="email"
-              placeholder="หมายเลขโทรศัพท์ ชื่อผู้ใช้ หรืออีเมล"
-              required
-              v-model="email.value.value"
-              :class="[
-                'placeholder:font-normal h-10 bg-[hsl(var(--card))]',
-                errorLogin ? 'border-sm border-red-500' : '',
-              ]"
-            />
-            <span class="text-red-500 text-sm">{{ email.errorMessage }}</span>
-          </div>
-          <div>
-            <!-- <Label for="password">Password</Label> -->
-            <Input
-              name="password"
-              type="password"
-              placeholder="รหัสผ่าน"
-              required
-              v-model="password.value.value"
-              :class="[
-                'placeholder:font-normal h-10 bg-[hsl(var(--card))]',
-                errorLogin ? 'border-sm border-red-500' : '',
-              ]"
-            />
-            <span class="text-red-500 text-sm">{{
-              password.errorMessage
-            }}</span>
-          </div>
-        </div>
-        <span v-if="errorLogin" class="text-red-500 text-sm"
-          >หมายเลขโทรศัพท์ ชื่อผู้ใช้ อีเมล หรือรหัสผ่าน ไม่ถูกต้อง</span
-        >
-        <Button class="w-full text-md font-semibold" @click="onLogin"
-          >เข้าสู่ระบบ</Button
-        >
-        <link
-          href="https://fonts.googleapis.com/css?family=Lato"
-          rel="stylesheet"
-        />
-      </Form>
-      <div class="mt-4 mb-8 text-center text-sm">
-        ยังไม่มีบัญชีใช่ไหม?
-        <!-- <a href="/register" class="underline">ลงชื่อสมัคร</a> -->
-        <NuxtLink to="/register"
-          ><Button variant="link" class="px-0 font-normal"
-            >ลงชื่อสมัคร</Button
-          ></NuxtLink
-        >
-      </div>
-      <Separator />
-      <div class="grid gap-2 mt-8 mb-4 text-sm">
-        <Button
-          class="w-full text-muted-800 bg-[hsl(var(--card))] shadow-md dark:text-white hover:bg-zinc-200 h-10"
-        >
-          <span class="w-6"
-            ><img src="@/assets/img/google-logo.png" alt="" class="w-full"
-          /></span>
-          ดำเนินการต่อด้วย Google
-        </Button>
-        <!-- <Button
-          class="w-full bg-[hsl(var(--card))] shadow-md text-muted-800 dark:text-white hover:text-white h-10"
-        >
-          <span class="w-6"
-            ><img src="@/assets/img/thaiid-logo.png" alt="" class="w-full"
-          /></span>
-          ดำเนินการต่อด้วย ThaiID
-        </Button> -->
-      </div>
-    </div>
+    
+  <form @submit.prevent="onLogin" class="grid gap-4">
+    <FormField name="email" v-slot="{ field }">
+      <FormItem>
+        <FormLabel>อีเมลผู้ใช้งาน</FormLabel>
+        <FormControl>
+          <Input
+            type="text"
+            placeholder="หมายเลขโทรศัพท์ ชื่อผู้ใช้ หรืออีเมล"
+            v-bind="field"
+            class="placeholder:font-normal h-10 bg-[hsl(var(--card))] invalid:border-red-500"
+          />
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    </FormField>
+
+    <FormField name="password" v-slot="{ field }">
+      <FormItem>
+        <FormLabel>รหัสผ่าน</FormLabel>
+        <FormControl>
+          <Input
+            type="password"
+            placeholder="รหัสผ่าน"
+            v-bind="field"
+            class="placeholder:font-normal h-10 bg-[hsl(var(--card))] invalid:border-red-500"
+          />
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    </FormField>
+
+    <span v-if="errorLogin" class="text-red-500 text-sm">
+      หมายเลขโทรศัพท์ ชื่อผู้ใช้ อีเมล หรือรหัสผ่าน ไม่ถูกต้อง
+    </span>
+
+    <Button type="submit" class="w-full text-md font-semibold">
+              <Loader v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
+
+      เข้าสู่ระบบ
+    </Button>
+  </form>
   </div>
 </template>
 
-<script lang="ts" setup>
-import { useForm, useField } from "vee-validate";
+<script setup lang="ts">
 import { cn } from "@/lib/utils";
 
-const { signIn } = useAuth();
-const errorLogin = ref(false);
+import { ref } from 'vue'
+import { toTypedSchema } from '@vee-validate/zod'
+import { Loader } from "lucide-vue-next";
 
-const device = useDevice();
+import * as z from 'zod'
 
-// ใช้ useForm() สำหรับจัดการฟอร์ม
-const { handleSubmit, validate, meta } = useForm();
 
-const checkEmailInDB = (email: string) => {
-  errorLogin.value = false;
-  if (!email) return "กรุณากรอกอีเมล";
-  return true;
-};
+const { signIn } = useAuth()  // สมมุติว่ามี useAuth hook
+const errorLogin = ref(false)
+const isLoading = ref(false);
 
-const validatePassword = (value: string) => {
-  errorLogin.value = false;
-  if (!value) return "กรุณากรอกรหัสผ่าน";
-  if (value.length < 6) return "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร";
-  return true;
-};
+// สร้าง schema ด้วย zod + vee-validate/zod
+const formSchema = toTypedSchema(
+  z.object({
+    // email: z.string().min(1, 'กรุณากรอกอีเมล').email('รูปแบบอีเมลไม่ถูกต้อง'),
+    email: z.string().min(1, 'กรุณากรอกอีเมล'),
+    password: z.string().min(6, 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'),
+  })
+)
 
-// // ฟังก์ชันเมื่อกด Submit
-// const onSubmit = handleSubmit((values, actions) => {
-//   console.log("Form values:", values);
-//   console.log("Form actions:", actions);
+// เรียก useForm เพื่อผูก form schema
+const form = useForm({
+  validationSchema: formSchema,
+})
 
-//   console.log("Form submitted!"); // all fields passed validation
-//   navigateTo("/dashboard");
-// });
-// ใช้ useField() สำหรับแต่ละฟิลด์
-const email = useField("email", checkEmailInDB);
-const password = useField("password", validatePassword);
-
-// กดปุ่มแล้วใช้ validate + login
-const onLogin = handleSubmit(async () => {
-  const result = await signIn("credentials", {
-    email: email.value.value,
-    password: password.value.value,
-    redirect: false,
-    callbackUrl: "/",
-  });
+// ฟังก์ชัน submit ที่ได้จาก useForm.handleSubmit
+const onLogin = form.handleSubmit(async (values) => {
+  errorLogin.value = false
+  isLoading.value = true;
+  const result = await signIn('credentials', {
+    username: values.email,
+    password: values.password,
+    redirect: false,            // ต้องใส่อันนี้
+    callbackUrl: '/dashboard',  // ยังคงใส่ได้
+  })
 
   if (result?.error) {
-    errorLogin.value = true;
-  } else {
-    navigateTo("/dashboard"); // ไปหน้าหลักหลังล็อกอินสำเร็จ
+    errorLogin.value = true
+    isLoading.value = false;
+
+  } else if (result?.url) {
+    // ทำ redirect ตรงนี้เอง
+    
+    navigateTo('/dashboard')   // หรือจะใช้ useRouter().push() ก็ได้
+    isLoading.value = false;
   }
-});
+})
+
 </script>
 
 <style scoped>
 .font-ibm {
-  font-family: "Noto Sans Thai";
+  font-family: 'Noto Sans Thai';
 }
 </style>

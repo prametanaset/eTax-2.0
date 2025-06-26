@@ -31,21 +31,21 @@ const availableProducts = ref([
   {
     id: 1,
     name: "เสื้อยืด",
-    price: 125000,
+    price: 1690,
     image: "/images/products/shirt.jpg",
     taxType: "exempt",
   },
   {
     id: 2,
     name: "กางเกงยีน",
-    price: 250000,
+    price: 590,
     image: "/images/products/jeans.jpg",
     taxType: "include",
   },
   {
     id: 3,
     name: "รองเท้าผ้าใบ",
-    price: 180000,
+    price: 1400,
     image: "/images/products/sneakers.jpg",
     taxType: "exclude",
   },
@@ -99,9 +99,12 @@ const removeProduct = (id: number) => {
 watch(
   products,
   (newVal) => {
+    newVal.forEach((p) => {
+      p.tax = p.taxType === "exempt" ? "0%" : "7%";
+    });
     productStore.setSelectProductList(newVal);
   },
-  { deep: true, immediate: true }
+  { deep: true }
 );
 
 const screenWidth = ref(0);
@@ -350,7 +353,7 @@ watch(
             <div>
               <Label class="block text-xs text-gray-600 sm:hidden">ภาษี</Label>
               <Select v-model="product.taxType">
-                <SelectTrigger class="w-36 sm:w-36 mx-auto h-10">
+                <SelectTrigger class="w-36 sm:w-36 mx-auto h-10 bg-[hsl(var(--card))]">
                   <SelectValue
                     :placeholder="
                       {

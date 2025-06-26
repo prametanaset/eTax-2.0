@@ -12,6 +12,9 @@ import { columns } from "@/components/Base/CustomerTable/columns";
 
 definePageMeta({
   title: "จัดการลูกค้า",
+  auth: {
+    unauthenticatedOnly: false,
+  }
 });
 
 const customerStore = useCustomerStore();

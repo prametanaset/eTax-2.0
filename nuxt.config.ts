@@ -31,14 +31,16 @@ export default defineNuxtConfig({
     "@sidebase/nuxt-auth",
   ],
   auth: {
-    isEnabled: true,
-    baseURL: process.env.AUTH_ORIGIN,
     provider: {
       type: "authjs",
+      trustHost: false,
+      defaultProvider: "github",
+      addDefaultCallbackUrl: true,
     },
     globalAppMiddleware: {
-      isEnabled: false,
+      isEnabled: true,
     },
+    baseURL: process.env.AUTH_ORIGIN,
   },
   // dateFns configuration should be placed in the module options if supported, not in the root config
   shadcn: {
@@ -77,11 +79,11 @@ export default defineNuxtConfig({
   css: ["@/assets/css/fonts.css", "@/assets/css/main.css"],
   runtimeConfig: {
     public: {
-      $http: process.env.PUBLIC_HTTP || "http://localhost:8080", // API base URL
       apiKey: "klihlifjlsdhfsfhuaskasdhf",
-      apiUrl: process.env.PUBLIC_HTTP || "http://localhost:8080",
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || "http://localhost:8080",
     },
     authSecret: "mySuperSecretString123",
+    apiSecret: process.env.NUXT_API_SECRET,
   },
   plugins: [{ src: "~/plugins/error-handler.ts" }],
 });

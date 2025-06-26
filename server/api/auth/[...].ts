@@ -1,116 +1,168 @@
+// ~/server/api/auth/[...].ts
 import { NuxtAuthHandler } from "#auth";
-import Credentials from "next-auth/providers/credentials";
-import axios from "axios";
-import { useAuthService } from "~/composables/useAuthService";
+import GithubProvider from "next-auth/providers/github";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { FetchError } from 'ofetch' 
+interface LoginRes {
+  headers: any;
+  access_token: string;
+  expires_at: string;
+  refresh_token: string; // ISO-8601
+}
 
-const { login, getAccessToken, getMe } = useAuthService();
-const config = useRuntimeConfig();
+interface RefreshRes {
+ access_token: string;
+ expires_at: string;
+  refresh_token?: string; // Add this field. It's optional for backwards compatibility.
+}
+
+const runtimeConfig = useRuntimeConfig()
 
 async function refreshAccessToken(token: any) {
+  console.log("Attempting to refresh token...")
   try {
-    // Get access token
-    const accessToken = await getAccessToken(token.refreshToken);
+    const res = await $fetch<RefreshRes>(`${runtimeConfig.public.apiBase}/auth/refresh`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: { refresh_token: token.refreshToken },
+    })
+
+    console.log("✅ RESPONSE FROM GO BACKEND:", res)
 
     return {
       ...token,
-      user: {
-        ...token.user,
-        accessToken: accessToken.data.accessToken,
-        accessTokenExpires: accessToken.data.accessExpireAt * 1000,
-      },
-    };
-  } catch (e) {
-    // console.error(e.response.data);
-    return {
-      ...token,
-      error: "RefreshAccessTokenError",
-    };
+      accessToken: res.access_token,
+      accessTokenExpires: new Date(res.expires_at).getTime(),
+      refreshToken: res.refresh_token ?? token.refreshToken,
+      error: undefined,
+      logout: false,          // เพิ่ม flag นี้
+    }
+  } catch (err: any) {
+    // ถ้าเจอ 401 → ติดป้าย logout
+    if (err instanceof FetchError && err.response?.status === 401) {
+      console.error("❌ Refresh token invalid (401) — force logout")
+      return {
+        ...token,
+        error: "InvalidRefreshToken",
+        accessToken: undefined,
+        refreshToken: undefined,
+        logout: true,         // ตรงนี้สำคัญ
+      }
+    }
+
+    console.error("❌ FAILED TO FETCH FROM GO BACKEND:", err)
+    return { ...token, error: "RefreshAccessTokenError", logout: false }
   }
 }
 
 export default NuxtAuthHandler({
-  secret: config.authSecret,
-  session: {
-    strategy: "jwt",
-  },
+  secret: useRuntimeConfig().apiSecret,
+
   providers: [
-    Credentials.default({
-      credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
-      },
-      // authorize: async (credentials) => {
-      //   try {
-      //     const res = await axios.post("https://your-api.com/login", {
-      //       email: credentials?.email,
-      //       password: credentials?.password,
-      //     });
-
-      //     const { user, accessToken, refreshToken } = res.data;
-
-      //     return {
-      //       ...user,
-      //       accessToken,
-      //       refreshToken,
-      //       accessTokenExpires: Date.now() + 60 * 60 * 1000, // 1 hr
-      //     };
-      //   } catch (e) {
-      //     console.error("Login failed", e);
-      //     return null;
-      //   }
-      // },
-      authorize: async (credentials) => {
-        const email = credentials?.email;
-        const password = credentials?.password;
-
-        // ✅ จำลองข้อมูลผู้ใช้ (Mock)
-        if (email === "test" && password === "123456") {
-          const user = {
-            userId: "123",
-            name: "Bas",
-            email: "test@example.com",
-            accessToken: "mock-access-token",
-            refreshToken: "mock-refresh-token",
-            accessTokenExpires: Date.now() + 60 * 60 * 1000,
-          };
-          return user;
+    // @ts-expect-error You need to use .default here for it to work during SSR. May be fixed via Vite at some point
+    GithubProvider.default({
+      clientId: process.env.GITHUB_ID!,
+      clientSecret: process.env.GITHUB_SECRET!,
+      async profile(profile: { id: any; login: any; avatar_url?: string; }, tokens: any) {
+        // profile.sub คือ provider UID
+        // tokens.access_token คือของ GitHub
+        // ดึงข้อมูล OAuth Login จาก backend ตัวเอง
+        const res = await $fetch<LoginRes>(`${runtimeConfig.public.apiBase}/auth/oauth-login`, {
+          method: 'POST',
+          body: {
+            provider: 'github',
+            provider_uid: String(profile.id),
+            username: profile.login,
+          },
+        })
+        // คืนค่าแบบเดียวกับ authorize credentials
+        return {
+          id: profile.id,
+          name: profile.login,
+          image: profile.avatar_url,
+          accessToken: res.access_token,
+          refreshToken: res.refresh_token,
+          accessTokenExpires: new Date(res.expires_at).getTime()
         }
+      }
+    }),
+    // @ts-expect-error You need to use .default here for it to work during SSR. May be fixed via Vite at some point
+    CredentialsProvider.default({
+      name: "Credentials",
+      credentials: {},
+      async authorize({
+        username,
+        password,
+      }: {
+        username: string;
+        password: string;
+      }) {
+        const res = await $fetch<LoginRes>(`${runtimeConfig.public.apiBase}/auth/login`, {
+          method: "POST",
+          body: { username, password },
+          credentials: "include",
+        });
 
-        // ❌ ไม่ตรงเงื่อนไขให้ login fail
-        return null;
+        if (!res.access_token) return null;
+
+        return {
+          id: username,
+          name: username,
+          accessToken: res.access_token,
+          refreshToken: res.refresh_token,
+          accessTokenExpires: new Date(res.expires_at).getTime(),
+        };
       },
     }),
   ],
-  callbacks: {
-    // @ts-ignore
-    async jwt({ token, account, profile, user }) {
-      if (user) {
-        token.user = user;
+
+callbacks: {
+  async jwt({ token, account, user }) {
+    if (account && user) {
+      token.accessToken       = (user as any).accessToken
+      token.refreshToken      = (user as any).refreshToken
+      token.accessTokenExpires= (user as any).accessTokenExpires
+      token.logout            = false
+      return token
+    }
+
+    // ดึง token ใหม่ทุกครั้ง (ไม่เช็ก Date.now() แล้ว)
+    const refreshed = await refreshAccessToken(token)
+    return refreshed
+  },
+
+  async session({ session, token }) {
+    session.accessToken        = token.accessToken   as string | undefined
+    session.refreshToken       = token.refreshToken  as string | undefined
+    session.accessTokenExpires = token.accessTokenExpires as number | undefined
+    session.error              = token.error         as string | undefined
+    session.logout             = token.logout        as boolean | undefined
+    return session
+  },
+},
+
+  events: {
+    async signOut({ token }) {
+      console.log("token sign out:", token);
+      try {
+        if (!token?.refreshToken) return;
+
+        await $fetch(`${runtimeConfig.public.apiBase}/auth/logout`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: {
+            refresh_token: token.refreshToken,
+          },
+          credentials: "include",
+        });
+      } catch (e) {
+        console.error("logout failed", e);
       }
-      return token;
-    },
-    // @ts-ignore
-    async session({ session, token, user }) {
-      if (token.user) {
-        // Return previous token if the access token has not expired yet
-        // @ts-ignore
-        if (Date.now() < token.user.accessTokenExpires) {
-          return {
-            ...session,
-            user: token.user,
-          };
-        }
-        // Access token has expired, try to update it
-        return refreshAccessToken(token);
-      }
-      // console.log("hellow", token.user);
-      return {
-        ...session,
-        user: token.user,
-      };
-    },
-    async signIn({ user, account, profile, email, credentials }) {
-      return !!user;
     },
   },
+
+  pages: { signIn: "/" },
 });

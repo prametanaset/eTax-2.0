@@ -121,6 +121,9 @@ import {
 definePageMeta({
   // layout: "default",
   title: "โปรไฟล์",
+  auth: {
+    unauthenticatedOnly: false,
+  }
 });
 
 const data_user = {

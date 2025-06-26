@@ -17,6 +17,7 @@
                     >เลขที่</span
                   >
                   <Input
+                    v-model="invNo"
                     type="text"
                     placeholder="กรอกเลขที่ใบกำกับภาษี"
                     class="h-10 font-normal bg-[hsl(var(--card))]"
@@ -28,8 +29,15 @@
                     >ประเภทเอกสาร</span
                   >
                   <Select v-model="documentType">
-                    <SelectTrigger class="h-10 bg-[hsl(var(--card))]" >
-                      <SelectValue placeholder="เลือกประเภทเอกสาร" :class="documentType !== null? '': 'text-[#a1a8b3] font-normal'" />
+                    <SelectTrigger class="h-10 bg-[hsl(var(--card))]">
+                      <SelectValue
+                        placeholder="เลือกประเภทเอกสาร"
+                        :class="
+                          documentType !== null
+                            ? ''
+                            : 'text-[#a1a8b3] font-normal'
+                        "
+                      />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
@@ -109,7 +117,10 @@
           <Button variant="outline" class="bg-[hsl(var(--card))]">
             <Save />สร้าง
           </Button>
-          <Button class="col-span-2"> <Send />สร้าง และ ส่ง </Button>
+          <Button class="col-span-2" @click="showAlert">
+            <Send />สร้าง และ ส่ง
+          </Button>
+
         </div>
       </Card>
     </div>
@@ -117,6 +128,19 @@
 </template>
 
 <script lang="ts" setup>
+import Swal from 'sweetalert2'
+
+const showAlert = () => {
+  Swal.fire({
+    title: 'สำเร็จ!',
+    text: 'ระบบได้ส่งข้อมูลของคุณเรียบร้อย',
+    icon: 'success',
+    confirmButtonText: 'ตกลง',
+    customClass: {
+    confirmButton: 'bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-400',
+  },
+  })
+}
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -135,6 +159,11 @@ import {
   Mail,
   Phone,
   Notebook,
+  Printer,
+  BadgeCheck,
+  FileDown,
+  TriangleAlert,
+  CalendarIcon,
 } from "lucide-vue-next";
 import {
   Card,
@@ -156,6 +185,9 @@ import { cn } from "@/lib/utils";
 
 definePageMeta({
   title: "ออกใบกำกับภาษี",
+  auth: {
+    unauthenticatedOnly: false,
+  },
 });
 
 import {
@@ -163,7 +195,7 @@ import {
   type DateValue,
   getLocalTimeZone,
 } from "@internationalized/date";
-import { CalendarIcon } from "lucide-vue-next";
+
 import { ref } from "vue";
 
 const df = new DateFormatter("th-TH", {
@@ -173,7 +205,11 @@ const df = new DateFormatter("th-TH", {
 const value = ref<DateValue>();
 
 const customer = ref(null);
-const documentType = ref(null);
+const activeTab = ref("status");
+const openDialog = ref(true);
+
+// const documentType = ref(null);
+const documentType = ref("ใบกำกับภาษี");
 const customerAddress = ref("");
 
 const storeApi = reactive({
@@ -187,6 +223,8 @@ const storeApi = reactive({
   },
   invNo: "INV0000000000000",
 });
+
+const invNo = ref("INV-0009");
 
 const invoice = reactive({
   invId: 0,

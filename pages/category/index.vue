@@ -20,6 +20,9 @@ onMounted(() => {
 
 definePageMeta({
   title: "รายการสินค้า",
+  auth: {
+    unauthenticatedOnly: false,
+  }
 });
 
 useHead({

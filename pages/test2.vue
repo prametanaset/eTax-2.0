@@ -1,507 +1,296 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+
+
+
+const open = ref(false);
+const storeName = ref("");
+const taxId = ref("");
+const contactName = ref("");
+const personalId = ref("");
+const branchCode = ref("");
+
+const provinces = ref([]);
+
+const loadProvinces = async () => {
+  try {
+    const locateService = useLocateService();
+    provinces.value = await locateService.fetchProvinces() || [];
+    provinces.value = await locateService.fetchProvinces() || [];
+    provinces.value = await locateService.fetchProvinces() || [];
+  } catch (error) {
+    console.error("Error fetching provinces:", error);
+  }
+};
+
+// ให้โหลด provinces พร้อมเปิด dialog
+const openDialog = async () => {
+  open.value = true;
+  await loadProvinces();
+};
+</script>
+
 <template>
+
   <div>
-    <BaseWidgetBar :color="statusColor" :range="selectedRange" />
-    <Button @click="isDialogOpen = true">เพิ่มข้อมูลลูกค้า</Button>
-    <BaseAddCustomerForm v-model="isDialogOpen" />
-    <BaseDropdown
-      v-model="selectedProvince"
-      type="province"
-      @selected-data="onProvinceSelected"
-    />
+  <BaseLocationPicker />
+  <Button @click="openDialog">ตั้งค่าร้านค้า</Button>
 
-    <BaseDropdown
-      v-model="selectedDistrict"
-      type="district"
-      :id="selectedProvince?.value"
-      @selected-data="onDistrictSelected"
-    />
+  <Dialog v-model:open="open">
+    <DialogContent
+      class="sm:max-w-4xl w-full max-h-[90dvh] bg-[hsl(var(--card))]"
+    >
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <!-- Left: Tabs Form -->
+        <div>
+          <DialogHeader>
+            <DialogTitle>ตั้งค่าร้านค้า</DialogTitle>
+            <DialogDescription>
+              เลือกประเภทและกรอกข้อมูลให้ครบถ้วน
+            </DialogDescription>
+          </DialogHeader>
 
-    <BaseDropdown
-      v-model="selectedSubDistrict"
-      type="subdistrict"
-      :id="selectedDistrict?.value"
-      @selected-data="onSubDistrictSelected"
+          <Tabs default-value="corporate" class="w-full mt-4">
+            <TabsList class="grid grid-cols-2 w-full mb-4">
+              <TabsTrigger value="corporate">นิติบุคคล</TabsTrigger>
+              <TabsTrigger value="person">บุคคลธรรมดา</TabsTrigger>
+            </TabsList>
+
+            <!-- Corporate (นิติบุคคล) -->
+            <TabsContent value="corporate">
+              <Card>
+                <CardHeader>
+                  <CardTitle>นิติบุคคล</CardTitle>
+                  <CardDescription>
+                    กรอกชื่อร้านค้าและเลขประจำตัวผู้เสียภาษี
+                  </CardDescription>
+                </CardHeader>
+                <CardContent class="space-y-4">
+                  <div>
+                    <Label for="storeName">ชื่อร้านค้า</Label>
+                    <Input
+                      id="storeName"
+                      v-model="storeName"
+                      placeholder="ชื่อบริษัท / ร้านค้า"
+                    />
+                  </div>
+                  <div class="flex gap-4">
+                    <!-- Tax ID -->
+                    <div class="flex-1">
+                      <Label for="taxId">เลขประจำตัวผู้เสียภาษี</Label>
+                      <Input id="taxId" v-model="taxId" placeholder="13 หลัก" />
+                    </div>
+
+                    <!-- Branch Code -->
+                    <div class="w-[120px]">
+                      <Label for="branchCode">เลขที่สาขา</Label>
+                      <Input
+                        id="branchCode"
+                        v-model="branchCode"
+                        placeholder="5 หลัก"
+                        maxlength="5"
+                        inputmode="numeric"
+                      />
+                    </div>
+                  </div>
+                  <div>
+    <div>
+    <Label class="mb-1 block text-sm font-medium">
+      ที่อยู่ร้านค้า <span class="text-red-500">*</span>
+    </Label>
+    <Textarea
+      v-model="address"
+      class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+      rows="2"
+      placeholder="บ้านเลขที่ หมู่ ซอย ถนน"
+      required
+      maxlength="150"
     />
   </div>
+    <!-- ใส่ LocationPicker -->
+    <BaseLocationPicker />
+  </div>
+                  
+                </CardContent>
+                <CardFooter>
+                  <Button>บันทึก</Button>
+                </CardFooter>
+              </Card>
+            </TabsContent>
+
+            <!-- Personal (บุคคลธรรมดา) -->
+            <TabsContent value="person">
+              <Card>
+                <CardHeader>
+                  <CardTitle>บุคคลธรรมดา</CardTitle>
+                  <CardDescription>
+                    กรอกชื่อผู้ติดต่อและเลขบัตรประชาชน
+                  </CardDescription>
+                </CardHeader>
+                <CardContent class="space-y-4">
+                  <div>
+                    <Label for="contactName">ชื่อผู้ติดต่อ</Label>
+                    <Input
+                      id="contactName"
+                      v-model="contactName"
+                      placeholder="ชื่อ-นามสกุล"
+                    />
+                  </div>
+                  <div>
+                    <Label for="personalId">เลขบัตรประชาชน</Label>
+                    <Input
+                      id="personalId"
+                      v-model="personalId"
+                      placeholder="13 หลัก"
+                    />
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <Button>บันทึก</Button>
+                </CardFooter>
+              </Card>
+            </TabsContent>
+          </Tabs>
+
+          <DialogFooter class="mt-6">
+            <DialogClose as-child>
+              <Button variant="ghost">ปิด</Button>
+            </DialogClose>
+          </DialogFooter>
+        </div>
+
+        <!-- Right: Preview -->
+        <!-- ห่อใน container preview -->
+        <div
+          class="relative top-16 left-10 w-full max-w-3xl bg-white border rounded-md shadow-lg p-6 space-y-4"
+        >
+          <!-- โลโก้ + ข้อมูลบริษัท -->
+          <div class="flex items-start gap-4 pb-4">
+            <!-- Logo -->
+            <div class="shrink-0">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                version="1.0"
+                class="mr-1 mb-1 h-12 w-12"
+                viewBox="0 0 300.000000 300.000000"
+                preserveAspectRatio="xMidYMid meet"
+              >
+                <g
+                  transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)"
+                  fill="#7a27b2"
+                  stroke="none"
+                >
+                  <path
+                    d="M1161 2370 c-155 -165 -292 -312 -304 -327 -20 -26 -22 -36 -17 -132 l5 -103 350 373 c193 205 350 378 350 384 0 7 -23 33 -51 58 l-51 46 -282 -299z"
+                  />
+                  <path
+                    d="M1472 2320 l-73 -80 520 0 521 0 0 80 0 80 -447 0 -448 0 -73 -80z"
+                  />
+                  <path
+                    d="M570 1927 l0 -443 73 -72 c40 -39 76 -72 80 -72 4 0 7 232 7 515 l0 515 -80 0 -80 0 0 -443z"
+                  />
+                  <path
+                    d="M2005 2151 l-79 -6 334 -314 c184 -173 354 -333 378 -355 l43 -41 49 55 c27 30 48 58 47 61 -1 4 -146 142 -322 308 -256 240 -325 300 -345 299 -14 -1 -61 -4 -105 -7z"
+                  />
+                  <path
+                    d="M1400 1861 c-108 -35 -200 -113 -247 -209 -25 -51 -28 -67 -28 -162 0 -99 2 -110 32 -171 142 -288 553 -281 692 11 23 48 26 68 26 160 0 95 -3 111 -28 162 -37 76 -101 139 -178 179 -56 29 -75 33 -154 36 -49 1 -101 -1 -115 -6z m199 -171 c56 -28 107 -93 121 -151 23 -94 -21 -196 -107 -246 -39 -23 -60 -28 -113 -28 -111 0 -193 65 -221 177 -22 93 29 200 120 248 50 26 149 27 200 0z"
+                  />
+                  <path
+                    d="M2270 1176 l0 -516 80 0 80 0 0 443 0 443 -62 60 c-35 33 -71 66 -80 73 -17 13 -18 -13 -18 -503z"
+                  />
+                  <path
+                    d="M266 1499 c-25 -28 -46 -54 -45 -58 1 -11 640 -606 650 -605 5 1 52 2 105 3 53 0 94 5 92 10 -5 12 -740 701 -749 701 -4 0 -28 -23 -53 -51z"
+                  />
+                  <path
+                    d="M1836 796 c-193 -205 -352 -378 -353 -383 -2 -6 20 -32 50 -57 l54 -46 80 82 c44 46 155 164 248 263 93 99 194 207 225 240 l57 60 -6 107 -6 106 -349 -372z"
+                  />
+                  <path
+                    d="M562 643 l3 -78 440 -2 c242 -2 445 1 450 5 6 4 41 40 80 80 l69 72 -522 0 -523 0 3 -77z"
+                  />
+                </g>
+              </svg>
+            </div>
+
+            <!-- ข้อมูลร้านค้า -->
+            <div class="flex flex-col text-[0.75rem] leading-relaxed mb-10">
+              <h1 class="text-lg font-bold">บริษัท ซันสเกลอัพ จำกัด</h1>
+              <p class="text-sm font-semibold">Sunscale Up Co., Ltd.</p>
+              <p>
+                111/226 หมู่ที่ 16 ตำบลบ้านเป็ด อำเภอเมืองขอนแก่น จ.ขอนแก่น
+                40000
+              </p>
+              <p>โทรศัพท์ 098-765-4321</p>
+              <p>เลขประจำตัวผู้เสียภาษี 0123456789123</p>
+            </div>
+          </div>
+          <!-- <Skeleton class="h-[125px] w-[250px] rounded-xl" /> -->
+
+          <div class="space-y-3">
+            <!-- หัวตาราง -->
+            <div class="flex gap-4">
+              <Skeleton class="h-6 w-[70px] rounded" />
+              <!-- ลำดับ -->
+              <Skeleton class="h-6 w-[500px] rounded" />
+              <!-- รายการ -->
+              <Skeleton class="h-6 w-[90px] rounded" />
+              <!-- จำนวน -->
+              <Skeleton class="h-6 w-[110px] rounded" />
+              <!-- ราคาต่อหน่วย -->
+              <Skeleton class="h-6 w-[120px] rounded" />
+              <!-- ราคารวม -->
+            </div>
+
+            <!-- บรรทัดที่ 1 -->
+            <div class="flex gap-4">
+              <Skeleton class="h-6 w-[70px] rounded" />
+              <Skeleton class="h-6 w-[500px] rounded" />
+              <Skeleton class="h-6 w-[90px] rounded" />
+              <Skeleton class="h-6 w-[110px] rounded" />
+              <Skeleton class="h-6 w-[120px] rounded" />
+            </div>
+
+            <!-- บรรทัดที่ 2 -->
+            <div class="flex gap-4">
+              <Skeleton class="h-6 w-[70px] rounded" />
+              <Skeleton class="h-6 w-[500px] rounded" />
+              <Skeleton class="h-6 w-[90px] rounded" />
+              <Skeleton class="h-6 w-[110px] rounded" />
+              <Skeleton class="h-6 w-[120px] rounded" />
+            </div>
+
+            <!-- บรรทัดที่ 3 -->
+            <div class="flex gap-4">
+              <Skeleton class="h-6 w-[70px] rounded" />
+              <Skeleton class="h-6 w-[500px] rounded" />
+              <Skeleton class="h-6 w-[90px] rounded" />
+              <Skeleton class="h-6 w-[110px] rounded" />
+              <Skeleton class="h-6 w-[120px] rounded" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </DialogContent>
+  </Dialog>
+  </div>
 </template>
-
-<script setup lang="ts">
-export interface Payment {
-  id: string;
-  amount: number;
-  status: 0 | 1 | 2 | 3;
-  email: string;
-  name: string;
-  date: string;
-}
-
-interface Dropdown {
-  value: number;
-  label: string;
-}
-
-const selectedProvince = ref<Dropdown | null>(null);
-const selectedDistrict = ref<Dropdown | null>(null);
-const selectedSubDistrict = ref<Dropdown | null>(null);
-
-// เมื่อเลือกจังหวัดใหม่
-const onProvinceSelected = (province: Dropdown) => {
-  selectedProvince.value = province;
-
-  // reset อำเภอและตำบล
-  selectedDistrict.value = null;
-  selectedSubDistrict.value = null;
-};
-
-// เมื่อเลือกอำเภอใหม่
-const onDistrictSelected = (district: Dropdown) => {
-  selectedDistrict.value = district;
-
-  // reset ตำบล
-  selectedSubDistrict.value = null;
-};
-
-// เมื่อเลือกตำบล
-const onSubDistrictSelected = (subdistrict: Dropdown) => {
-  selectedSubDistrict.value = subdistrict;
-};
-
-const isDialogOpen = ref(false);
-const selectedRange = ref<"today" | "week" | "month" | "year">("week");
-const statusColor = computed(() => {
-  switch ("success") {
-    case "success":
-      return "#22c55e";
-    case "warning":
-      return "#facc15";
-    case "cancel":
-      return "#ef4444";
-    case "money":
-      return "#a855f7";
-    default:
-      return "#6b7280";
-  }
-});
-const data: Payment[] = [
-  {
-    id: "INV-0001",
-    amount: 321,
-    status: 2,
-    email: "suchintrakuulbuy@naakhphanthu-thnmphlkrang.or.th",
-    name: "ปัตถพงษ์ ตระกูลไม้เรียง",
-    date: "2025-05-19T20:42:00",
-  },
-  {
-    id: "INV-0002",
-    amount: 658,
-    status: 0,
-    email: "thnmphlkrangrathphngs@gmail.com",
-    name: "ธมน ตั้งกุลงาม",
-    date: "2025-05-20T03:12:00",
-  },
-  {
-    id: "INV-0003",
-    amount: 949,
-    status: 1,
-    email: "wthnadraksaa@namthiphy-paansuwrrn.in.th",
-    name: "มณียา วะคีมัน",
-    date: "2025-05-20T02:00:00",
-  },
-  {
-    id: "INV-0004",
-    amount: 417,
-    status: 2,
-    email: "ephchrmnii17@ymail.com",
-    name: "สมนึก นวลฉวี",
-    date: "2025-05-18T05:33:00",
-  },
-  {
-    id: "INV-0005",
-    amount: 733,
-    status: 2,
-    email: "sedchwaa@aenwphyaa-tanephaa.com",
-    name: "จินต์จุฑา ทวีเดช",
-    date: "2025-05-23T22:07:00",
-  },
-  {
-    id: "INV-0006",
-    amount: 980,
-    status: 2,
-    email: "nawamandrthitikul@yahoo.com",
-    name: "รังสินี ยะผา",
-    date: "2025-05-21T07:04:00",
-  },
-  {
-    id: "INV-0007",
-    amount: 482,
-    status: 0,
-    email: "chaachumkulpriiyaa@muulnithiaehymsiri.com",
-    name: "สีหราช ดีตพันธุ์",
-    date: "2025-05-18T03:27:00",
-  },
-  {
-    id: "INV-0008",
-    amount: 430,
-    status: 1,
-    email: "kumaarbuycchakrphanth@hcchkelkhaphanthuwiswkaar.co.th",
-    name: "เทียมศักดิ์ ดวงทับทิม",
-    date: "2025-05-21T19:58:00",
-  },
-  {
-    id: "INV-0009",
-    amount: 941,
-    status: 0,
-    email: "ethasnsuththi@bmcchdiskaprakaay.in.th",
-    name: "เอกวิทย์ เตมิยะเดช",
-    date: "2025-05-23T15:48:00",
-  },
-  {
-    id: "INV-0010",
-    amount: 101,
-    status: 0,
-    email: "ssiyaa26@thhaaraethkrup.com",
-    name: "ณิชาภัทร วิลาสินี",
-    date: "2025-05-22T22:50:00",
-  },
-  {
-    id: "INV-0011",
-    amount: 135,
-    status: 0,
-    email: "chaayaesngchayyaanunaay@haanghunswncchamkad.com",
-    name: "รอกีเย๊าะ โพธิสัตย์",
-    date: "2025-05-18T10:53:00",
-  },
-  {
-    id: "INV-0012",
-    amount: 206,
-    status: 1,
-    email: "piynuchnumkan@yahoo.com",
-    name: "เกศรา นามขำ",
-    date: "2025-05-22T18:18:00",
-  },
-  {
-    id: "INV-0013",
-    amount: 292,
-    status: 0,
-    email: "aychisthaa28@thumabutraelathngsinthu.co",
-    name: "ธนวันต์ ธรรมทินนา",
-    date: "2025-05-23T14:22:00",
-  },
-  {
-    id: "INV-0014",
-    amount: 881,
-    status: 0,
-    email: "niymechiiymecchtphinisth@protonmail.com",
-    name: "บุญญามี ไทยสุชาต",
-    date: "2025-05-20T23:58:00",
-  },
-  {
-    id: "INV-0015",
-    amount: 923,
-    status: 0,
-    email: "cthnadaawuth@hotmail.com",
-    name: "เกษรา จันอ้น",
-    date: "2025-05-20T09:05:00",
-  },
-  {
-    id: "INV-0016",
-    amount: 346,
-    status: 1,
-    email: "ssiyaanilwrrn@haanghunswncchamkad.in.th",
-    name: "เอกชัย นครเทพ",
-    date: "2025-05-19T06:10:00",
-  },
-  {
-    id: "INV-0017",
-    amount: 466,
-    status: 2,
-    email: "qophthisaty@brisath.net.th",
-    name: "ทับทิม ซูสารอ",
-    date: "2025-05-22T23:27:00",
-  },
-  {
-    id: "INV-0018",
-    amount: 846,
-    status: 1,
-    email: "siththayyaphaa@icloud.com",
-    name: "ภควัฒน์ อุลหัสสา",
-    date: "2025-05-19T12:29:00",
-  },
-  {
-    id: "INV-0019",
-    amount: 166,
-    status: 1,
-    email: "ecchtphinisth36@brisath.in.th",
-    name: "กิ่งแก้ว ขอหมั่นกลาง",
-    date: "2025-05-19T01:15:00",
-  },
-  {
-    id: "INV-0020",
-    amount: 451,
-    status: 1,
-    email: "siththaydisdain@kon.in.th",
-    name: "นราวรรณ ทรงโกมล",
-    date: "2025-05-18T13:25:00",
-  },
-  {
-    id: "INV-0021",
-    amount: 570,
-    status: 0,
-    email: "cthrrmsthitaiphsaal@smaakhmaithaichoy.go.th",
-    name: "คมสัน ตันเผ่า",
-    date: "2025-05-22T00:31:00",
-  },
-  {
-    id: "INV-0022",
-    amount: 257,
-    status: 2,
-    email: "piynuch92@bcchksaastrsilpencchieniiyring.in.th",
-    name: "พงษ์นเรศ ตะละภัฏ",
-    date: "2025-05-22T22:29:00",
-  },
-  {
-    id: "INV-0023",
-    amount: 294,
-    status: 0,
-    email: "ekrikphl31@brisath.go.th",
-    name: "สมหมาย นามขำ",
-    date: "2025-05-20T02:12:00",
-  },
-  {
-    id: "INV-0024",
-    amount: 433,
-    status: 1,
-    email: "nirandrthuwanuti@yahoo.com",
-    name: "พัชรีนิษฐ์ แท่นทอง",
-    date: "2025-05-21T12:37:00",
-  },
-  {
-    id: "INV-0025",
-    amount: 730,
-    status: 1,
-    email: "ynngkhraaythnprathiip@ymail.com",
-    name: "กิติวัฒน์ ไทยแท้",
-    date: "2025-05-20T13:44:00",
-  },
-  {
-    id: "INV-0026",
-    amount: 472,
-    status: 0,
-    email: "aariiy12@smaakhmophthisaty.in.th",
-    name: "ยุลิน ไทนิยม",
-    date: "2025-05-19T18:45:00",
-  },
-  {
-    id: "INV-0027",
-    amount: 224,
-    status: 1,
-    email: "hlakthraphy56@naamkhamechrwis.co.th",
-    name: "โสภณ พรมอ่อน",
-    date: "2025-05-21T04:51:00",
-  },
-  {
-    id: "INV-0028",
-    amount: 977,
-    status: 2,
-    email: "akhrphnth64@kon.in.th",
-    name: "ไมล์ ไม้แดง",
-    date: "2025-05-18T03:16:00",
-  },
-  {
-    id: "INV-0029",
-    amount: 183,
-    status: 0,
-    email: "rkiieyaaanilsuwrrn@ymail.com",
-    name: "อนุวัช ดำริห์ชอบ",
-    date: "2025-05-23T01:39:00",
-  },
-  {
-    id: "INV-0030",
-    amount: 786,
-    status: 1,
-    email: "chadchaa11@hcchkngaamphiechsth.or.th",
-    name: "ทานตะวัน ถิรสวัสดิ์",
-    date: "2025-05-22T13:59:00",
-  },
-  {
-    id: "INV-0031",
-    amount: 641,
-    status: 0,
-    email: "ekhiiywnethiiymsakdi@protonmail.com",
-    name: "โอภาส เลิศกิ่ง",
-    date: "2025-05-19T02:08:00",
-  },
-  {
-    id: "INV-0032",
-    amount: 672,
-    status: 2,
-    email: "sirnath27@ymail.com",
-    name: "ธีร์ธวันาย ศรีเผด็จ",
-    date: "2025-05-23T06:05:00",
-  },
-  {
-    id: "INV-0033",
-    amount: 509,
-    status: 0,
-    email: "vetmiyaedch@kon.in.th",
-    name: "สุรการณ์ ตะละภัฏ",
-    date: "2025-05-18T09:55:00",
-  },
-  {
-    id: "INV-0034",
-    amount: 844,
-    status: 0,
-    email: "nnaakknk@outlook.com",
-    name: "หลักทรัพย์ เณรานุสนธิ์",
-    date: "2025-05-23T21:32:00",
-  },
-  {
-    id: "INV-0035",
-    amount: 859,
-    status: 0,
-    email: "siththichayaithniym@ymail.com",
-    name: "อธิวัตร งามพิเชษฐ์",
-    date: "2025-05-23T03:56:00",
-  },
-  {
-    id: "INV-0036",
-    amount: 193,
-    status: 1,
-    email: "helkhaphanthu@brisath.com",
-    name: "นราวรรณ นากกนก",
-    date: "2025-05-22T03:51:00",
-  },
-  {
-    id: "INV-0037",
-    amount: 818,
-    status: 1,
-    email: "iaethmthn@ymail.com",
-    name: "ภัคชัญญา เขียวอ่อน",
-    date: "2025-05-23T04:39:00",
-  },
-  {
-    id: "INV-0038",
-    amount: 423,
-    status: 1,
-    email: "cchuthaaratn91@hcchkthumabutr.com",
-    name: "เกศรา ถนัดรักษา",
-    date: "2025-05-21T18:18:00",
-  },
-  {
-    id: "INV-0039",
-    amount: 116,
-    status: 2,
-    email: "jthiiwr@brisath.com",
-    name: "พรชนก ศรทอง",
-    date: "2025-05-20T18:49:00",
-  },
-  {
-    id: "INV-0040",
-    amount: 975,
-    status: 0,
-    email: "hrthayhiraysaalii@protonmail.com",
-    name: "จันทภา บุญศล",
-    date: "2025-05-18T21:50:00",
-  },
-  {
-    id: "INV-0041",
-    amount: 435,
-    status: 1,
-    email: "prayuththchuusaar@brisath.in.th",
-    name: "วรปรัชญ์ เมืองสุข",
-    date: "2025-05-19T10:31:00",
-  },
-  {
-    id: "INV-0042",
-    amount: 931,
-    status: 1,
-    email: "nuwachphrmn@hcchkthnadrbechrwis.com",
-    name: "วีระโชติ พงศ์ฉบับนภา",
-    date: "2025-05-21T08:58:00",
-  },
-  {
-    id: "INV-0043",
-    amount: 606,
-    status: 1,
-    email: "thaawrawrnnichaaphathr@outlook.com",
-    name: "สิริ ไทไชโย",
-    date: "2025-05-22T08:19:00",
-  },
-  {
-    id: "INV-0044",
-    amount: 979,
-    status: 2,
-    email: "rthrrmniym@kon.in.th",
-    name: "สิทธัญ ตวันเยี่ยม",
-    date: "2025-05-20T22:40:00",
-  },
-  {
-    id: "INV-0045",
-    amount: 821,
-    status: 2,
-    email: "thngsiiaiphlyulin@gmail.com",
-    name: "พิมพ์สุดา พงศ์ฉบับนภา",
-    date: "2025-05-23T11:47:00",
-  },
-  {
-    id: "INV-0046",
-    amount: 156,
-    status: 2,
-    email: "thiphywaariiecchriyramy@ymail.com",
-    name: "สมเกียรติ ศรีวงค์",
-    date: "2025-05-21T22:11:00",
-  },
-  {
-    id: "INV-0047",
-    amount: 415,
-    status: 1,
-    email: "nabenuuengnaiml@hcchktraachuuimprtekchprt.com",
-    name: "เมษา ชำนาญวาด",
-    date: "2025-05-20T17:13:00",
-  },
-  {
-    id: "INV-0048",
-    amount: 870,
-    status: 0,
-    email: "aisykicchnathwrinthr@haanghunswncchamkad.com",
-    name: "นัสรุน ติระคมน์",
-    date: "2025-05-18T11:52:00",
-  },
-  {
-    id: "INV-0049",
-    amount: 356,
-    status: 0,
-    email: "rkiieyaaa42@protonmail.com",
-    name: "พิชาภพ ยางสวย",
-    date: "2025-05-23T20:37:00",
-  },
-  {
-    id: "INV-0050",
-    amount: 186,
-    status: 0,
-    email: "thuuphmsrrephchy@brisath.com",
-    name: "อาฮามัด พรรษาสกุล",
-    date: "2025-05-20T00:51:00",
-  },
-];
-async function exportPayments() {
-  try {
-    const res = await fetch("/api/export", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "Payments.xlsx";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-  } catch (err) {
-    console.error("Export failed", err);
-  }
-}
-</script>
