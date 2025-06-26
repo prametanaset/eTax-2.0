@@ -3,7 +3,8 @@ import { custom } from "zod";
 import type { Customer } from "~/types/customer";
 
 export default function useCustomers() {
-  const $axios = useAxios(); // ดึง Axios จาก composable
+  const { apiClient } = useApiClient();
+  const storeId = "a3f2b4e1-8f17-4f55-b6c0-1b758e2f34cd";
 
   interface Customer {
     ID: number;
@@ -18,7 +19,7 @@ export default function useCustomers() {
 
   const getCustomersService = async () => {
     try {
-      const response = await $axios.get("/customers");
+      const response = await apiClient.get(`/customers/store/${storeId}`);
       return response.data;
     } catch (error) {
       console.error("❌ Error fetching customers:", error);
@@ -28,11 +29,15 @@ export default function useCustomers() {
 
   const updateCustomerService = async (payload: Customer) => {
     try {
-      const response = await $axios.put(`/customers/${payload.ID}`, payload, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await apiClient.put(
+        `/customers/${payload.ID}`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       return response.data; // สมมติ API ส่งข้อมูลลูกค้ากลับมา
     } catch (error) {
       console.error("❌ Error updating customers:", error);
@@ -41,7 +46,7 @@ export default function useCustomers() {
 
   const createCustomerService = async (payload: Customer) => {
     try {
-      const response = await $axios.post("/customers", payload, {
+      const response = await apiClient.post("/customers", payload, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -60,7 +65,7 @@ export default function useCustomers() {
 
   const deleteCustomerService = async (payload: Customer) => {
     try {
-      const response = await $axios.delete(`/customers/${payload.ID}`);
+      const response = await apiClient.delete(`/customers/${payload.ID}`);
       return response.data; // ✅ ส่งกลับเฉพาะข้อมูลที่สำคัญ
     } catch (error: any) {
       console.error(

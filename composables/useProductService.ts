@@ -2,13 +2,13 @@ import useAxios from "@/composables/useAxios";
 import type { ProductPayload, Product } from "~/types/product";
 
 export default function useProducts() {
-  const $axios = useAxios(); // ดึง Axios จาก composable
+  const { apiClient } = useApiClient();
 
   const storeId = "a3f2b4e1-8f17-4f55-b6c0-1b758e2f34cd";
 
   const getProducts = async () => {
     try {
-      const response = await $axios.get("/products", {
+      const response = await apiClient.get("/products", {
         params: { store_id: storeId },
       });
       return response.data;
@@ -20,7 +20,7 @@ export default function useProducts() {
 
   const getProductById = async (id: Number) => {
     try {
-      const response = await $axios.get(`/products/${id}`);
+      const response = await apiClient.get(`/products/${id}`);
       return response.data;
     } catch (error) {
       console.error("❌ Error fetching products:", error);
@@ -43,7 +43,7 @@ export default function useProducts() {
           },
         ],
       };
-      const response = await $axios.post("/products", payload, {
+      const response = await apiClient.post("/products", payload, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -77,7 +77,7 @@ export default function useProducts() {
           },
         ],
       };
-      const response = await $axios.put(`/products/`, payload, {
+      const response = await apiClient.put(`/products/`, payload, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -97,7 +97,7 @@ export default function useProducts() {
 
   const deleteProduct = async (id: Number) => {
     try {
-      const response = await $axios.delete(`/products/${id}`);
+      const response = await apiClient.delete(`/products/${id}`);
       return response.data; // ✅ ส่งกลับเฉพาะข้อมูลที่สำคัญ
     } catch (error: any) {
       console.error(
