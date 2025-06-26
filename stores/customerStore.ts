@@ -1,18 +1,7 @@
 import { defineStore } from "pinia";
-import { number } from "zod";
+import type { Customer } from "~/types/customer";
 
 export const useCustomerStore = defineStore("customerStore", () => {
-  interface Customer {
-    ID: number;
-    StoreId: number;
-    FirstName: string;
-    LastName: string;
-    Email: string;
-    Phone: string;
-    Address: string;
-    TaxIdNo: string;
-  }
-
   const customerList = ref<Array<Customer>>([]);
   const customerToUpdate = ref<Array<Customer>>([]);
   const customerToDelete = ref<Array<Customer>>([]);

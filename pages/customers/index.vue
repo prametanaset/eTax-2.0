@@ -19,11 +19,13 @@ definePageMeta({
 
 const customerStore = useCustomerStore();
 
-const customerData = computed(() => customerStore.customerList);
-
 onMounted(() => {
-  customerStore.getCustomer();
+  customerStore.getCustomer(); // ✅ async fetch
 });
+
+const customerData = computed(() =>
+  mapCustomerResponseToCustomer(customerStore.customerList)
+);
 
 useHead({
   title: "e-Tax - ลูกค้า",

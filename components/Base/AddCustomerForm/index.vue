@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref, defineProps, defineEmits } from "vue";
+import { ref, defineProps, defineEmits, watch } from "vue";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
+  DialogClose,
 } from "@/components/ui/dialog";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
@@ -18,25 +19,46 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { useLocationService } from "@/composables/useLocationService";
 
 interface Dropdown {
   dvalue: number;
   dlabel: string;
 }
 
-const props = defineProps<{ modelValue: boolean }>();
+const props = defineProps<{
+  modelValue: boolean;
+  mode: "create" | "edit";
+  customer?: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    zipCode: number;
+    vatNo: string | null;
+    address: string;
+    provinceId: number;
+    districtsId: number;
+    subdistrictsId: number;
+  };
+}>();
 
 const emit = defineEmits<{
   (e: "update:modelValue", value: boolean): void;
   (
-    e: "customer-added",
+    e: "customer-added" | "customer-updated",
     customer: {
       name: string;
       firstName: string;
       lastName: string;
       email: string;
       phone: string;
-      zipCode: Number;
+      zipCode: number;
+      vatNo?: string | null;
+      address: string;
+      provinceId: number;
+      districtsId: number;
+      subdistrictsId: number;
     }
   ): void;
 }>();
@@ -44,15 +66,19 @@ const emit = defineEmits<{
 const selectedProvince = ref<Dropdown | null>(null);
 const selectedDistrict = ref<Dropdown | null>(null);
 const selectedSubDistrict = ref<Dropdown | null>(null);
-const zipCode = ref(null);
+const zipCode = ref<number | null>(null);
+const activeTab = ref<"individual" | "corporate">("individual");
 
 const individual = ref({
-  name: "",
   firstName: "",
   lastName: "",
   phone: "",
   email: "",
   zipCode: 0,
+  address: "",
+  provinceId: 0,
+  districtsId: 0,
+  subdistrictsId: 0,
 });
 
 const corporate = ref({
@@ -62,62 +88,112 @@ const corporate = ref({
   email: "",
   phone: "",
   zipCode: 0,
+  provinceId: 0,
+  districtsId: 0,
+  subdistrictsId: 0,
 });
 
-function addIndividual() {
-  const name =
-    `${individual.value.firstName} ${individual.value.lastName}`.trim();
-  const firstName = `${individual.value.firstName}`;
-  const lastName = `${individual.value.lastName}`;
-  const email = individual.value.email;
-  const phone = individual.value.phone;
-  const zip = zipCode.value;
-  emit("customer-added", { name, firstName, lastName, email, phone, zip });
-  emit("update:modelValue", false);
-}
+watch(
+  () => props.modelValue,
+  (open) => {
+    if (open && props.mode === "edit") {
+      const c = props.customer;
+      zipCode.value = c.zipCode;
+      selectedProvince.value = { dvalue: c.provinceId, dlabel: "" };
+      selectedDistrict.value = { dvalue: c.districtsId, dlabel: "" };
+      selectedSubDistrict.value = { dvalue: c.subdistrictsId, dlabel: "" };
 
-function addCorporate() {
-  const name = corporate.value.companyName;
-  const email = corporate.value.email;
-  const firstName = corporate.value.companyName;
-  const lastName = corporate.value.companyName;
-  const phone = corporate.value.phone;
-  emit("customer-added", {
-    name,
-    firstName,
-    lastName,
-    email,
-    phone,
-    zipCode,
-  });
+      if (c.vatNo) {
+        activeTab.value = "corporate";
+        corporate.value = {
+          companyName: c.firstName,
+          tin: c.vatNo,
+          address: c.address,
+          email: c.email,
+          phone: c.phone,
+          zipCode: c.zipCode,
+          provinceId: c.provinceId,
+          districtsId: c.districtsId,
+          subdistrictsId: c.subdistrictsId,
+        };
+      } else {
+        activeTab.value = "individual";
+        individual.value = {
+          firstName: c.firstName,
+          lastName: c.lastName,
+          phone: c.phone,
+          email: c.email,
+          zipCode: c.zipCode,
+          address: c.address,
+          provinceId: c.provinceId,
+          districtsId: c.districtsId,
+          subdistrictsId: c.subdistrictsId,
+        };
+      }
+    }
+  },
+  { immediate: true }
+);
+
+function submitCustomer(type: "individual" | "corporate") {
+  if (
+    !selectedProvince.value ||
+    !selectedDistrict.value ||
+    !selectedSubDistrict.value ||
+    zipCode.value === null
+  )
+    return;
+
+  const data =
+    type === "individual"
+      ? {
+          name: `${individual.value.firstName} ${individual.value.lastName}`.trim(),
+          firstName: individual.value.firstName,
+          lastName: individual.value.lastName,
+          email: individual.value.email,
+          phone: individual.value.phone,
+          zipCode: zipCode.value,
+          address: individual.value.address,
+          provinceId: selectedProvince.value.dvalue,
+          districtsId: selectedDistrict.value.dvalue,
+          subdistrictsId: selectedSubDistrict.value.dvalue,
+        }
+      : {
+          name: corporate.value.companyName,
+          firstName: corporate.value.companyName,
+          lastName: corporate.value.companyName,
+          email: corporate.value.email,
+          phone: corporate.value.phone,
+          zipCode: zipCode.value,
+          vatNo: corporate.value.tin,
+          address: corporate.value.address,
+          provinceId: selectedProvince.value.dvalue,
+          districtsId: selectedDistrict.value.dvalue,
+          subdistrictsId: selectedSubDistrict.value.dvalue,
+        };
+
+  emit(props.mode === "edit" ? "customer-updated" : "customer-added", data);
   emit("update:modelValue", false);
 }
 
 const locationService = useLocationService();
 
-// เมื่อเลือกจังหวัดใหม่
 const onProvinceSelected = (province: Dropdown) => {
   selectedProvince.value = province;
-
-  // reset อำเภอและตำบล
   selectedDistrict.value = null;
   selectedSubDistrict.value = null;
+  zipCode.value = null;
 };
 
-// เมื่อเลือกอำเภอใหม่
 const onDistrictSelected = (district: Dropdown) => {
   selectedDistrict.value = district;
-
-  // reset ตำบล
   selectedSubDistrict.value = null;
+  zipCode.value = null;
 };
 
-// เมื่อเลือกตำบล
 const onSubDistrictSelected = async (subdistrict: Dropdown) => {
   selectedSubDistrict.value = subdistrict;
-  zipCode.value = await locationService.getZipCode(
-    selectedSubDistrict.value.dvalue
-  );
+  zipCode.value = await locationService.getZipCode(subdistrict.dvalue);
 };
 </script>
 
@@ -127,11 +203,13 @@ const onSubDistrictSelected = async (subdistrict: Dropdown) => {
 
     <DialogContent class="max-w-2xl overflow-auto max-h-[90vh]">
       <DialogHeader>
-        <DialogTitle>เพิ่มลูกค้าใหม่</DialogTitle>
-        <DialogDescription>กรอกข้อมูลลูกค้าใหม่</DialogDescription>
+        <DialogTitle>{{
+          props.mode === "edit" ? "แก้ไขข้อมูลลูกค้า" : "เพิ่มลูกค้าใหม่"
+        }}</DialogTitle>
+        <DialogDescription>กรอกข้อมูลลูกค้า</DialogDescription>
       </DialogHeader>
 
-      <Tabs default-value="individual" class="w-full">
+      <Tabs v-model="activeTab" class="w-full">
         <TabsList class="grid w-full grid-cols-2 mb-4">
           <TabsTrigger value="individual">บุคคลธรรมดา</TabsTrigger>
           <TabsTrigger value="corporate">นิติบุคคล</TabsTrigger>
@@ -165,6 +243,13 @@ const onSubDistrictSelected = async (subdistrict: Dropdown) => {
                 <Input
                   v-model="individual.email"
                   placeholder="email@example.com"
+                />
+              </div>
+              <div>
+                <Label>ที่อยู่</Label>
+                <Input
+                  v-model="individual.address"
+                  placeholder="ที่อยู่ตามทะเบียน"
                 />
               </div>
               <div>
@@ -237,6 +322,36 @@ const onSubDistrictSelected = async (subdistrict: Dropdown) => {
                   v-model="corporate.email"
                   placeholder="email@company.com"
                 />
+              </div>
+              <div>
+                <Label>จังหวัด</Label>
+                <BaseDropdown
+                  v-model="selectedProvince"
+                  type="province"
+                  @selected-data="onProvinceSelected"
+                />
+              </div>
+              <div>
+                <Label>อำเภอ/เขต</Label>
+                <BaseDropdown
+                  v-model="selectedDistrict"
+                  type="district"
+                  :id="selectedProvince?.dvalue"
+                  @selected-data="onDistrictSelected"
+                />
+              </div>
+              <div>
+                <Label>ตำบล</Label>
+                <BaseDropdown
+                  v-model="selectedSubDistrict"
+                  type="subdistrict"
+                  :id="selectedDistrict?.dvalue"
+                  @selected-data="onSubDistrictSelected"
+                />
+              </div>
+              <div>
+                <Label>รหัสไปรษณีย์</Label>
+                <Input v-model="zipCode" readonly />
               </div>
             </CardContent>
             <CardFooter class="flex gap-3 justify-end">

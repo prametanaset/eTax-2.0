@@ -5,7 +5,7 @@ export default function useAxios() {
 
   // const token = localStorage.getItem("token");
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2FwaS5leGFtcGxlLmNvbSIsImV4cCI6MTc1MDAzMDQwNywiaWF0IjoxNzQ5OTcwNDA3LCJpc3MiOiJodHRwczovL2F1dGguZXhhbXBsZS5jb20iLCJqdGkiOiI5ZTY0YWU5ZS0xNWI4LTRmYjUtOTJhYS05NjljMTc4MTMyOTEiLCJuYmYiOjE3NDk5NzA0MDcsInNjb3BlIjoidXNlciIsInN1YiI6IjYiLCJ0b2tlbl90eXBlIjoiYWNjZXNzIn0.RTXkuW9yjOW9gE9oYhwEwdeD65e5Dg1AQ_BiH6F1iz0";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2FwaS5leGFtcGxlLmNvbSIsImV4cCI6MTc1MDg4MjQzOCwiaWF0IjoxNzUwODIyNDM4LCJpc3MiOiJodHRwczovL2F1dGguZXhhbXBsZS5jb20iLCJqdGkiOiI2MGE0ZDA4NC01ZDJkLTRmNjMtYjY0NC0wMDg3MjVhZGU2NWUiLCJuYmYiOjE3NTA4MjI0MzgsInNjb3BlIjoidXNlciIsInN1YiI6ImY0MjljZWVhLTRjMTgtNDk4MS1iMzU2LTIxNWIwNTZjNDgwNyIsInRva2VuX3R5cGUiOiJhY2Nlc3MifQ.uAdwkA_v-9B-ZMXfpJC4HX1OMwnJLfTbx2779bd4Vcw";
 
   const $axios = axios.create({
     baseURL: config.public.$http, // ใช้ค่า baseURL จาก runtimeConfig

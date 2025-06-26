@@ -1,6 +1,7 @@
 import type { Updater } from "@tanstack/vue-table";
 import type { Ref } from "vue";
 import dayjs from "dayjs";
+import type { Customer } from "~/types/customer";
 
 export const convertToBuddhistYear = (date: any) => {
   const year = date.getFullYear();
@@ -58,4 +59,29 @@ export function valueUpdater<T extends Updater<any>>(
     typeof updaterOrValue === "function"
       ? updaterOrValue(ref.value)
       : updaterOrValue;
+}
+
+export function mapCustomerResponseToCustomer(response: any[]): Customer[] {
+  return response.map((c) => ({
+    ID: c.id,
+    StoreId: c.store_id,
+    vatNo: c.person_customer?.vat_no || c.company_customer?.vat_no || "-",
+    FirstName:
+      c.person_customer?.first_name || c.company_customer?.company_name || "-",
+    LastName: c.person_customer?.last_name || "",
+    Email:
+      c.customer_contacts?.find((con) => con.contact_type === "email")
+        ?.contact_value || "-",
+    Phone:
+      c.customer_contacts?.find((con) => con.contact_type === "phone")
+        ?.contact_value || "-",
+    Address: [
+      c.customer_address?.address_line1,
+      c.customer_address?.address_line2,
+    ]
+      .filter(Boolean)
+      .join(" "),
+    CreatedAt: c.created_at,
+    UpdatedAt: c.updated_at,
+  }));
 }
