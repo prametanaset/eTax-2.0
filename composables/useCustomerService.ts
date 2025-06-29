@@ -59,14 +59,14 @@ export default function useCustomers() {
             ? {
                 first_name: payload.firstName,
                 last_name: payload.lastName,
-                vat_no: payload.vatNo || "",
+                tin: payload.tin || "",
               }
             : undefined,
         company:
           type === "company"
             ? {
                 company_name: payload.firstName,
-                vat_no: payload.vatNo || "",
+                tin: payload.tin || "",
                 branch_no: 0, // ถ้ามีค่าอื่นก็แทนที่
               }
             : undefined,

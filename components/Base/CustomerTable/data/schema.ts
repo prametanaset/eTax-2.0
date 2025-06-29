@@ -8,7 +8,7 @@ export const customerSchema = z.object({
   Email: z.string().email(),
   Phone: z.string().optional(), // เบอร์โทรเป็นทางเลือก
   Address: z.string(),
-  vatNo: z.string(),
+  Tin: z.string(),
 });
 
 export type Customer = z.infer<typeof customerSchema>;

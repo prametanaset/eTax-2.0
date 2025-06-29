@@ -21,11 +21,6 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useLocationService } from "@/composables/useLocationService";
 
-interface Dropdown {
-  dvalue: number;
-  dlabel: string;
-}
-
 const props = defineProps<{
   modelValue: boolean;
   mode: "create" | "edit";
@@ -48,13 +43,14 @@ const emit = defineEmits<{
   (
     e: "customer-added" | "customer-updated",
     customer: {
-      name: string;
-      firstName: string;
-      lastName: string;
+      firstName?: string;
+      lastName?: string;
+      companyName?: string;
       email: string;
       phone: string;
+      branchCode?: string;
       zipCode: number;
-      vatNo?: string | null;
+      tin: string | null;
       address: string;
       provinceId: number;
       districtsId: number;
@@ -63,16 +59,13 @@ const emit = defineEmits<{
   ): void;
 }>();
 
-const selectedProvince = ref<Dropdown | null>(null);
-const selectedDistrict = ref<Dropdown | null>(null);
-const selectedSubDistrict = ref<Dropdown | null>(null);
-const zipCode = ref<number | null>(null);
-const activeTab = ref<"individual" | "corporate">("individual");
+const activeTab = ref<"person" | "corporate">("corporate");
 
-const individual = ref({
+const person = ref({
   firstName: "",
   lastName: "",
   phone: "",
+  tin: "",
   email: "",
   zipCode: 0,
   address: "",
@@ -84,6 +77,7 @@ const individual = ref({
 const corporate = ref({
   companyName: "",
   tin: "",
+  branchCode: "",
   address: "",
   email: "",
   phone: "",
@@ -93,107 +87,25 @@ const corporate = ref({
   subdistrictsId: 0,
 });
 
-watch(
-  () => props.modelValue,
-  (open) => {
-    if (open && props.mode === "edit") {
-      const c = props.customer;
-      zipCode.value = c.zipCode;
-      selectedProvince.value = { dvalue: c.provinceId, dlabel: "" };
-      selectedDistrict.value = { dvalue: c.districtsId, dlabel: "" };
-      selectedSubDistrict.value = { dvalue: c.subdistrictsId, dlabel: "" };
-
-      if (c.vatNo) {
-        activeTab.value = "corporate";
-        corporate.value = {
-          companyName: c.firstName,
-          tin: c.vatNo,
-          address: c.address,
-          email: c.email,
-          phone: c.phone,
-          zipCode: c.zipCode,
-          provinceId: c.provinceId,
-          districtsId: c.districtsId,
-          subdistrictsId: c.subdistrictsId,
-        };
-      } else {
-        activeTab.value = "individual";
-        individual.value = {
-          firstName: c.firstName,
-          lastName: c.lastName,
-          phone: c.phone,
-          email: c.email,
-          zipCode: c.zipCode,
-          address: c.address,
-          provinceId: c.provinceId,
-          districtsId: c.districtsId,
-          subdistrictsId: c.subdistrictsId,
-        };
-      }
-    }
-  },
-  { immediate: true }
-);
-
-function submitCustomer(type: "individual" | "corporate") {
-  if (
-    !selectedProvince.value ||
-    !selectedDistrict.value ||
-    !selectedSubDistrict.value ||
-    zipCode.value === null
-  )
-    return;
-
-  const data =
-    type === "individual"
-      ? {
-          name: `${individual.value.firstName} ${individual.value.lastName}`.trim(),
-          firstName: individual.value.firstName,
-          lastName: individual.value.lastName,
-          email: individual.value.email,
-          phone: individual.value.phone,
-          zipCode: zipCode.value,
-          address: individual.value.address,
-          provinceId: selectedProvince.value.dvalue,
-          districtsId: selectedDistrict.value.dvalue,
-          subdistrictsId: selectedSubDistrict.value.dvalue,
-        }
-      : {
-          name: corporate.value.companyName,
-          firstName: corporate.value.companyName,
-          lastName: corporate.value.companyName,
-          email: corporate.value.email,
-          phone: corporate.value.phone,
-          zipCode: zipCode.value,
-          vatNo: corporate.value.tin,
-          address: corporate.value.address,
-          provinceId: selectedProvince.value.dvalue,
-          districtsId: selectedDistrict.value.dvalue,
-          subdistrictsId: selectedSubDistrict.value.dvalue,
-        };
+function submitCustomer(type: "person" | "corporate") {
+  const data = type === "person" ? person.value : corporate.value;
 
   emit(props.mode === "edit" ? "customer-updated" : "customer-added", data);
   emit("update:modelValue", false);
 }
 
-const locationService = useLocationService();
-
-const onProvinceSelected = (province: Dropdown) => {
-  selectedProvince.value = province;
-  selectedDistrict.value = null;
-  selectedSubDistrict.value = null;
-  zipCode.value = null;
-};
-
-const onDistrictSelected = (district: Dropdown) => {
-  selectedDistrict.value = district;
-  selectedSubDistrict.value = null;
-  zipCode.value = null;
-};
-
-const onSubDistrictSelected = async (subdistrict: Dropdown) => {
-  selectedSubDistrict.value = subdistrict;
-  zipCode.value = await locationService.getZipCode(subdistrict.dvalue);
+const handleSelectLocation = (data: any) => {
+  if (activeTab.value === "person") {
+    person.value.provinceId = data.provinceId;
+    person.value.districtsId = data.districtId;
+    person.value.subdistrictsId = data.subdistrictId;
+    person.value.zipCode = data.zipCode;
+  } else {
+    corporate.value.provinceId = data.provinceId;
+    corporate.value.districtsId = data.districtId;
+    corporate.value.subdistrictsId = data.subdistrictId;
+    corporate.value.zipCode = data.zipCode;
+  }
 };
 </script>
 
@@ -201,168 +113,197 @@ const onSubDistrictSelected = async (subdistrict: Dropdown) => {
   <Dialog :open="modelValue" @update:open="emit('update:modelValue', $event)">
     <!-- เปลี่ยนสี ความทึบ และเบลอของฉากหลังตรงนี้ -->
 
-    <DialogContent class="max-w-2xl overflow-auto max-h-[90vh]">
-      <DialogHeader>
-        <DialogTitle>{{
-          props.mode === "edit" ? "แก้ไขข้อมูลลูกค้า" : "เพิ่มลูกค้าใหม่"
-        }}</DialogTitle>
-        <DialogDescription>กรอกข้อมูลลูกค้า</DialogDescription>
-      </DialogHeader>
+    <DialogContent
+      class="sm:max-w-4xl w-full max-h-[90dvh] bg-[hsl(var(--card))] overflow-hidden"
+    >
+      <div class="grid gap-6">
+        <!-- Left: Tabs Form -->
+        <div>
+          <DialogHeader>
+            <DialogTitle>ตั้งค่าร้านค้า</DialogTitle>
+            <DialogDescription>
+              เลือกประเภทและกรอกข้อมูลให้ครบถ้วน
+            </DialogDescription>
+          </DialogHeader>
 
-      <Tabs v-model="activeTab" class="w-full">
-        <TabsList class="grid w-full grid-cols-2 mb-4">
-          <TabsTrigger value="individual">บุคคลธรรมดา</TabsTrigger>
-          <TabsTrigger value="corporate">นิติบุคคล</TabsTrigger>
-        </TabsList>
+          <Tabs v-model="activeTab" class="w-full mt-4">
+            <TabsList class="grid grid-cols-2 w-full mb-4">
+              <TabsTrigger value="corporate">นิติบุคคล</TabsTrigger>
+              <TabsTrigger value="person">บุคคลธรรมดา</TabsTrigger>
+            </TabsList>
 
-        <TabsContent value="individual">
-          <Card>
-            <CardHeader>
-              <CardTitle>ข้อมูลบุคคลธรรมดา</CardTitle>
-            </CardHeader>
-            <CardContent class="space-y-4">
-              <div class="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>ชื่อ</Label>
-                  <Input
-                    v-model="individual.firstName"
-                    placeholder="ชื่อจริง"
-                  />
-                </div>
-                <div>
-                  <Label>นามสกุล</Label>
-                  <Input v-model="individual.lastName" placeholder="นามสกุล" />
-                </div>
-              </div>
-              <div>
-                <Label>เบอร์โทร</Label>
-                <Input v-model="individual.phone" placeholder="0812345678" />
-              </div>
-              <div>
-                <Label>อีเมล</Label>
-                <Input
-                  v-model="individual.email"
-                  placeholder="email@example.com"
-                />
-              </div>
-              <div>
-                <Label>ที่อยู่</Label>
-                <Input
-                  v-model="individual.address"
-                  placeholder="ที่อยู่ตามทะเบียน"
-                />
-              </div>
-              <div>
-                <Label>จังหวัด</Label>
-                <BaseDropdown
-                  v-model="selectedProvince"
-                  type="province"
-                  @selected-data="onProvinceSelected"
-                />
-              </div>
-              <div>
-                <Label>อำเภอ/เขต</Label>
-                <BaseDropdown
-                  v-model="selectedDistrict"
-                  type="district"
-                  :id="selectedProvince?.dvalue"
-                  @selected-data="onDistrictSelected"
-                />
-              </div>
-              <div>
-                <Label>ตำบล</Label>
-                <BaseDropdown
-                  v-model="selectedSubDistrict"
-                  type="subdistrict"
-                  :id="selectedDistrict?.dvalue"
-                  @selected-data="onSubDistrictSelected"
-                />
-              </div>
-              <div>
-                <Label>รหัสไปรษณีย์</Label>
-                <Input v-model="zipCode" readonly />
-              </div>
-            </CardContent>
-            <CardFooter class="flex gap-3 justify-end">
-              <DialogClose as-child>
-                <Button type="button" variant="outline">ยกเลิก</Button>
-              </DialogClose>
-              <Button @click="addIndividual">บันทึก</Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
+            <!-- Corporate (นิติบุคคล) -->
+            <TabsContent value="corporate">
+              <Card>
+                <CardHeader>
+                  <CardTitle>นิติบุคคล</CardTitle>
+                  <CardDescription>
+                    กรอกชื่อร้านค้าและเลขประจำตัวผู้เสียภาษี
+                  </CardDescription>
+                </CardHeader>
+                <CardContent class="space-y-4">
+                  <div>
+                    <Label for="storeName">ชื่อร้านค้า</Label>
+                    <Input
+                      id="storeName"
+                      v-model="corporate.companyName"
+                      placeholder="ชื่อบริษัท / ร้านค้า"
+                    />
+                  </div>
+                  <div class="flex gap-4">
+                    <!-- Tax ID -->
+                    <div class="flex-1">
+                      <Label for="taxId">เลขประจำตัวผู้เสียภาษี</Label>
+                      <Input
+                        id="taxId"
+                        v-model="corporate.tin"
+                        placeholder="13 หลัก"
+                      />
+                    </div>
 
-        <TabsContent value="corporate">
-          <Card>
-            <CardHeader>
-              <CardTitle>ข้อมูลนิติบุคคล</CardTitle>
-            </CardHeader>
-            <CardContent class="space-y-4">
-              <div>
-                <Label>ชื่อบริษัท</Label>
-                <Input
-                  v-model="corporate.companyName"
-                  placeholder="ชื่อบริษัท"
-                />
-              </div>
-              <div>
-                <Label>เลขประจำตัวผู้เสียภาษี</Label>
-                <Input v-model="corporate.tin" placeholder="010xxxxxxxxxxx" />
-              </div>
-              <div>
-                <Label>ที่อยู่</Label>
-                <Input
-                  v-model="corporate.address"
-                  placeholder="ที่อยู่ตามทะเบียน"
-                />
-              </div>
-              <div>
-                <Label>อีเมล</Label>
-                <Input
-                  v-model="corporate.email"
-                  placeholder="email@company.com"
-                />
-              </div>
-              <div>
-                <Label>จังหวัด</Label>
-                <BaseDropdown
-                  v-model="selectedProvince"
-                  type="province"
-                  @selected-data="onProvinceSelected"
-                />
-              </div>
-              <div>
-                <Label>อำเภอ/เขต</Label>
-                <BaseDropdown
-                  v-model="selectedDistrict"
-                  type="district"
-                  :id="selectedProvince?.dvalue"
-                  @selected-data="onDistrictSelected"
-                />
-              </div>
-              <div>
-                <Label>ตำบล</Label>
-                <BaseDropdown
-                  v-model="selectedSubDistrict"
-                  type="subdistrict"
-                  :id="selectedDistrict?.dvalue"
-                  @selected-data="onSubDistrictSelected"
-                />
-              </div>
-              <div>
-                <Label>รหัสไปรษณีย์</Label>
-                <Input v-model="zipCode" readonly />
-              </div>
-            </CardContent>
-            <CardFooter class="flex gap-3 justify-end">
-              <DialogClose as-child>
-                <Button type="button" variant="outline">ยกเลิก</Button>
-              </DialogClose>
-              <Button @click="addCorporate">บันทึก</Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
-      </Tabs>
+                    <!-- Branch Code -->
+                    <div class="w-[120px]">
+                      <Label for="branchCode">เลขที่สาขา</Label>
+                      <Input
+                        id="branchCode"
+                        v-model="corporate.branchCode"
+                        placeholder="5 หลัก"
+                        maxlength="5"
+                        inputmode="numeric"
+                      />
+                    </div>
+                  </div>
+                  <div class="grid gap-4 grid-cols-2">
+                    <div>
+                      <Label for="email">อีเมล</Label>
+                      <Input
+                        id="email"
+                        v-model="corporate.email"
+                        placeholder="ที่อยู่อีเมล"
+                      />
+                    </div>
+                    <div>
+                      <Label for="phone">เบอร์โทรศัพท์</Label>
+                      <Input
+                        id="phone"
+                        v-model="corporate.phone"
+                        placeholder="เบอร์ติดต่อ"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <Label class="mb-1 block text-sm font-medium">
+                        ที่อยู่ร้านค้า <span class="text-red-500">*</span>
+                      </Label>
+                      <Textarea
+                        v-model="corporate.address"
+                        class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                        rows="2"
+                        placeholder="บ้านเลขที่ หมู่ ซอย ถนน"
+                        required
+                        maxlength="150"
+                      />
+                    </div>
+                  </div>
+                  <!-- ใส่ LocationPicker -->
+                  <BaseLocationPicker @location-data="handleSelectLocation" />
+                </CardContent>
+                <CardFooter class="flex justify-end">
+                  <Button @click="submitCustomer('corporate')">บันทึก</Button>
+                  <DialogClose as-child>
+                    <Button variant="ghost">ปิด</Button>
+                  </DialogClose>
+                </CardFooter>
+              </Card>
+            </TabsContent>
+
+            <!-- Personal (บุคคลธรรมดา) -->
+            <TabsContent value="person">
+              <Card>
+                <CardHeader>
+                  <CardTitle>บุคคลธรรมดา</CardTitle>
+                  <CardDescription>
+                    กรอกชื่อผู้ติดต่อและเลขบัตรประชาชน
+                  </CardDescription>
+                </CardHeader>
+                <CardContent class="space-y-4">
+                  <div class="grid gap-4 grid-cols-2">
+                    <div>
+                      <Label for="firstName">ชื่อ</Label>
+                      <Input
+                        id="firstName"
+                        v-model="person.firstName"
+                        placeholder="ชื่อจริง"
+                      />
+                    </div>
+                    <div>
+                      <Label for="lastName">นามสกุล</Label>
+                      <Input
+                        id="lastName"
+                        v-model="person.lastName"
+                        placeholder="นามสกุล"
+                      />
+                    </div>
+                  </div>
+                  <div class="flex gap-4">
+                    <!-- Tax ID -->
+                    <div class="flex-1">
+                      <Label for="taxId">เลขประจำตัวผู้เสียภาษี</Label>
+                      <Input
+                        id="taxId"
+                        v-model="person.tin"
+                        placeholder="13 หลัก"
+                      />
+                    </div>
+                  </div>
+                  <div class="grid gap-4 grid-cols-2">
+                    <div>
+                      <Label for="email">อีเมล</Label>
+                      <Input
+                        id="email"
+                        v-model="person.email"
+                        placeholder="ที่อยู่อีเมล"
+                      />
+                    </div>
+                    <div>
+                      <Label for="phone">เบอร์โทรศัพท์</Label>
+                      <Input
+                        id="phone"
+                        v-model="person.phone"
+                        placeholder="เบอร์ติดต่อ"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <Label class="mb-1 block text-sm font-medium">
+                        ที่อยู่ร้านค้า <span class="text-red-500">*</span>
+                      </Label>
+                      <Textarea
+                        v-model="person.address"
+                        class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                        rows="2"
+                        placeholder="บ้านเลขที่ หมู่ ซอย ถนน"
+                        required
+                        maxlength="150"
+                      />
+                    </div>
+                  </div>
+                  <!-- ใส่ LocationPicker -->
+                  <BaseLocationPicker @location-data="handleSelectLocation" />
+                </CardContent>
+                <CardFooter class="flex justify-end">
+                  <Button @click="submitCustomer('person')">บันทึก</Button>
+                  <DialogClose as-child>
+                    <Button variant="ghost">ปิด</Button>
+                  </DialogClose>
+                </CardFooter>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </div>
     </DialogContent>
   </Dialog>
 </template>

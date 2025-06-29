@@ -65,7 +65,7 @@ export function mapCustomerResponseToCustomer(response: any[]): Customer[] {
   return response.map((c) => ({
     ID: c.id,
     StoreId: c.store_id,
-    vatNo: c.person_customer?.vat_no || c.company_customer?.vat_no || "-",
+    Tin: c.person_customer?.tin || c.company_customer?.tin || "-",
     FirstName:
       c.person_customer?.first_name || c.company_customer?.company_name || "-",
     LastName: c.person_customer?.last_name || "",

@@ -30,10 +30,10 @@ export const columns: ColumnDef<Customer>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "vatNo",
+    accessorKey: "Tin",
     header: ({ column }) =>
       h(DataTableColumnHeader, { column, title: "หมายเลขผู้เสียภาษี" }),
-    cell: ({ row }) => h("div", {}, row.getValue("vatNo")),
+    cell: ({ row }) => h("div", {}, row.getValue("Tin")),
   },
   {
     accessorKey: "FirstName",

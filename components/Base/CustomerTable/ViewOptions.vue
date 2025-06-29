@@ -70,7 +70,7 @@ const customer = reactive<Customer>({
   Email: "",
   Phone: "",
   Address: "",
-  vatNo: "",
+  Tin: "",
 });
 
 const resetCustomer = () => {
@@ -82,7 +82,7 @@ const resetCustomer = () => {
     Email: "",
     Phone: "",
     Address: "",
-    vatNo: "",
+    Tin: "",
   });
 };
 
@@ -95,7 +95,7 @@ watch(
 
 const handleCreateCustomer = async (newCustomer: Customer) => {
   try {
-    const type = newCustomer.vatNo ? "company" : "person";
+    const type = newCustomer.Tin ? "company" : "person";
     await createCustomerService(newCustomer, type);
     isDialogOpen.value = false;
     await customerStore.getCustomer();

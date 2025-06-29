@@ -1,7 +1,7 @@
 export interface Customer {
   ID: number;
   StoreId: string;
-  vatNo: string;
+  Tin: string;
   FirstName: string;
   LastName: string;
   Email: string;

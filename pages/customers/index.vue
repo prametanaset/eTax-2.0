@@ -14,7 +14,7 @@ definePageMeta({
   title: "จัดการลูกค้า",
   auth: {
     unauthenticatedOnly: false,
-  }
+  },
 });
 
 const customerStore = useCustomerStore();
@@ -26,6 +26,8 @@ onMounted(() => {
 const customerData = computed(() =>
   mapCustomerResponseToCustomer(customerStore.customerList)
 );
+
+console.log(customerData);
 
 useHead({
   title: "e-Tax - ลูกค้า",
