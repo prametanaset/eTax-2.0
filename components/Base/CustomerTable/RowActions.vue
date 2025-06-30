@@ -19,13 +19,46 @@
         <DropdownMenuSeparator />
         <DropdownMenuItem
           class="cursor-pointer"
-          @click="handleDeleteCustomer(row.original)"
+          @click="deleteCustomer(row.original)"
         >
           ลบข้อมูลลูกค้า
           <DropdownMenuShortcut><Trash2 class="w-4" /></DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+
+    <!-- ยืนยันการลบ -->
+    <AlertDialog :open="isAlertOpen" @update:open="isAlertOpen = $event">
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle
+            >คุณแน่ใจหรือไม่ที่จะลบข้อมูลลูกค้า?</AlertDialogTitle
+          >
+          <AlertDialogDescription>
+            <strong
+              v-if="customerToDelete?.CustomerType === 'บุคคลธรรมดา'"
+              class="text-primary"
+              >{{
+                `${customerToDelete?.FirstName} ${customerToDelete?.LastName}`
+              }}</strong
+            >
+            <strong v-else class="text-primary">{{
+              `${customerToDelete?.FirstName}`
+            }}</strong>
+            <div>การลบนี้ไม่สามารถย้อนกลับได้</div>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel @click="isAlertOpen = false"
+            >ยกเลิก</AlertDialogCancel
+          >
+          <AlertDialogAction @click="handleDeleteCustomer"
+            >ยืนยัน</AlertDialogAction
+          >
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+
     <BaseAddCustomerForm
       v-model="isDialogOpen"
       mode="edit"
@@ -64,6 +97,8 @@ const { toast } = useToast();
 const props = defineProps<DataTableRowActionsProps>();
 const customerStore = useCustomerStore();
 const isDialogOpen = ref(false);
+const isAlertOpen = ref(false);
+const customerToDelete = ref<Customer | null>(null);
 
 let selectCustomer = ref([]);
 
@@ -71,7 +106,6 @@ const {
   updateCustomerService,
   deleteCustomerService,
   getCustomersByIdService,
-  getCustomersService,
 } = useCustomerService();
 
 const updateCustomer = async (customer: Customer) => {
@@ -82,7 +116,7 @@ const updateCustomer = async (customer: Customer) => {
 
 const handleUpdateCustomer = async (customer: Customer) => {
   try {
-    await updateCustomerService(customer);
+    await updateCustomerService(customer.id, customer, customer.customerType);
     isDialogOpen.value = false;
     await customerStore.getCustomer();
     toast({ title: "อัพเดทข้อมูลลูกค้าแล้ว" });
@@ -94,9 +128,14 @@ const handleUpdateCustomer = async (customer: Customer) => {
   }
 };
 
-const handleDeleteCustomer = async (customer: Customer) => {
+const deleteCustomer = (customer: Customer) => {
+  customerToDelete.value = customer;
+  isAlertOpen.value = true;
+};
+
+const handleDeleteCustomer = async () => {
   try {
-    await deleteCustomerService(customer);
+    await deleteCustomerService(customerToDelete.value.ID);
     await customerStore.getCustomer();
     toast({ title: "ลบข้อมูลลูกค้าแล้ว" });
   } catch {
@@ -108,27 +147,49 @@ const handleDeleteCustomer = async (customer: Customer) => {
 };
 
 const convertToFormProps = (res: any) => {
-  const person = res.person;
   const address = res.customer.customer_address;
   const contacts = res.contact;
+  const customerType = res.customer.customer_type;
 
-  return {
-    name: `${person.first_name} ${person.last_name}`.trim(),
-    firstName: person.first_name,
-    lastName: person.last_name,
-    email:
-      contacts.find((c: any) => c.contact_type === "email")?.contact_value ||
-      "",
-    phone:
-      contacts.find((c: any) => c.contact_type === "phone")?.contact_value ||
-      "",
-    zipCode: parseInt(address.postal_code),
-    vatNo: person.vat_no || null,
-    address: address.address_line1,
-    provinceId: address.province_id,
-    districtsId: address.districts_id,
-    subdistrictsId: address.subdistricts_id,
-  };
+  const email =
+    contacts.find((c: any) => c.contact_type === "email")?.contact_value || "-";
+  const phone =
+    contacts.find((c: any) => c.contact_type === "phone")?.contact_value || "-";
+  const zipCode = parseInt(address.postal_code);
+
+  if (customerType === "person") {
+    const person = res.person;
+    return {
+      id: person.customer_id,
+      customerType,
+      firstName: person.first_name,
+      lastName: person.last_name,
+      tin: person.tin,
+      email,
+      phone,
+      zipCode,
+      address: address.address_line1,
+      provinceId: address.province_id,
+      districtsId: address.districts_id,
+      subdistrictsId: address.subdistricts_id,
+    };
+  } else {
+    const company = res.company;
+    return {
+      id: company.customer_id,
+      customerType,
+      companyName: company.company_name,
+      email,
+      phone,
+      zipCode,
+      tin: company.tin?.slice(0, 13) || "-",
+      branchCode: company.tin?.slice(13, 19) || "-",
+      address: address.address_line1,
+      provinceId: address.province_id,
+      districtsId: address.districts_id,
+      subdistrictsId: address.subdistricts_id,
+    };
+  }
 };
 </script>
 

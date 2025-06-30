@@ -36,6 +36,12 @@ export const columns: ColumnDef<Customer>[] = [
     cell: ({ row }) => h("div", {}, row.getValue("Tin")),
   },
   {
+    accessorKey: "CustomerType",
+    header: ({ column }) =>
+      h(DataTableColumnHeader, { column, title: "ประเภทลูกค้า" }),
+    cell: ({ row }) => h("div", {}, row.getValue("CustomerType")),
+  },
+  {
     accessorKey: "FirstName",
     header: ({ column }) => h(DataTableColumnHeader, { column, title: "ชื่อ" }),
     cell: ({ row }) => h("div", {}, row.getValue("FirstName")),

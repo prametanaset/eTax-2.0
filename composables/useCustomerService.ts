@@ -24,11 +24,63 @@ export default function useCustomers() {
     }
   };
 
-  const updateCustomerService = async (payload: Customer) => {
+  const updateCustomerService = async (
+    id: Number,
+    payload: Customer,
+    type: "person" | "company"
+  ) => {
     try {
+      const formattedPayload = {
+        customer: {
+          store_id: "a3f2b4e1-8f17-4f55-b6c0-1b758e2f34cd", // ✅ ใส่ให้ตายตัว หรือรับจาก context
+          customer_type: type,
+          customer_id: id,
+          status: "active",
+          created_by: 1,
+          updated_by: 1,
+        },
+        person:
+          type === "person"
+            ? {
+                first_name: payload.firstName,
+                last_name: payload.lastName,
+                tin: payload.tin || "",
+              }
+            : undefined,
+        company:
+          type === "company"
+            ? {
+                company_name: payload.firstName,
+                tin: payload.tin || "",
+              }
+            : undefined,
+        address: {
+          address_line1: payload.address,
+          address_line2: "", // ใส่ถ้ามีช่องกรอกที่อยู่เพิ่ม
+          province_id: payload.provinceId,
+          districts_id: payload.districtsId,
+          subdistricts_id: payload.subdistrictsId,
+          postal_code: String(payload.zipCode),
+        },
+        contacts: [
+          {
+            contact_type: "email",
+            contact_value: payload.email,
+          },
+          ...(payload.phone
+            ? [
+                {
+                  contact_type: "phone",
+                  contact_value: payload.phone,
+                },
+              ]
+            : []),
+        ],
+      };
+      // ส่งไปยัง API
       const response = await apiClient.put(
-        `/customers/${payload.ID}`,
-        payload,
+        `/customers/${id}`,
+        formattedPayload,
         {
           headers: {
             "Content-Type": "application/json",
@@ -67,7 +119,6 @@ export default function useCustomers() {
             ? {
                 company_name: payload.firstName,
                 tin: payload.tin || "",
-                branch_no: 0, // ถ้ามีค่าอื่นก็แทนที่
               }
             : undefined,
         address: {
@@ -112,9 +163,9 @@ export default function useCustomers() {
     }
   };
 
-  const deleteCustomerService = async (payload: Customer) => {
+  const deleteCustomerService = async (id: Number) => {
     try {
-      const response = await apiClient.delete(`/customers/${payload.ID}`);
+      const response = await apiClient.delete(`/customers/${id}`);
       return response.data; // ✅ ส่งกลับเฉพาะข้อมูลที่สำคัญ
     } catch (error: any) {
       console.error(

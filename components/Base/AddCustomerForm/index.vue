@@ -19,18 +19,21 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { useLocationService } from "@/composables/useLocationService";
 
 const props = defineProps<{
   modelValue: boolean;
   mode: "create" | "edit";
   customer?: {
-    firstName: string;
-    lastName: string;
+    customerType: "person" | "company";
+    id?: number;
+    companyName?: string;
+    firstName?: string;
+    lastName?: string;
     email: string;
     phone: string;
     zipCode: number;
-    vatNo: string | null;
+    tin: string;
+    branchCode?: string;
     address: string;
     provinceId: number;
     districtsId: number;
@@ -88,7 +91,18 @@ const corporate = ref({
 });
 
 function submitCustomer(type: "person" | "corporate") {
-  const data = type === "person" ? person.value : corporate.value;
+  const data =
+    type === "person"
+      ? {
+          ...person.value,
+          customerType: props.customer?.customerType,
+          id: props.customer?.id,
+        }
+      : {
+          ...corporate.value,
+          customerType: props.customer?.customerType,
+          id: props.customer?.id,
+        };
 
   emit(props.mode === "edit" ? "customer-updated" : "customer-added", data);
   emit("update:modelValue", false);
@@ -107,6 +121,45 @@ const handleSelectLocation = (data: any) => {
     corporate.value.zipCode = data.zipCode;
   }
 };
+
+watch(
+  () => props.modelValue,
+  (open) => {
+    if (open && props.mode === "edit") {
+      const c = props.customer;
+
+      if (c.customerType == "company") {
+        activeTab.value = "corporate";
+        corporate.value = {
+          companyName: c.companyName,
+          tin: c.tin,
+          branchCode: c.branchCode,
+          address: c.address,
+          email: c.email,
+          phone: c.phone,
+          zipCode: c.zipCode,
+          provinceId: c.provinceId,
+          districtsId: c.districtsId,
+          subdistrictsId: c.subdistrictsId,
+        };
+      } else {
+        activeTab.value = "person";
+        person.value = {
+          firstName: c.firstName,
+          lastName: c.lastName,
+          phone: c.phone,
+          email: c.email,
+          zipCode: c.zipCode,
+          address: c.address,
+          tin: c.tin,
+          provinceId: c.provinceId,
+          districtsId: c.districtsId,
+          subdistrictsId: c.subdistrictsId,
+        };
+      }
+    }
+  }
+);
 </script>
 
 <template>
@@ -120,16 +173,42 @@ const handleSelectLocation = (data: any) => {
         <!-- Left: Tabs Form -->
         <div>
           <DialogHeader>
-            <DialogTitle>ตั้งค่าร้านค้า</DialogTitle>
+            <DialogTitle>{{
+              props.mode === "edit" ? "แก้ไขข้อมูลลูกค้า" : "เพิ่มข้อมูลลูกค้า"
+            }}</DialogTitle>
             <DialogDescription>
               เลือกประเภทและกรอกข้อมูลให้ครบถ้วน
             </DialogDescription>
           </DialogHeader>
 
           <Tabs v-model="activeTab" class="w-full mt-4">
-            <TabsList class="grid grid-cols-2 w-full mb-4">
-              <TabsTrigger value="corporate">นิติบุคคล</TabsTrigger>
-              <TabsTrigger value="person">บุคคลธรรมดา</TabsTrigger>
+            <TabsList
+              :class="[
+                'grid w-full mb-4',
+                props.mode === 'edit' ? 'grid-cols-1' : 'grid-cols-2',
+              ]"
+            >
+              <!-- นิติบุคคล -->
+              <TabsTrigger
+                v-if="
+                  props.mode === 'create' ||
+                  props.customer?.customerType === 'company'
+                "
+                value="corporate"
+              >
+                นิติบุคคล
+              </TabsTrigger>
+
+              <!-- บุคคลธรรมดา -->
+              <TabsTrigger
+                v-if="
+                  props.mode === 'create' ||
+                  props.customer?.customerType === 'person'
+                "
+                value="person"
+              >
+                บุคคลธรรมดา
+              </TabsTrigger>
             </TabsList>
 
             <!-- Corporate (นิติบุคคล) -->

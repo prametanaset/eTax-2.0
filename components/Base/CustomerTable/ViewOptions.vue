@@ -5,7 +5,7 @@
       <Button @click="isDialogOpen = true">เพิ่มข้อมูลลูกค้า</Button>
       <BaseAddCustomerForm
         v-model="isDialogOpen"
-        mode="add"
+        mode="create"
         @customer-added="handleCreateCustomer"
       />
     </div>
@@ -95,8 +95,19 @@ watch(
 
 const handleCreateCustomer = async (newCustomer: Customer) => {
   try {
-    const type = newCustomer.Tin ? "company" : "person";
-    await createCustomerService(newCustomer, type);
+    // console.log(newCustomer);
+    const type = newCustomer.branchCode ? "company" : "person";
+    if (newCustomer.branchCode) {
+      const payload = {
+        ...newCustomer,
+        tin: `${newCustomer.tin}${newCustomer.branchCode}`,
+        firstName: `${newCustomer.companyName}`,
+      };
+      await createCustomerService(payload, type);
+    } else {
+      await createCustomerService(newCustomer, type);
+    }
+
     isDialogOpen.value = false;
     await customerStore.getCustomer();
     resetCustomer();
