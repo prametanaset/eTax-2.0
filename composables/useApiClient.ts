@@ -7,6 +7,8 @@ import axios, {
 } from 'axios'
 import { useAuth } from '#imports'
 
+let refreshPromise: Promise<any> | null = null
+
 export function useApiClient() {
   const runtimeConfig = useRuntimeConfig()
   const { data: session, getSession, signOut } = useAuth()
@@ -15,7 +17,6 @@ export function useApiClient() {
    * A single promise to ensure `getSession` is only called once
    * during concurrent failing requests.
    */
-  let refreshPromise: Promise<any> | null = null
 
   const api = axios.create({
     baseURL: runtimeConfig.public.apiBase,

@@ -18,10 +18,10 @@
         </h5>
       </div>
       <div class="mt-8">
-        <v-btn flat class="rounded-xl w-100 text-subtitle-1" color="#EF0081">
+        <!-- <v-btn flat class="rounded-xl w-100 text-subtitle-1" color="#EF0081">
           <v-icon class="mr-1">mdi-arrow-left</v-icon>
           <p>กลับสู่หน้าหลัก</p>
-        </v-btn>
+        </v-btn> -->
       </div>
     </div>
   </div>

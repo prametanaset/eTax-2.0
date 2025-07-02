@@ -40,6 +40,10 @@ export default defineNuxtConfig({
     globalAppMiddleware: {
       isEnabled: true,
     },
+    sessionRefresh: {
+      enablePeriodically: false,
+      enableOnWindowFocus: false
+    },
     baseURL: process.env.AUTH_ORIGIN,
   },
   // dateFns configuration should be placed in the module options if supported, not in the root config
