@@ -3,7 +3,8 @@ import type { Customer } from "~/types/customer";
 
 export default function useCustomers() {
   const { apiClient } = useApiClient();
-  const storeId = "a3f2b4e1-8f17-4f55-b6c0-1b758e2f34cd";
+  const profileStore = useProfileStore();
+  const storeId = profileStore.stores[0].id || null;
 
   const getCustomersService = async () => {
     try {
@@ -32,7 +33,7 @@ export default function useCustomers() {
     try {
       const formattedPayload = {
         customer: {
-          store_id: "a3f2b4e1-8f17-4f55-b6c0-1b758e2f34cd", // ✅ ใส่ให้ตายตัว หรือรับจาก context
+          store_id: storeId, // ✅ ใส่ให้ตายตัว หรือรับจาก context
           customer_type: type,
           customer_id: id,
           status: "active",
@@ -51,7 +52,7 @@ export default function useCustomers() {
           type === "company"
             ? {
                 company_name: payload.firstName,
-                tin: payload.tin || "",
+                tin: `${payload.tin}${payload.branchCode}` || "",
               }
             : undefined,
         address: {
@@ -100,7 +101,7 @@ export default function useCustomers() {
     try {
       const formattedPayload = {
         customer: {
-          store_id: "a3f2b4e1-8f17-4f55-b6c0-1b758e2f34cd", // ✅ ใส่ให้ตายตัว หรือรับจาก context
+          store_id: storeId, // ✅ ใส่ให้ตายตัว หรือรับจาก context
           customer_type: type,
           status: "active",
           created_by: 1,

@@ -4,7 +4,8 @@ import type { ProductPayload, Product } from "~/types/product";
 export default function useProducts() {
   const { apiClient } = useApiClient();
 
-  const storeId = "a3f2b4e1-8f17-4f55-b6c0-1b758e2f34cd";
+  const profileStore = useProfileStore();
+  const storeId = profileStore.stores[0].id || null;
 
   const getProducts = async () => {
     try {

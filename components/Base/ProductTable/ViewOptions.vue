@@ -6,7 +6,7 @@
       <!-- เรียก Dialog Component -->
       <BaseAddProductDialog
         v-model="isDialogOpen"
-        mode="add"
+        mode="create"
         @product-added="handleCreateProduct"
       />
     </div>

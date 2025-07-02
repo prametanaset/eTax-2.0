@@ -61,7 +61,7 @@ const pages = computed(() => {
     <div
       v-for="(itemsOnPage, pageIndex) in pages"
       :key="pageIndex"
-      class="relative bg-white w-[794px] max-w-[794px] h-[1123px] max-h-[1123px] mx-auto px-6  flex flex-col justify-between page"
+      class="relative bg-white w-[794px] max-w-[794px] h-[1123px] max-h-[1123px] mx-auto px-6 flex flex-col justify-between page"
     >
       <!-- Header -->
       <div>
@@ -203,7 +203,7 @@ const pages = computed(() => {
             <tbody>
               <tr v-for="(item, i) in itemsOnPage" :key="i">
                 <td class="p-2">{{ i + 1 }}</td>
-                <td class="p-2">{{ item.id }}</td>
+                <td class="p-2">{{ item.sku }}</td>
                 <td class="p-2 max-w-[15rem] text-overflow-ellipsis">
                   {{ item.name }}
                 </td>

@@ -71,6 +71,7 @@ const customer = reactive<Customer>({
   Phone: "",
   Address: "",
   Tin: "",
+  CustomerType: "",
 });
 
 const resetCustomer = () => {

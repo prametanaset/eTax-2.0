@@ -590,17 +590,6 @@ export const mails = [
     read: false,
     labels: ["personal"],
   },
-  {
-    // This is the new entry with the converted date
-    id: "your-new-id-here", // You'll need to generate a unique ID
-    name: "Your Name", // Replace with the sender's name
-    email: "youremail@example.com", // Replace with the sender's email
-    subject: "Subject of the email", // Replace with the email subject
-    text: "Content of the email.", // Replace with the email content
-    date: new Date("2025-06-02T13:38:04"), // Converted date
-    read: false, // Set as needed
-    labels: ["new", "example"], // Set as needed
-  },
 ];
 
 export type Mail = (typeof mails)[number];

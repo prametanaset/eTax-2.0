@@ -62,6 +62,8 @@
 <script lang="ts" setup>
 import { Store } from "lucide-vue-next";
 
+const profileStore = useProfileStore();
+
 const seller = ref({
   name: "บริษัท แสงทอง จำกัด",
   taxNo: "0105539039991",

@@ -26,30 +26,7 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { Label } from "@/components/ui/label";
-
-const availableProducts = ref([
-  {
-    id: 1,
-    name: "เสื้อยืด",
-    price: 1690,
-    image: "/images/products/shirt.jpg",
-    taxType: "exempt",
-  },
-  {
-    id: 2,
-    name: "กางเกงยีน",
-    price: 590,
-    image: "/images/products/jeans.jpg",
-    taxType: "include",
-  },
-  {
-    id: 3,
-    name: "รองเท้าผ้าใบ",
-    price: 1400,
-    image: "/images/products/sneakers.jpg",
-    taxType: "exclude",
-  },
-]);
+import { toast } from "~/components/ui/toast/use-toast";
 
 const products = ref<any[]>([]);
 const isPopoverOpen = ref(false);
@@ -57,11 +34,38 @@ const isDialogOpen = ref(false);
 const lastAddedProductId = ref<number | null>(null);
 
 const productStore = useProductStore();
+const { createProduct } = useProductService();
 
-const handleNewProductAdded = (product: any) => {
-  availableProducts.value.push(product);
-  addProduct(product);
+const availableProducts = computed(() => productStore.products);
+
+onMounted(() => {
+  productStore.getProduct();
+});
+
+const handleCreateProduct = async (product: any) => {
+  try {
+    await createAProduct(product);
+    isDialogOpen.value = false;
+    await productStore.getProduct(); // ✅ Store จะอัปเดตค่าเอง
+    toast({
+      title: "สร้างสินค้าสำเร็จ",
+    });
+  } catch (err) {
+    console.error("❌ Error creating product:", err);
+    toast({
+      variant: "destructive",
+      title: "เกิดข้อผิดพลาดในการสร้างสินค้า",
+    });
+  }
 };
+
+async function createAProduct(productData: any) {
+  try {
+    await createProduct(productData);
+  } catch (err) {
+    throw err;
+  }
+}
 
 const addProduct = (selectedProduct: any) => {
   const existing = products.value.find((p) => p.id === selectedProduct.id);
@@ -159,7 +163,7 @@ watch(
         <Button
           class="flex items-center rounded-xl justify-between px-3 text-left"
         >
-          <CirclePlus /> <span>เพิ่มรายการสินค้า</span>
+          <Plus /> <span>เพิ่มรายการสินค้า</span>
         </Button>
       </PopoverTrigger>
       <!--       <PopoverContent class="p-0 w-[var(--reka-popper-anchor-width)]" align="end" >
@@ -168,14 +172,14 @@ watch(
         <Command>
           <CommandInput placeholder="ค้นหาสินค้า" />
           <CommandList>
-            <CommandEmpty>No products found.</CommandEmpty>
+            <CommandEmpty>ไม่พบสินค้า</CommandEmpty>
             <CommandGroup class="max-h-[300px] overflow-y-auto relative">
               <CommandItem
                 :value="'new-product'"
                 @select="isDialogOpen = true"
-                class="sticky -top-1 z-10 bg-white dark:bg-[hsl(var(--popover))] shadow-sm px-4 py-2 flex items-center text-blue-600 font-semibold cursor-pointer"
+                class="sticky -top-1 z-10 bg-white dark:bg-[hsl(var(--popover))] shadow-sm px-4 py-2 flex items-center text-primary-500 cursor-pointer"
               >
-                <CirclePlus class="w-5 h-5 mr-3" />
+                <Plus class="w-5 h-5 mr-3" />
                 <span>เพิ่มสินค้าใหม่</span>
               </CommandItem>
               <CommandItem
@@ -186,7 +190,7 @@ watch(
                 class="flex items-center px-4 py-2 cursor-pointer"
               >
                 <img
-                  :src="product.image"
+                  :src="product.product_image.url"
                   class="w-10 h-10 rounded-md object-cover mr-3"
                 />
                 <div>
@@ -223,13 +227,15 @@ watch(
               :class="screenWidth < 640 ? 'col-span-2' : ''"
             >
               <img
-                :src="product.image"
-                :alt="product.name"
+                :src="product.product_image.url"
+                :alt="product.sku"
                 class="w-12 h-12 rounded-xl object-cover"
               />
               <div class="flex-1 min-w-0">
                 <p class="font-semibold truncate">{{ product.name }}</p>
-                <p class="text-sm font-medium text-gray-500">SKU: SHIRT-001</p>
+                <p class="text-sm font-medium text-gray-500">
+                  SKU: {{ product.sku }}
+                </p>
               </div>
             </div>
 
@@ -353,7 +359,9 @@ watch(
             <div>
               <Label class="block text-xs text-gray-600 sm:hidden">ภาษี</Label>
               <Select v-model="product.taxType">
-                <SelectTrigger class="w-36 sm:w-36 mx-auto h-10 bg-[hsl(var(--card))]">
+                <SelectTrigger
+                  class="w-36 sm:w-36 mx-auto h-10 bg-[hsl(var(--card))]"
+                >
                   <SelectValue
                     :placeholder="
                       {
@@ -418,9 +426,9 @@ watch(
               <CommandItem
                 :value="'new-product'"
                 @select="isDialogOpen = true"
-                class="sticky -top-1 z-10 bg-white dark:bg-[hsl(var(--popover))] shadow-sm px-4 py-2 flex items-center text-blue-600 font-semibold cursor-pointer"
+                class="sticky -top-1 z-10 bg-white dark:bg-[hsl(var(--popover))] shadow-sm px-4 py-2 flex items-center text-primary-500 cursor-pointer"
               >
-                <CirclePlus class="w-5 h-5 mr-3" />
+                <Plus class="w-5 h-5 mr-3" />
                 <span>เพิ่มสินค้าใหม่</span>
               </CommandItem>
               <CommandItem
@@ -431,7 +439,7 @@ watch(
                 class="flex items-center px-4 py-2 cursor-pointer"
               >
                 <img
-                  :src="product.image"
+                  :src="product.product_image.url"
                   class="w-10 h-10 rounded-md object-cover mr-3"
                 />
                 <div>
@@ -450,7 +458,8 @@ watch(
     <!-- เรียก Dialog Component -->
     <BaseAddProductDialog
       v-model="isDialogOpen"
-      @product-added="handleNewProductAdded"
+      mode="create"
+      @product-added="handleCreateProduct"
     />
   </div>
 </template>
