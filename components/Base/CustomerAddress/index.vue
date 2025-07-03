@@ -77,10 +77,10 @@ const handleCreateCustomer = async (newCustomer: Customer) => {
             variant="outline"
             class="absolute top-[50%] left-[50%]"
             style="transform: translate(-50%, -50%)"
-            >เลือกข้อมูลลูกค้า</Button
+            ><Plus />เลือกข้อมูลลูกค้า</Button
           >
         </PopoverTrigger>
-        <PopoverContent class="w-80">
+        <PopoverContent class="w-72 p-0">
           <Command>
             <CommandInput placeholder="ค้นหาชื่อลูกค้า..." />
             <CommandList>

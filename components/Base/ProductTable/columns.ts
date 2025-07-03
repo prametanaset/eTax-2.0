@@ -79,6 +79,10 @@ export const columns: ColumnDef<Product>[] = [
     header: ({ column }) =>
       h(DataTableColumnHeader, { column, title: "อัตราภาษี (%)" }),
     cell: ({ row }) => h("div", {}, row.getValue("vat_rate") + " %"),
+    filterFn: (row, id, value) => {
+      const rowValue = String(row.getValue(id));
+      return value.map(String).includes(rowValue);
+    },
   },
   {
     id: "actions",

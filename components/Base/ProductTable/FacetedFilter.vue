@@ -52,14 +52,15 @@
               :key="option.value"
               :value="option"
               @select="
-                (e) => {
-                  console.log(e.detail.value);
-                  const isSelected = selectedValues.has(option.value);
+                () => {
+                  const valStr = String(option.value);
+                  const isSelected = selectedValues.has(valStr);
                   if (isSelected) {
-                    selectedValues.delete(option.value);
+                    selectedValues.delete(valStr);
                   } else {
-                    selectedValues.add(option.value);
+                    selectedValues.add(valStr);
                   }
+
                   const filterValues = Array.from(selectedValues);
                   column?.setFilterValue(
                     filterValues.length ? filterValues : undefined
@@ -71,13 +72,13 @@
                 :class="
                   cn(
                     'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
-                    selectedValues.has(option.value)
+                    selectedValues.has(String(option.value))
                       ? 'bg-primary text-primary-foreground'
                       : 'opacity-50 [&_svg]:invisible'
                   )
                 "
               >
-                <CheckIcon :class="cn('h-4 w-4')" />
+                <CheckIcon class="h-4 w-4" />
               </div>
               <component
                 :is="option.icon"
@@ -152,9 +153,16 @@ interface DataTableFacetedFilter {
 const props = defineProps<DataTableFacetedFilter>();
 
 const facets = computed(() => props.column?.getFacetedUniqueValues());
-const selectedValues = computed(
-  () => new Set(props.column?.getFilterValue() as string[])
-);
+const selectedValues = computed(() => {
+  const value = props.column?.getFilterValue();
+  if (Array.isArray(value)) {
+    return new Set(value.map((v) => String(v)));
+  }
+  if (value !== undefined && value !== null) {
+    return new Set([String(value)]);
+  }
+  return new Set();
+});
 </script>
 
 <style></style>

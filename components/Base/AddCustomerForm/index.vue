@@ -64,6 +64,12 @@ const emit = defineEmits<{
 
 const activeTab = ref<"person" | "corporate">("corporate");
 
+const locationData = reactive({
+  provincesId: 0,
+  districtsId: 0,
+  subdistrictsId: 0,
+});
+
 const person = ref({
   firstName: "",
   lastName: "",
@@ -127,7 +133,9 @@ watch(
   (open) => {
     if (open && props.mode === "edit") {
       const c = props.customer;
-
+      locationData.provincesId = c.provinceId;
+      locationData.districtsId = c.districtsId;
+      locationData.subdistrictsId = c.subdistrictsId;
       if (c.customerType == "company") {
         activeTab.value = "corporate";
         corporate.value = {
@@ -286,7 +294,10 @@ watch(
                     </div>
                   </div>
                   <!-- ใส่ LocationPicker -->
-                  <BaseLocationPicker @location-data="handleSelectLocation" />
+                  <BaseLocationPicker
+                    @location-data="handleSelectLocation"
+                    :update-data="locationData"
+                  />
                 </CardContent>
                 <CardFooter class="flex justify-end">
                   <Button @click="submitCustomer('corporate')">บันทึก</Button>
@@ -370,7 +381,10 @@ watch(
                     </div>
                   </div>
                   <!-- ใส่ LocationPicker -->
-                  <BaseLocationPicker @location-data="handleSelectLocation" />
+                  <BaseLocationPicker
+                    @location-data="handleSelectLocation"
+                    :update-data="locationData"
+                  />
                 </CardContent>
                 <CardFooter class="flex justify-end">
                   <Button @click="submitCustomer('person')">บันทึก</Button>

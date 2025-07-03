@@ -19,6 +19,14 @@ import { Label } from "@/components/ui/label"; // ✅ เพิ่ม Label
 import { MapPin } from "lucide-vue-next";
 import { useLocateService } from "@/composables/useLocateService";
 
+const props = defineProps<{
+  updateData?: {
+    provincesId: number;
+    districtsId: number;
+    subdistrictsId: number;
+  };
+}>();
+
 const emit = defineEmits<{
   (
     e: "location-data",
@@ -109,6 +117,36 @@ const labelSubdistrict = computed(
     subdistricts.value.find((s) => s.Value === selectedSubdistrict.value)
       ?.Label || "เลือกตำบล"
 );
+
+watchEffect(async () => {
+  if (
+    props.updateData?.provincesId &&
+    props.updateData?.districtsId &&
+    props.updateData?.subdistrictsId
+  ) {
+    // ดึงรายการจังหวัดล่วงหน้า (ในกรณีที่ onMounted ยังไม่ดึง)
+    if (provinces.value.length === 0) {
+      provinces.value = await locateService.fetchProvinces();
+    }
+
+    selectedProvince.value = props.updateData.provincesId;
+    districts.value = await locateService.fetchDistricts(
+      props.updateData.provincesId
+    );
+
+    selectedDistrict.value = props.updateData.districtsId;
+    subdistricts.value = await locateService.fetchSubdistricts(
+      props.updateData.districtsId
+    );
+
+    selectedSubdistrict.value = props.updateData.subdistrictsId;
+
+    const zipRes = await locateService.fetchZipcode(
+      props.updateData.subdistrictsId
+    );
+    zipCode.value = String(zipRes.zip_code);
+  }
+});
 </script>
 
 <template>
