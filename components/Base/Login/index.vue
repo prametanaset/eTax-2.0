@@ -1,12 +1,26 @@
 <script setup lang="ts">
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+
+
 const isLogin = ref(true);
+
+watch(
+  () => isLogin.value,
+  (val) => {
+    if (!val) {
+      const authForm = useRegisterFormStore()
+      authForm.clearStore()
+    }
+  },
+  { immediate: true }
+)
+
 </script>
 
 <template>
   <div
-    class="container relative flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0 bg-white dark:bg-[#0f1729]"
+    class="container relative flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-[55%_1fr] lg:px-0 bg-white dark:bg-[#0f1729]"
   >
     <div class="absolute right-4 top-4 md:right-8 md:top-8 flex items-center">
       <!-- ✅ ปุ่มที่คลิกได้ -->
@@ -92,14 +106,12 @@ const isLogin = ref(true);
         </blockquote>
       </div>
     </div>
-    <div class="lg:p-8 p-5 pt-20">
-      <div
-        class="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]"
-      >
-        <BaseUserAuthLogin v-if="isLogin" />
-        <BaseUserAuthForm v-else />
-      </div>
+    <div class="min-h-screen flex items-center justify-center p-4 py-0">
+    <div class="w-full max-w-sm ">
+      <BaseUserAuthLogin v-if="isLogin" />
+      <BaseUserAuthForm  v-else />
     </div>
+  </div>
   </div>
 </template>
 
