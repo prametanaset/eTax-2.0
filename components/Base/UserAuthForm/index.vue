@@ -87,33 +87,33 @@
 
       <div
         class="flex items-center space-x-2"
-        :class="passwordRules.minLength ? 'text-green-600' : 'text-red-500'"
+        :class="passwordRules.minLength ? 'text-green-600' : 'text-gray-500'"
       >
-        <component :is="passwordRules.minLength ? CheckCircle : XCircle" class="w-4 h-4" />
+        <component :is="passwordRules.minLength ? CheckCircle : Dot" class="w-4 h-4" />
         <span>มีอย่างน้อย 8 ตัวอักษร</span>
       </div>
 
       <div
         class="flex items-center space-x-2"
-        :class="passwordRules.hasUpper ? 'text-green-600' : 'text-red-500'"
+        :class="passwordRules.hasUpper ? 'text-green-600' : 'text-gray-500'"
       >
-        <component :is="passwordRules.hasUpper ? CheckCircle : XCircle" class="w-4 h-4" />
+        <component :is="passwordRules.hasUpper ? CheckCircle : Dot" class="w-4 h-4" />
         <span>มีตัวอักษรพิมพ์ใหญ่ (A-Z)</span>
       </div>
 
       <div
         class="flex items-center space-x-2"
-        :class="passwordRules.hasLower ? 'text-green-600' : 'text-red-500'"
+        :class="passwordRules.hasLower ? 'text-green-600' : 'text-gray-500'"
       >
-        <component :is="passwordRules.hasLower ? CheckCircle : XCircle" class="w-4 h-4" />
+        <component :is="passwordRules.hasLower ? CheckCircle : Dot" class="w-4 h-4" />
         <span>มีตัวอักษรพิมพ์เล็ก (a-z)</span>
       </div>
 
       <div
         class="flex items-center space-x-2"
-        :class="passwordRules.hasNumberOrSymbol ? 'text-green-600' : 'text-red-500'"
+        :class="passwordRules.hasNumberOrSymbol ? 'text-green-600' : 'text-gray-500'"
       >
-        <component :is="passwordRules.hasNumberOrSymbol ? CheckCircle : XCircle" class="w-4 h-4" />
+        <component :is="passwordRules.hasNumberOrSymbol ? CheckCircle : Dot" class="w-4 h-4" />
         <span>มีตัวเลขหรืออักขระพิเศษ เช่น 0-9, !@#$</span>
       </div>
   </AlertDescription>
@@ -226,7 +226,7 @@ import { ref, watch, nextTick } from "vue";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 import * as z from "zod";
-import { Github, Loader, CheckCircle, XCircle, Eye, EyeOff } from "lucide-vue-next";
+import { Github, Loader, CheckCircle, Dot, Eye, EyeOff } from "lucide-vue-next";
 import { Toaster } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/toast/use-toast";
 
