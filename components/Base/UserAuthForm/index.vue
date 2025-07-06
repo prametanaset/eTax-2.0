@@ -200,6 +200,9 @@
           </FormField>
 
           <!-- Buttons -->
+           <div class="flex flex-col items-center">
+
+           
           <Button
             type="submit"
             :disabled="
@@ -209,7 +212,8 @@
                   form.values.password !== form.values.confirmPassword)) ||
               isOtpIncomplete
             "
-            class="w-full py-2 sm:py-5 text-sm sm:text-base font-semibold bg-primary-500 rounded-full"
+            class="py-2 sm:py-5 text-sm sm:text-base font-semibold bg-primary-500 rounded-full"
+            :class="showOtpField ? 'w-72': 'w-full'"
           >
             <Loader v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
             {{
@@ -220,7 +224,7 @@
                 : "ดำเนินการต่อ"
             }}
           </Button>
-
+</div>
           <div v-if="showOtpField" class="text-center text-sm mt-2">
             <p v-if="isCountingDown" class="text-muted-foreground">
               ส่งอีกครั้งได้ใน ({{ countdown }} วินาที)

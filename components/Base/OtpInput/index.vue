@@ -70,7 +70,7 @@ function handleComplete(val: string[]) {
           v-for="(_, index) in OTP_LENGTH"
           :key="index"
           :index="index"
-          class="w-16 h-14 text-xl first:rounded-l-lg last:rounded-r-lg"
+          class="w-12 h-12 text-xl first:rounded-l-lg last:rounded-r-lg"
         />
       </PinInputGroup>
     </PinInput>
