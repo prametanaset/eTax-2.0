@@ -89,7 +89,7 @@ function handleEditProduct() {
             <Label for="name">ชื่อสินค้า</Label>
             <Input
               id="name"
-              v-model="newProduct.name"
+              v-model="editProduct.name"
               class="bg-[hsl(var(--card))]"
             />
           </div>
@@ -101,7 +101,7 @@ function handleEditProduct() {
               id="price"
               type="number"
               placeholder="ระบุราคาสินค้า"
-              v-model="newProduct.price"
+              v-model="editProduct.price"
               class="bg-[hsl(var(--card))]"
             />
           </div>
@@ -109,7 +109,7 @@ function handleEditProduct() {
           <!-- ประเภทภาษี -->
           <div class="space-y-2">
             <Label>ประเภทภาษี</Label>
-            <Select v-model="newProduct.taxType">
+            <Select v-model="editProduct.taxType">
               <SelectTrigger class="shadow-none w-full">
                 <SelectValue placeholder="เลือกภาษี" />
               </SelectTrigger>
@@ -126,16 +126,16 @@ function handleEditProduct() {
             <Label for="image">ลิงก์รูป</Label>
             <Input
               id="image"
-              v-model="newProduct.image"
+              v-model="editProduct.image"
               class="bg-[hsl(var(--card))]"
             />
           </div>
 
           <!-- ตัวอย่างรูป -->
           <div class="flex justify-center">
-            <div v-if="newProduct.image" class="w-32 h-32">
+            <div v-if="editProduct.image" class="w-32 h-32">
               <img
-                :src="newProduct.image"
+                :src="editProduct.image"
                 alt="preview"
                 class="w-32 h-32 object-cover rounded-md border shadow"
               />
@@ -152,9 +152,9 @@ function handleEditProduct() {
           <div class="text-center mt-4">
             <Badge variant="outline">
               {{
-                newProduct.taxType === "include"
+                editProduct.taxType === "include"
                   ? "รวม VAT"
-                  : newProduct.taxType === "exclude"
+                  : editProduct.taxType === "exclude"
                   ? "ไม่รวม VAT"
                   : "ยกเว้นภาษี"
               }}

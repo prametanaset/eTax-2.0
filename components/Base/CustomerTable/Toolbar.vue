@@ -9,13 +9,13 @@
           table.getColumn('FirstName')?.setFilterValue($event.target.value)
         "
       />
-      <!-- <DataTableFacetedFilter
-        v-if="table.getColumn('Vat')"
-        :column="table.getColumn('Vat')"
-        title="สถานะ"
-        :options="statuses"
-      />
       <DataTableFacetedFilter
+        v-if="table.getColumn('CustomerType')"
+        :column="table.getColumn('CustomerType')"
+        title="ประเภทลูกค้า"
+        :options="customerType"
+      />
+      <!-- <DataTableFacetedFilter
         v-if="table.getColumn('VatRate')"
         :column="table.getColumn('VatRate')"
         title="อัตราภาษี"
@@ -45,7 +45,7 @@ import { Input } from "@/components/ui/input";
 import { computed } from "vue";
 import Cross2Icon from "~icons/radix-icons/cross-2";
 
-import { rates, statuses } from "./data/data";
+import { rates, customerType } from "./data/data";
 import DataTableFacetedFilter from "./FacetedFilter.vue";
 import DataTableViewOptions from "./ViewOptions.vue";
 
