@@ -4,13 +4,16 @@
     <!-- Card container -->
     <div class="w-full max-w-sm">
       <div class="grid gap-6">
-        <div class="flex flex-col spm,,,,,,,,,,zhbnace-y-5 text-center">
+        <div class="flex flex-col space-y-2 text-center">
           <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight">
             ขอต้อนรับกลับมา
           </h1>
+          <p class="text-sm text-muted-foreground">
+            ออกใบกำกับภาษีง่าย ไม่ต้องใช้ CA พร้อมส่งสรรพากร
+          </p>
         </div>
 
-        <form @submit.prevent="onLogin" class="grid gap-3 sm:gap-4">
+        <form @submit.prevent="onLogin" class="grid gap-3 ">
           <FormField name="email" v-slot="{ field }">
             <FormItem>
               <FormLabel>อีเมลผู้ใช้งาน</FormLabel>
@@ -19,7 +22,7 @@
                   v-bind="field"
                   type="text"
                   placeholder="หมายเลขโทรศัพท์ ชื่อผู้ใช้ หรืออีเมล"
-                  class="w-full placeholder:font-normal h-10 sm:h-12 bg-[hsl(var(--card))] invalid:border-red-500"
+                  class="w-full placeholder:font-normal h-10 sm:h-12 bg-[hsl(var(--card))] invalid:border-red-500 rounded-lg"
                 />
               </FormControl>
               <FormMessage />
@@ -27,29 +30,32 @@
           </FormField>
 
           <FormField name="password" v-slot="{ field }">
-    <FormItem>
-      <FormLabel>รหัสผ่าน</FormLabel>
-      <FormControl>
-        <div class="relative">
-          <Input
-            v-bind="field"
-            :type="showPassword ? 'text' : 'password'"
-            placeholder="รหัสผ่าน"
-            class="w-full pr-10 placeholder:font-normal h-10 sm:h-12 bg-[hsl(var(--card))] invalid:border-red-500"
-          />
-          <button
-            type="button"
-            @click="showPassword = !showPassword"
-            class="absolute inset-y-0 right-3 flex items-center text-muted-foreground"
-            tabindex="-1"
-          >
-            <component :is="showPassword ? EyeOff : Eye" class="w-4 h-4" />
-          </button>
-        </div>
-      </FormControl>
-      <FormMessage />
-    </FormItem>
-  </FormField>
+            <FormItem>
+              <FormLabel>รหัสผ่าน</FormLabel>
+              <FormControl>
+                <div class="relative">
+                  <Input
+                    v-bind="field"
+                    :type="showPassword ? 'text' : 'password'"
+                    placeholder="รหัสผ่าน"
+                    class="w-full pr-10 placeholder:font-normal h-10 sm:h-12 bg-[hsl(var(--card))] invalid:border-red-500 rounded-lg"
+                  />
+                  <button
+                    type="button"
+                    @click="showPassword = !showPassword"
+                    class="absolute inset-y-0 right-3 flex items-center text-muted-foreground"
+                    tabindex="-1"
+                  >
+                    <component
+                      :is="showPassword ? EyeOff : Eye"
+                      class="w-4 h-4"
+                    />
+                  </button>
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
 
           <span v-if="errorLogin" class="text-red-500 text-sm">
             หมายเลขโทรศัพท์ ชื่อผู้ใช้ อีเมล หรือรหัสผ่าน ไม่ถูกต้อง
@@ -57,7 +63,7 @@
 
           <Button
             type="submit"
-            class="w-full py-3 text-md sm:text-lg font-semibold bg-primary-500"
+            class="w-full py-3 text-md sm:text-lg font-semibold bg-primary-500 rounded-full mt-3"
           >
             <Loader v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
             เข้าสู่ระบบ
@@ -73,12 +79,12 @@ import { cn } from "@/lib/utils";
 import { ref } from "vue";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as z from "zod";
-import { Loader, Eye, EyeOff  } from "lucide-vue-next";
+import { Loader, Eye, EyeOff } from "lucide-vue-next";
 
 const { signIn } = useAuth();
 const errorLogin = ref(false);
 const isLoading = ref(false);
-const showPassword = ref(false)
+const showPassword = ref(false);
 
 // ปรับ schema ให้ใช้ nonempty() พร้อมข้อความ
 const formSchema = toTypedSchema(

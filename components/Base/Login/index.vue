@@ -42,13 +42,13 @@ watch(
       class="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex"
     >
       <ClientOnly>
-        <BaseThreeLinesEffect class="absolute inset-0 overflow-hidden" />
+        <!-- <BaseThreeLinesEffect class="absolute inset-0 overflow-hidden" />
         <div
           class="absolute inset-0 bg-gradient-to-b from-black-500/50 to-black-500/30"
-        ></div>
-        <!-- <div
-          class="absolute inset-0 bg-black"
         ></div> -->
+        <div
+          class="absolute inset-0 bg-black"
+        ></div>
       </ClientOnly>
       <div
         class="relative z-20 flex items-center text-lg font-medium font-poppins"
