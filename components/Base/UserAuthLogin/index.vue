@@ -1,111 +1,124 @@
 <template>
-   <div :class="cn('grid gap-6', $attrs.class ?? '')">
-    <div class="flex flex-col space-y-2 text-center">
-      <h1 class="text-2xl font-semibold tracking-tight">ขอต้อนรับกลับมา</h1>
-      <p class="text-sm text-muted-foreground">
-        Enter your email below to login your account
-      </p>
-    </div>
-    
-  <form @submit.prevent="onLogin" class="grid gap-4">
-    <FormField name="email" v-slot="{ field }">
-      <FormItem>
-        <FormLabel>อีเมลผู้ใช้งาน</FormLabel>
-        <FormControl>
-          <Input
-            type="text"
-            placeholder="หมายเลขโทรศัพท์ ชื่อผู้ใช้ หรืออีเมล"
-            v-bind="field"
-            class="placeholder:font-normal h-10 bg-[hsl(var(--card))] invalid:border-red-500"
-          />
-        </FormControl>
-        <FormMessage />
-      </FormItem>
-    </FormField>
+  <!-- Wrapper กึ่งกลางแนวตั้ง–แนวนอน และให้ background จางๆ -->
+  <div class="min-h-screen flex items-center justify-center p-4">
+    <!-- Card container -->
+    <div class="w-full max-w-sm">
+      <div class="grid gap-6">
+        <div class="flex flex-col spm,,,,,,,,,,zhbnace-y-5 text-center">
+          <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight">
+            ขอต้อนรับกลับมา
+          </h1>
+        </div>
 
-    <FormField name="password" v-slot="{ field }">
-      <FormItem>
-        <FormLabel>รหัสผ่าน</FormLabel>
-        <FormControl>
+        <form @submit.prevent="onLogin" class="grid gap-3 sm:gap-4">
+          <FormField name="email" v-slot="{ field }">
+            <FormItem>
+              <FormLabel>อีเมลผู้ใช้งาน</FormLabel>
+              <FormControl>
+                <Input
+                  v-bind="field"
+                  type="text"
+                  placeholder="หมายเลขโทรศัพท์ ชื่อผู้ใช้ หรืออีเมล"
+                  class="w-full placeholder:font-normal h-10 sm:h-12 bg-[hsl(var(--card))] invalid:border-red-500"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+
+          <FormField name="password" v-slot="{ field }">
+    <FormItem>
+      <FormLabel>รหัสผ่าน</FormLabel>
+      <FormControl>
+        <div class="relative">
           <Input
-            type="password"
+            v-bind="field"
+            :type="showPassword ? 'text' : 'password'"
             placeholder="รหัสผ่าน"
-            v-bind="field"
-            class="placeholder:font-normal h-10 bg-[hsl(var(--card))] invalid:border-red-500"
+            class="w-full pr-10 placeholder:font-normal h-10 sm:h-12 bg-[hsl(var(--card))] invalid:border-red-500"
           />
-        </FormControl>
-        <FormMessage />
-      </FormItem>
-    </FormField>
+          <button
+            type="button"
+            @click="showPassword = !showPassword"
+            class="absolute inset-y-0 right-3 flex items-center text-muted-foreground"
+            tabindex="-1"
+          >
+            <component :is="showPassword ? EyeOff : Eye" class="w-4 h-4" />
+          </button>
+        </div>
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  </FormField>
 
-    <span v-if="errorLogin" class="text-red-500 text-sm">
-      หมายเลขโทรศัพท์ ชื่อผู้ใช้ อีเมล หรือรหัสผ่าน ไม่ถูกต้อง
-    </span>
+          <span v-if="errorLogin" class="text-red-500 text-sm">
+            หมายเลขโทรศัพท์ ชื่อผู้ใช้ อีเมล หรือรหัสผ่าน ไม่ถูกต้อง
+          </span>
 
-    <Button type="submit" class="w-full text-md font-semibold">
-              <Loader v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
-
-      เข้าสู่ระบบ
-    </Button>
-  </form>
+          <Button
+            type="submit"
+            class="w-full py-3 text-md sm:text-lg font-semibold bg-primary-500"
+          >
+            <Loader v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
+            เข้าสู่ระบบ
+          </Button>
+        </form>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { cn } from "@/lib/utils";
+import { ref } from "vue";
+import { toTypedSchema } from "@vee-validate/zod";
+import * as z from "zod";
+import { Loader, Eye, EyeOff  } from "lucide-vue-next";
 
-import { ref } from 'vue'
-import { toTypedSchema } from '@vee-validate/zod'
-import { Loader } from "lucide-vue-next";
-
-import * as z from 'zod'
-
-
-const { signIn } = useAuth()  // สมมุติว่ามี useAuth hook
-const errorLogin = ref(false)
+const { signIn } = useAuth();
+const errorLogin = ref(false);
 const isLoading = ref(false);
+const showPassword = ref(false)
 
-// สร้าง schema ด้วย zod + vee-validate/zod
+// ปรับ schema ให้ใช้ nonempty() พร้อมข้อความ
 const formSchema = toTypedSchema(
   z.object({
-    // email: z.string().min(1, 'กรุณากรอกอีเมล').email('รูปแบบอีเมลไม่ถูกต้อง'),
-    email: z.string().min(1, 'กรุณากรอกอีเมล'),
-    password: z.string().min(6, 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'),
+    email: z
+      .string({ required_error: "ต้องระบุอีเมล" })
+      .nonempty({ message: "กรุณากรอกอีเมลผู้ใช้งาน" }),
+    // .email({ message: 'รูปแบบอีเมลไม่ถูกต้อง' }),
+    password: z
+      .string({ required_error: "ต้องระบุรหัสผ่าน" })
+      .nonempty({ message: "กรุณากรอกรหัสผ่าน" })
+      .min(6, { message: "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร" }),
   })
-)
+);
 
-// เรียก useForm เพื่อผูก form schema
 const form = useForm({
   validationSchema: formSchema,
-})
+});
 
-// ฟังก์ชัน submit ที่ได้จาก useForm.handleSubmit
 const onLogin = form.handleSubmit(async (values) => {
-  errorLogin.value = false
+  errorLogin.value = false;
   isLoading.value = true;
-  const result = await signIn('credentials', {
+  const result = await signIn("credentials", {
     username: values.email,
     password: values.password,
-    redirect: false,            // ต้องใส่อันนี้
-    callbackUrl: '/dashboard',  // ยังคงใส่ได้
-  })
+    redirect: false,
+    callbackUrl: "/dashboard",
+  });
 
   if (result?.error) {
-    errorLogin.value = true
-    isLoading.value = false;
-
+    errorLogin.value = true;
   } else if (result?.url) {
-    // ทำ redirect ตรงนี้เอง
-    
-    navigateTo('/dashboard')   // หรือจะใช้ useRouter().push() ก็ได้
-    isLoading.value = false;
+    navigateTo("/dashboard");
   }
-})
-
+  isLoading.value = false;
+});
 </script>
 
 <style scoped>
 .font-ibm {
-  font-family: 'Noto Sans Thai';
+  font-family: "Noto Sans Thai";
 }
 </style>

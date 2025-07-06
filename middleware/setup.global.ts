@@ -2,6 +2,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const skipPaths = ["/"];
 
   if (skipPaths.includes(to.path)) return;
+  if (to.path.startsWith('/.well-known')) return;
 
   const profileStore = useProfileStore();
   const userService = useUserService();
