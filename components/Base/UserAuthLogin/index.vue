@@ -13,7 +13,7 @@
           </p>
         </div>
 
-        <form @submit.prevent="onLogin" class="grid gap-3 ">
+        <form @submit.prevent="onLogin" class="grid gap-3">
           <FormField name="email" v-slot="{ field }">
             <FormItem>
               <FormLabel>อีเมลผู้ใช้งาน</FormLabel>
@@ -63,12 +63,40 @@
 
           <Button
             type="submit"
-            class="w-full py-3 text-md sm:text-lg font-semibold bg-primary-500 rounded-full mt-3"
+            class="w-full py-3 text-md sm:text-base font-semibold bg-primary-500 rounded-full mt-3"
           >
             <Loader v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
             เข้าสู่ระบบ
           </Button>
         </form>
+        <div>
+          <div class="relative my-5">
+            <div class="absolute inset-0 flex items-center">
+              <span class="w-full border-t" />
+            </div>
+            <div class="relative flex justify-center text-xs uppercase">
+              <span class="bg-white px-2 text-muted-foreground"> หรือ </span>
+            </div>
+          </div>
+
+          <client-only>
+            <Button
+              variant="outline"
+              type="button"
+              :disabled="isLoading"
+              class="w-full py-2 sm:py-3 text-sm sm:text-sm rounded-full"
+            >
+              <NuxtImg
+                src="/logo/google-logo.png"
+                alt="Google logo"
+                width="16"
+                height="16"
+                class="mr-2 h-4 w-4"
+              />
+              ดำเนินการต่อด้วย Google 
+            </Button>
+          </client-only>
+        </div>
       </div>
     </div>
   </div>
@@ -79,7 +107,7 @@ import { cn } from "@/lib/utils";
 import { ref } from "vue";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as z from "zod";
-import { Loader, Eye, EyeOff } from "lucide-vue-next";
+import { Loader, Eye, EyeOff, Github } from "lucide-vue-next";
 
 const { signIn } = useAuth();
 const errorLogin = ref(false);

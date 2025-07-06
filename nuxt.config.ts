@@ -29,6 +29,7 @@ export default defineNuxtConfig({
     "@nuxtjs/device",
     "@pinia/nuxt",
     "@sidebase/nuxt-auth",
+    "@nuxt/image",
   ],
   auth: {
     provider: {

@@ -23,7 +23,7 @@
                   authForm.email
                 : showPasswordField
                 ? "ตั้งค่ารหัสผ่านของคุณสำหรับ ScaleTax เพื่อดำเนินการต่อ"
-                : "เริ่มต้นใช้ TaxHub ของคุณ"
+                : ""
             }}
           </p>
         </div>
@@ -81,8 +81,44 @@
               </FormControl>
               <FormMessage />
             </FormItem>
-            <!-- Password Rules -->
-            <Alert class="mt-3">
+            
+          </FormField>
+          <!-- Confirm Password -->
+          <FormField
+            v-if="showPasswordField && isPasswordValid"
+            name="confirmPassword"
+            v-slot="{ field }"
+          >
+            <FormItem>
+              <FormLabel>ยืนยันรหัสผ่าน</FormLabel>
+              <FormControl>
+                <div class="relative">
+                <Input
+                  v-bind="field"
+                   :type="showConfirmPassword ? 'text' : 'password'"
+                  placeholder="ยืนยันรหัสผ่าน"
+                  class="w-full pr-10 h-10 sm:h-12 placeholder:font-normal bg-[hsl(var(--card))] invalid:border-red-500 rounded-lg"
+                  autocomplete="new-password"
+                />
+                 <button
+                    type="button"
+                    @click="showConfirmPassword = !showConfirmPassword"
+                    class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition ring-0"
+                    tabindex="-1"
+                  >
+                    <component
+                      :is="showConfirmPassword ? EyeOff : Eye"
+                      class="w-5 h-5 text-gray-500"
+                    />
+                  </button>
+                  </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+
+          <!-- Password Rules -->
+            <Alert v-if="showPasswordField" class="mt-3">
               <AlertTitle class="text-sm">รหัสผ่านของคุณต้องมี:</AlertTitle>
               <AlertDescription class="mt-2 space-y-2">
                 <div
@@ -140,7 +176,6 @@
                 </div>
               </AlertDescription>
             </Alert>
-          </FormField>
 
           <!-- OTP -->
           <FormField
@@ -157,7 +192,10 @@
                 @update:model-value="(arr: string[] | undefined) => form.setFieldValue('pin', arr)"
                 @complete="handleComplete"
               />
-              <FormMessage v-if="errorOtpVerify" class="self-start w-full text-left"/>
+              <FormMessage
+                v-if="errorOtpVerify"
+                class="self-start w-full text-left"
+              />
             </FormItem>
           </FormField>
 
@@ -166,7 +204,9 @@
             type="submit"
             :disabled="
               isLoading ||
-              (showPasswordField && !isPasswordValid) ||
+              (showPasswordField &&
+                (!isPasswordValid ||
+                  form.values.password !== form.values.confirmPassword)) ||
               isOtpIncomplete
             "
             class="w-full py-2 sm:py-5 text-sm sm:text-base font-semibold bg-primary-500 rounded-full"
@@ -191,7 +231,7 @@
               type="button"
               :disabled="isLoading"
               @click.prevent="onSendOtpCode"
-              class="p-0 h-auto"
+              class="p-0 h-auto text-black"
             >
               <Loader v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
               ส่งอีเมลซ้ำ
@@ -215,10 +255,16 @@
               variant="outline"
               type="button"
               :disabled="isLoading"
-              class="w-full py-2 sm:py-3 text-sm sm:text-base rounded-full"
+              class="w-full py-2 sm:py-3 text-sm sm:text-sm rounded-full"
             >
-              <Github class="mr-2 h-4 w-4" />
-              GitHub
+              <NuxtImg
+                src="/logo/google-logo.png"
+                alt="Google logo"
+                width="16"
+                height="16"
+                class="mr-2 h-4 w-4"
+              />
+              ดำเนินการต่อด้วย Google
             </Button>
           </client-only>
         </div>
@@ -265,6 +311,8 @@ const errorCheckMail = ref(false);
 const errorOtpVerify = ref(false);
 const errorOtpStatusCode = ref<number | null>(null);
 const showPassword = ref(false);
+const showConfirmPassword = ref(false);
+
 
 const showPasswordField = ref(false);
 const showOtpField = ref(false);
@@ -326,6 +374,7 @@ const formSchema = toTypedSchema(
     //   },
     //   { message: "รหัสผ่านต้องมีอย่างน้อย 6 ตัว" }
     // )
+    confirmPassword: z.string().optional(),
     pin: z
       .array(z.string())
       .optional()
@@ -333,10 +382,18 @@ const formSchema = toTypedSchema(
         (val) => {
           if (showOtpField.value) return val && val.length === OTP_LENGTH;
           return true;
-        },
+        }
         // { message: otpErrorMessage.value }
       ),
-  })
+  }).refine(
+    (data) => {
+      if (showPasswordField.value) {
+        return data.password === data.confirmPassword;
+      }
+      return true;
+    },
+    { message: "รหัสผ่านไม่ตรงกัน", path: ["confirmPassword"] }
+  ),
 );
 const passwordRules = computed(() => {
   const value = form.values.password || "";
