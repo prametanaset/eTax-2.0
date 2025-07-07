@@ -75,7 +75,7 @@ const device = useDevice();
     </ScrollArea>
     <!-- ------------------desktop layout-------------------- -->
     <ScrollArea
-      class="overflow-hidden h-[calc(98.6dvh-3.5rem)] hidden xl:block"
+      class="overflow-hidden h-[calc(93.6dvh-3.5rem)] hidden xl:block"
     >
       <table class="table-auto w-full h-full overflow-hidden">
         <thead>
