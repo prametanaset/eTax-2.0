@@ -70,7 +70,7 @@ definePageMeta({
 const { handleSubmit } = useForm();
 
 const checkEmailInDB = (email: string) => {
-  if (!email) return "กรุณากรอกอีเมล";
+  if (!email) return "ต้องกรอกอีเมล";
   return true;
 };
 

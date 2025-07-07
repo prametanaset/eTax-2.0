@@ -108,6 +108,7 @@ watch(
     </div>
     <div class="min-h-screen flex items-center justify-center p-4 py-0">
     <div class="w-full max-w-sm ">
+      <!-- <BaseUserAuthResetPassword /> -->
       <BaseUserAuthLogin v-if="isLogin" />
       <BaseUserAuthForm  v-else />
     </div>

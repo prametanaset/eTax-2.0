@@ -42,9 +42,6 @@
                   class="w-full h-10 sm:h-12 placeholder:font-normal bg-[hsl(var(--card))] invalid:border-red-500 rounded-lg"
                 />
               </FormControl>
-              <FormDescription v-if="errorCheckMail" class="text-red-500">
-                อีเมลนี้มีอยู่แล้ว
-              </FormDescription>
               <FormMessage />
             </FormItem>
           </FormField>
@@ -81,7 +78,6 @@
               </FormControl>
               <FormMessage />
             </FormItem>
-            
           </FormField>
           <!-- Confirm Password -->
           <FormField
@@ -93,14 +89,14 @@
               <FormLabel>ยืนยันรหัสผ่าน</FormLabel>
               <FormControl>
                 <div class="relative">
-                <Input
-                  v-bind="field"
-                   :type="showConfirmPassword ? 'text' : 'password'"
-                  placeholder="ยืนยันรหัสผ่าน"
-                  class="w-full pr-10 h-10 sm:h-12 placeholder:font-normal bg-[hsl(var(--card))] invalid:border-red-500 rounded-lg"
-                  autocomplete="new-password"
-                />
-                 <button
+                  <Input
+                    v-bind="field"
+                    :type="showConfirmPassword ? 'text' : 'password'"
+                    placeholder="ยืนยันรหัสผ่าน"
+                    class="w-full pr-10 h-10 sm:h-12 placeholder:font-normal bg-[hsl(var(--card))] invalid:border-red-500 rounded-lg"
+                    autocomplete="new-password"
+                  />
+                  <button
                     type="button"
                     @click="showConfirmPassword = !showConfirmPassword"
                     class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition ring-0"
@@ -111,71 +107,71 @@
                       class="w-5 h-5 text-gray-500"
                     />
                   </button>
-                  </div>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
           </FormField>
 
           <!-- Password Rules -->
-            <Alert v-if="showPasswordField" class="mt-3">
-              <AlertTitle class="text-sm">รหัสผ่านของคุณต้องมี:</AlertTitle>
-              <AlertDescription class="mt-2 space-y-2">
-                <div
-                  class="flex items-center space-x-2"
-                  :class="
-                    passwordRules.minLength ? 'text-green-600' : 'text-gray-500'
-                  "
-                >
-                  <component
-                    :is="passwordRules.minLength ? CheckCircle : Dot"
-                    class="w-4 h-4"
-                  />
-                  <span>มีอย่างน้อย 8 ตัวอักษร</span>
-                </div>
+          <Alert v-if="showPasswordField" class="mt-3">
+            <AlertTitle class="text-sm">รหัสผ่านของคุณต้องมี:</AlertTitle>
+            <AlertDescription class="mt-2 space-y-2">
+              <div
+                class="flex items-center space-x-2"
+                :class="
+                  passwordRules.minLength ? 'text-green-600' : 'text-gray-500'
+                "
+              >
+                <component
+                  :is="passwordRules.minLength ? CheckCircle : Dot"
+                  class="w-4 h-4"
+                />
+                <span>มีอย่างน้อย 8 ตัวอักษร</span>
+              </div>
 
-                <div
-                  class="flex items-center space-x-2"
-                  :class="
-                    passwordRules.hasUpper ? 'text-green-600' : 'text-gray-500'
-                  "
-                >
-                  <component
-                    :is="passwordRules.hasUpper ? CheckCircle : Dot"
-                    class="w-4 h-4"
-                  />
-                  <span>มีตัวอักษรพิมพ์ใหญ่ (A-Z)</span>
-                </div>
+              <div
+                class="flex items-center space-x-2"
+                :class="
+                  passwordRules.hasUpper ? 'text-green-600' : 'text-gray-500'
+                "
+              >
+                <component
+                  :is="passwordRules.hasUpper ? CheckCircle : Dot"
+                  class="w-4 h-4"
+                />
+                <span>มีตัวอักษรพิมพ์ใหญ่ (A-Z)</span>
+              </div>
 
-                <div
-                  class="flex items-center space-x-2"
-                  :class="
-                    passwordRules.hasLower ? 'text-green-600' : 'text-gray-500'
-                  "
-                >
-                  <component
-                    :is="passwordRules.hasLower ? CheckCircle : Dot"
-                    class="w-4 h-4"
-                  />
-                  <span>มีตัวอักษรพิมพ์เล็ก (a-z)</span>
-                </div>
+              <div
+                class="flex items-center space-x-2"
+                :class="
+                  passwordRules.hasLower ? 'text-green-600' : 'text-gray-500'
+                "
+              >
+                <component
+                  :is="passwordRules.hasLower ? CheckCircle : Dot"
+                  class="w-4 h-4"
+                />
+                <span>มีตัวอักษรพิมพ์เล็ก (a-z)</span>
+              </div>
 
-                <div
-                  class="flex items-center space-x-2"
-                  :class="
-                    passwordRules.hasNumberOrSymbol
-                      ? 'text-green-600'
-                      : 'text-gray-500'
-                  "
-                >
-                  <component
-                    :is="passwordRules.hasNumberOrSymbol ? CheckCircle : Dot"
-                    class="w-4 h-4"
-                  />
-                  <span>มีตัวเลขหรืออักขระพิเศษ เช่น 0-9, !@#$</span>
-                </div>
-              </AlertDescription>
-            </Alert>
+              <div
+                class="flex items-center space-x-2"
+                :class="
+                  passwordRules.hasNumberOrSymbol
+                    ? 'text-green-600'
+                    : 'text-gray-500'
+                "
+              >
+                <component
+                  :is="passwordRules.hasNumberOrSymbol ? CheckCircle : Dot"
+                  class="w-4 h-4"
+                />
+                <span>มีตัวเลขหรืออักขระพิเศษ เช่น 0-9, !@#$</span>
+              </div>
+            </AlertDescription>
+          </Alert>
 
           <!-- OTP -->
           <FormField
@@ -193,38 +189,35 @@
                 @complete="handleComplete"
               />
               <FormMessage
-                v-if="errorOtpVerify"
-                class="self-start w-full text-left"
+                class="ml-8 self-start w-full text-left"
               />
             </FormItem>
           </FormField>
 
           <!-- Buttons -->
-           <div class="flex flex-col items-center">
-
-           
-          <Button
-            type="submit"
-            :disabled="
-              isLoading ||
-              (showPasswordField &&
-                (!isPasswordValid ||
-                  form.values.password !== form.values.confirmPassword)) ||
-              isOtpIncomplete
-            "
-            class="py-2 sm:py-5 text-sm sm:text-base font-semibold bg-primary-500 rounded-full"
-            :class="showOtpField ? 'w-72': 'w-full'"
-          >
-            <Loader v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
-            {{
-              showOtpField
-                ? "ยืนยัน OTP"
-                : showPasswordField
-                ? "ดำเนินการต่อ"
-                : "ดำเนินการต่อ"
-            }}
-          </Button>
-</div>
+          <div class="flex flex-col items-center">
+            <Button
+              type="submit"
+              :disabled="
+                isLoading ||
+                (showPasswordField &&
+                  (!isPasswordValid ||
+                    form.values.password !== form.values.confirmPassword)) ||
+                isOtpIncomplete
+              "
+              class="py-2 sm:py-5 text-sm sm:text-base font-semibold bg-primary-500 rounded-full"
+              :class="showOtpField ? 'w-72' : 'w-full'"
+            >
+              <Loader v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
+              {{
+                showOtpField
+                  ? "ยืนยัน OTP"
+                  : showPasswordField
+                  ? "ดำเนินการต่อ"
+                  : "ดำเนินการต่อ"
+              }}
+            </Button>
+          </div>
           <div v-if="showOtpField" class="text-center text-sm mt-2">
             <p v-if="isCountingDown" class="text-muted-foreground">
               ส่งอีกครั้งได้ใน ({{ countdown }} วินาที)
@@ -317,7 +310,6 @@ const errorOtpStatusCode = ref<number | null>(null);
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 
-
 const showPasswordField = ref(false);
 const showOtpField = ref(false);
 const passwordInput = ref<any>(null);
@@ -366,38 +358,33 @@ const otpErrorMessage = computed(() => {
   return "";
 });
 const formSchema = toTypedSchema(
-  z.object({
-    email: z
-      .string({ required_error: "ต้องระบุอีเมล" })
-      .min(1, "กรุณากรอกอีเมล"),
-    password: z.string().optional(),
-    // .refine(
-    //   (val) => {
-    //     if (showPasswordField.value) return val && val.length >= 6;
-    //     return true;
-    //   },
-    //   { message: "รหัสผ่านต้องมีอย่างน้อย 6 ตัว" }
-    // )
-    confirmPassword: z.string().optional(),
-    pin: z
-      .array(z.string())
-      .optional()
-      .refine(
-        (val) => {
-          if (showOtpField.value) return val && val.length === OTP_LENGTH;
-          return true;
+  z
+    .object({
+      email: z
+        .string({ required_error: "ต้องระบุอีเมล" })
+        .min(1, "กรุณากรอกอีเมล"),
+      password: z.string().optional(),
+
+      confirmPassword: z.string().optional(),
+      pin: z
+        .array(z.string())
+        .optional()
+        .refine(
+          (val) => {
+            if (showOtpField.value) return val && val.length === OTP_LENGTH;
+            return true;
+          }
+        ),
+    })
+    .refine(
+      (data) => {
+        if (showPasswordField.value) {
+          return data.password === data.confirmPassword;
         }
-        // { message: otpErrorMessage.value }
-      ),
-  }).refine(
-    (data) => {
-      if (showPasswordField.value) {
-        return data.password === data.confirmPassword;
-      }
-      return true;
-    },
-    { message: "รหัสผ่านไม่ตรงกัน", path: ["confirmPassword"] }
-  ),
+        return true;
+      },
+      { message: "รหัสผ่านไม่ตรงกัน", path: ["confirmPassword"] }
+    )
 );
 const passwordRules = computed(() => {
   const value = form.values.password || "";
@@ -427,6 +414,7 @@ const onCheckMail = form.handleSubmit(async ({ email: e }) => {
     const { data } = await useUserService().checkEmail({ username: e });
     errorCheckMail.value = data.taken;
     showPasswordField.value = !data.taken;
+    if (errorCheckMail) form.setErrors({email: "อีเมลนี้มีอยู่แล้ว"})
     if (!data.taken) authForm.email = e;
   } finally {
     isLoading.value = false;
@@ -476,6 +464,8 @@ async function onRegister() {
       // ตัวอย่าง: OTP ไม่ถูกต้อง
 
       errorOtpVerify.value = true;
+      form.setErrors({ pin: "OTP ไม่ถูกต้อง" })
+
       toast({
         title: "ข้อมูลไม่ถูกต้อง",
         description: message,
@@ -483,6 +473,7 @@ async function onRegister() {
       });
     } else if (statusCode === 409) {
       // ตัวอย่าง: ผู้ใช้งานซ้ำ
+      form.setErrors({ pin: "บัญชีมีอยู่แล้ว" })
       toast({
         title: "บัญชีมีอยู่แล้ว",
         description: message,
@@ -490,6 +481,7 @@ async function onRegister() {
       });
     } else if (statusCode === 423) {
       // ตัวอย่าง: ผู้ใช้งานซ้ำ
+      form.setErrors({ pin: "เกินจำนวนครั้งที่กำหนด กรุณากดส่งอีเมลซ้ำ" })
       toast({
         title: "ยืนยันล้มเหลว",
         description: "เกินจำนวนครั้งที่กำหนด กรุณากดส่งอีเมลซำ",
@@ -528,11 +520,11 @@ async function onSendOtpCode() {
     showOtpField.value = true;
     startCountdown(); // << เรียกใช้ฟังก์ชันนับถอยหลังที่นี่
   } catch (err: any) {
-    console.error("ส่งรหัส OTP ล้มเหลว:", err);
     const message =
       err?.response?.data?.message ||
       err.message ||
       "เกิดข้อผิดพลาดขณะส่งรหัส OTP";
+
 
     toast({
       title: "ไม่สามารถส่งรหัส OTP ได้",

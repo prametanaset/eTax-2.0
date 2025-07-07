@@ -57,9 +57,18 @@
             </FormItem>
           </FormField>
 
-          <span v-if="errorLogin" class="text-red-500 text-sm">
-            หมายเลขโทรศัพท์ ชื่อผู้ใช้ อีเมล หรือรหัสผ่าน ไม่ถูกต้อง
-          </span>
+           <div class="text-right">
+            <Button variant="link" asChild class="p-0 -mt-2">
+              <NuxtLink
+                to="/forgot-password"
+                class="text-sm"
+              >
+                ลืมรหัสผ่านใช่หรือไม่
+              </NuxtLink>
+            </Button>
+          </div>
+
+
 
           <Button
             type="submit"
@@ -70,7 +79,7 @@
           </Button>
         </form>
         <div>
-          <div class="relative my-5">
+          <div class="relative mb-5">
             <div class="absolute inset-0 flex items-center">
               <span class="w-full border-t" />
             </div>
@@ -127,12 +136,11 @@ const formSchema = toTypedSchema(
       .min(6, { message: "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร" }),
   })
 );
-
-const form = useForm({
+const { handleSubmit, setErrors } = useForm({
   validationSchema: formSchema,
 });
 
-const onLogin = form.handleSubmit(async (values) => {
+const onLogin = handleSubmit(async (values) => {
   errorLogin.value = false;
   isLoading.value = true;
   const result = await signIn("credentials", {
@@ -144,6 +152,9 @@ const onLogin = form.handleSubmit(async (values) => {
 
   if (result?.error) {
     errorLogin.value = true;
+    setErrors({
+      password: 'ที่อยู่อีเมลหรือรหัสผ่านไม่ถูกต้อง'
+    })
   } else if (result?.url) {
     navigateTo("/dashboard");
   }
