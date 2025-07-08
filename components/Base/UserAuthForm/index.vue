@@ -423,15 +423,20 @@ const onCheckMail = form.handleSubmit(async ({ email: e }) => {
 
 async function onRegister() {
   const isValid = await form.validate();
+  const code = authForm.otpValue.join("");
+
+  if (code.length !== OTP_LENGTH) return;
   if (!isValid) return;
   errorOtpVerify.value = false;
   isLoading.value = true;
   try {
-    await onOtpVerify();
+    // await onOtpVerify();
 
     await useUserService().register({
       username: authForm.email,
       password: authForm.password,
+      otp_ref: authForm.refCode,
+      otp_code: code
     });
 
     const { signIn } = useAuth();
@@ -507,6 +512,7 @@ async function onSendOtpCode() {
   try {
     const response = await useUseOtpService().sendOtp({
       email: authForm.email,
+      purpose: "verify_email"
     });
     authForm.refCode = response.data.ref;
 

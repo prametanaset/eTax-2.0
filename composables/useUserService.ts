@@ -20,13 +20,11 @@ export function useUserService() {
     } as any);
   }
 
-  async function register(payload: { username: string, password: string }) {
+  async function register(payload: { username: string, password: string, otp_ref: string, otp_code: string }) {
     return apiClient.post("/auth/register", payload, {
       skipAuth: true,
     } as any);
   }
-
-  
 
   return {
     checkEmail,

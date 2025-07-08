@@ -1,7 +1,7 @@
 export function useUseOtpService() {
   const { apiClient } = useApiClient();
 
-  async function sendOtp(payload: { email: string }) {
+  async function sendOtp(payload: { email: string, purpose: string }) {
     return apiClient.post("/auth/send-otp", payload, {
       skipAuth: true,
     } as any);
