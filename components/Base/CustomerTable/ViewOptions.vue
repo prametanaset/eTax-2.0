@@ -96,12 +96,10 @@ watch(
 
 const handleCreateCustomer = async (newCustomer: Customer) => {
   try {
-    // console.log(newCustomer);
     const type = newCustomer.branchCode ? "company" : "person";
     if (newCustomer.branchCode) {
       const payload = {
         ...newCustomer,
-        tin: `${newCustomer.tin}${newCustomer.branchCode}`,
         firstName: `${newCustomer.companyName}`,
       };
       await createCustomerService(payload, type);

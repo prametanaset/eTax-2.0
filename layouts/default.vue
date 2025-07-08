@@ -111,7 +111,7 @@ onMounted(() => {
             </Transition>
           </div>
 
-          <div id="profile" class="flex items-center font-">
+          <div id="profile" class="flex items-center gap-3">
             <!-- <Badge
               variant="outline"
               class=" text-green-600 border-green-500 px-1 py-2 mr-2 text-sm font-light leading-none rounded-lg whitespace-nowrap"
@@ -121,9 +121,10 @@ onMounted(() => {
 
             <TooltipProvider :delay-duration="100">
               <Tooltip>
-                <TooltipTrigger as-child class="mr-2">
+                <TooltipTrigger as-child>
                   <BaseDotNoti
                     :color="isOnline ? '#44ec83' : '#facc70'"
+                    class="cursor-pointer"
                     @click="toggleDotColor"
                   />
                 </TooltipTrigger>
@@ -143,6 +144,8 @@ onMounted(() => {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
+
+            <BaseFeedback />
 
             <Separator
               orientation="vertical"

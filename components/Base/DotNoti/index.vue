@@ -6,9 +6,9 @@
 defineProps({
   color: {
     type: String,
-    default: '#22c55e' // default green
-  }
-})
+    default: "#22c55e", // default green
+  },
+});
 </script>
 
 <style scoped>
@@ -34,7 +34,7 @@ defineProps({
 
 .ping::before,
 .ping::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
