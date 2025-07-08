@@ -53,6 +53,7 @@ const zipCode = ref("");
 const showProvince = ref(false);
 const showDistrict = ref(false);
 const showSubdistrict = ref(false);
+const isInitializing = ref(false);
 
 // Validation
 const touchedProvince = ref(false);
@@ -74,7 +75,7 @@ onMounted(async () => {
 });
 
 watch(selectedProvince, async (code) => {
-  if (code == null) return;
+  if (isInitializing.value || code == null) return;
   districts.value = await locateService.fetchDistricts(code);
   selectedDistrict.value = null;
   selectedSubdistrict.value = null;
@@ -83,14 +84,14 @@ watch(selectedProvince, async (code) => {
 });
 
 watch(selectedDistrict, async (code) => {
-  if (code == null) return;
+  if (isInitializing.value || code == null) return;
   subdistricts.value = await locateService.fetchSubdistricts(code);
   selectedSubdistrict.value = null;
   zipCode.value = "";
 });
 
 watch(selectedSubdistrict, async (code) => {
-  if (code == null) return;
+  if (isInitializing.value || code == null) return;
   const zipRes = await locateService.fetchZipcode(code);
   zipCode.value = String(zipRes.zip_code);
   const data = {
@@ -124,7 +125,9 @@ watchEffect(async () => {
     props.updateData?.districtsId &&
     props.updateData?.subdistrictsId
   ) {
-    // ดึงรายการจังหวัดล่วงหน้า (ในกรณีที่ onMounted ยังไม่ดึง)
+    isInitializing.value = true;
+
+    // โหลดจังหวัดถ้ายังไม่มี
     if (provinces.value.length === 0) {
       provinces.value = await locateService.fetchProvinces();
     }
@@ -145,6 +148,8 @@ watchEffect(async () => {
       props.updateData.subdistrictsId
     );
     zipCode.value = String(zipRes.zip_code);
+
+    isInitializing.value = false;
   }
 });
 </script>

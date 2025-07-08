@@ -1,10 +1,8 @@
 <template>
   <Dialog v-model:open="isOpen">
-    <DialogTrigger as-child>
-      <span class="cursor-pointer flex gap-2 items-center"
-        ><MessageCircle /> หากมีคำติชม</span
-      >
-    </DialogTrigger>
+    <DialogTrigger as-child
+      ><MessageSquareDot class="w-8 cursor-pointer"
+    /></DialogTrigger>
     <DialogContent class="max-w-[500px] m-auto">
       <DialogHeader class="text-left relative">
         <!-- <div
@@ -80,7 +78,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { MessageCircle, Send } from "lucide-vue-next";
+import { MessageSquareDot, Send } from "lucide-vue-next";
 import veryBad from "@/assets/lotties/Animation-1-Very bad.json";
 import bad from "@/assets/lotties/Animation-2-Bad.json";
 import happy from "@/assets/lotties/Animation-4-Happy.json";

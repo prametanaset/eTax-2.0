@@ -120,6 +120,7 @@ export default function useCustomers() {
             ? {
                 company_name: payload.firstName,
                 tin: payload.tin || "",
+                branch_no: payload.branchCode,
               }
             : undefined,
         address: {
@@ -145,7 +146,6 @@ export default function useCustomers() {
             : []),
         ],
       };
-
       // ส่งไปยัง API
       const response = await apiClient.post("/customers", formattedPayload, {
         headers: {

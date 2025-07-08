@@ -120,7 +120,6 @@
           <Button class="col-span-2" @click="showAlert">
             <Send />สร้าง และ ส่ง
           </Button>
-
         </div>
       </Card>
     </div>
@@ -128,19 +127,20 @@
 </template>
 
 <script lang="ts" setup>
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 const showAlert = () => {
   Swal.fire({
-    title: 'สำเร็จ!',
-    text: 'ระบบได้ส่งข้อมูลของคุณเรียบร้อย',
-    icon: 'success',
-    confirmButtonText: 'ตกลง',
+    title: "สำเร็จ!",
+    text: "ระบบได้ส่งข้อมูลของคุณเรียบร้อย",
+    icon: "success",
+    confirmButtonText: "ตกลง",
     customClass: {
-    confirmButton: 'bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-400',
-  },
-  })
-}
+      confirmButton:
+        "bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-400",
+    },
+  });
+};
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -211,18 +211,6 @@ const openDialog = ref(true);
 // const documentType = ref(null);
 const documentType = ref("ใบกำกับภาษี");
 const customerAddress = ref("");
-
-const storeApi = reactive({
-  storeName: "บริษัท ซันสเกลอัพ จำกัด",
-  address: {
-    building: "ศูนย์อาหารและบริการที่ 1 (คอมเพล็กซ์) มหาวิทยาลัยขอนแก่น",
-    subDistrict: "ในเมือง",
-    district: "เมืองขอนแก่น",
-    province: "ขอนแก่น",
-    postalCode: "40002",
-  },
-  invNo: "INV0000000000000",
-});
 
 const invNo = ref("INV-0009");
 

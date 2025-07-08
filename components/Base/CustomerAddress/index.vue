@@ -44,7 +44,6 @@ const handleCreateCustomer = async (newCustomer: Customer) => {
     if (newCustomer.branchCode) {
       const payload = {
         ...newCustomer,
-        tin: `${newCustomer.tin}${newCustomer.branchCode}`,
         firstName: `${newCustomer.companyName}`,
       };
       await createCustomerService(payload, type);
@@ -71,17 +70,17 @@ const handleCreateCustomer = async (newCustomer: Customer) => {
       v-if="!selectedUser"
     >
       <!-- Popover เลือกลูกค้า -->
-      <Popover>
-        <PopoverTrigger as-child>
+      <Dialog>
+        <DialogTrigger as-child>
           <Button
             variant="outline"
             class="absolute top-[50%] left-[50%]"
             style="transform: translate(-50%, -50%)"
             ><Plus />เลือกข้อมูลลูกค้า</Button
           >
-        </PopoverTrigger>
-        <PopoverContent class="w-72 p-0">
-          <Command>
+        </DialogTrigger>
+        <DialogContent>
+          <Command class="bg-transparent">
             <CommandInput placeholder="ค้นหาชื่อลูกค้า..." />
             <CommandList>
               <CommandEmpty>ไม่พบลูกค้า</CommandEmpty>
@@ -97,16 +96,40 @@ const handleCreateCustomer = async (newCustomer: Customer) => {
                   :value="p.ID"
                   @select="handleSelect(p)"
                 >
-                  <p v-if="p.CustomerType === 'บุคคลธรรมดา'">
-                    {{ p.FirstName }} {{ p.LastName }}
-                  </p>
-                  <p v-else>{{ p.FirstName }}</p>
+                  <div
+                    v-if="p.CustomerType === 'บุคคลธรรมดา'"
+                    class="text-md flex items-center gap-2 cursor-pointer"
+                  >
+                    <Avatar>
+                      <AvatarFallback class="dark:text-white">{{
+                        p.FirstName[0] + p.LastName[0]
+                      }}</AvatarFallback>
+                    </Avatar>
+                    <div class="">
+                      <p>{{ p.FirstName }} {{ p.LastName }}</p>
+                      <span class="text-sm text-muted-500">{{ p.Tin }}</span>
+                    </div>
+                  </div>
+                  <div
+                    v-else
+                    class="text-md flex items-center gap-2 cursor-pointer"
+                  >
+                    <Avatar>
+                      <AvatarFallback class="dark:text-white">{{
+                        p.FirstName[0] + p.FirstName[1]
+                      }}</AvatarFallback>
+                    </Avatar>
+                    <div class="">
+                      <p>{{ p.FirstName }}</p>
+                      <span class="text-sm text-muted-500">{{ p.Tin }}</span>
+                    </div>
+                  </div>
                 </CommandItem>
               </CommandGroup>
             </CommandList>
           </Command>
-        </PopoverContent>
-      </Popover>
+        </DialogContent>
+      </Dialog>
 
       <BaseAddCustomerForm
         v-model="isDialogOpen"
