@@ -92,10 +92,12 @@
           </div>
 
           <client-only>
-            <Button
+            <div class="flex flex-col gap-3">
+              <Button
               variant="outline"
               type="button"
               :disabled="isLoading"
+              @click="signInWith('google')"
               class="w-full py-2 sm:py-3 text-sm sm:text-sm rounded-full"
             >
               <NuxtImg
@@ -107,6 +109,17 @@
               />
               ดำเนินการต่อด้วย Google 
             </Button>
+            <Button
+              variant="outline"
+              type="button"
+              :disabled="isLoading"
+              @click="signInWith('github')"
+              class="w-full py-2 sm:py-3 text-sm sm:text-sm rounded-full"
+            >
+              <Github class="mr-2 h-4 w-4" />
+              ดำเนินการต่อด้วย Github
+            </Button>
+            </div>
           </client-only>
         </div>
       </div>
@@ -144,6 +157,11 @@ const formSchema = toTypedSchema(
 const { handleSubmit, setErrors } = useForm({
   validationSchema: formSchema,
 });
+
+const signInWith = async (provider: "google" | "github") => {
+  console.log(`Sign in with ${provider}`);
+  await signIn(provider);
+};
 
 const onLogin = handleSubmit(async (values) => {
   errorLogin.value = false;

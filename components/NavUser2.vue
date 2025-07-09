@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Icon } from "@iconify/vue";
+const { data } = useAuth();
 
 import {
   DropdownMenu,
@@ -91,21 +92,20 @@ const logOutHandler = async () => {
   }
 };
 
-
-const loading = ref(false)
-const error = ref('')
+const loading = ref(false);
+const error = ref("");
 
 const handleSignOut = async () => {
-  loading.value = true
-  error.value = ''
+  loading.value = true;
+  error.value = "";
   try {
-    await signOut({ callbackUrl: '/' })
+    await signOut({ callbackUrl: "/" });
   } catch (e: any) {
-    error.value = e?.message || 'Logout failed'
+    error.value = e?.message || "Logout failed";
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 </script>
 
 <template>
@@ -119,8 +119,13 @@ const handleSignOut = async () => {
           >
             <!-- <ChevronsUpDown class="ml-auto size-4" /> -->
             <Avatar class="h-8 w-8 rounded-full">
-              <AvatarImage :src="user.avatar" :alt="user.name" />
-              <AvatarFallback class="rounded-full"> CN </AvatarFallback>
+              <AvatarImage
+                :src="data?.user?.image || user.avatar"
+                :alt="user.name"
+              />
+              <AvatarFallback class="rounded-full">
+                {{ user.name.slice(0, 2).toUpperCase() }}
+              </AvatarFallback>
             </Avatar>
             <!-- <div class="grid flex-1 text-left text-sm">
               <span class="truncate font-semibold leading-snug">{{

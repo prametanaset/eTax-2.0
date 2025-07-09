@@ -31,6 +31,18 @@ const {
   address,
 } = storeToRefs(shop);
 
+const { listMessages, getMessage } = useGmailService()
+
+onMounted(async () => {
+  const inbox = await listMessages()
+  console.log("📥 Inbox:", inbox)
+
+  if (inbox?.messages?.[0]?.id) {
+    const detail = await getMessage(inbox.messages[0].id)
+    console.log("📨 Message detail:", detail)
+  }
+})
+
 function buildMerchantPayloadFromStore(
   shop: ReturnType<typeof useShopFormStore>
 ) {
@@ -80,10 +92,15 @@ async function save() {
     alert(e?.response?.data?.message || "เกิดข้อผิดพลาดในการบันทึก");
   }
 }
+const { data } = useAuth();
+
 </script>
 
 <template>
   <div class="flex gap-4">
+    <div>
+      {{ data }}
+    </div>
     <BaseFeedback />
     <Button @click="openDialog">ตั้งค่าร้านค้า</Button>
     <Dialog v-model:open="open">

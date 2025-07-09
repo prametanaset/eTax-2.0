@@ -1,6 +1,7 @@
 // ~/server/api/auth/[...].ts
 import { NuxtAuthHandler } from "#auth";
 import GithubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { FetchError } from 'ofetch' 
 interface LoginRes {
@@ -88,6 +89,44 @@ export default NuxtAuthHandler({
       }
     }),
     // @ts-expect-error You need to use .default here for it to work during SSR. May be fixed via Vite at some point
+    GoogleProvider.default({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      authorization: {
+        params: {
+          prompt: "consent",           // ขอให้ผู้ใช้ยืนยันทุกครั้ง
+          access_type: "offline",      // เพื่อให้ได้ refresh_token
+          response_type: "code",
+          scope: [
+      "openid",
+      "email",
+      "profile",
+      "https://www.googleapis.com/auth/gmail.readonly"
+    ].join(" ")
+        }
+      },
+      async profile(profile: { sub: any; email: any; name: any; picture: any; }, tokens: any) {
+        const res = await $fetch<LoginRes>(`${runtimeConfig.public.apiBase}/auth/oauth-login`, {
+          method: 'POST',
+          body: {
+            provider: 'google',
+            provider_uid: profile.sub,
+            username: profile.email,
+          },
+        });
+
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+          accessToken: res.access_token,
+          refreshToken: res.refresh_token,
+          accessTokenExpires: new Date(res.expires_at).getTime(),
+        };
+      }
+    }),
+    // @ts-expect-error You need to use .default here for it to work during SSR. May be fixed via Vite at some point
     CredentialsProvider.default({
       name: "Credentials",
       credentials: {},
@@ -124,6 +163,13 @@ callbacks: {
       token.refreshToken      = (user as any).refreshToken
       token.accessTokenExpires= (user as any).accessTokenExpires
       token.logout            = false
+
+      if (account.provider === "google") {
+        token.googleAccessToken = account.access_token
+        token.googleRefreshToken = account.refresh_token
+        token.googleTokenExpires = account.expires_at
+      }
+
       return token
     }
 
@@ -138,6 +184,11 @@ callbacks: {
     session.accessTokenExpires = token.accessTokenExpires as number | undefined
     session.error              = token.error         as string | undefined
     session.logout             = token.logout        as boolean | undefined
+
+    session.googleAccessToken = token.googleAccessToken as string | undefined;
+    session.googleRefreshToken = token.googleRefreshToken as string | undefined;
+    session.googleTokenExpires = token.googleTokenExpires as string | undefined;
+   
     return session
   },
 },

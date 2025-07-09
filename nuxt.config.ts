@@ -35,7 +35,7 @@ export default defineNuxtConfig({
     provider: {
       type: "authjs",
       trustHost: false,
-      defaultProvider: "github",
+      defaultProvider: "google",
       addDefaultCallbackUrl: true,
     },
     globalAppMiddleware: {

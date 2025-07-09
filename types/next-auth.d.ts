@@ -18,6 +18,9 @@ declare module "next-auth" {
     user?: DefaultSession["user"]
     error?: string
     logout?: boolean
+    googleAccessToken?: string
+    googleRefreshToken?: string
+    googleTokenExpires?: string
   }
 }
 
