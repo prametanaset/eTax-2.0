@@ -6,6 +6,7 @@ export const useResetPasswordStore = defineStore('authForm', () => {
   const password = ref<string>('')
   const otpValue = ref<string[]>([])
   const refCode = ref<string>('')
+  const resetToken = ref<string>('')
 
   const handleComplete = (e: string[]) => {
     alert(e.join(''))
@@ -23,6 +24,7 @@ export const useResetPasswordStore = defineStore('authForm', () => {
     password,
     otpValue,
     refCode,
+    resetToken,
     handleComplete,
     clearStore,
   }

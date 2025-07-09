@@ -58,15 +58,18 @@
           </FormField>
 
            <div class="text-right">
-            <Button variant="link" asChild class="p-0 -mt-2">
-              <NuxtLink
-                to="/forgot-password"
-                class="text-sm"
+              <Button
+                variant="link"
+                type="button"
+                @click="
+                  toggleStore.resetPassword = true;
+                  toggleStore.isLogin = false;
+                "
+                class="p-0 -mt-2 text-sm"
               >
                 ลืมรหัสผ่านใช่หรือไม่
-              </NuxtLink>
-            </Button>
-          </div>
+              </Button>
+            </div>
 
 
 
@@ -119,6 +122,8 @@ import * as z from "zod";
 import { Loader, Eye, EyeOff, Github } from "lucide-vue-next";
 
 const { signIn } = useAuth();
+const toggleStore = useToggleResetPasswordStores(); 
+
 const errorLogin = ref(false);
 const isLoading = ref(false);
 const showPassword = ref(false);

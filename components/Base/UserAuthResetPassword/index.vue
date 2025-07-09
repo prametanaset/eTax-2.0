@@ -5,7 +5,14 @@
         <!-- Header -->
         <div class="flex flex-col space-y-2 text-center" :class="resetPasswordSuccess? 'gap-1 mb-2':''">
           <div v-if="resetPasswordSuccess" class="flex justify-center">
-            <component :is="CheckCircle" class="w-16 h-16 text-green-600" />
+            <div v-if="resetPasswordSuccess" class="flex justify-center mb-8">
+              <LottiePlayer
+                  ref="lottieRef"
+                  :animationData="checkMark"
+                  :loop="false"
+                  class="scale-[4]"
+                />
+            </div>
           </div>
           <h1
             class="text-2xl sm:text-3xl font-semibold tracking-tight"
@@ -214,7 +221,9 @@
           <div class="flex flex-col items-center">
             <Button
               type="submit"
-              :disabled="isLoading"
+              :disabled="isLoading || (showPasswordField &&
+                  (!isPasswordValid ||
+                    form.values.password !== form.values.confirmPassword)) || isOtpIncomplete"
               class="py-2 sm:py-5 text-sm sm:text-base font-semibold bg-primary-500 rounded-full"
               :class="showOtpField || resetPasswordSuccess ? 'w-72' : 'w-full'"
             >
@@ -239,10 +248,9 @@
               variant="link"
               type="button"
               :disabled="isLoading"
-              @click.prevent="onCheckMail"
+              @click="onSendOtpCode"
               class="p-0 h-auto text-black"
             >
-              <Loader v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
               ส่งอีเมลซ้ำ
             </Button>
           </div>
@@ -255,7 +263,6 @@
               @click.prevent="goToLogin"
               class="p-0 h-auto text-black"
             >
-              <Loader v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
               กลับไปที่ลงชื่อเข้าใช้
             </Button>
           </div>
@@ -281,6 +288,7 @@
         </ClientOnly>
       </div>
     </div>
+    <Toaster />
   </div>
 </template>
 
@@ -289,6 +297,12 @@ import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 import * as z from "zod";
 import { Loader, CheckCircle, Dot, EyeOff, Eye } from "lucide-vue-next";
+import { Toaster } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/toast/use-toast";
+import checkMark from "@/assets/lotties/Animation-CheckMark.json";
+
+const { toast } = useToast();
+
 const hasMounted = ref(false);
 onMounted(() => {
   hasMounted.value = true;
@@ -296,6 +310,7 @@ onMounted(() => {
 
 const OTP_LENGTH = 6;
 const authForm = useResetPasswordStore();
+const toggleStore = useToggleResetPasswordStores();
 
 const isLoading = ref(false);
 const showEmailField = ref(true);
@@ -306,9 +321,14 @@ const isCountingDown = ref(false);
 const countdown = ref(0);
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
+const errorOtpVerify = ref(false);
+const errorOtpStatusCode = ref<number | null>(null);
+const lottieRef = ref<any>(null);
 
 let timer: ReturnType<typeof setInterval> | null = null;
-
+onMounted(() => {
+  
+});
 const formSchema = computed(() => {
   // --- Schema for the Password Step ---
   if (showPasswordField.value) {
@@ -381,13 +401,13 @@ async function onCheckMail() {
     const response = await useUserService().checkEmail({ username: authForm.email });
 
     if (response.data.taken === true) {
+      await onSendOtpCode();
       showEmailField.value = false;
       showOtpField.value = true;
-      startCountdown();
+      await startCountdown();
     } else {
       form.setFieldError('email', 'ไม่พบที่อยู่อีเมลนี้ในระบบ');
     }
-
   } catch (error) {
     console.error("An unexpected error occurred:", error);
     form.setFieldError('email', 'เกิดข้อผิดพลาดบางอย่าง โปรดลองอีกครั้ง');
@@ -398,38 +418,167 @@ async function onCheckMail() {
 }
 
 async function onResetPassword() {
-  console.log("reset password");
-  showPasswordField.value = false;
-  resetPasswordSuccess.value = true;
+  isLoading.value = true;
+  try {
+    const { data } = await useUserService().resetPassword({
+      reset_token: authForm.resetToken,
+      new_password: authForm.password
+    })
+
+    if (
+      !data ||
+      (typeof data === "object" && "error" in data && data.error)
+    ) {
+      throw new Error(data?.error || "การรีเซตล้มเหลว");
+    }
+
+    toast({
+      title: "รีเซ็ตรหัสผ่านสำเร็จ",
+      description: "ดำเนินการต่อไปได้",
+    });
+
+    showPasswordField.value = false;
+    resetPasswordSuccess.value = true;
+  } finally {
+    isLoading.value = false;
+  }
+
   return;
 }
 
 async function goToLogin() {
   console.log("reset password");
-  resetPasswordSuccess.value = false;
-  showEmailField.value = true;
+  // resetPasswordSuccess.value = false;
+  // showEmailField.value = true;
+  toggleStore.resetPassword = false;
+  toggleStore.isLogin = true;
   return;
 }
 
 async function onVerifyOtp() {
-  console.log("verify otp");
-  showOtpField.value = false;
-  showPasswordField.value = true;
+  isLoading.value = true;
+  try {
+    const { data } = await useUseOtpService().verifyOtp({
+      email: authForm.email,
+      ref: authForm.refCode,
+      code: authForm.otpValue.join(""),
+      purpose: "reset_password",
+    });
+
+    if (!data?.reset_token) {
+      throw new Error("ไม่พบข้อมูลอ้างอิง (token) จากระบบ");
+    } else {
+      authForm.resetToken = data.reset_token;
+    }
+
+    toast({
+      title: "ยืนยัน OTP สำเร็จ",
+      description: "ดำเนินการต่อไปได้",
+    });
+
+    showOtpField.value = false;
+    showPasswordField.value = true;
+    console.log('showPasswordField =', showPasswordField.value);
+  }  catch (err: any) {
+    console.error("ยืนยัน OTP ล้มเหลว:", err);
+
+    const status = err?.response?.status;
+    errorOtpStatusCode.value = status; // << เก็บไว้ตรงนี้
+
+    const message =
+      err?.response?.data?.message ||
+      err.message ||
+      "เกิดข้อผิดพลาดขณะยืนยัน OTP";
+
+    toast({
+      title: "ไม่สามารถยืนยัน OTP ได้",
+      description: message,
+      variant: "destructive",
+    });
+
+    throw err;
+  } finally {
+    isLoading.value = false;
+  }
+  
   return;
 }
 
-const startCountdown = () => {
+async function onSendOtpCode() {
+  if (isCountingDown.value) return;
+
+  isLoading.value = true;
+
+  try {
+    const { data } = await useUseOtpService().sendOtp({
+      email: authForm.email,
+      purpose: "reset_password",
+    });
+    console.log(data)
+    if (!data?.ref) {
+      throw new Error("ไม่พบข้อมูลอ้างอิง (ref) จากระบบ");
+    }
+
+    authForm.refCode = data.ref;
+
+    toast({
+      title: "ส่งรหัส OTP สำเร็จ",
+      description: `รหัสถูกส่งไปยัง ${authForm.email} แล้ว`,
+    });
+
+    // เริ่มนับถอยหลังเมื่อส่งสำเร็จ
+    await startCountdown();
+  } catch (err: any) {
+    const message =
+      err?.response?.data?.message ||
+      err?.message ||
+      "เกิดข้อผิดพลาดขณะส่งรหัส OTP";
+
+    toast({
+      title: "ไม่สามารถส่งรหัส OTP ได้",
+      description: message,
+      variant: "destructive",
+    });
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+const isOtpIncomplete = computed(() => {
+  return showOtpField.value && authForm.otpValue.join("").length !== OTP_LENGTH;
+});
+
+
+const otpErrorMessage = computed(() => {
+  if (errorOtpStatusCode.value === 423) {
+    return "OTP เกินจำนวนครั้ง กรุณากดส่งอีเมลซ้ำ";
+  }
+
+  if (errorOtpVerify.value) {
+    return "OTP ไม่ถูกต้อง";
+  }
+
+  const len = OTP_LENGTH;
+  const currentLength = authForm.otpValue?.join("")?.length || 0;
+
+  if (currentLength < len) {
+    return len === 6 ? "OTP ต้องมีหกหลัก" : `OTP ต้องมี ${len} หลัก`;
+  }
+
+  return "";
+});
+
+const startCountdown = async () => {
+  if (timer) clearInterval(timer);
   isCountingDown.value = true;
   countdown.value = 60;
-
-  if (timer) clearInterval(timer);
 
   timer = setInterval(() => {
     if (countdown.value > 0) {
       countdown.value--;
     } else {
       isCountingDown.value = false;
-      if (timer) clearInterval(timer);
+      clearInterval(timer!);
     }
   }, 1000);
 };
@@ -462,6 +611,22 @@ watch(
     }
   }
 );
+
+watch(
+  () => form.values.password,
+  (val) => {
+    if (showPasswordField.value && val) {
+      authForm.password = val;
+    }
+  }
+);
+
+watch(resetPasswordSuccess, async (val) => {
+  if (val) {
+    await nextTick(); // รอให้ DOM render ก่อน
+    lottieRef.value?.play(); // เรียก play()
+  }
+});
 </script>
 
 <style></style>

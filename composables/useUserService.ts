@@ -9,11 +9,6 @@ export function useUserService() {
     return response.data;
   }
 
-  // async function updateProfile(payload: any) {
-  //   const response = await apiClient.put("/api/profile", payload);
-  //   return response.data;
-  // }
-
   async function checkEmail(payload: { username: string }) {
     return apiClient.post("/auth/check-email", payload, {
       skipAuth: true,
@@ -26,9 +21,16 @@ export function useUserService() {
     } as any);
   }
 
+  async function resetPassword(payload: { reset_token: string, new_password: string }) {
+    return apiClient.post("/auth/reset-password", payload, {
+      skipAuth: true,
+    } as any);
+  }
+
   return {
     checkEmail,
     register,
-    getMe
+    getMe,
+    resetPassword
   };
 }

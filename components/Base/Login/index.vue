@@ -2,20 +2,21 @@
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 
+const toggleStore = useToggleResetPasswordStores();
+const { resetPassword, isLogin } = storeToRefs(toggleStore);
 
-const isLogin = ref(true);
-
+// เคลียร์ register form เมื่อเข้าสู่หน้า login
 watch(
   () => isLogin.value,
   (val) => {
-    if (!val) {
+    if (val) {
       const authForm = useRegisterFormStore()
+      resetPassword.value = false
       authForm.clearStore()
     }
   },
   { immediate: true }
 )
-
 </script>
 
 <template>
@@ -108,9 +109,9 @@ watch(
     </div>
     <div class="min-h-screen flex items-center justify-center p-4 py-0">
     <div class="w-full max-w-sm ">
-      <!-- <BaseUserAuthResetPassword /> -->
-      <BaseUserAuthLogin v-if="isLogin" />
-      <BaseUserAuthForm  v-else />
+      <BaseUserAuthResetPassword v-if="toggleStore.resetPassword && !toggleStore.isLogin" />
+      <BaseUserAuthLogin v-if="toggleStore.isLogin && !toggleStore.resetPassword" />
+      <BaseUserAuthForm v-if="!toggleStore.isLogin && !toggleStore.resetPassword" />
     </div>
   </div>
   </div>

@@ -7,7 +7,7 @@ export function useUseOtpService() {
     } as any);
   }
 
-  async function verifyOtp(payload: { email: string, ref: string, code: string }) {
+  async function verifyOtp(payload: { email: string, ref: string, code: string, purpose: string }) {
     return apiClient.post("/auth/verify-otp", payload, {
       skipAuth: true,
     } as any);

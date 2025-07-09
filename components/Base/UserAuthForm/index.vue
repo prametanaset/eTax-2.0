@@ -414,7 +414,7 @@ const onCheckMail = form.handleSubmit(async ({ email: e }) => {
     const { data } = await useUserService().checkEmail({ username: e });
     errorCheckMail.value = data.taken;
     showPasswordField.value = !data.taken;
-    if (errorCheckMail) form.setErrors({email: "อีเมลนี้มีอยู่แล้ว"})
+    if (data.taken) form.setErrors({ email: "อีเมลนี้มีอยู่แล้ว" });
     if (!data.taken) authForm.email = e;
   } finally {
     isLoading.value = false;
@@ -430,8 +430,6 @@ async function onRegister() {
   errorOtpVerify.value = false;
   isLoading.value = true;
   try {
-    // await onOtpVerify();
-
     await useUserService().register({
       username: authForm.email,
       password: authForm.password,
@@ -531,7 +529,6 @@ async function onSendOtpCode() {
       err.message ||
       "เกิดข้อผิดพลาดขณะส่งรหัส OTP";
 
-
     toast({
       title: "ไม่สามารถส่งรหัส OTP ได้",
       description: message,
@@ -565,7 +562,7 @@ async function onOtpVerify() {
       ref: authForm.refCode,
     };
 
-    const response = await verifyOtp(payload);
+    // const response = await verifyOtp(payload);
 
     // ตรวจสอบว่า OTP สำเร็จหรือไม่ (ถ้ามี field success หรือ status ก็ตรวจเพิ่มได้)
     toast({
@@ -575,8 +572,6 @@ async function onOtpVerify() {
 
     return true;
   } catch (err: any) {
-    console.error("ยืนยัน OTP ล้มเหลว:", err);
-
     const status = err?.response?.status;
     errorOtpStatusCode.value = status; // << เก็บไว้ตรงนี้
 
