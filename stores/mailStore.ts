@@ -1,32 +1,28 @@
 import type { UUID } from "crypto";
 import { defineStore } from "pinia";
 import { mails } from "@/components/Base/Mail/data/mail";
+const { listMessages, getMessage } = useGmailService();
 
 export const useMailStore = defineStore("mailStore", () => {
-  interface Mail {
-    id: String;
-    name: String;
-    email: String;
-    subject: String;
-    text: String;
-    date: Date;
-    read: Boolean;
-    labels: [];
-  }
+  const selectMail = ref<{
+    data: any;
+    renderHtml: string;
+  } | null>(null);
 
-  const selectMail = ref<Array<Mail>>([]);
-  const mailList = ref<Array<Mail>>([]);
+  const mailList = ref([]);
 
-  function getMails() {
-    mailList.value = mails;
-  }
+  function getMails() {}
 
-  function setSelectMail(mail: any) {
-    selectMail.value = mail;
+  async function setSelectMail(mail: any) {
+    const html = await getMessage(mail.id);
+    selectMail.value = {
+      data: { ...mail },
+      renderHtml: html as string,
+    };
   }
 
   function clearSelectMailStore() {
-    selectMail.value = [];
+    selectMail.value = null;
   }
 
   return {

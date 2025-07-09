@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import type { Mail } from "./data/mail";
-
 import {
   Archive,
   ArchiveX,
@@ -16,21 +14,8 @@ import {
 import { computed } from "vue";
 import ScrollArea from "~/components/ui/scroll-area/ScrollArea.vue";
 
-interface MailDisplayProps {
-  mail: Mail | undefined;
-}
-
-const device = useDevice();
 const mailStore = useMailStore();
-const props = defineProps<MailDisplayProps>();
-const mailFallbackName = computed(() => {
-  return props.mail?.name
-    .split(" ")
-    .map((chunk) => chunk[0])
-    .join("");
-});
-
-const today = new Date();
+const mail = computed(() => mailStore.selectMail);
 </script>
 
 <template>
@@ -97,7 +82,7 @@ const today = new Date();
               <PopoverContent class="flex w-[535px] p-0">
                 <div class="flex flex-col gap-2 border-r px-2 py-4">
                   <div class="px-4 text-sm font-medium">Snooze until</div>
-                  <div class="grid min-w-[250px] gap-1">
+                  <!-- <div class="grid min-w-[250px] gap-1">
                     <Button variant="ghost" class="justify-start font-normal">
                       Later today
                       <span class="ml-auto text-muted-foreground">
@@ -122,7 +107,7 @@ const today = new Date();
                         {{ formatThaiDate(today) }}
                       </span>
                     </Button>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="p-2">
                   <Calendar />
@@ -178,39 +163,38 @@ const today = new Date();
         </DropdownMenu>
       </div>
 
-      <div v-if="mail" class="flex flex-1 flex-col">
-        <div class="flex items-start p-4">
+      <div v-if="mail?.renderHtml" class="flex flex-1 flex-col">
+        <div class="flex items-start p-4 justify-between">
           <div class="flex items-start gap-4 text-sm">
-            <Avatar>
-              <AvatarFallback>
-                {{ mailFallbackName }}
-              </AvatarFallback>
-            </Avatar>
             <div class="grid gap-1">
               <div class="font-semibold">
-                {{ mail.name }}
+                {{ extractName(mail.data.from) }}
               </div>
-              <div class="line-clamp-1 text-xs">
-                {{ mail.subject }}
-              </div>
-              <div class="line-clamp-1 text-xs">
-                <span class="font-medium">Reply-To:</span> {{ mail.email }}
+              <div class="line-clamp-1">
+                {{ mail.data.subject }}
               </div>
             </div>
           </div>
-          <div v-if="mail.date" class="ml-auto text-xs text-muted-foreground">
-            {{ formatThaiDate(new Date()) }}
+          <div class="text-xs text-muted-foreground">
+            {{ formatMailDate(mail.data.date) }}
           </div>
         </div>
         <Separator />
-        <div class="flex-1 whitespace-pre-wrap p-4 text-sm">
-          {{ mail.text }}
+        <div class="flex-1 whitespace-pre-wrap p-4 text-sm bg-white text-black">
+          <div
+            v-if="mail.renderHtml"
+            v-html="mail.renderHtml"
+            class="prose max-w-none"
+          ></div>
         </div>
         <Separator class="mt-auto" />
         <div class="p-4">
           <form>
             <div class="grid gap-4">
-              <Textarea class="p-4" :placeholder="`Reply ${mail.name}...`" />
+              <Textarea
+                class="p-4"
+                :placeholder="`Reply ${extractName(mail.data.from)}...`"
+              />
               <div class="flex items-center">
                 <Label
                   html-for="mute"

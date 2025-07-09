@@ -1,152 +1,202 @@
 <script lang="ts" setup>
-import type { Mail } from "./data/mail";
-import { cn } from "@/lib/utils";
 import { RotateCcw, Star, MailOpen, Dot } from "lucide-vue-next";
+const { listMessages, getMessage } = useGmailService();
+const { data: session, status, signIn } = useAuth();
 
-interface MailListProps {
-  items: Mail[];
+interface Mail {
+  id: string;
+  snippet: string;
+  subject: string;
+  from: string;
+  date: string;
+  read: boolean;
 }
 
-defineProps<MailListProps>();
+const emails = ref<Mail[]>([]);
+const loading = ref(false);
+const nextPageToken = ref<string | null>(null);
+const scrollContainer = ref<HTMLElement | null>(null);
+const device = useDevice();
+
+const fetchEmails = async () => {
+  if (loading.value) return;
+  loading.value = true;
+
+  const { data, nextPageToken: token } = await listMessages(
+    30,
+    nextPageToken.value || undefined
+  );
+  emails.value.push(...data);
+  nextPageToken.value = token || null;
+
+  loading.value = false;
+};
+
+// โหลดรอบแรก
+onMounted(() => {
+  if (session.value?.googleAccessToken) fetchEmails();
+});
+
+// สังเกต scroll ถึงล่างสุด
+
+const onScroll = (e: Event) => {
+  const target = e.target as HTMLElement;
+  if (target.scrollTop + target.clientHeight >= target.scrollHeight - 100) {
+    if (nextPageToken.value) fetchEmails();
+  }
+};
+
+onMounted(() => {
+  nextTick(() => {
+    const el = scrollContainer.value?.querySelector(
+      "[data-radix-scroll-area-viewport]"
+    );
+    if (el) {
+      el.addEventListener("scroll", onScroll);
+    }
+  });
+});
+
 const selectedMail = defineModel<string>("selectedMail", { required: false });
 const mailStore = useMailStore();
-const device = useDevice();
 </script>
 
 <template>
   <div>
-    <!-- ------------------mobile layout-------------------- -->
-    <ScrollArea class="xl:hidden overflow-y-auto h-[87dvh]">
-      <div
-        v-for="item of items"
-        :key="item.id"
-        class="cursor-pointer hover:bg-accent relative p-2 flex gap-3 border-b"
-        @click="(selectedMail = item.id), mailStore.setSelectMail(item)"
-        :class="{
-          'bg-muted-300 dark:bg-muted-800 ':
-            selectedMail === item.id && !device.isMobile,
-          'bg-[hsl(var(--card))] rounded-sm overflow-hidden': !item.read,
-        }"
+    <div>
+      <!-- ------------------mobile layout-------------------- -->
+      <ScrollArea
+        class="xl:hidden overflow-y-auto h-[87dvh]"
+        ref="scrollContainer"
       >
-        <!-- profile img -->
         <div
-          class="bg-muted-500 w-10 h-10 rounded-[50%] relative overflow-hidden"
+          v-for="item of emails"
+          :key="item.id"
+          class="cursor-pointer hover:bg-accent relative p-2 flex gap-3 border-b"
+          @click="(selectedMail = item.id), mailStore.setSelectMail(item)"
+          :class="{
+            'bg-muted-300 dark:bg-muted-800 ':
+              selectedMail === item.id && !device.isMobile,
+            'bg-[hsl(var(--card))] rounded-sm overflow-hidden': !item.read,
+          }"
         >
-          <span
-            class="text-white absolute text-center top-[50%] left-[50%]"
-            style="transform: translate(-50%, -50%)"
-            >{{ item.name[0] }}</span
-          >
-        </div>
-        <div class="">
-          <!-- ชื่อผู้ส่ง -->
-          <div :class="[item.read ? 'font-normal' : 'font-bold']">
-            {{ item.name }}
-          </div>
-          <!-- หัวข้อ + เนื้อหา -->
-          <div
-            class="w-[80vw] overflow-hidden whitespace-nowrap text-ellipsis truncate"
-          >
-            <span :class="item.read ? 'font-normal' : 'font-bold'">
-              {{ item.subject }}
-            </span>
-          </div>
-          <!-- หัวข้อ + เนื้อหา -->
-          <div
-            class="w-[80vw] overflow-hidden whitespace-nowrap text-ellipsis truncate"
-          >
-            <span class="text-muted-800 dark:text-muted-400" :title="item.text">
-              {{ item.text }}
-            </span>
-          </div>
-          <!-- วันที่ -->
-          <div
-            class="px-4 text-xs text-end min-w-[6rem] absolute right-0 top-1"
-            :class="
-              selectedMail === item.id
-                ? 'text-foreground'
-                : 'text-muted-foreground'
-            "
-          >
-            {{ formatMailDate(new Date()) }}
-          </div>
-        </div>
-      </div>
-    </ScrollArea>
-    <!-- ------------------desktop layout-------------------- -->
-    <ScrollArea
-      class="overflow-hidden h-[calc(93.6dvh-3.5rem)] hidden xl:block"
-    >
-      <table class="table-auto w-full h-full overflow-hidden">
-        <thead>
-          <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <TransitionGroup name="list" appear>
-            <tr
-              v-for="item of items"
-              :key="item.id"
-              :class="['cursor-pointer hover:bg-accent text-sm']"
-              @click="(selectedMail = item.id), mailStore.setSelectMail(item)"
+          <div class="">
+            <!-- ชื่อผู้ส่ง -->
+            <div :class="[item.read ? 'font-normal' : 'font-bold']">
+              {{ extractName(item.from) }}
+            </div>
+            <!-- หัวข้อ + เนื้อหา -->
+            <div
+              class="w-[80vw] overflow-hidden whitespace-nowrap text-ellipsis truncate"
             >
-              <!-- ชื่อผู้ส่ง -->
-              <td
-                :class="[
-                  'w-[20rem]  pr-4 py-2 flex',
-                  item.read
-                    ? 'font-normal text-muted-800 dark:text-muted-400'
-                    : 'font-semibold',
-                ]"
+              <span :class="item.read ? 'font-normal' : 'font-bold'">
+                {{ item.subject }}
+              </span>
+            </div>
+            <!-- หัวข้อ + เนื้อหา -->
+            <div
+              class="w-[80vw] overflow-hidden whitespace-nowrap text-ellipsis truncate"
+            >
+              <span
+                class="text-muted-800 dark:text-muted-400"
+                :title="item.snippet"
               >
-                <Dot
-                  :class="[item.read ? 'text-transparent' : 'text-primary-500']"
-                />
-                {{ item.name }}
-              </td>
+                {{ item.snippet }}
+              </span>
+            </div>
+            <!-- วันที่ -->
+            <div
+              class="px-4 text-xs text-end min-w-[6rem] absolute right-0 top-1"
+              :class="
+                selectedMail === item.id
+                  ? 'text-foreground'
+                  : 'text-muted-foreground'
+              "
+            >
+              {{ formatMailDate(item.date) }}
+            </div>
+          </div>
+        </div>
+      </ScrollArea>
+      <!-- ------------------desktop layout-------------------- -->
+      <div
+        class="overflow-y-auto h-[calc(93.6dvh-3.5rem)] hidden xl:block"
+        @scroll="onScroll"
+      >
+        <table class="table-auto w-full h-full overflow-hidden">
+          <thead>
+            <tr>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
 
-              <!-- หัวข้อ + เนื้อหา -->
-              <td
-                class="w-full max-w-[800px] px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis truncate"
+          <tbody>
+            <TransitionGroup name="list" appear>
+              <tr
+                v-for="item of emails"
+                :key="item.id"
+                :class="['cursor-pointer hover:bg-accent text-sm']"
+                @click="mailStore.setSelectMail(item)"
               >
-                <span
-                  :class="
+                <!-- ชื่อผู้ส่ง -->
+                <td
+                  :class="[
+                    'w-[20rem]  pr-4 py-2 flex',
                     item.read
                       ? 'font-normal text-muted-800 dark:text-muted-400'
-                      : 'font-semibold'
+                      : 'font-semibold',
+                  ]"
+                >
+                  <Dot
+                    :class="[
+                      item.read ? 'text-transparent' : 'text-primary-500',
+                    ]"
+                  />
+                  {{ extractName(item.from) }}
+                </td>
+
+                <!-- หัวข้อ + เนื้อหา -->
+                <td
+                  class="w-full max-w-[800px] px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis truncate"
+                >
+                  <span
+                    :class="
+                      item.read
+                        ? 'font-normal text-muted-800 dark:text-muted-400'
+                        : 'font-semibold'
+                    "
+                  >
+                    {{ item.subject }}
+                  </span>
+                  -
+                  <span
+                    class="text-muted-800 dark:text-muted-400"
+                    :title="item.snippet"
+                  >
+                    {{ item.snippet }}
+                  </span>
+                </td>
+
+                <!-- วันที่ -->
+                <td
+                  class="px-4 py-2 text-xs text-end min-w-[6rem]"
+                  :class="
+                    selectedMail === item.id
+                      ? 'text-foreground'
+                      : 'text-muted-foreground'
                   "
                 >
-                  {{ item.subject }}
-                </span>
-                -
-                <span
-                  class="text-muted-800 dark:text-muted-400"
-                  :title="item.text"
-                >
-                  {{ item.text }}
-                </span>
-              </td>
-
-              <!-- วันที่ -->
-              <td
-                class="px-4 py-2 text-xs text-end min-w-[6rem]"
-                :class="
-                  selectedMail === item.id
-                    ? 'text-foreground'
-                    : 'text-muted-foreground'
-                "
-              >
-                {{ formatMailDate(new Date()) }}
-              </td>
-            </tr>
-          </TransitionGroup>
-        </tbody>
-      </table>
-    </ScrollArea>
+                  {{ formatMailDate(item.date) }}
+                </td>
+              </tr>
+            </TransitionGroup>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div v-if="loading" class="text-center">กำลังโหลด...</div>
   </div>
 </template>
 

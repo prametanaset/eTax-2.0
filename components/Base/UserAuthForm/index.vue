@@ -188,9 +188,7 @@
                 @update:model-value="(arr: string[] | undefined) => form.setFieldValue('pin', arr)"
                 @complete="handleComplete"
               />
-              <FormMessage
-                class="ml-8 self-start w-full text-left"
-              />
+              <FormMessage class="ml-8 self-start w-full text-left" />
             </FormItem>
           </FormField>
 
@@ -243,7 +241,7 @@
               <span class="w-full border-t" />
             </div>
             <div class="relative flex justify-center text-xs uppercase">
-              <span class="bg-white px-2 text-muted-foreground"> หรือ </span>
+              <span class="px-2 text-muted-foreground"> หรือ </span>
             </div>
           </div>
 
@@ -369,12 +367,10 @@ const formSchema = toTypedSchema(
       pin: z
         .array(z.string())
         .optional()
-        .refine(
-          (val) => {
-            if (showOtpField.value) return val && val.length === OTP_LENGTH;
-            return true;
-          }
-        ),
+        .refine((val) => {
+          if (showOtpField.value) return val && val.length === OTP_LENGTH;
+          return true;
+        }),
     })
     .refine(
       (data) => {
@@ -434,7 +430,7 @@ async function onRegister() {
       username: authForm.email,
       password: authForm.password,
       otp_ref: authForm.refCode,
-      otp_code: code
+      otp_code: code,
     });
 
     const { signIn } = useAuth();
@@ -467,7 +463,7 @@ async function onRegister() {
       // ตัวอย่าง: OTP ไม่ถูกต้อง
 
       errorOtpVerify.value = true;
-      form.setErrors({ pin: "OTP ไม่ถูกต้อง" })
+      form.setErrors({ pin: "OTP ไม่ถูกต้อง" });
 
       toast({
         title: "ข้อมูลไม่ถูกต้อง",
@@ -476,7 +472,7 @@ async function onRegister() {
       });
     } else if (statusCode === 409) {
       // ตัวอย่าง: ผู้ใช้งานซ้ำ
-      form.setErrors({ pin: "บัญชีมีอยู่แล้ว" })
+      form.setErrors({ pin: "บัญชีมีอยู่แล้ว" });
       toast({
         title: "บัญชีมีอยู่แล้ว",
         description: message,
@@ -484,7 +480,7 @@ async function onRegister() {
       });
     } else if (statusCode === 423) {
       // ตัวอย่าง: ผู้ใช้งานซ้ำ
-      form.setErrors({ pin: "เกินจำนวนครั้งที่กำหนด กรุณากดส่งอีเมลซ้ำ" })
+      form.setErrors({ pin: "เกินจำนวนครั้งที่กำหนด กรุณากดส่งอีเมลซ้ำ" });
       toast({
         title: "ยืนยันล้มเหลว",
         description: "เกินจำนวนครั้งที่กำหนด กรุณากดส่งอีเมลซำ",
@@ -510,7 +506,7 @@ async function onSendOtpCode() {
   try {
     const response = await useUseOtpService().sendOtp({
       email: authForm.email,
-      purpose: "verify_email"
+      purpose: "verify_email",
     });
     authForm.refCode = response.data.ref;
 

@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <MailNotion :mails="mails" class="flex-1" />
+    <MailNotion class="flex-1" />
   </div>
 </template>
 

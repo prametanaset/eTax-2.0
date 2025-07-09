@@ -57,21 +57,19 @@
             </FormItem>
           </FormField>
 
-           <div class="text-right">
-              <Button
-                variant="link"
-                type="button"
-                @click="
-                  toggleStore.resetPassword = true;
-                  toggleStore.isLogin = false;
-                "
-                class="p-0 -mt-2 text-sm"
-              >
-                ลืมรหัสผ่านใช่หรือไม่
-              </Button>
-            </div>
-
-
+          <div class="text-right">
+            <Button
+              variant="link"
+              type="button"
+              @click="
+                toggleStore.resetPassword = true;
+                toggleStore.isLogin = false;
+              "
+              class="p-0 -mt-2 text-sm"
+            >
+              ลืมรหัสผ่านใช่หรือไม่
+            </Button>
+          </div>
 
           <Button
             type="submit"
@@ -87,38 +85,38 @@
               <span class="w-full border-t" />
             </div>
             <div class="relative flex justify-center text-xs uppercase">
-              <span class="bg-white px-2 text-muted-foreground"> หรือ </span>
+              <span class="px-2 text-muted-foreground"> หรือ </span>
             </div>
           </div>
 
           <client-only>
             <div class="flex flex-col gap-3">
               <Button
-              variant="outline"
-              type="button"
-              :disabled="isLoading"
-              @click="signInWith('google')"
-              class="w-full py-2 sm:py-3 text-sm sm:text-sm rounded-full"
-            >
-              <NuxtImg
-                src="/logo/google-logo.png"
-                alt="Google logo"
-                width="16"
-                height="16"
-                class="mr-2 h-4 w-4"
-              />
-              ดำเนินการต่อด้วย Google 
-            </Button>
-            <Button
-              variant="outline"
-              type="button"
-              :disabled="isLoading"
-              @click="signInWith('github')"
-              class="w-full py-2 sm:py-3 text-sm sm:text-sm rounded-full"
-            >
-              <Github class="mr-2 h-4 w-4" />
-              ดำเนินการต่อด้วย Github
-            </Button>
+                variant="outline"
+                type="button"
+                :disabled="isLoading"
+                @click="signInWith('google')"
+                class="w-full py-2 sm:py-3 text-sm sm:text-sm rounded-full"
+              >
+                <NuxtImg
+                  src="/logo/google-logo.png"
+                  alt="Google logo"
+                  width="16"
+                  height="16"
+                  class="mr-2 h-4 w-4"
+                />
+                ดำเนินการต่อด้วย Google
+              </Button>
+              <!-- <Button
+                variant="outline"
+                type="button"
+                :disabled="isLoading"
+                @click="signInWith('github')"
+                class="w-full py-2 sm:py-3 text-sm sm:text-sm rounded-full"
+              >
+                <Github class="mr-2 h-4 w-4" />
+                ดำเนินการต่อด้วย Github
+              </Button> -->
             </div>
           </client-only>
         </div>
@@ -135,7 +133,7 @@ import * as z from "zod";
 import { Loader, Eye, EyeOff, Github } from "lucide-vue-next";
 
 const { signIn } = useAuth();
-const toggleStore = useToggleResetPasswordStores(); 
+const toggleStore = useToggleResetPasswordStores();
 
 const errorLogin = ref(false);
 const isLoading = ref(false);
@@ -176,8 +174,8 @@ const onLogin = handleSubmit(async (values) => {
   if (result?.error) {
     errorLogin.value = true;
     setErrors({
-      password: 'ที่อยู่อีเมลหรือรหัสผ่านไม่ถูกต้อง'
-    })
+      password: "ที่อยู่อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+    });
   } else if (result?.url) {
     navigateTo("/dashboard");
   }

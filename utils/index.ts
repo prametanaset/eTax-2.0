@@ -1,41 +1,49 @@
 import type { Updater } from "@tanstack/vue-table";
 import type { Ref } from "vue";
-import dayjs from "dayjs";
 import type { Customer } from "~/types/customer";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import localeData from "dayjs/plugin/localeData";
+import "dayjs/locale/th";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.extend(localeData);
+dayjs.locale("th");
 
 export const convertToBuddhistYear = (date: any) => {
   const year = date.getFullYear();
   return year + 543;
 };
 
-export const formatThaiDate = (date: any) => {
-  if (!date || date === "") return "";
+export function formatThaiDate(date: dayjs.Dayjs): string {
+  const bangkokDate = date.tz("Asia/Bangkok");
+  const currentYear = dayjs().year();
+  const buddhistYear = bangkokDate.year() + 543;
 
-  const thaiMonths = [
-    "ม.ค.",
-    "ก.พ.",
-    "มี.ค.",
-    "เม.ย.",
-    "พ.ค.",
-    "มิ.ย.",
-    "ก.ค.",
-    "ส.ค.",
-    "ก.ย.",
-    "ต.ค.",
-    "พ.ย.",
-    "ธ.ค.",
-  ];
+  const formatted = bangkokDate.format("D MMM");
 
-  const day = date.getDate().toString().padStart(2, "0");
-  const month = thaiMonths[date.getMonth()];
-  const year = convertToBuddhistYear(date);
+  if (bangkokDate.year() === currentYear) {
+    return formatted;
+  }
 
-  return `${day} ${month} ${year}`;
-};
+  return `${formatted} ${buddhistYear}`;
+}
 
 export function formatMailDate(input: string | Date): string {
-  const now = dayjs();
-  const date = dayjs(input);
+  const now = dayjs().tz("Asia/Bangkok");
+  let date: dayjs.Dayjs;
+
+  if (typeof input === "string") {
+    // แปลง string เป็น UTC แล้วแปลงเป็น timezone ไทย
+    date = dayjs.utc(input).tz("Asia/Bangkok");
+  } else {
+    // ถ้าเป็น Date ให้สร้าง dayjs แล้วแปลง timezone ไทย
+    date = dayjs(input).tz("Asia/Bangkok");
+  }
+
+  if (!date.isValid()) return "-";
 
   if (date.isSame(now, "day")) {
     return date.format("HH:mm");
@@ -85,4 +93,9 @@ export function mapCustomerResponseToCustomer(response: any[]): Customer[] {
     CreatedAt: c.created_at,
     UpdatedAt: c.updated_at,
   }));
+}
+
+export function extractName(from: string): string {
+  const match = from.match(/^(.*?)\s*<.*?>$/);
+  return match ? match[1] : from;
 }

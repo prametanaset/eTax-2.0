@@ -43,7 +43,7 @@ export default defineNuxtConfig({
     },
     sessionRefresh: {
       enablePeriodically: false,
-      enableOnWindowFocus: false
+      enableOnWindowFocus: false,
     },
     baseURL: process.env.AUTH_ORIGIN,
   },
