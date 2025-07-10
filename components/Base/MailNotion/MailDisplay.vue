@@ -63,106 +63,27 @@ const safeHtml = computed(() => {
 <template>
   <ScrollArea class="h-full">
     <div class="flex h-full flex-col">
-      <div
-        :class="[
-          'flex items-center p-2 bg-background border-b border-muted-300 dark:border-muted-800 sticky top-0',
-        ]"
-      >
-        <div class="flex items-center gap-2">
-          <Tooltip>
-            <TooltipTrigger as-child>
-              <Button
-                size="icon"
-                :disabled="!mail"
-                @click="mailStore.clearSelectMailStore()"
-              >
-                <ChevronRight class="size-4" />
-                <span class="sr-only">กลับ</span>
-              </Button>
-            </TooltipTrigger>
-            <!-- <TooltipContent>ปิด</TooltipContent> -->
-          </Tooltip>
-          <Separator orientation="vertical" class="mx-2 h-6" />
-          <Tooltip>
-            <TooltipTrigger as-child>
-              <Button variant="ghost" size="icon" :disabled="!mail">
-                <Archive class="size-4" />
-                <span class="sr-only">Archive</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Archive</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger as-child>
-              <Button variant="ghost" size="icon" :disabled="!mail">
-                <ArchiveX class="size-4" />
-                <span class="sr-only">Move to junk</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Move to junk</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger as-child>
-              <Button variant="ghost" size="icon" :disabled="!mail">
-                <Trash2 class="size-4" />
-                <span class="sr-only">Move to trash</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Move to trash</TooltipContent>
-          </Tooltip>
-          <Separator orientation="vertical" class="mx-1 h-6" />
-        </div>
-        <div class="ml-auto flex items-center gap-2">
-          <Tooltip>
-            <TooltipTrigger as-child>
-              <Button variant="ghost" size="icon" :disabled="!mail">
-                <Reply class="size-4" />
-                <span class="sr-only">Reply</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Reply</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger as-child>
-              <Button variant="ghost" size="icon" :disabled="!mail">
-                <ReplyAll class="size-4" />
-                <span class="sr-only">Reply all</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Reply all</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger as-child>
-              <Button variant="ghost" size="icon" :disabled="!mail">
-                <Forward class="size-4" />
-                <span class="sr-only">Forward</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Forward</TooltipContent>
-          </Tooltip>
-        </div>
-        <Separator orientation="vertical" class="mx-2 h-6" />
-        <DropdownMenu>
-          <DropdownMenuTrigger as-child>
-            <Button variant="ghost" size="icon" :disabled="!mail">
-              <MoreVertical class="size-4" />
-              <span class="sr-only">More</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>Mark as unread</DropdownMenuItem>
-            <DropdownMenuItem>Star thread</DropdownMenuItem>
-            <DropdownMenuItem>Add label</DropdownMenuItem>
-            <DropdownMenuItem>Mute thread</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-
       <div v-if="mail?.renderHtml" class="flex flex-1 flex-col">
         <div class="flex items-start p-4 justify-between">
-          <div class="flex items-start gap-4 text-sm">
+          <div class="flex items-center gap-4 text-sm">
+            <div class="flex items-center gap-2">
+              <Tooltip>
+                <TooltipTrigger as-child>
+                  <Button
+                    size="icon"
+                    :disabled="!mail"
+                    @click="mailStore.clearSelectMailStore()"
+                  >
+                    <ChevronRight class="size-4" />
+                    <span class="sr-only">กลับ</span>
+                  </Button>
+                </TooltipTrigger>
+                <!-- <TooltipContent>ปิด</TooltipContent> -->
+              </Tooltip>
+            </div>
+            <Separator orientation="vertical" class="mx-2 h-6" />
             <div class="grid gap-1">
-              <div class="font-semibold">
+              <div class="font-semibold text-lg">
                 {{ extractName(mail.data.from) }}
               </div>
               <div class="line-clamp-1">
@@ -170,37 +91,17 @@ const safeHtml = computed(() => {
               </div>
             </div>
           </div>
-          <div class="text-xs text-muted-foreground">
+          <div class="text-xs text-muted-foreground px-3">
             {{ formatMailDate(mail.data.date) }}
           </div>
         </div>
         <Separator />
-        <div class="w-full overflow-x-auto bg-white">
+        <div class="w-full h-full overflow-x-auto">
           <iframe
-            sandbox="allow-same-origin allow-scripts"
+            sandbox="allow-same-origin allow-scripts "
             :srcdoc="safeHtml"
-            class="min-w-[320px] w-full border-0 h-dvh"
+            class="min-w-[320px] w-full border-0 h-screen"
           />
-        </div>
-        <Separator class="mt-auto" />
-        <div class="p-4">
-          <form>
-            <div class="grid gap-4">
-              <Textarea
-                class="p-4"
-                :placeholder="`Reply ${extractName(mail.data.from)}...`"
-              />
-              <div class="flex items-center">
-                <Label
-                  html-for="mute"
-                  class="flex items-center gap-2 text-xs font-normal"
-                >
-                  <Switch id="mute" aria-label="Mute thread" /> Mute this thread
-                </Label>
-                <Button type="button" size="sm" class="ml-auto"> Send </Button>
-              </div>
-            </div>
-          </form>
         </div>
       </div>
       <div v-else class="p-8 text-center text-muted-foreground">

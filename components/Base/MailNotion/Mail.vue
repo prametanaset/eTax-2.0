@@ -74,11 +74,6 @@ const handleLogin = async () => {
 </script>
 <template>
   <div class="flex gap-6 lg:h-[calc(99.5dvh-3.5rem)] overflow-hidden">
-    <!-- Sidebar mail -->
-    <!-- <div class="hidden xl:block w-64 h-full">
-      <Nav class="h-full" :links="links" />
-    </div> -->
-
     <!-- Main content -->
     <BaseGoogleAuthLogin v-if="!session?.googleAccessToken" />
 
@@ -86,16 +81,6 @@ const handleLogin = async () => {
       <div
         class="flex gap-1 lg:max-w-[30rem] bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 pt-2 px-2 xl:px-0"
       >
-        <!-- ✅ แสดง Nav ใน Drawer (เฉพาะจอเล็ก) -->
-        <!-- <Sheet>
-          <SheetTrigger as-child class="lg:hidden">
-            <Button variant="outline"> <Menu /> </Button>
-          </SheetTrigger>
-          <SheetContent side="left">
-            <Nav :links="links" />
-          </SheetContent>
-        </Sheet> -->
-
         <!-- ✅ กล่องค้นหา -->
         <form class="w-full xl:ml-3">
           <div class="relative">
