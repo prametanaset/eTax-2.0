@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 const { listMessages } = useGmailService();
 const { data: session, status, signIn } = useAuth();
+import { Dot } from "lucide-vue-next";
 
 interface Mail {
   id: string;

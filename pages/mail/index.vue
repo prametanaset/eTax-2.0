@@ -1,5 +1,5 @@
 <template>
-  <MailNotion class="flex-1" />
+  <MailNotion />
 </template>
 
 <script lang="ts" setup>
