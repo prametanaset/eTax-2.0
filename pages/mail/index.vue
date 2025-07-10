@@ -1,25 +1,13 @@
 <template>
-  <div class="">
-    <MailNotion class="flex-1" />
-  </div>
+  <MailNotion class="flex-1" />
 </template>
 
 <script lang="ts" setup>
-import MailGoogle from "~/components/Base/MailGoogle/Mail.vue";
 import MailNotion from "~/components/Base/MailNotion/Mail.vue";
-import { accounts, mails } from "@/components/Base/MailNotion/data/mail";
 
 definePageMeta({
   layout: "default",
-  title: "Mail",
-});
-
-const mailStore = useMailStore();
-
-const mailList = computed(() => mailStore.mailList);
-
-onMounted(() => {
-  mailStore.getMails();
+  title: "เมล",
 });
 
 useHead({

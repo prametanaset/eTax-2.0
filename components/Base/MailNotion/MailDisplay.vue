@@ -111,53 +111,6 @@ const safeHtml = computed(() => {
             <TooltipContent>Move to trash</TooltipContent>
           </Tooltip>
           <Separator orientation="vertical" class="mx-1 h-6" />
-          <Tooltip>
-            <Popover>
-              <PopoverTrigger as-child>
-                <TooltipTrigger as-child>
-                  <Button variant="ghost" size="icon" :disabled="!mail">
-                    <Clock class="size-4" />
-                    <span class="sr-only">Snooze</span>
-                  </Button>
-                </TooltipTrigger>
-              </PopoverTrigger>
-              <PopoverContent class="flex w-[535px] p-0">
-                <div class="flex flex-col gap-2 border-r px-2 py-4">
-                  <div class="px-4 text-sm font-medium">Snooze until</div>
-                  <!-- <div class="grid min-w-[250px] gap-1">
-                    <Button variant="ghost" class="justify-start font-normal">
-                      Later today
-                      <span class="ml-auto text-muted-foreground">
-                        {{ formatThaiDate(today) }}
-                      </span>
-                    </Button>
-                    <Button variant="ghost" class="justify-start font-normal">
-                      Tomorrow
-                      <span class="ml-auto text-muted-foreground">
-                        {{ formatThaiDate(today) }}
-                      </span>
-                    </Button>
-                    <Button variant="ghost" class="justify-start font-normal">
-                      This weekend
-                      <span class="ml-auto text-muted-foreground">
-                        {{ formatThaiDate(today) }}
-                      </span>
-                    </Button>
-                    <Button variant="ghost" class="justify-start font-normal">
-                      Next week
-                      <span class="ml-auto text-muted-foreground">
-                        {{ formatThaiDate(today) }}
-                      </span>
-                    </Button>
-                  </div> -->
-                </div>
-                <div class="p-2">
-                  <Calendar />
-                </div>
-              </PopoverContent>
-            </Popover>
-            <TooltipContent>Snooze</TooltipContent>
-          </Tooltip>
         </div>
         <div class="ml-auto flex items-center gap-2">
           <Tooltip>
@@ -224,7 +177,7 @@ const safeHtml = computed(() => {
         <Separator />
         <div class="w-full overflow-x-auto bg-white">
           <iframe
-            sandbox="allow-same-origin"
+            sandbox="allow-same-origin allow-scripts"
             :srcdoc="safeHtml"
             class="min-w-[320px] w-full border-0 h-dvh"
           />

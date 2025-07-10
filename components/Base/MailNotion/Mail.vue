@@ -1,7 +1,4 @@
 <script lang="ts" setup>
-import { cn } from "@/lib/utils";
-
-import { refDebounced } from "@vueuse/core";
 import { Menu, Search, Star } from "lucide-vue-next";
 import { computed, ref } from "vue";
 import MailDisplay from "./MailDisplay.vue";
@@ -83,22 +80,8 @@ const handleLogin = async () => {
     </div> -->
 
     <!-- Main content -->
-    <Button
-      v-if="!session?.googleAccessToken"
-      variant="outline"
-      type="button"
-      class="w-full py-2 sm:py-3 text-sm sm:text-sm rounded-full"
-      @click="handleLogin"
-    >
-      <NuxtImg
-        src="/logo/google-logo.png"
-        alt="Google logo"
-        width="16"
-        height="16"
-        class="mr-2 h-4 w-4"
-      />
-      ดำเนินการต่อด้วย Google
-    </Button>
+    <BaseGoogleAuthLogin v-if="!session?.googleAccessToken" />
+
     <div v-else class="flex flex-col h-full w-full gap-3 relative">
       <div
         class="flex gap-1 lg:max-w-[30rem] bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 pt-2 px-2 xl:px-0"

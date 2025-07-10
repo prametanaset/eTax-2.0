@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import { RotateCcw, Star, MailOpen, Dot } from "lucide-vue-next";
-const { listMessages, getMessage } = useGmailService();
+const { listMessages } = useGmailService();
 const { data: session, status, signIn } = useAuth();
 
 interface Mail {
