@@ -48,28 +48,38 @@ export function useGmailService() {
     const res = await gmailClient.get(`/users/me/messages/${id}?format=full`);
     const payload = res.data?.payload;
 
-    let raw = "";
+    // recursive function เพื่อหา text/html ในทุกระดับ
+    function findHtmlPart(part: any): string | null {
+      if (!part) return null;
 
-    if (payload?.parts) {
-      // หา part ที่เป็น text/html
-      const htmlPart = payload.parts.find(
-        (part: any) => part.mimeType === "text/html"
-      );
-      raw = htmlPart?.body?.data;
-    } else {
-      // บางอีเมลจะไม่มี parts → อยู่ใน payload.body
-      raw = payload?.body?.data;
+      // ถ้าเป็น HTML โดยตรง
+      if (part.mimeType === "text/html" && part.body?.data) {
+        return part.body.data;
+      }
+
+      // ถ้าเป็น multipart (มี sub-parts)
+      if (Array.isArray(part.parts)) {
+        for (const subPart of part.parts) {
+          const result = findHtmlPart(subPart);
+          if (result) return result;
+        }
+      }
+
+      return null;
     }
 
+    const raw = findHtmlPart(payload) || payload?.body?.data;
     if (!raw) return null;
 
     // แปลงจาก Base64 URL-safe → Standard แล้ว decode
     const decoded = atob(raw.replace(/-/g, "+").replace(/_/g, "/"));
-    return decodeURIComponent(
+    const decodedHtml = decodeURIComponent(
       Array.from(decoded)
         .map((c) => "%" + c.charCodeAt(0).toString(16).padStart(2, "0"))
         .join("")
     );
+
+    return decodedHtml;
   }
 
   async function sendMessage(rawBase64: string) {
@@ -79,9 +89,21 @@ export function useGmailService() {
     return res.data;
   }
 
+  async function markAsRead(id: string) {
+    try {
+      const res = await gmailClient.post(`/users/me/messages/${id}/modify`, {
+        removeLabelIds: ["UNREAD"],
+      });
+      // อัปเดต local state, ถ้ามี
+    } catch (err) {
+      console.error("Failed to mark mail as read", err);
+    }
+  }
+
   return {
     listMessages,
     getMessage,
     sendMessage,
+    markAsRead,
   };
 }

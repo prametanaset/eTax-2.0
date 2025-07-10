@@ -13,9 +13,51 @@ import {
 } from "lucide-vue-next";
 import { computed } from "vue";
 import ScrollArea from "~/components/ui/scroll-area/ScrollArea.vue";
+import DOMPurify from "dompurify";
 
 const mailStore = useMailStore();
 const mail = computed(() => mailStore.selectMail);
+
+const safeHtml = computed(() => {
+  const html = mail.value?.renderHtml || "";
+  return DOMPurify.sanitize(`
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <style>
+        html, body {
+          margin: 0;
+          padding: 1rem;
+          font-family: sans-serif;
+          max-width: 100%;
+          overflow-x: hidden;
+          box-sizing: border-box;
+        }
+
+        * {
+          box-sizing: border-box !important;
+          max-width: 100% !important;
+        }
+
+        table {
+          width: 100% !important;
+          display: block;
+          overflow-x: auto;
+        }
+
+        img {
+          max-width: 100% !important;
+          height: auto !important;
+        }
+      </style>
+    </head>
+    <body>
+      ${html}
+    </body>
+  </html>`);
+});
 </script>
 
 <template>
@@ -180,12 +222,12 @@ const mail = computed(() => mailStore.selectMail);
           </div>
         </div>
         <Separator />
-        <div class="flex-1 whitespace-pre-wrap p-4 text-sm bg-white text-black">
-          <div
-            v-if="mail.renderHtml"
-            v-html="mail.renderHtml"
-            class="prose max-w-none"
-          ></div>
+        <div class="w-full overflow-x-auto bg-white">
+          <iframe
+            sandbox="allow-same-origin"
+            :srcdoc="safeHtml"
+            class="min-w-[320px] w-full border-0 h-dvh"
+          />
         </div>
         <Separator class="mt-auto" />
         <div class="p-4">

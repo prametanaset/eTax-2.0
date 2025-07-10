@@ -14,20 +14,22 @@ interface Mail {
 
 const emails = ref<Mail[]>([]);
 const loading = ref(false);
-const nextPageToken = ref<string | null>(null);
+const nextPageToken = computed(() => mailStore.mailList.nextPageToken);
 const scrollContainer = ref<HTMLElement | null>(null);
 const device = useDevice();
+const mailStore = useMailStore();
 
 const fetchEmails = async () => {
   if (loading.value) return;
   loading.value = true;
 
-  const { data, nextPageToken: token } = await listMessages(
+  const { data, nextPageToken } = await listMessages(
     30,
-    nextPageToken.value || undefined
+    mailStore.mailList.nextPageToken || undefined
   );
-  emails.value.push(...data);
-  nextPageToken.value = token || null;
+
+  mailStore.updateMailList(data, nextPageToken);
+  emails.value = mailStore.mailList.data;
 
   loading.value = false;
 };
@@ -42,7 +44,7 @@ onMounted(() => {
 const onScroll = (e: Event) => {
   const target = e.target as HTMLElement;
   if (target.scrollTop + target.clientHeight >= target.scrollHeight - 100) {
-    if (nextPageToken.value) fetchEmails();
+    if (mailStore.mailList.nextPageToken) fetchEmails();
   }
 };
 
@@ -58,17 +60,13 @@ onMounted(() => {
 });
 
 const selectedMail = defineModel<string>("selectedMail", { required: false });
-const mailStore = useMailStore();
 </script>
 
 <template>
   <div>
     <div>
       <!-- ------------------mobile layout-------------------- -->
-      <ScrollArea
-        class="xl:hidden overflow-y-auto h-[87dvh]"
-        ref="scrollContainer"
-      >
+      <div class="xl:hidden overflow-y-auto h-[87dvh]" @scroll="onScroll">
         <div
           v-for="item of emails"
           :key="item.id"
@@ -117,7 +115,7 @@ const mailStore = useMailStore();
             </div>
           </div>
         </div>
-      </ScrollArea>
+      </div>
       <!-- ------------------desktop layout-------------------- -->
       <div
         class="overflow-y-auto h-[calc(93.6dvh-3.5rem)] hidden xl:block"
@@ -143,7 +141,7 @@ const mailStore = useMailStore();
                 <!-- ชื่อผู้ส่ง -->
                 <td
                   :class="[
-                    'w-[20rem]  pr-4 py-2 flex',
+                    'w-[20rem] pr-4 py-2 flex overflow-hidden whitespace-nowrap text-ellipsis truncate',
                     item.read
                       ? 'font-normal text-muted-800 dark:text-muted-400'
                       : 'font-semibold',

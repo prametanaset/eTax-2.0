@@ -1,7 +1,5 @@
-import type { UUID } from "crypto";
 import { defineStore } from "pinia";
-import { mails } from "@/components/Base/Mail/data/mail";
-const { listMessages, getMessage } = useGmailService();
+const { listMessages, getMessage, markAsRead } = useGmailService();
 
 export const useMailStore = defineStore("mailStore", () => {
   const selectMail = ref<{
@@ -9,14 +7,33 @@ export const useMailStore = defineStore("mailStore", () => {
     renderHtml: string;
   } | null>(null);
 
-  const mailList = ref([]);
+  const mailList = reactive({
+    data: [] as any[],
+    nextPageToken: null as string | null,
+  });
 
-  function getMails() {}
+  function updateMailList(newData: any[], nextToken: string | null) {
+    const existingIds = new Set(mailList.data.map((m) => m.id));
+    const uniqueNew = newData.filter((m) => !existingIds.has(m.id));
+    mailList.data.push(...uniqueNew);
+    mailList.nextPageToken = nextToken;
+  }
 
   async function setSelectMail(mail: any) {
     const html = await getMessage(mail.id);
+    await markAsRead(mail.id);
+
+    // อัปเดต labelIds ใน memory
+    mail.read = true;
+
+    // // อัปเดตใน list
+    const index = mailList.data.findIndex((m) => m.id === mail.id);
+    if (index !== -1) {
+      mailList.data[index] = { ...mail };
+    }
+
     selectMail.value = {
-      data: { ...mail },
+      data: mail,
       renderHtml: html as string,
     };
   }
@@ -28,8 +45,8 @@ export const useMailStore = defineStore("mailStore", () => {
   return {
     selectMail,
     mailList,
-    clearSelectMailStore,
-    getMails,
+    updateMailList,
     setSelectMail,
+    clearSelectMailStore,
   };
 });
