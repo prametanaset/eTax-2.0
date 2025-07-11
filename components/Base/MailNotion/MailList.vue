@@ -2,6 +2,7 @@
 const { listMessages } = useGmailService();
 const { data: session, status, signIn } = useAuth();
 import { Dot } from "lucide-vue-next";
+import { isToday, isThisWeek, isThisMonth } from "date-fns";
 
 interface Mail {
   id: string;
@@ -118,7 +119,7 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
       </div>
       <!-- ------------------desktop layout-------------------- -->
       <div
-        class="overflow-y-auto h-[calc(93.6dvh-3.5rem)] hidden xl:block"
+        class="overflow-y-auto h-[calc(96.5dvh-3.5rem)] hidden xl:block"
         @scroll="onScroll"
       >
         <table class="table-auto w-full h-full overflow-hidden">
@@ -127,31 +128,43 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
               <th></th>
               <th></th>
               <th></th>
+              <th></th>
             </tr>
           </thead>
 
           <tbody>
             <TransitionGroup name="list" appear>
+              <!-- วันนี้ -->
+              <tr v-if="emails.some((e) => isToday(new Date(e.date)))">
+                <td
+                  colspan="4"
+                  class="px-4 py-2 font-bold text-muted-foreground bg-muted"
+                >
+                  วันนี้
+                </td>
+              </tr>
               <tr
-                v-for="item of emails"
+                v-for="item in emails"
+                v-if="isToday(new Date(item.date))"
                 :key="item.id"
-                :class="['cursor-pointer hover:bg-accent text-sm']"
                 @click="mailStore.setSelectMail(item)"
               >
                 <!-- ชื่อผู้ส่ง -->
-                <td
-                  :class="[
-                    'w-[20rem] pr-4 py-2 flex overflow-hidden whitespace-nowrap text-ellipsis truncate',
-                    item.read
-                      ? 'font-normal text-muted-800 dark:text-muted-400'
-                      : 'font-semibold',
-                  ]"
-                >
+                <td>
                   <Dot
                     :class="[
                       item.read ? 'text-transparent' : 'text-primary-500',
                     ]"
                   />
+                </td>
+                <td
+                  :class="[
+                    'max-w-[16vw] min-w-[16vw] pr-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis truncate',
+                    item.read
+                      ? 'font-normal text-muted-800 dark:text-muted-400'
+                      : 'font-semibold',
+                  ]"
+                >
                   {{ extractName(item.from) }}
                 </td>
 

@@ -1,26 +1,27 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const skipPaths = ["/"];
-
   if (skipPaths.includes(to.path)) return;
-  if (to.path.startsWith('/.well-known')) return;
+  if (to.path.startsWith("/.well-known")) return;
 
   const profileStore = useProfileStore();
   const userService = useUserService();
 
   try {
     const dataFromService = await userService.getMe();
+    console.log("Received profile data:", dataFromService);
 
-    if (dataFromService) {
-      // แปลงเป็น plain object เพื่อหลีกเลี่ยงปัญหา reactivity
+    if (dataFromService && typeof dataFromService === "object") {
       const plainData = JSON.parse(JSON.stringify(dataFromService));
       profileStore.setProfile(plainData);
 
-      // ป้องกัน error กรณี profileStore.user ยังไม่ถูก reactive ทันที
-      const hasMerchant = plainData?.merchant;
+      const hasMerchant = plainData?.merchant_info?.merchant;
+      console.log("merchant from plainData:", hasMerchant);
 
-      if (!hasMerchant && to.path !== '/setting-store') {
-        return navigateTo('/setting-store');
+      if (!hasMerchant && to.path !== "/setting-store") {
+        return navigateTo("/setting-store");
       }
+    } else {
+      console.warn("getMe() returned invalid data:", dataFromService);
     }
   } catch (error) {
     console.error("Failed to fetch user profile in middleware:", error);

@@ -8,64 +8,6 @@ import MailList from "./MailList.vue";
 const searchValue = ref("");
 const mailStore = useMailStore();
 
-// const filteredMailList = computed(() => {
-//   let output: Mail[] = [];
-//   const searchValue = debouncedSearch.value?.trim();
-//   if (!searchValue) {
-//     output = props.mails;
-//   } else {
-//     output = props.mails.filter((item) => {
-//       return (
-//         item.name.includes(debouncedSearch.value) ||
-//         item.email.includes(debouncedSearch.value) ||
-//         item.name.includes(debouncedSearch.value) ||
-//         item.subject.includes(debouncedSearch.value) ||
-//         item.text.includes(debouncedSearch.value)
-//       );
-//     });
-//   }
-
-//   return output;
-// });
-const links = [
-  {
-    title: "Inbox",
-    label: "128",
-    icon: "lucide:inbox",
-    variant: "default",
-  },
-  {
-    title: "Drafts",
-    label: "9",
-    icon: "lucide:file",
-    variant: "ghost",
-  },
-  {
-    title: "Sent",
-    label: "",
-    icon: "lucide:send",
-    variant: "ghost",
-  },
-  {
-    title: "Junk",
-    label: "23",
-    icon: "lucide:archive",
-    variant: "ghost",
-  },
-  {
-    title: "Trash",
-    label: "",
-    icon: "lucide:trash",
-    variant: "ghost",
-  },
-  {
-    title: "Archive",
-    label: "",
-    icon: "lucide:archive",
-    variant: "ghost",
-  },
-];
-
 const { data: session, status, signIn } = useAuth();
 
 const handleLogin = async () => {
@@ -80,21 +22,7 @@ const handleLogin = async () => {
     <div v-else class="flex flex-col h-full w-full gap-3 relative">
       <div
         class="flex gap-1 lg:max-w-[30rem] bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 pt-2 px-2 xl:px-0"
-      >
-        <!-- ✅ กล่องค้นหา -->
-        <form class="w-full xl:ml-3">
-          <div class="relative">
-            <Search
-              class="absolute left-2 top-2.5 size-4 text-muted-foreground"
-            />
-            <Input
-              v-model="searchValue"
-              placeholder="ค้นหา"
-              class="pl-8 w-full"
-            />
-          </div>
-        </form>
-      </div>
+      ></div>
       <div class="h-full">
         <!-- ✅ รายการเมล -->
         <MailList />
