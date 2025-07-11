@@ -35,6 +35,9 @@ const emit = defineEmits<{
       districtId: number | null;
       subdistrictId: number | null;
       zipCode: string;
+      provinces: string;
+      districts: string;
+      subdistricts: string;
     }
   ): void;
 }>();
@@ -95,12 +98,16 @@ watch(selectedSubdistrict, async (code) => {
   const zipRes = await locateService.fetchZipcode(code);
   zipCode.value = String(zipRes.zip_code);
   const data = {
-    provinceId: selectedProvince.value,
-    districtId: selectedDistrict.value,
-    subdistrictId: selectedSubdistrict.value,
-    zipCode: zipCode.value,
-  };
-  emit("location-data", data);
+  provinceId: selectedProvince.value,
+  districtId: selectedDistrict.value,
+  subdistrictId: selectedSubdistrict.value,
+  zipCode: zipCode.value,
+  provinces: provinces.value.find((p) => p.Value === selectedProvince.value)?.Label || "",
+  districts: districts.value.find((d) => d.Value === selectedDistrict.value)?.Label || "",
+  subdistricts: subdistricts.value.find((s) => s.Value === selectedSubdistrict.value)?.Label || "",
+};
+emit("location-data", data);
+
 });
 
 const labelProvince = computed(
@@ -165,11 +172,11 @@ watchEffect(async () => {
         <PopoverTrigger as-child>
           <Button
             variant="outline"
-            class="w-full justify-start"
+            class="w-full justify-start bg-[hsl(var(--card))]"
             :class="{ 'border-red-500': errorProvince }"
             @blur="touchedProvince = true"
           >
-            <MapPin class="w-4 h-4 mr-2" />
+            <!-- <MapPin class="w-4 h-4 mr-2" /> -->
             <span class="truncate">{{ labelProvince }}</span>
           </Button>
         </PopoverTrigger>
@@ -203,19 +210,19 @@ watchEffect(async () => {
 
     <!-- อำเภอ -->
     <div class="relative">
-      <Label class="block text-sm font-medium">
+      <Label class="block text-sm font-medium" :class="districts.length === 0 ? 'text-gray-400' : ''">
         อำเภอ <span class="text-red-500">*</span>
       </Label>
       <Popover v-model:open="showDistrict">
         <PopoverTrigger as-child>
           <Button
             variant="outline"
-            class="w-full justify-start"
+            class="w-full justify-start bg-[hsl(var(--card))]"
             :disabled="districts.length === 0"
             :class="{ 'border-red-500': errorDistrict }"
             @blur="touchedDistrict = true"
           >
-            <MapPin class="w-4 h-4 mr-2" />
+            <!-- <MapPin class="w-4 h-4 mr-2" /> -->
             <span class="truncate">{{ labelDistrict }}</span>
           </Button>
         </PopoverTrigger>
@@ -249,19 +256,19 @@ watchEffect(async () => {
 
     <!-- ตำบล -->
     <div class="relative">
-      <Label class="block text-sm font-medium">
+      <Label class="block text-sm font-medium" :class="subdistricts.length === 0 ? 'text-gray-400' : ''">
         ตำบล <span class="text-red-500">*</span>
       </Label>
       <Popover v-model:open="showSubdistrict">
         <PopoverTrigger as-child>
           <Button
             variant="outline"
-            class="w-full justify-start"
+            class="w-full justify-start bg-[hsl(var(--card))]"
             :disabled="subdistricts.length === 0"
             :class="{ 'border-red-500': errorSubdistrict }"
             @blur="touchedSubdistrict = true"
           >
-            <MapPin class="w-4 h-4 mr-2" />
+            <!-- <MapPin class="w-4 h-4 mr-2" /> -->
             <span class="truncate">{{ labelSubdistrict }}</span>
           </Button>
         </PopoverTrigger>
@@ -295,11 +302,11 @@ watchEffect(async () => {
 
     <!-- รหัสไปรษณีย์ -->
     <div>
-      <Label class="block text-sm font-medium">รหัสไปรษณีย์</Label>
+      <Label class="block text-sm font-medium" :class="zipCode.length === 0 ? 'text-gray-400' : ''">รหัสไปรษณีย์</Label>
       <Input
         v-model="zipCode"
         placeholder="รหัสไปรษณีย์"
-        class="w-full"
+        class="w-full bg-[hsl(var(--card))]"
         readonly
       />
     </div>

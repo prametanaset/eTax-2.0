@@ -10,21 +10,21 @@ watch(
   () => isLogin.value,
   (val) => {
     if (val) {
-      const authForm = useRegisterFormStore()
-      resetPassword.value = false
-      authForm.clearStore()
+      const authForm = useRegisterFormStore();
+      resetPassword.value = false;
+      authForm.clearStore();
     }
   },
   { immediate: true }
-)
+);
 </script>
 
 <template>
   <div
-    class="container relative flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-[55%_1fr] lg:px-0 bg-white dark:bg-[#0f1729]"
+    class="relative min-h-screen h-screen md:grid lg:grid-cols-[55%_1fr] lg:px-0 bg-white dark:bg-[#0f1729] w-full"
   >
+    <!-- ปุ่มสลับ login/register -->
     <div class="absolute right-4 top-4 md:right-8 md:top-8 flex items-center">
-      <!-- ✅ ปุ่มที่คลิกได้ -->
       <p class="text-sm text-muted-foreground">
         {{ isLogin ? "ยังไม่มีบัญชีใช่ไหม?" : "มีบัญชีอยู่แล้ว?" }}
       </p>
@@ -39,30 +39,26 @@ watch(
       </Button>
     </div>
 
+    <!-- ฝั่งซ้าย -->
     <div
-      class="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex"
+      class="relative hidden h-full w-full flex-col bg-muted p-10 text-white dark:border-r lg:flex"
     >
       <ClientOnly>
-        <!-- <BaseThreeLinesEffect class="absolute inset-0 overflow-hidden" />
-        <div
-          class="absolute inset-0 bg-gradient-to-b from-black-500/50 to-black-500/30"
-        ></div> -->
-        <div
-          class="absolute inset-0 bg-black"
-        ></div>
+        <div class="absolute inset-0 bg-black"></div>
       </ClientOnly>
       <div
         class="relative z-20 flex items-center text-lg font-medium font-poppins"
       >
+        <!-- โลโก้ -->
         <svg
           xmlns="http://www.w3.org/2000/svg"
           version="1.0"
           class="mr-1 h-8 w-8"
-          viewBox="0 0 300.000000 300.000000"
+          viewBox="0 0 300 300"
           preserveAspectRatio="xMidYMid meet"
         >
           <g
-            transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)"
+            transform="translate(0,300) scale(0.1,-0.1)"
             fill="#ff4200"
             stroke="none"
           >
@@ -103,17 +99,24 @@ watch(
             &ldquo;โปรแกรม e-Tax ช่วยให้การออกใบกำกับภาษีรวดเร็ว มืออาชีพ
             และพร้อมส่งให้ลูกค้าได้ทันที ประหยัดทั้งเวลาและลดข้อผิดพลาด&rdquo;
           </p>
-          <footer class="text-sm"></footer>
         </blockquote>
       </div>
     </div>
-    <div class="min-h-screen flex items-center justify-center p-4 py-0">
-    <div class="w-full max-w-sm ">
-      <BaseUserAuthResetPassword v-if="toggleStore.resetPassword && !toggleStore.isLogin" />
-      <BaseUserAuthLogin v-if="toggleStore.isLogin && !toggleStore.resetPassword" />
-      <BaseUserAuthForm v-if="!toggleStore.isLogin && !toggleStore.resetPassword" />
+
+    <!-- ฝั่งขวา -->
+    <div class="h-full w-full flex items-center justify-center p-4 py-0">
+      <div class="w-full max-w-sm">
+        <BaseUserAuthResetPassword
+          v-if="toggleStore.resetPassword && !toggleStore.isLogin"
+        />
+        <BaseUserAuthLogin
+          v-if="toggleStore.isLogin && !toggleStore.resetPassword"
+        />
+        <BaseUserAuthForm
+          v-if="!toggleStore.isLogin && !toggleStore.resetPassword"
+        />
+      </div>
     </div>
-  </div>
   </div>
 </template>
 

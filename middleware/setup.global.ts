@@ -11,14 +11,19 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     const dataFromService = await userService.getMe();
 
     if (dataFromService) {
-      // 👇 *** FIX: Convert the data to a plain object before setting it in the store ***
+      // แปลงเป็น plain object เพื่อหลีกเลี่ยงปัญหา reactivity
       const plainData = JSON.parse(JSON.stringify(dataFromService));
       profileStore.setProfile(plainData);
+
+      // ป้องกัน error กรณี profileStore.user ยังไม่ถูก reactive ทันที
+      const hasMerchant = plainData?.merchant;
+
+      if (!hasMerchant && to.path !== '/setting-store') {
+        return navigateTo('/setting-store');
+      }
     }
   } catch (error) {
-    // It's good practice to handle potential errors from your API call
     console.error("Failed to fetch user profile in middleware:", error);
-    // You might want to redirect to an error page or login page here
     // return navigateTo('/login');
   }
 });
