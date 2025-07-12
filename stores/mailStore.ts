@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 const { listMessages, getMessage, markAsRead } = useGmailService();
+const route = useRoute();
 
 export const useMailStore = defineStore("mailStore", () => {
   const selectMail = ref<{
@@ -41,6 +42,15 @@ export const useMailStore = defineStore("mailStore", () => {
   function clearSelectMailStore() {
     selectMail.value = null;
   }
+
+  watch(
+    () => route.path,
+    (newVal) => {
+      if (newVal !== "/mail") {
+        clearSelectMailStore();
+      }
+    }
+  );
 
   return {
     selectMail,
