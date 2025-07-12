@@ -19,7 +19,7 @@ const handleLogin = async () => {
     <!-- Main content -->
     <BaseGoogleAuthLogin v-if="!session?.googleAccessToken" />
 
-    <div v-else class="flex flex-col h-full w-full gap-3 relative">
+    <div v-else class="flex flex-col h-full w-full relative">
       <div
         class="flex gap-1 lg:max-w-[30rem] bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 pt-2 px-2 xl:px-0"
       ></div>

@@ -7,7 +7,7 @@ export function useGmailService() {
   }
 
   async function listMessages(
-    maxResults = 30,
+    maxResults = 10,
     pageToken?: string
   ): Promise<{ data: any[]; nextPageToken?: string }> {
     const res = await gmailClient.get<GmailListResult>("/users/me/messages", {

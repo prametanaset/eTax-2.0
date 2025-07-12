@@ -2,7 +2,6 @@
 const { listMessages } = useGmailService();
 const { data: session, status, signIn } = useAuth();
 import { Dot } from "lucide-vue-next";
-import { isToday, isThisWeek, isThisMonth } from "date-fns";
 
 interface Mail {
   id: string;
