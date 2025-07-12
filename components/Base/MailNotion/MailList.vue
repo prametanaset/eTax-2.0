@@ -64,7 +64,6 @@ const groupedEmails = computed(() => {
       }
     }
   }
-
   return groups;
 });
 
@@ -189,7 +188,12 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                 <tr
                   v-for="item in group"
                   :key="item.id"
-                  class="cursor-pointer hover:bg-accent text-sm w-full"
+                  :class="[
+                    'cursor-pointer hover:bg-accent text-sm w-full',
+                    mailStore.selectMail?.data.id === item.id
+                      ? 'bg-[hsl(var(--card))]'
+                      : '',
+                  ]"
                   @click="mailStore.setSelectMail(item)"
                 >
                   <td>
