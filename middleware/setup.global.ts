@@ -17,9 +17,9 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       const hasMerchant = plainData?.merchant_info?.merchant;
       console.log("merchant from plainData:", hasMerchant);
 
-      if (!hasMerchant && to.path !== "/setting-store") {
-        return navigateTo("/setting-store");
-      }
+      // if (!hasMerchant && to.path !== "/setting-store") {
+      //   return navigateTo("/setting-store");
+      // }
     } else {
       console.warn("getMe() returned invalid data:", dataFromService);
     }

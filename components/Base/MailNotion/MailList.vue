@@ -35,6 +35,40 @@ const fetchEmails = async () => {
   loading.value = false;
 };
 
+import { computed } from "vue";
+import { isToday, isYesterday, differenceInCalendarDays } from "date-fns";
+
+const groupedEmails = computed(() => {
+  const groups = {
+    Today: [],
+    Yesterday: [],
+    Last7Days: [],
+    Last30Days: [],
+    Older: [],
+  };
+
+  for (const email of emails.value) {
+    const date = new Date(email.date);
+
+    if (isToday(date)) {
+      groups.Today.push(email);
+    } else if (isYesterday(date)) {
+      groups.Yesterday.push(email);
+    } else {
+      const daysAgo = differenceInCalendarDays(new Date(), date);
+      if (daysAgo <= 7) {
+        groups.Last7Days.push(email);
+      } else if (daysAgo <= 30) {
+        groups.Last30Days.push(email);
+      } else {
+        groups.Older.push(email);
+      }
+    }
+  }
+
+  return groups;
+});
+
 // โหลดรอบแรก
 onMounted(() => {
   if (session.value?.googleAccessToken) fetchEmails();
@@ -134,74 +168,83 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
 
           <tbody>
             <TransitionGroup name="list" appear>
-              <!-- วันนี้ -->
-              <tr v-if="emails.some((e) => isToday(new Date(e.date)))">
-                <td
-                  colspan="4"
-                  class="px-4 py-2 font-bold text-muted-foreground bg-muted"
-                >
-                  วันนี้
-                </td>
-              </tr>
-              <tr
-                v-for="item in emails"
-                v-if="isToday(new Date(item.date))"
-                :key="item.id"
-                @click="mailStore.setSelectMail(item)"
-              >
-                <!-- ชื่อผู้ส่ง -->
-                <td>
-                  <Dot
-                    :class="[
-                      item.read ? 'text-transparent' : 'text-primary-500',
-                    ]"
-                  />
-                </td>
-                <td
-                  :class="[
-                    'max-w-[16vw] min-w-[16vw] pr-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis truncate',
-                    item.read
-                      ? 'font-normal text-muted-800 dark:text-muted-400'
-                      : 'font-semibold',
-                  ]"
-                >
-                  {{ extractName(item.from) }}
-                </td>
+              <template v-for="(group, label) in groupedEmails" :key="label">
+                <tr v-if="group.length">
+                  <td
+                    v-if="label !== 'Today'"
+                    colspan="4"
+                    class="pl-7 py-2 pt-5 text-sm font-bold text-primary-500 bg-muted border-b"
+                  >
+                    {{
+                      label === "Yesterday"
+                        ? "เมื่อวาน"
+                        : label === "Last7Days"
+                        ? "7 วันที่ผ่านมา"
+                        : label === "Last30Days"
+                        ? "30 วันที่ผ่านมา"
+                        : "ก่อนหน้านี้"
+                    }}
+                  </td>
+                </tr>
 
-                <!-- หัวข้อ + เนื้อหา -->
-                <td
-                  class="w-full max-w-[800px] px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis truncate"
+                <tr
+                  v-for="item in group"
+                  :key="item.id"
+                  class="cursor-pointer hover:bg-accent text-sm w-full"
+                  @click="mailStore.setSelectMail(item)"
                 >
-                  <span
-                    :class="
+                  <td>
+                    <Dot
+                      :class="[
+                        item.read ? 'text-transparent' : 'text-primary-500',
+                      ]"
+                    />
+                  </td>
+
+                  <td
+                    :class="[
+                      'max-w-[16vw] min-w-[16vw] pr-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis truncate',
                       item.read
                         ? 'font-normal text-muted-800 dark:text-muted-400'
-                        : 'font-semibold'
+                        : 'font-semibold',
+                    ]"
+                  >
+                    {{ extractName(item.from) }}
+                  </td>
+
+                  <td
+                    class="w-full max-w-[800px] px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis truncate"
+                  >
+                    <span
+                      :class="
+                        item.read
+                          ? 'font-normal text-muted-800 dark:text-muted-400'
+                          : 'font-semibold'
+                      "
+                    >
+                      {{ item.subject }}
+                    </span>
+                    -
+                    <span
+                      class="text-muted-800 dark:text-muted-400"
+                      :title="item.snippet"
+                    >
+                      {{ item.snippet }}
+                    </span>
+                  </td>
+
+                  <td
+                    class="px-4 py-2 text-xs text-end min-w-[6rem]"
+                    :class="
+                      selectedMail === item.id
+                        ? 'text-foreground'
+                        : 'text-muted-foreground'
                     "
                   >
-                    {{ item.subject }}
-                  </span>
-                  -
-                  <span
-                    class="text-muted-800 dark:text-muted-400"
-                    :title="item.snippet"
-                  >
-                    {{ item.snippet }}
-                  </span>
-                </td>
-
-                <!-- วันที่ -->
-                <td
-                  class="px-4 py-2 text-xs text-end min-w-[6rem]"
-                  :class="
-                    selectedMail === item.id
-                      ? 'text-foreground'
-                      : 'text-muted-foreground'
-                  "
-                >
-                  {{ formatMailDate(item.date) }}
-                </td>
-              </tr>
+                    {{ formatMailDate(item.date) }}
+                  </td>
+                </tr>
+              </template>
             </TransitionGroup>
           </tbody>
         </table>
