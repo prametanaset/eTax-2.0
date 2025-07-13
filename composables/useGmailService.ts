@@ -34,6 +34,7 @@ export function useGmailService() {
           from: getHeader("From"),
           date: getHeader("Date"),
           read: !res.data.labelIds.includes("UNREAD"),
+          html: await getMessage(msg.id),
         };
       })
     );

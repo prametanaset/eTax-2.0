@@ -267,7 +267,7 @@ const { data } = useAuth();
       </DialogContent>
     </Dialog>
 
-    <BaseConnectGmail />
+    <BaseMailNotion />
     <!-- <pre>{{ emailHtml }}</pre> -->
 
     <!-- <SafeHtml

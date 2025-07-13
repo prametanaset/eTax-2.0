@@ -1,10 +1,8 @@
 <template>
-  <MailNotion />
+  <BaseMailNotion />
 </template>
 
 <script lang="ts" setup>
-import MailNotion from "~/components/Base/MailNotion/Mail.vue";
-
 definePageMeta({
   layout: "default",
   title: "เมล",

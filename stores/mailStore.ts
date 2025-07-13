@@ -21,7 +21,6 @@ export const useMailStore = defineStore("mailStore", () => {
   }
 
   async function setSelectMail(mail: any) {
-    const html = await getMessage(mail.id);
     await markAsRead(mail.id);
 
     // อัปเดต labelIds ใน memory
@@ -35,7 +34,7 @@ export const useMailStore = defineStore("mailStore", () => {
 
     selectMail.value = {
       data: mail,
-      renderHtml: html as string,
+      renderHtml: mail.html,
     };
   }
 
