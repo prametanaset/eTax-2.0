@@ -162,7 +162,7 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
       </div>
       <!-- ------------------desktop layout-------------------- -->
       <div
-        class="overflow-y-auto h-[calc(96.5dvh-3.5rem)] hidden xl:block"
+        class="overflow-y-auto h-[calc(97.5dvh-3.5rem)] hidden xl:block"
         @scroll="onScroll"
       >
         <table class="table-auto w-full overflow-hidden">

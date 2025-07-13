@@ -73,7 +73,6 @@ const handleCreateCustomer = async (newCustomer: Customer) => {
       <Dialog>
         <DialogTrigger as-child>
           <Button
-            variant="outline"
             class="absolute top-[50%] left-[50%]"
             style="transform: translate(-50%, -50%)"
             ><Plus />เลือกข้อมูลลูกค้า</Button

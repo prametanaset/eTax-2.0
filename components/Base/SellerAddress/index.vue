@@ -65,7 +65,7 @@ import { Store } from "lucide-vue-next";
 const profileStore = useProfileStore();
 
 const seller = ref({
-  name: "บริษัท แสงทอง จำกัด",
+  name: profileStore.stores[0].store_name,
   taxNo: "0105539039991",
   address: "88/88 ถ.พหลโยธิน เขตจตุจักร กรุงเทพฯ 10900",
   email: null,

@@ -128,7 +128,7 @@
                 <Separator />
                 <p class="text-muted-500 text-sm">ช่องทางติดต่อ</p>
                 <div class="flex justify-between items-center gap-3">
-                  <p>อีเมลร้านค้า</p>
+                  <p>อีเมล</p>
                   <div class="grid items-center gap-1.5">
                     {{ data_user.email }}
                   </div>
@@ -236,7 +236,7 @@
                 <div class="flex justify-between items-center gap-3">
                   <p>ชื่อร้านค้า</p>
                   <div class="grid items-center gap-1.5">
-                    Nvidia Corporation
+                    {{ profileStore.stores[0].store_name }}
                   </div>
                 </div>
                 <div class="flex justify-between items-center gap-3">
@@ -323,10 +323,7 @@
                   <DialogContent class="sm:max-w-[425px]">
                     <DialogHeader>
                       <DialogTitle>Edit profile</DialogTitle>
-                      <DialogDescription>
-                        Make changes to your profile here. Click save when
-                        you're done.
-                      </DialogDescription>
+                      <DialogDescription> </DialogDescription>
                     </DialogHeader>
                     <div class="grid gap-4 py-4">
                       <div class="grid grid-cols-4 items-center gap-4">
@@ -370,12 +367,13 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits(["update:modelValue"]);
+const profileStore = useProfileStore();
 
 const data_user = {
   id: 1,
   firstName: "John",
   lastName: "Wick",
-  email: "prametanaset147@gmail.com",
+  email: profileStore.user?.username,
   phone: "098-765-321",
   taxNo: "1111111111111",
   profileUrl: "",

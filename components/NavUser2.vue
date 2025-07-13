@@ -73,11 +73,11 @@ const tabTriggerData = [
     icon: Store,
     value: "store",
   },
-  {
-    title: "ช่องทางชำระเงิน",
-    icon: CreditCardIcon,
-    value: "payment",
-  },
+  // {
+  //   title: "ช่องทางชำระเงิน",
+  //   icon: CreditCardIcon,
+  //   value: "payment",
+  // },
 ];
 
 const showDialog = ref(false);

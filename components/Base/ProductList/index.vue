@@ -160,9 +160,7 @@ watch(
     <!-- Product Selection Popover -->
     <Popover v-if="!(products.length > 0)">
       <PopoverTrigger as-child>
-        <Button
-          class="flex items-center rounded-xl justify-between px-3 text-left"
-        >
+        <Button class="flex items-center justify-between px-3 text-left">
           <Plus /> <span>เพิ่มรายการสินค้า</span>
         </Button>
       </PopoverTrigger>
@@ -408,10 +406,7 @@ watch(
     <!-- Product Selection Popover -->
     <Popover v-if="products.length" v-model:open="isPopoverOpen">
       <PopoverTrigger as-child>
-        <Button
-          variant="link"
-          class="flex items-center justify-between text-left"
-        >
+        <Button class="flex items-center justify-between text-left">
           <Plus />
           <span>เพิ่มรายการสินค้า</span>
           <!-- <ChevronDown class="h-4 w-4 text-muted-foreground" /> -->
@@ -426,7 +421,7 @@ watch(
               <CommandItem
                 :value="'new-product'"
                 @select="isDialogOpen = true"
-                class="sticky -top-1 z-10 bg-white dark:bg-[hsl(var(--popover))] shadow-sm px-4 py-2 flex items-center text-primary-500 cursor-pointer"
+                class="sticky -top-1 z-10 shadow-sm px-4 py-2 flex items-center text-primary-500 cursor-pointer"
               >
                 <Plus class="w-5 h-5 mr-3" />
                 <span>เพิ่มสินค้าใหม่</span>
