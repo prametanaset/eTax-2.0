@@ -4,15 +4,9 @@ import { computed, ref } from "vue";
 import MailDisplay from "./MailDisplay.vue";
 import MailList from "./MailList.vue";
 // import Nav from "./Nav.vue";
-
-const searchValue = ref("");
 const mailStore = useMailStore();
 
-const { data: session, status, signIn } = useAuth();
-
-const handleLogin = async () => {
-  await signIn("google");
-};
+const { data: session } = useAuth();
 </script>
 <template>
   <div class="flex gap-6 lg:h-[calc(99.5dvh-3.5rem)] overflow-hidden">

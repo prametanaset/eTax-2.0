@@ -32,7 +32,7 @@ const safeHtml = computed(() => {
   const clean = DOMPurify.sanitize(
     `
     <!DOCTYPE html>
-    <html>
+    <html >
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -44,6 +44,13 @@ const safeHtml = computed(() => {
             max-width: 100%;
             overflow-x: hidden;
             box-sizing: border-box;
+            background-color: white;
+            color: black;
+          }
+
+          .dark body {
+            background-color: #121212 !important;
+            color: #ffffff !important;
           }
 
           * {
@@ -60,6 +67,14 @@ const safeHtml = computed(() => {
           img {
             max-width: 100% !important;
             height: auto !important;
+          }
+
+          a {
+            color: #1a0dab;
+          }
+
+          .dark a {
+            color: #8ab4f8 !important;
           }
         </style>
       </head>
@@ -79,11 +94,13 @@ const safeHtml = computed(() => {
 </script>
 
 <template>
-  <ScrollArea class="h-full bg-muted-300 dark:bg-[hsl(var(--card))]">
-    <div class="flex h-full flex-col">
+  <ScrollArea class="bg-muted-300 dark:bg-[hsl(var(--card))] h-full">
+    <div class="flex flex-col">
       <div v-if="mail?.renderHtml" class="flex flex-1 flex-col">
         <!-- header -->
-        <div class="flex items-center px-4 py-2 justify-between">
+        <div
+          class="flex items-center px-4 py-2 justify-between sticky top-0 z-10 bg-muted-300 dark:bg-[hsl(var(--card))] border-b border-primary-500"
+        >
           <div class="flex items-center gap-2 text-sm">
             <div class="flex items-center gap-2">
               <Tooltip>
@@ -116,12 +133,13 @@ const safeHtml = computed(() => {
           </div>
         </div>
         <!-- end header -->
-        <Separator />
-        <div class="w-full h-full overflow-x-auto py-2 px-6">
+
+        <!-- Body ที่กินพื้นที่ที่เหลือ -->
+        <div class="flex-1 overflow-hidden">
           <iframe
-            sandbox="allow-same-origin allow-popups "
+            sandbox="allow-same-origin allow-popups"
             :srcdoc="safeHtml"
-            class="min-w-[320px] w-full border-0 h-screen bg-white"
+            class="w-full h-screen border-0 bg-white"
           />
         </div>
       </div>

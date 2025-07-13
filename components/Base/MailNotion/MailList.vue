@@ -19,17 +19,28 @@ const scrollContainer = ref<HTMLElement | null>(null);
 const device = useDevice();
 const mailStore = useMailStore();
 
-const fetchEmails = async () => {
+const fetchInitialEmails = async (targetCount = 40, pageSize = 10) => {
   if (loading.value) return;
   loading.value = true;
 
-  const { data, nextPageToken } = await listMessages(
-    30,
-    mailStore.mailList.nextPageToken || undefined
-  );
+  let token = mailStore.mailList.nextPageToken || undefined;
+  let loaded = 0;
 
-  mailStore.updateMailList(data, nextPageToken);
-  emails.value = mailStore.mailList.data;
+  while (loaded < targetCount) {
+    const { data, nextPageToken } = await listMessages(pageSize, token);
+    mailStore.updateMailList(data, nextPageToken);
+
+    emails.value = mailStore.mailList.data;
+
+    loaded += data.length;
+    token = nextPageToken;
+
+    // ถ้าไม่มีเมลใหม่ให้โหลดอีกก็หยุดทันที
+    if (!token || data.length === 0) break;
+
+    // รอเล็กน้อยเพื่อไม่ให้ API call ติดกันเกินไป
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
 
   loading.value = false;
 };
@@ -69,7 +80,7 @@ const groupedEmails = computed(() => {
 
 // โหลดรอบแรก
 onMounted(() => {
-  if (session.value?.googleAccessToken) fetchEmails();
+  if (session.value?.googleAccessToken) fetchInitialEmails();
 });
 
 // สังเกต scroll ถึงล่างสุด
@@ -77,7 +88,7 @@ onMounted(() => {
 const onScroll = (e: Event) => {
   const target = e.target as HTMLElement;
   if (target.scrollTop + target.clientHeight >= target.scrollHeight - 100) {
-    if (mailStore.mailList.nextPageToken) fetchEmails();
+    if (mailStore.mailList.nextPageToken) fetchInitialEmails();
   }
 };
 
@@ -154,7 +165,7 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
         class="overflow-y-auto h-[calc(96.5dvh-3.5rem)] hidden xl:block"
         @scroll="onScroll"
       >
-        <table class="table-auto w-full h-full overflow-hidden">
+        <table class="table-auto w-full overflow-hidden">
           <thead>
             <tr>
               <th></th>
@@ -189,9 +200,9 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                   v-for="item in group"
                   :key="item.id"
                   :class="[
-                    'cursor-pointer hover:bg-accent text-sm w-full',
+                    'cursor-pointer hover:bg-accent text-sm w-full h-10',
                     mailStore.selectMail?.data.id === item.id
-                      ? 'bg-[hsl(var(--card))]'
+                      ? 'dark:bg-[hsl(var(--card))] bg-muted-200'
                       : '',
                   ]"
                   @click="mailStore.setSelectMail(item)"
