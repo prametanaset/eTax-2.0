@@ -347,7 +347,7 @@ const columns: ColumnDef<Payment>[] = [
       return h(
         "div",
         { class: "ml-5 text-sm font-medium" },
-        typeLabels[row.getValue("documentType")] ?? "ไม่ทราบประเภท"
+        typeLabels[row.getValue("documentType") as string] ?? "ไม่ทราบประเภท"
       );
     },
     filterFn: "equals",
@@ -455,9 +455,6 @@ const table = useVueTable({
   state: {
     get sorting() {
       return sorting.value;
-    },
-    get columnFilters() {
-      return columnVisibility.value;
     },
     get columnVisibility() {
       return columnVisibility.value;
