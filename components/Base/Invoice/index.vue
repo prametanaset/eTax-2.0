@@ -4,6 +4,7 @@ import { item } from "@unovis/ts/components/bullet-legend/style";
 import thaiBaht from "thai-baht-text";
 
 const productStore = useProductStore();
+const profileStore = useProfileStore();
 
 const invoice = {
   number: "INV1069",
@@ -22,12 +23,12 @@ const invoice = {
 
 const store_data = {
   profile: "",
-  storeNameTH: "บริษัท ซันสเกลอัพ จำกัด",
-  storeNameEN: "Sunscale Up Co., Ltd.",
+  storeNameTH: profileStore.stores[0].store_name,
+  storeNameEN: "",
   storeAddress:
     "111/226 หมู่ที่ 16 ตำบลบ้านเป็ด อำเภอเมืองขอนแก่น จ.ขอนแก่น 40000",
   phone: "098-765-4321",
-  taxNo: "0123456789123",
+  taxNo: profileStore.company?.vat_no,
 };
 
 const itemsPerPage = computed(() => {
@@ -117,7 +118,9 @@ const pages = computed(() => {
               <CardTitle class="text-lg">{{
                 store_data.storeNameTH
               }}</CardTitle>
-              <p class="font-bold text-sm">{{ store_data.storeNameEN }}</p>
+              <p class="font-bold text-sm">
+                {{ store_data.storeNameEN != "" ? "" : "" }}
+              </p>
               <p>{{ store_data.storeAddress }}</p>
               <p>โทรศัพท์ {{ store_data.phone }}</p>
               <p>เลขประจำตัวผู้เสียภาษี {{ store_data.taxNo }}</p>

@@ -1,8 +1,9 @@
 import { defineStore } from "pinia";
-const { listMessages, getMessage, markAsRead } = useGmailService();
-const route = useRoute();
 
 export const useMailStore = defineStore("mailStore", () => {
+  const { markAsRead } = useGmailService();
+  const route = useRoute();
+
   const selectMail = ref<{
     data: any;
     renderHtml: string;
@@ -12,6 +13,7 @@ export const useMailStore = defineStore("mailStore", () => {
     data: [] as any[],
     nextPageToken: null as string | null,
   });
+  const mailLoaded = ref(false);
 
   function updateMailList(newData: any[], nextToken: string | null) {
     const existingIds = new Set(mailList.data.map((m) => m.id));
@@ -54,6 +56,7 @@ export const useMailStore = defineStore("mailStore", () => {
   return {
     selectMail,
     mailList,
+    mailLoaded,
     updateMailList,
     setSelectMail,
     clearSelectMailStore,

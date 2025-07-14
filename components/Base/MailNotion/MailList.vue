@@ -2,6 +2,7 @@
 const { listMessages } = useGmailService();
 const { data: session, status, signIn } = useAuth();
 import { Dot } from "lucide-vue-next";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Mail {
   id: string;
@@ -21,6 +22,8 @@ const mailStore = useMailStore();
 
 const fetchInitialEmails = async (targetCount = 40, pageSize = 10) => {
   if (loading.value) return;
+  mailStore.mailLoaded = true;
+
   loading.value = true;
 
   let token = mailStore.mailList.nextPageToken || undefined;
@@ -29,6 +32,7 @@ const fetchInitialEmails = async (targetCount = 40, pageSize = 10) => {
   while (loaded < targetCount) {
     const { data, nextPageToken } = await listMessages(pageSize, token);
     mailStore.updateMailList(data, nextPageToken);
+    mailStore.mailLoaded = false;
 
     emails.value = mailStore.mailList.data;
 
@@ -108,6 +112,9 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
 
 <template>
   <div>
+    <div v-if="mailStore.mailLoaded" class="flex flex-col gap-1 px-2">
+      <Skeleton v-for="i in 10" class="h-10 w-full" />
+    </div>
     <div>
       <!-- ------------------mobile layout-------------------- -->
       <div class="xl:hidden overflow-y-auto h-[87dvh]" @scroll="onScroll">

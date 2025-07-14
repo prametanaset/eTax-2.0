@@ -113,7 +113,7 @@
           <!-- <Button variant="outline" class="bg-[hsl(var(--card))]">
             <Eye />ตัวอย่าง
           </Button> -->
-          <BasePreviewInvoice class="p-6"></BasePreviewInvoice>
+          <BasePreviewInvoice class="p-6" />
           <Button variant="outline" class="bg-[hsl(var(--card))]">
             <Save />สร้าง
           </Button>

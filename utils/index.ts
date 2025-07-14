@@ -17,7 +17,15 @@ export const convertToBuddhistYear = (date: any) => {
   return year + 543;
 };
 
-export function formatThaiDate(date: dayjs.Dayjs): string {
+export function formatThaiDate(date: Date): string {
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0"); // getMonth() เริ่มจาก 0
+  const year = date.getFullYear().toString();
+
+  return `${day}/${month}/${year}`;
+}
+
+export function formatThaiDateforMail(date: dayjs.Dayjs): string {
   const bangkokDate = date.tz("Asia/Bangkok");
   const currentYear = dayjs().year();
   const buddhistYear = bangkokDate.year() + 543;
@@ -49,7 +57,7 @@ export function formatMailDate(input: string | Date): string {
     return date.format("HH:mm");
   }
 
-  return formatThaiDate(date);
+  return formatThaiDateforMail(date);
 }
 
 export const currencyFormat = (number: any) => {
