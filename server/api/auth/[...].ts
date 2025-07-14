@@ -20,7 +20,6 @@ interface RefreshRes {
 const runtimeConfig = useRuntimeConfig();
 
 async function refreshAccessToken(token: any) {
-  console.log("Attempting to refresh token...");
   try {
     const res = await $fetch<RefreshRes>(
       `${runtimeConfig.public.apiBase}/auth/refresh`,
@@ -32,7 +31,6 @@ async function refreshAccessToken(token: any) {
       }
     );
 
-    console.log("✅ RESPONSE FROM GO BACKEND:", res);
 
     return {
       ...token,
@@ -45,7 +43,6 @@ async function refreshAccessToken(token: any) {
   } catch (err: any) {
     // ถ้าเจอ 401 → ติดป้าย logout
     if (err instanceof FetchError && err.response?.status === 401) {
-      console.error("❌ Refresh token invalid (401) — force logout");
       return {
         ...token,
         error: "InvalidRefreshToken",
@@ -55,7 +52,6 @@ async function refreshAccessToken(token: any) {
       };
     }
 
-    console.error("❌ FAILED TO FETCH FROM GO BACKEND:", err);
     return { ...token, error: "RefreshAccessTokenError", logout: false };
   }
 }
@@ -219,7 +215,6 @@ export default NuxtAuthHandler({
 
   events: {
     async signOut({ token }) {
-      console.log("token sign out:", token);
       try {
         if (!token?.refreshToken) return;
 

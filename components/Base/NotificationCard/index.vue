@@ -50,7 +50,7 @@ const product = reactive({
     <CardContent class="grid gap-4">
       <div class="border-muted-200 dark:border-muted-800/80 border-b pb-4">
         <div class="font-heading text-2xl leading-none font-bold tracking-normal mb-3">
-          ฿1,074.00
+          ฿{{ currencyFormat(total) }}
           <span class="text-sm leading-normal font-normal tracking-normal text-muted-600 inline dark:text-white">
             (รวมภาษีมูลค่าเพิ่ม)
           </span>

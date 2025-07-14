@@ -143,13 +143,11 @@ const showPassword = ref(false);
 const formSchema = toTypedSchema(
   z.object({
     email: z
-      .string({ required_error: "ต้องระบุอีเมล" })
-      .nonempty({ message: "กรุณากรอกอีเมลผู้ใช้งาน" }),
-    // .email({ message: 'รูปแบบอีเมลไม่ถูกต้อง' }),
+      .string()
+,    // .email({ message: 'รูปแบบอีเมลไม่ถูกต้อง' }),
     password: z
-      .string({ required_error: "ต้องระบุรหัสผ่าน" })
-      .nonempty({ message: "กรุณากรอกรหัสผ่าน" })
-      .min(6, { message: "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร" }),
+      .string()
+
   })
 );
 const { handleSubmit, setErrors } = useForm({

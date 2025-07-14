@@ -43,7 +43,6 @@ function copy(id: string) {
 }
 
 const activeTab = ref("account");
-const invoiceRef = ref(null)
 
 </script>
 
@@ -61,9 +60,15 @@ const invoiceRef = ref(null)
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
-          <DropdownMenuItem class="cursor-pointer" @click="openDialog = true">
-            ดูรายละเอียด
-          </DropdownMenuItem>
+          <DropdownMenuItem
+  class="cursor-pointer"
+  @click="
+    $emit('expand');
+    openDialog = true;
+  "
+>
+  ดูรายละเอียด
+</DropdownMenuItem>
 
           <DropdownMenuItem class="cursor-pointer"
             >ดาวน์โหลดไฟล์ PDF</DropdownMenuItem
@@ -116,7 +121,7 @@ const invoiceRef = ref(null)
         <div class="overflow-y-auto overflow-x-hidden h-[70vh]">
           <!-- <div class="h-[300dvh]"> -->
           <div>
-            <BaseInvoiceDetailTabs v-model="activeTab" :print-target="invoiceRef"></BaseInvoiceDetailTabs>
+            <BaseInvoiceDetailTabs v-model="activeTab"></BaseInvoiceDetailTabs>
           </div>
         </div>
         <DialogFooter class="flex items-center border-t sm:justify-between p-4 py-1 bg-slate-100">
@@ -127,7 +132,7 @@ const invoiceRef = ref(null)
           </p>
 
           <div class="flex flex-wrap gap-2">
-            <Button variant="outline"  v-print="'invoice-to-print'"><Printer /> พิมพ์ </Button>
+            <Button variant="outline" ><Printer /> พิมพ์ </Button>
             <Button variant="outline"> <Mail /> ส่งอีเมล </Button>
             <Button variant="outline"> <FileDown /> ดาวน์โหลด PDF </Button>
           </div>
