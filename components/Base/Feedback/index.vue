@@ -55,7 +55,6 @@
           />
         </div>
       </DialogHeader>
-      <GridForm />
       <DrawerFooter>
         <DrawerClose as-child>
           <Button @click="handleSubmit" :disabled="!canSubmit"
