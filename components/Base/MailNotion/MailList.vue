@@ -22,7 +22,9 @@ const mailStore = useMailStore();
 
 const fetchInitialEmails = async (targetCount = 40, pageSize = 10) => {
   if (loading.value) return;
-  mailStore.mailLoaded = true;
+  if (mailStore.mailList.data.length === 0) {
+    mailStore.mailLoaded = true;
+  }
 
   loading.value = true;
 
@@ -111,13 +113,16 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
 </script>
 
 <template>
-  <div>
+  <div class="relative">
     <div v-if="mailStore.mailLoaded" class="flex flex-col gap-1 px-2">
       <Skeleton v-for="i in 10" class="h-10 w-full" />
     </div>
     <div>
       <!-- ------------------mobile layout-------------------- -->
-      <div class="xl:hidden overflow-y-auto h-[87dvh]" @scroll="onScroll">
+      <div
+        class="xl:hidden overflow-y-auto h-[87dvh] custom-scroll"
+        @scroll="onScroll"
+      >
         <div
           v-for="item of emails"
           :key="item.id"
@@ -169,10 +174,10 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
       </div>
       <!-- ------------------desktop layout-------------------- -->
       <div
-        class="overflow-y-auto h-[calc(97.5dvh-3.5rem)] hidden xl:block"
+        class="overflow-y-auto h-[calc(100dvh-3.5rem)] hidden xl:block custom-scroll"
         @scroll="onScroll"
       >
-        <table class="table-auto w-full overflow-hidden">
+        <table class="table-auto w-full overflow-hidden px-5">
           <thead>
             <tr>
               <th></th>
@@ -271,7 +276,19 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
         </table>
       </div>
     </div>
-    <div v-if="loading" class="text-center">กำลังโหลด...</div>
+    <div
+      v-if="loading"
+      class="absolute bottom-0 w-full flex justify-center items-center py-3 bg-[hsl(var(--card))]/50 z-50 backdrop-blur-sm"
+    >
+      <div class="flex items-center space-x-2">
+        <!-- Spinner -->
+        <div
+          class="w-5 h-5 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"
+        ></div>
+        <!-- Loading Text -->
+        <span class="text-sm text-gray-600 animate-pulse">กำลังโหลด...</span>
+      </div>
+    </div>
   </div>
 </template>
 

@@ -75,12 +75,13 @@ onMounted(() => {
 <template>
   <SidebarProvider v-model:open="open">
     <AppSidebar />
-    <SidebarInset>
-      <div ref="sentinel" class="h-1"></div>
+    <SidebarInset
+      :class="[route.path == '/mail' ? 'relative overflow-x-hidden' : '']"
+    >
       <!-- Invisible marker -->
       <header
         :class="[
-          'sticky top-0  flex h-14 shrink-0 z-50 bg-[hsl(var(--background))] items-center gap-2 transition-all',
+          'sticky top-0 flex h-14 shrink-0 z-50 bg-[hsl(var(--background))] items-center gap-2 transition-all',
           isStuck ? 'shadow-sm ' : '',
         ]"
       >

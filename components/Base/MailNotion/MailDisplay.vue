@@ -139,7 +139,7 @@ const safeHtml = computed(() => {
           <iframe
             sandbox="allow-same-origin allow-popups"
             :srcdoc="safeHtml"
-            class="w-full h-screen border-0 bg-white"
+            class="w-full h-[calc(100dvh-5rem)] border-0 bg-white"
           />
         </div>
       </div>

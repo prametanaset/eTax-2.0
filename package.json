@@ -30,6 +30,7 @@
     "dayjs": "^1.11.13",
     "dompurify": "^3.2.6",
     "exceljs": "^4.4.0",
+    "jsdom": "13.0.0",
     "lottie-web": "^5.13.0",
     "lucide-vue-next": "^0.483.0",
     "next-auth": "4.21.1",
