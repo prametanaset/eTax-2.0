@@ -68,6 +68,20 @@ onMounted(() => {
   });
 });
 
+watch(
+  () => route.path,
+  (newPath) => {
+    if (newPath === '/mail') {
+      open.value = false;
+    } else {
+      open.value = isLg.value; // กลับมาตามขนาดจอ
+    }
+  },
+  { immediate: true } // ให้ทำงานทันทีตอน mounted
+);
+
+
+
 // เปิด/ปิดตามขนาดจอ
 // watch(isLg, (val) => open.value = val, { immediate: true });
 </script>
