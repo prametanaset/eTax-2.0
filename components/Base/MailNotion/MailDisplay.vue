@@ -19,7 +19,7 @@ const mailStore = useMailStore();
 const mail = computed(() => mailStore.selectMail);
 
 const safeHtml = computed(() => {
-  const html = mail.value?.renderHtml || "";
+  const html = mail.value?.data.html || "";
 
   // เพิ่ม hook เพื่อปรับ <a> ทั้งหมด
   DOMPurify.addHook("afterSanitizeAttributes", (node) => {
@@ -96,7 +96,7 @@ const safeHtml = computed(() => {
 <template>
   <ScrollArea class="bg-muted-300 dark:bg-[hsl(var(--card))] h-full">
     <div class="flex flex-col">
-      <div v-if="mail?.renderHtml" class="flex flex-1 flex-col">
+      <div v-if="mail?.data.html" class="flex flex-1 flex-col">
         <!-- header -->
         <div
           class="flex items-center px-4 py-2 justify-between sticky top-0 z-10 bg-muted-300 dark:bg-[hsl(var(--card))] border-b border-primary-500"

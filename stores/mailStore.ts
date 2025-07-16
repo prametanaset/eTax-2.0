@@ -3,10 +3,10 @@ import { defineStore } from "pinia";
 export const useMailStore = defineStore("mailStore", () => {
   const { markAsRead } = useGmailService();
   const route = useRoute();
+  const showMailType = ref('all')
 
   const selectMail = ref<{
     data: any;
-    renderHtml: string;
   } | null>(null);
 
   const mailList = reactive({
@@ -23,11 +23,9 @@ export const useMailStore = defineStore("mailStore", () => {
   }
 
   async function setSelectMail(mail: any) {
-    await markAsRead(mail.id);
-
     // อัปเดต labelIds ใน memory
+    const mailread = mail.read
     mail.read = true;
-
     // // อัปเดตใน list
     const index = mailList.data.findIndex((m) => m.id === mail.id);
     if (index !== -1) {
@@ -36,8 +34,15 @@ export const useMailStore = defineStore("mailStore", () => {
 
     selectMail.value = {
       data: mail,
-      renderHtml: mail.html,
     };
+
+    if(!mailread){
+      await markAsRead(mail.id);
+    }
+  }
+
+  function setShowMailType(type: string){
+    showMailType.value = type
   }
 
   function clearSelectMailStore() {
@@ -55,10 +60,12 @@ export const useMailStore = defineStore("mailStore", () => {
 
   return {
     selectMail,
+    showMailType,
     mailList,
     mailLoaded,
     updateMailList,
     setSelectMail,
     clearSelectMailStore,
+    setShowMailType
   };
 });

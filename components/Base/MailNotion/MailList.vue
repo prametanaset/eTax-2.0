@@ -4,6 +4,8 @@ const { data: session, status, signIn } = useAuth();
 import { Dot } from "lucide-vue-next";
 import { Skeleton } from "@/components/ui/skeleton";
 
+// defineProps<Mail[]>()
+
 interface Mail {
   id: string;
   snippet: string;
@@ -11,7 +13,10 @@ interface Mail {
   from: string;
   date: string;
   read: boolean;
+  html: string;
+  attachments: []
 }
+
 
 const emails = ref<Mail[]>([]);
 const loading = ref(false);
@@ -146,6 +151,7 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
               <span :class="item.read ? 'font-normal' : 'font-bold'">
                 {{ item.subject }}
               </span>
+              
             </div>
             <!-- หัวข้อ + เนื้อหา -->
             <div
@@ -157,6 +163,7 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
               >
                 {{ item.snippet }}
               </span>
+              
             </div>
             <!-- วันที่ -->
             <div
@@ -249,7 +256,10 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                       "
                     >
                       {{ item.subject }}
+                      
                     </span>
+                    <span v-if="item.attachments.length > 0"><Badge v-for="file in item.attachments">{{ 
+                    file.filename }}</Badge></span>
                     -
                     <span
                       class="text-muted-800 dark:text-muted-400"
@@ -257,6 +267,7 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                     >
                       {{ item.snippet }}
                     </span>
+                    
                   </td>
 
                   <td
