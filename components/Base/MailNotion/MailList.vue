@@ -201,9 +201,11 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                   <td
                     v-if="label !== 'Today'"
                     colspan="4"
-                    class="pl-7 py-2 pt-5 text-sm font-bold text-primary-500 bg-muted border-b"
+                    class="pl-12 pr-10 py-2 pt-5 text-sm font-bold text-primary-500 bg-muted"
                   >
-                    {{
+                  <div class="border-b border-muted">
+                    <div class="pl-4 pb-2">
+                      {{
                       label === "Yesterday"
                         ? "เมื่อวาน"
                         : label === "Last7Days"
@@ -212,6 +214,8 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                         ? "30 วันที่ผ่านมา"
                         : "ก่อนหน้านี้"
                     }}
+                    </div>
+                    </div>
                   </td>
                 </tr>
 
@@ -226,10 +230,10 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                   ]"
                   @click="mailStore.setSelectMail(item)"
                 >
-                  <td>
+                  <td class="pl-8">
                     <Dot
                       :class="[
-                        item.read ? 'text-transparent' : 'text-primary-500',
+                        item.read ? 'text-transparent' : 'text-primary-500 h-8 w-8',
                       ]"
                     />
                   </td>
@@ -271,7 +275,7 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                   </td>
 
                   <td
-                    class="px-4 py-2 text-xs text-end min-w-[6rem]"
+                    class="px-4 py-2 text-xs text-end min-w-[6rem] pr-10"
                     :class="
                       selectedMail === item.id
                         ? 'text-foreground'
