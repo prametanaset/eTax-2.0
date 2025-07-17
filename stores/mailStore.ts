@@ -66,9 +66,11 @@ export const useMailStore = defineStore("mailStore", () => {
   watch(
     () => selectMail.value,
     async (newVal, oldVal) => {
-      console.log("newVal", newVal);
-      console.log("oldVal", oldVal);
-      if (showMailType.value === "unread" && newVal === null && oldVal) {
+      if (
+        showMailType.value === "unread" &&
+        (newVal === null || newVal) &&
+        oldVal
+      ) {
         const index = mailList.data.findIndex((m) => m.id === oldVal.data.id);
         if (index !== -1) {
           // mark ว่าอ่านแล้ว
