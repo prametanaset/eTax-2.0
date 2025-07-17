@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 const { listMessages } = useGmailService();
 const { data: session, status, signIn } = useAuth();
-import { Dot } from "lucide-vue-next";
+import { Dot, Paperclip } from "lucide-vue-next";
 import { Skeleton } from "@/components/ui/skeleton";
 
 // defineProps<Mail[]>()
@@ -14,9 +14,8 @@ interface Mail {
   date: string;
   read: boolean;
   html: string;
-  attachments: []
+  attachments: [];
 }
-
 
 const emails = ref<Mail[]>([]);
 const loading = ref(false);
@@ -68,7 +67,17 @@ const groupedEmails = computed(() => {
     Older: [],
   };
 
+  const showType = mailStore.showMailType; // เช่น 'unread', 'all', 'read'
+
   for (const email of emails.value) {
+    if (
+      showType === "unread" &&
+      email.read // skip ที่อ่านแล้ว
+    ) {
+      continue;
+    } else if (showType === "unread") {
+    }
+
     const date = new Date(email.date);
 
     if (isToday(date)) {
@@ -86,6 +95,7 @@ const groupedEmails = computed(() => {
       }
     }
   }
+
   return groups;
 });
 
@@ -125,7 +135,7 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
     <div>
       <!-- ------------------mobile layout-------------------- -->
       <div
-        class="xl:hidden overflow-y-auto h-[87dvh] custom-scroll"
+        class="xl:hidden overflow-y-auto h-[calc(100dvh-3.5rem)] custom-scroll"
         @scroll="onScroll"
       >
         <div
@@ -151,7 +161,6 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
               <span :class="item.read ? 'font-normal' : 'font-bold'">
                 {{ item.subject }}
               </span>
-              
             </div>
             <!-- หัวข้อ + เนื้อหา -->
             <div
@@ -163,7 +172,6 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
               >
                 {{ item.snippet }}
               </span>
-              
             </div>
             <!-- วันที่ -->
             <div
@@ -203,22 +211,21 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                     colspan="4"
                     class="pl-12 pr-10 py-2 pt-5 text-sm font-bold text-primary-500 bg-muted"
                   >
-                  <div class="border-b border-muted">
-                    <div class="pl-4 pb-2">
-                      {{
-                      label === "Yesterday"
-                        ? "เมื่อวาน"
-                        : label === "Last7Days"
-                        ? "7 วันที่ผ่านมา"
-                        : label === "Last30Days"
-                        ? "30 วันที่ผ่านมา"
-                        : "ก่อนหน้านี้"
-                    }}
-                    </div>
+                    <div class="border-b border-muted">
+                      <div class="pl-4 pb-2">
+                        {{
+                          label === "Yesterday"
+                            ? "เมื่อวาน"
+                            : label === "Last7Days"
+                            ? "7 วันที่ผ่านมา"
+                            : label === "Last30Days"
+                            ? "30 วันที่ผ่านมา"
+                            : "ก่อนหน้านี้"
+                        }}
+                      </div>
                     </div>
                   </td>
                 </tr>
-
                 <tr
                   v-for="item in group"
                   :key="item.id"
@@ -233,7 +240,9 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                   <td class="pl-8">
                     <Dot
                       :class="[
-                        item.read ? 'text-transparent' : 'text-primary-500 h-8 w-8',
+                        item.read
+                          ? 'text-transparent'
+                          : 'text-primary-500 h-8 w-8',
                       ]"
                     />
                   </td>
@@ -249,29 +258,54 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                     {{ extractName(item.from) }}
                   </td>
 
-                  <td
-                    class="w-full max-w-[800px] px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis truncate"
-                  >
-                    <span
-                      :class="
-                        item.read
-                          ? 'font-normal text-muted-800 dark:text-muted-400'
-                          : 'font-semibold'
-                      "
-                    >
-                      {{ item.subject }}
-                      
-                    </span>
-                    <span v-if="item.attachments.length > 0"><Badge v-for="file in item.attachments">{{ 
-                    file.filename }}</Badge></span>
-                    -
-                    <span
-                      class="text-muted-800 dark:text-muted-400"
-                      :title="item.snippet"
-                    >
-                      {{ item.snippet }}
-                    </span>
-                    
+                  <td class="w-full max-w-[800px] px-4 py-2">
+                    <div class="flex items-center gap-2 overflow-hidden">
+                      <!-- Subject + Snippet -->
+                      <div
+                        class="truncate whitespace-nowrap overflow-hidden min-w-0"
+                      >
+                        <span
+                          :class="
+                            item.read
+                              ? 'font-normal text-muted-800 dark:text-muted-400'
+                              : 'font-semibold'
+                          "
+                        >
+                          {{ item.subject }}
+                        </span>
+                        -
+                        <span
+                          class="text-muted-800 dark:text-muted-400"
+                          :title="item.snippet"
+                        >
+                          {{ item.snippet }}
+                        </span>
+                      </div>
+
+                      <!-- Attachments badge -->
+                      <div
+                        v-if="item.attachments?.length > 0"
+                        class="flex items-center flex-shrink-0 gap-1"
+                      >
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger as-child>
+                              <div class="">
+                                <Paperclip class="text-primary-500" size="20" />
+                              </div>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p
+                                v-for="file in item.attachments"
+                                :key="file.filename"
+                              >
+                                {{ file.filename }}
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+                    </div>
                   </td>
 
                   <td

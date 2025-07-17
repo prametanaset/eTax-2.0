@@ -7,67 +7,65 @@ export function useGmailService() {
   }
 
   async function listMessages(
-  maxResults = 10,
-  pageToken?: string
-): Promise<{ data: any[]; nextPageToken?: string }> {
-  const res = await gmailClient.get<GmailListResult>("/users/me/messages", {
-    params: { maxResults, pageToken },
-  });
+    maxResults = 10,
+    pageToken?: string
+  ): Promise<{ data: any[]; nextPageToken?: string }> {
+    const res = await gmailClient.get<GmailListResult>("/users/me/messages", {
+      params: { maxResults, pageToken },
+    });
 
-  const messages = res.data.messages || [];
+    const messages = res.data.messages || [];
 
-  const inboxDetails = await Promise.all(
-    messages.map(async (msg) => {
-      const res = await gmailClient.get(
-        `/users/me/messages/${msg.id}?format=full`
-      );
-      const payload = res.data.payload;
-      const headers = payload.headers || [];
+    const inboxDetails = await Promise.all(
+      messages.map(async (msg) => {
+        const res = await gmailClient.get(
+          `/users/me/messages/${msg.id}?format=full`
+        );
+        const payload = res.data.payload;
+        const headers = payload.headers || [];
 
-      const getHeader = (name: string) =>
-        headers.find((h: any) => h.name === name)?.value || "";
+        const getHeader = (name: string) =>
+          headers.find((h: any) => h.name === name)?.value || "";
 
-
-      // ค้นหาไฟล์แนบใน parts ของ payload
-      // const attachments = hasAttachments(payload.parts);
-      // ฟังก์ชันดึงไฟล์แนบจาก messageId และ attachmentId
-      const getAttachments = async (parts: any[] = []) => {
-        const files = [];
-        for (const part of parts) {
-          if (part.filename && part.body?.attachmentId) {
-            const attachmentId = part.body.attachmentId;
-            const file = await getFile(msg.id, attachmentId);
-            files.push({
-              filename: part.filename,
-              file,
-            });
+        // ค้นหาไฟล์แนบใน parts ของ payload
+        // const attachments = hasAttachments(payload.parts);
+        // ฟังก์ชันดึงไฟล์แนบจาก messageId และ attachmentId
+        const getAttachments = async (parts: any[] = []) => {
+          const files = [];
+          for (const part of parts) {
+            if (part.filename && part.body?.attachmentId) {
+              const attachmentId = part.body.attachmentId;
+              const file = await getFile(msg.id, attachmentId);
+              files.push({
+                filename: part.filename,
+                file,
+              });
+            }
           }
-        }
-        return files;
-      };
+          return files;
+        };
 
-      // ค้นหาไฟล์แนบใน parts ของ payload
-      const attachments = await getAttachments(payload.parts);
+        // ค้นหาไฟล์แนบใน parts ของ payload
+        const attachments = await getAttachments(payload.parts);
 
-      return {
-        id: msg.id,
-        snippet: res.data.snippet || "",
-        subject: getHeader("Subject"),
-        from: getHeader("From"),
-        date: getHeader("Date"),
-        read: !res.data.labelIds.includes("UNREAD"),
-        html: await getMessage(msg.id),
-        attachments,  // เพิ่มข้อมูลไฟล์แนบ
-      };
-    })
-  );
+        return {
+          id: msg.id,
+          snippet: res.data.snippet || "",
+          subject: getHeader("Subject"),
+          from: getHeader("From"),
+          date: getHeader("Date"),
+          read: !res.data.labelIds.includes("UNREAD"),
+          html: await getMessage(msg.id),
+          attachments, // เพิ่มข้อมูลไฟล์แนบ
+        };
+      })
+    );
 
-  return {
-    data: inboxDetails,
-    nextPageToken: res.data.nextPageToken,
-  };
-}
-
+    return {
+      data: inboxDetails,
+      nextPageToken: res.data.nextPageToken,
+    };
+  }
 
   async function getMessage(id: string): Promise<string | null> {
     const res = await gmailClient.get(`/users/me/messages/${id}?format=full`);
@@ -125,38 +123,109 @@ export function useGmailService() {
     }
   }
 
-  async function getFile(messageId: string, attachmentId: string){
+  async function getFile(messageId: string, attachmentId: string) {
     try {
       // ดึงข้อมูลไฟล์แนบจาก Gmail API
-      const res = await gmailClient.get(`/users/me/messages/${messageId}/attachments/${attachmentId}`);
-      return res.data
-      
-      // // ตรวจสอบว่าไฟล์แนบมีข้อมูลหรือไม่
-      // if (attachment && attachment.data) {
-      //   const fileData = attachment.data;
-
-      //   // แปลงจาก base64 เป็น Binary (blob)
-      //   const decodedData = atob(fileData);  // แปลง base64 เป็น binary string
-
-      //   // แปลงเป็น Uint8Array สำหรับการสร้างไฟล์
-      //   const byteArray = new Uint8Array(decodedData.length);
-      //   for (let i = 0; i < decodedData.length; i++) {
-      //     byteArray[i] = decodedData.charCodeAt(i);
-      //   }
-
-      //   // สร้าง Blob เพื่อดาวน์โหลดไฟล์
-      //   const blob = new Blob([byteArray]);
-      //   return blob;
-      }
-    catch (error) {
-      console.error('Error fetching attachment:', error);
+      const res = await gmailClient.get(
+        `/users/me/messages/${messageId}/attachments/${attachmentId}`
+      );
+      return res.data;
+    } catch (error) {
+      console.error("Error fetching attachment:", error);
     }
-}
+  }
+
+  function downloadFile(file: { filename: string; data: string }) {
+    const mimeType = getMimeType(file.filename);
+    const raw = file.data.includes(",") ? file.data.split(",")[1] : file.data;
+    const safeBase64 = decodeBase64UrlSafe(raw);
+
+    try {
+      const byteCharacters = atob(safeBase64);
+      const byteArrays: Uint8Array[] = [];
+
+      for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+        const slice = byteCharacters.slice(offset, offset + 512);
+        const byteNumbers = new Array(slice.length);
+        for (let i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+        }
+        byteArrays.push(new Uint8Array(byteNumbers));
+      }
+
+      const blob = new Blob(byteArrays, { type: mimeType });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = file.filename;
+      a.style.display = "none";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download failed:", error);
+    }
+  }
+
+  function decodeBase64UrlSafe(base64url: string): string {
+    let base64 = base64url.replace(/-/g, "+").replace(/_/g, "/");
+    while (base64.length % 4 !== 0) {
+      base64 += "=";
+    }
+    return base64;
+  }
+
+  // Helper to detect file MIME type from extension
+  function getMimeType(filename: string): string {
+    const ext = filename.split(".").pop()?.toLowerCase();
+    switch (ext) {
+      case "ics":
+        return "text/calendar";
+      case "pdf":
+        return "application/pdf";
+      case "txt":
+        return "text/plain";
+      case "csv":
+        return "text/csv";
+      case "jpg":
+      case "jpeg":
+        return "image/jpeg";
+      case "gif":
+        return "image/gif";
+      case "png":
+        return "image/png";
+      case "docx":
+        return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+      default:
+        return "application/octet-stream";
+    }
+  }
+
+  function normalizeBase64(base64url: string): string {
+    // แปลง base64 ที่มาจาก Gmail ให้เป็นรูปแบบปกติ
+    let base64 = base64url.replace(/-/g, "+").replace(/_/g, "/");
+    const pad = base64.length % 4;
+    if (pad) {
+      base64 += "=".repeat(4 - pad);
+    }
+    return base64;
+  }
+
+  function imageSrc(file: any): string {
+    const ext = file.filename.split(".").pop() || "jpg";
+    const mime = getMimeType(ext);
+    const base64 = normalizeBase64(file.file.data);
+    return `data:${mime};base64,${base64}`;
+  }
 
   return {
     listMessages,
     getMessage,
     sendMessage,
     markAsRead,
+    downloadFile,
+    imageSrc,
   };
 }

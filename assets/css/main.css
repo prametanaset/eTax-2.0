@@ -29,7 +29,7 @@
   border-radius: 50%;
   filter: blur(150px);
   transform-origin: center;
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
   opacity: 0.5;
   animation: float 4s ease-in-out infinite, hueShift 10s linear infinite;
 }

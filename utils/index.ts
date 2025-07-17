@@ -5,11 +5,13 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import localeData from "dayjs/plugin/localeData";
+import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/th";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(localeData);
+dayjs.extend(relativeTime);
 dayjs.locale("th");
 
 export const convertToBuddhistYear = (date: any) => {
@@ -106,4 +108,24 @@ export function mapCustomerResponseToCustomer(response: any[]): Customer[] {
 export function extractName(from: string): string {
   const match = from.match(/^(.*?)\s*<.*?>$/);
   return match ? match[1] : from;
+}
+
+/**
+ * แสดงวันที่เมลแบบ: อา. 13 ก.ค. 19:03 (2 วันที่ผ่านมา)
+ */
+export function formatMailDisplayDate(dateString: string): string {
+  const date = dayjs(dateString);
+  const formatted = date.format("dd D MMM HH:mm"); // อา. 13 ก.ค. 19:03
+  const relative = dayjs().to(date); // (2 วันที่ผ่านมา)
+
+  return `${formatted} (${relative})`;
+}
+
+export function formatBytes(bytes: number): string {
+  if (bytes === 0) return "0 Bytes";
+  const k = 1024;
+  const sizes = ["Bytes", "KB", "MB", "GB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  const size = parseFloat((bytes / Math.pow(k, i)).toFixed(2));
+  return `${size} ${sizes[i]}`;
 }

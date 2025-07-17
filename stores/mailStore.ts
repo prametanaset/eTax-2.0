@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 export const useMailStore = defineStore("mailStore", () => {
   const { markAsRead } = useGmailService();
   const route = useRoute();
-  const showMailType = ref('all')
+  const showMailType = ref("all");
 
   const selectMail = ref<{
     data: any;
@@ -24,7 +24,12 @@ export const useMailStore = defineStore("mailStore", () => {
 
   async function setSelectMail(mail: any) {
     // อัปเดต labelIds ใน memory
-    const mailread = mail.read
+    if (showMailType.value === "unread")
+      return (selectMail.value = {
+        data: mail,
+      });
+
+    const mailread = mail.read;
     mail.read = true;
     // // อัปเดตใน list
     const index = mailList.data.findIndex((m) => m.id === mail.id);
@@ -36,13 +41,13 @@ export const useMailStore = defineStore("mailStore", () => {
       data: mail,
     };
 
-    if(!mailread){
+    if (!mailread) {
       await markAsRead(mail.id);
     }
   }
 
-  function setShowMailType(type: string){
-    showMailType.value = type
+  function setShowMailType(type: string) {
+    showMailType.value = type;
   }
 
   function clearSelectMailStore() {
@@ -58,6 +63,23 @@ export const useMailStore = defineStore("mailStore", () => {
     }
   );
 
+  watch(
+    () => selectMail.value,
+    async (newVal, oldVal) => {
+      console.log("newVal", newVal);
+      console.log("oldVal", oldVal);
+      if (showMailType.value === "unread" && newVal === null && oldVal) {
+        const index = mailList.data.findIndex((m) => m.id === oldVal.data.id);
+        if (index !== -1) {
+          // mark ว่าอ่านแล้ว
+          mailList.data[index] = { ...mailList.data[index], read: true };
+        }
+        await markAsRead(oldVal.data.id);
+      }
+    },
+    { deep: true }
+  );
+
   return {
     selectMail,
     showMailType,
@@ -66,6 +88,6 @@ export const useMailStore = defineStore("mailStore", () => {
     updateMailList,
     setSelectMail,
     clearSelectMailStore,
-    setShowMailType
+    setShowMailType,
   };
 });

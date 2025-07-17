@@ -9,97 +9,31 @@ import {
   ReplyAll,
   Trash2,
   ChevronRight,
+  ArrowDownToLine,
   ChevronLeft,
 } from "lucide-vue-next";
 import { computed } from "vue";
 import ScrollArea from "~/components/ui/scroll-area/ScrollArea.vue";
 import DOMPurify from "dompurify";
+import FileChip from "./FileChip.vue";
 
 const mailStore = useMailStore();
 const mail = computed(() => mailStore.selectMail);
 
-const safeHtml = computed(() => {
-  const html = mail.value?.data.html || "";
-
-  // เพิ่ม hook เพื่อปรับ <a> ทั้งหมด
-  DOMPurify.addHook("afterSanitizeAttributes", (node) => {
-    if (node.tagName === "A") {
-      node.setAttribute("target", "_blank");
-      node.setAttribute("rel", "noopener noreferrer");
-    }
-  });
-
-  const clean = DOMPurify.sanitize(
-    `
-    <!DOCTYPE html>
-    <html >
-      <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <style>
-          html, body {
-            margin: 0;
-            padding: 1rem;
-            font-family: sans-serif;
-            max-width: 100%;
-            overflow-x: hidden;
-            box-sizing: border-box;
-            background-color: white;
-            color: black;
-          }
-
-          .dark body {
-            background-color: #121212 !important;
-            color: #ffffff !important;
-          }
-
-          * {
-            box-sizing: border-box !important;
-            max-width: 100% !important;
-          }
-
-          table {
-            width: 100% !important;
-            display: block;
-            overflow-x: auto;
-          }
-
-          img {
-            max-width: 100% !important;
-            height: auto !important;
-          }
-
-          a {
-            color: #1a0dab;
-          }
-
-          .dark a {
-            color: #8ab4f8 !important;
-          }
-        </style>
-      </head>
-      <body>
-        ${html}
-      </body>
-    </html>
-    `,
-    { ADD_ATTR: ["target", "rel"] }
-  );
-
-  // ลบ hook ทิ้ง (กัน side effect)
-  DOMPurify.removeAllHooks();
-
-  return clean;
-});
+const sanitizedHtml = computed(() =>
+  DOMPurify.sanitize(mail.value?.data.html || "", {
+    ADD_ATTR: ["target", "rel"],
+  })
+);
 </script>
 
 <template>
-  <ScrollArea class="bg-muted-300 dark:bg-[hsl(var(--card))] h-full">
+  <ScrollArea class="bg-muted-200 dark:bg-[hsl(var(--card))] h-full">
     <div class="flex flex-col">
-      <div v-if="mail?.data.html" class="flex flex-1 flex-col">
+      <div v-if="mail?.data.html" class="">
         <!-- header -->
         <div
-          class="flex items-center px-4 py-2 justify-between sticky top-0 z-10 bg-muted-300 dark:bg-[hsl(var(--card))] border-b border-primary-500"
+          class="flex items-center px-4 py-2 justify-between sticky top-0 z-10 bg-muted-200 dark:bg-[hsl(var(--card))] border-b border-primary-500"
         >
           <div class="flex items-center gap-2 text-sm">
             <div class="flex items-center gap-2">
@@ -128,23 +62,31 @@ const safeHtml = computed(() => {
               </div>
             </div>
           </div>
-          <div class="text-xs text-muted-foreground px-3">
-            {{ formatMailDate(mail.data.date) }}
+          <div
+            class="text-xs text-end text-muted-foreground px-3 min-w-[10rem]"
+          >
+            {{ formatMailDisplayDate(mail.data.date) }}
           </div>
         </div>
         <!-- end header -->
 
         <!-- Body ที่กินพื้นที่ที่เหลือ -->
-        <div class="flex-1 overflow-hidden">
-          <iframe
-            sandbox="allow-same-origin allow-popups"
-            :srcdoc="safeHtml"
-            class="w-full h-[calc(100dvh-5rem)] border-0 bg-white"
-          />
+        <div class="relative">
+          <div class="overflow-auto px-5 py-2" v-html="sanitizedHtml" />
+        </div>
+
+        <div
+          v-if="mail.data.attachments.length > 0"
+          class="px-5 flex flex-col gap-5"
+        >
+          <Separator />
+          <div>
+            <FileChip :files="mail.data.attachments" />
+          </div>
         </div>
       </div>
       <div v-else class="p-8 text-center text-muted-foreground">
-        No message selected
+        ไม่พบข้อมูลเมล
       </div>
     </div>
   </ScrollArea>
