@@ -220,6 +220,38 @@ export function useGmailService() {
     return `data:${mime};base64,${base64}`;
   }
 
+  async function searchMail(keyword: string) {
+    try {
+      // Step 1: Search message IDs
+      const searchRes = await gmailClient.get(
+        `/gmail/v1/users/me/messages?q=${encodeURIComponent(keyword)}`
+      );
+
+      const messages = searchRes.data.messages || [];
+
+      if (messages.length === 0) return [];
+
+      // Step 2: ดึงรายละเอียดแต่ละ message (batch หรือ loop ก็ได้)
+      const detailedMails = await Promise.all(
+        messages.slice(0, 20).map(async (msg: { id: string }) => {
+          const mailRes = await gmailClient.get(
+            `/gmail/v1/users/me/messages/${msg.id}`,
+            {
+              params: { format: "full" }, // "metadata" ก็ใช้ได้ถ้าต้องการเฉพาะ headers
+            }
+          );
+
+          return mailRes.data;
+        })
+      );
+
+      return detailedMails;
+    } catch (err) {
+      console.error("searchMail error:", err);
+      return [];
+    }
+  }
+
   return {
     listMessages,
     getMessage,
@@ -227,5 +259,6 @@ export function useGmailService() {
     markAsRead,
     downloadFile,
     imageSrc,
+    searchMail,
   };
 }

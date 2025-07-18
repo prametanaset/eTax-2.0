@@ -33,7 +33,7 @@ const sanitizedHtml = computed(() =>
       <div v-if="mail?.data.html" class="">
         <!-- header -->
         <div
-          class="flex items-center px-4 py-2 justify-between sticky top-0 z-10 bg-muted-200 dark:bg-[hsl(var(--card))] border-b border-primary-500"
+          class="flex items-start px-4 py-2 justify-between sticky top-0 z-10 bg-muted-200 dark:bg-[hsl(var(--card))] border-b border-primary-500"
         >
           <div class="flex items-center gap-2 text-sm">
             <div class="flex items-center gap-2">
@@ -53,17 +53,37 @@ const sanitizedHtml = computed(() =>
               </Tooltip>
             </div>
             <Separator orientation="vertical" class="mx-2 h-6" />
-            <div class="grid gap-1">
-              <div class="font-semibold text-lg">
-                {{ extractName(mail.data.from) }}
-              </div>
-              <div class="line-clamp-1">
-                {{ mail.data.subject }}
-              </div>
+            <div class="grid gap-1 max-w-[400px]">
+              <!-- ผู้ส่ง -->
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger as-child>
+                    <h1 class="font-semibold text-lg truncate">
+                      {{ extractName(mail.data.from) }}
+                    </h1>
+                  </TooltipTrigger>
+                  <TooltipContent class="relative z-[999]">
+                    <p>{{ extractName(mail.data.from) }}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              <!-- หัวเรื่อง -->
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger as-child>
+                    <h1 class="text-sm line-clamp-1 text-muted-foreground">
+                      {{ mail.data.subject }}
+                    </h1>
+                  </TooltipTrigger>
+                  <TooltipContent class="relative z-[999]">
+                    <p>{{ mail.data.subject }}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
           </div>
           <div
-            class="text-xs text-end text-muted-foreground px-3 min-w-[10rem]"
+            class="text-xs text-end text-muted-foreground mt-1 min-w-[15rem]"
           >
             {{ formatMailDisplayDate(mail.data.date) }}
           </div>

@@ -71,7 +71,11 @@ onMounted(() => {
 watch(
   () => route.path,
   (newPath) => {
-    if (newPath === '/mail') {
+    if (
+      newPath === "/mail" ||
+      newPath === "/mail/sendcustomer" ||
+      newPath === "/mail/fromedta"
+    ) {
       open.value = false;
     } else {
       open.value = isLg.value; // กลับมาตามขนาดจอ
@@ -79,8 +83,6 @@ watch(
   },
   { immediate: true } // ให้ทำงานทันทีตอน mounted
 );
-
-
 
 // เปิด/ปิดตามขนาดจอ
 // watch(isLg, (val) => open.value = val, { immediate: true });
@@ -90,7 +92,13 @@ watch(
   <SidebarProvider v-model:open="open">
     <AppSidebar />
     <SidebarInset
-      :class="[route.path == '/mail' ? 'relative overflow-x-hidden' : '']"
+      :class="[
+        route.path == '/mail' ||
+        route.path == '/mail/sendcustomer' ||
+        route.path == '/mail/fromedta'
+          ? 'relative overflow-x-hidden'
+          : '',
+      ]"
     >
       <!-- Invisible marker -->
       <header
@@ -175,7 +183,11 @@ watch(
       <div
         :class="[
           'w-full mx-auto   pt-0 ',
-          route.path == '/mail' ? '' : 'max-w-[1440px] px-4 pb-6',
+          route.path == '/mail' ||
+          route.path == '/mail/sendcustomer' ||
+          route.path == '/mail/fromedta'
+            ? ''
+            : 'max-w-[1440px] px-4 pb-6',
         ]"
       >
         <div v-if="false" class="flex items-center gap-2">
@@ -197,7 +209,16 @@ watch(
           </NuxtLink> -->
           <h1 class="text-2xl font-semibold">{{ route.meta.title }}</h1>
         </div>
-        <div :class="[route.path == '/mail' ? '' : 'pt-4']" id="main">
+        <div
+          :class="[
+            route.path == '/mail' ||
+            route.path == '/mail/sendcustomer' ||
+            route.path == '/mail/fromedta'
+              ? ''
+              : 'pt-4',
+          ]"
+          id="main"
+        >
           <slot />
         </div>
       </div>

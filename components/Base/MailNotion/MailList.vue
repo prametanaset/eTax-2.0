@@ -124,6 +124,15 @@ onMounted(() => {
   });
 });
 
+watchEffect(() => {
+  if (mailStore.showMailType === "unread") {
+    const totalUnread = Object.values(groupedEmails.value).flat().length;
+    if (totalUnread < 40) {
+      fetchInitialEmails(); // ฟังก์ชันใน store
+    }
+  }
+});
+
 const selectedMail = defineModel<string>("selectedMail", { required: false });
 </script>
 
@@ -199,6 +208,7 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
               <th></th>
               <th></th>
               <th></th>
+              <th></th>
             </tr>
           </thead>
 
@@ -258,7 +268,10 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                     {{ extractName(item.from) }}
                   </td>
 
-                  <td class="w-full max-w-[800px] px-4 py-2">
+                  <td
+                    class="w-full max-w-[800px] pr-10 py-2"
+                    :colspan="item.attachments?.length > 0 ? 1 : 2"
+                  >
                     <div class="flex items-center gap-2 overflow-hidden">
                       <!-- Subject + Snippet -->
                       <div
@@ -267,7 +280,7 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                         <span
                           :class="
                             item.read
-                              ? 'font-normal text-muted-800 dark:text-muted-400'
+                              ? 'font-normal text-muted-500 dark:text-muted-400'
                               : 'font-semibold'
                           "
                         >
@@ -275,39 +288,40 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                         </span>
                         -
                         <span
-                          class="text-muted-800 dark:text-muted-400"
+                          :class="[
+                            item.read
+                              ? 'text-muted-500 dark:text-muted-400'
+                              : 'font-semibold',
+                          ]"
                           :title="item.snippet"
                         >
                           {{ item.snippet }}
                         </span>
                       </div>
-
-                      <!-- Attachments badge -->
-                      <div
-                        v-if="item.attachments?.length > 0"
-                        class="flex items-center flex-shrink-0 gap-1"
-                      >
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger as-child>
-                              <div class="">
-                                <Paperclip class="text-primary-500" size="20" />
-                              </div>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p
-                                v-for="file in item.attachments"
-                                :key="file.filename"
-                              >
-                                {{ file.filename }}
-                              </p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      </div>
                     </div>
                   </td>
-
+                  <!-- Attachments badge -->
+                  <td v-if="item.attachments?.length > 0">
+                    <tr class="flex items-center flex-shrink-0">
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger as-child>
+                            <div class="">
+                              <Paperclip class="text-primary-500" size="20" />
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p
+                              v-for="file in item.attachments"
+                              :key="file.filename"
+                            >
+                              {{ file.filename }}
+                            </p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </tr>
+                  </td>
                   <td
                     class="px-4 py-2 text-xs text-end min-w-[6rem] pr-10"
                     :class="
