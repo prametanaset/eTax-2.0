@@ -15,7 +15,7 @@
           <span
             class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
           >
-            <Search class="size-6 text-muted-foreground" />
+            <Search class="size-6" />
           </span>
           <span
             class="absolute end-0 inset-y-0 flex items-center justify-center px-2"
@@ -38,7 +38,7 @@
             v-for="(mail, index) in filteredMails"
             :key="mail.id"
             :class="[
-              'p-2 hover:bg-muted-700 cursor-pointer',
+              'p-2 dark:hover:bg-muted-700 hover:bg-muted-300 cursor-pointer',
               index !== filteredMails.length - 1 ? 'border-b' : '',
             ]"
             @click="mailStore.setSelectMail(mail)"
