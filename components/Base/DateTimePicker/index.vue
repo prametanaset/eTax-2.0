@@ -26,6 +26,35 @@ const minutes = Array.from({ length: 60 }, (_, i) => i);
 const hourContainer = ref<HTMLElement | null>(null);
 const minuteContainer = ref<HTMLElement | null>(null);
 
+const toLocalISOString = (val: any): string => {
+  const localDate = new Date(
+    val.year,
+    val.month - 1,
+    val.day,
+    val.hour ?? 0,
+    val.minute ?? 0,
+    val.second ?? 0,
+    val.millisecond ?? 0
+  )
+
+  // แปลงเป็น local ISO โดยตัด Z ออก
+  const iso = localDate.toISOString()
+  const localISOString = new Date(localDate.getTime() - localDate.getTimezoneOffset() * 60000).toISOString()
+  return localISOString.split('Z')[0]
+}
+
+
+
+
+const invoiceStore = useInvoiceStore()
+
+watch(value, (newVal) => {
+  if (newVal) {
+    const isoString = toLocalISOString(newVal)
+    invoiceStore.invoice.issue_date = isoString
+  }
+}, { immediate: true, deep: true }) 
+
 const df = new DateFormatter("th-TH-u-ca-buddhist", {
   dateStyle: "long",
   timeStyle: "short",

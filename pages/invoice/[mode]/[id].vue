@@ -17,7 +17,7 @@
                     >เลขที่</span
                   >
                   <Input
-                    v-model="invNo"
+                    v-model="invoiceStore.invoice.document_number"
                     type="text"
                     placeholder="กรอกเลขที่ใบกำกับภาษี"
                     class="h-10 font-normal bg-[hsl(var(--card))]"
@@ -28,12 +28,12 @@
                   <span class="font-medium dark:text-white text-black/80"
                     >ประเภทเอกสาร</span
                   >
-                  <Select v-model="documentType">
+                  <Select v-model="invoiceStore.invoice.document_type">
                     <SelectTrigger class="h-10 bg-[hsl(var(--card))]">
                       <SelectValue
                         placeholder="เลือกประเภทเอกสาร"
                         :class="
-                          documentType !== null
+                          invoiceStore.invoice.document_type !== ''
                             ? ''
                             : 'text-[#a1a8b3] font-normal'
                         "
@@ -41,8 +41,8 @@
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem value="ใบกำกับภาษี">ใบกำกับภาษี</SelectItem>
-                        <SelectItem value="ใบเสร็จรับเงิน/ใบกำกับภาษี">
+                        <SelectItem value="TAX-INVOICE">ใบกำกับภาษี</SelectItem>
+                        <SelectItem value="RECEIPT-TAX-INVOICE">
                           ใบเสร็จรับเงิน/ใบกำกับภาษี
                         </SelectItem>
                       </SelectGroup>
@@ -64,6 +64,7 @@
                     >เลขอ้างอิง</span
                   >
                   <Input
+                    v-model="invoiceStore.invoice.reference_id"
                     type="text"
                     placeholder="กรอกเลขอ้างอิง (Ref No.)"
                     class="h-10 font-normal bg-[hsl(var(--card))]"
@@ -141,48 +142,17 @@ const showAlert = () => {
     },
   });
 };
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Label } from "@/components/ui/label";
+
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import {
-  Plus,
-  Pencil,
-  Eye,
   Send,
   Save,
-  ChevronDown,
-  MapPinned,
-  UserRound,
-  Edit,
-  MapPin,
-  Mail,
-  Phone,
   Notebook,
-  Printer,
-  BadgeCheck,
-  FileDown,
-  TriangleAlert,
-  CalendarIcon,
 } from "lucide-vue-next";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-
-import { cn } from "@/lib/utils";
-
+const invoiceStore = useInvoiceStore()
+invoiceStore.invoice.items
 definePageMeta({
   title: "ออกใบกำกับภาษี",
   auth: {
@@ -190,29 +160,13 @@ definePageMeta({
   },
 });
 
-import {
-  DateFormatter,
-  type DateValue,
-  getLocalTimeZone,
-} from "@internationalized/date";
-
 import { ref } from "vue";
 
-const df = new DateFormatter("th-TH", {
-  dateStyle: "long",
-});
 
-const value = ref<DateValue>();
 
 const customer = ref(null);
-const activeTab = ref("status");
-const openDialog = ref(true);
-
-// const documentType = ref(null);
-const documentType = ref("ใบกำกับภาษี");
 const customerAddress = ref("");
 
-const invNo = ref("INV-0009");
 
 const invoice = reactive({
   invId: 0,
@@ -237,61 +191,14 @@ const invoice = reactive({
   ],
 });
 
-const addItem = () => {
-  invoice.invItem.push({
-    itemName: "",
-    qty: 0,
-    price: 0,
-    discount: 0,
-    vat: 0,
-    totalPrice: 0,
-    includeVat: "รวมภาษีมูลค่าเพิ่มแล้ว",
-  });
-};
+// const invoiceIdProxy = computed({
+//   get: () => invoiceStore.invoice.d ?? '', // แสดงเป็นช่องว่างเมื่อ id เป็น null
+//   set: (val: string | number) => {
+//     const num = Number(val);
+//     invoiceStore.invoice.document_number = isNaN(num) ? null : num;
+//   }
+// });
 
-// ✅ คำนวณยอดรวมทั้งหมด (ก่อนหักส่วนลดและ VAT)
-const totalAmount = computed(() =>
-  invoice.invItem.reduce(
-    (sum: any, item: { totalPrice: any }) => sum + item.totalPrice,
-    0
-  )
-);
-
-// ✅ คำนวณส่วนลดทั้งหมด (เฉพาะส่วนลดของบิล ไม่รวมส่วนลดของสินค้าแต่ละรายการ)
-const totalDiscount = computed(() => invoice.invDiscount);
-
-// ✅ คำนวณยอดรวมก่อนภาษี (Net Amount) โดยหักส่วนลดก่อน
-const subtotal = computed(
-  () =>
-    invoice.invItem.reduce(
-      (sum: number, item: { includeVat: string; totalPrice: number }) => {
-        if (item.includeVat === "รวมภาษีมูลค่าเพิ่มแล้ว") {
-          return sum + item.totalPrice / 1.07; // แยก VAT ออกจากราคาที่รวม VAT แล้ว
-        } else {
-          return sum + item.totalPrice; // ราคาสินค้าที่ยังไม่รวม VAT หรือยกเว้นภาษี
-        }
-      },
-      0
-    ) - totalDiscount.value // หักส่วนลดของบิล
-);
-
-// ✅ คำนวณภาษีมูลค่าเพิ่ม (VAT) เฉพาะสินค้าที่ต้องเสียภาษี
-const totalVat = computed(() =>
-  invoice.invItem
-    .filter((item: { includeVat: string }) => item.includeVat !== "ยกเว้นภาษี") // คำนวณเฉพาะสินค้าที่ต้องเสียภาษี
-    .reduce((sum: number, item: { includeVat: string; totalPrice: number }) => {
-      if (item.includeVat === "รวมภาษีมูลค่าเพิ่มแล้ว") {
-        return sum + (item.totalPrice / 1.07) * 0.07; // แยก VAT ออกจากราคาที่รวม VAT แล้ว
-      } else {
-        return sum + item.totalPrice * 0.07; // คำนวณ VAT จากราคาที่ยังไม่รวมภาษี
-      }
-    }, 0)
-);
-
-// ✅ คำนวณยอดสุทธิ (Grand Total)
-const grandTotal = computed(() => subtotal.value + totalVat.value);
-
-// ✅ Watch คำนวณ totalPrice ใหม่ทุกครั้งที่ qty หรือ price เปลี่ยน
 watch(
   invoice.invItem,
   (newVal: any[]) => {

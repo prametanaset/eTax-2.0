@@ -3,43 +3,22 @@ import { ref, onMounted, onUnmounted } from "vue";
 import { Input } from "@/components/ui/input";
 import Draggable from "vuedraggable";
 
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
 import { Trash, Plus, CirclePlus, GripVertical } from "lucide-vue-next";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import { Label } from "@/components/ui/label";
+
 import { toast } from "~/components/ui/toast/use-toast";
+const productStore = useProductStore();
+const invoiceStore = useInvoiceStore();
+const { createProduct } = useProductService();
 
 const products = ref<any[]>([]);
 const isPopoverOpen = ref(false);
 const isDialogOpen = ref(false);
 const lastAddedProductId = ref<number | null>(null);
 
-const productStore = useProductStore();
-const { createProduct } = useProductService();
-
 const availableProducts = computed(() => productStore.products);
 
 onMounted(() => {
-  productStore.getProduct();
+  productStore.getProduct(); 
 });
 
 const handleCreateProduct = async (product: any) => {
@@ -100,16 +79,6 @@ const removeProduct = (id: number) => {
   products.value = products.value.filter((p) => p.id !== id);
 };
 
-watch(
-  products,
-  (newVal) => {
-    newVal.forEach((p) => {
-      p.tax = p.taxType === "exempt" ? "0%" : "7%";
-    });
-    productStore.setSelectProductList(newVal);
-  },
-  { deep: true }
-);
 
 const screenWidth = ref(0);
 const updateWidth = () => {
@@ -135,7 +104,10 @@ watch(
     newVal.forEach((p) => {
       p.tax = p.taxType === "exempt" ? "0%" : "7%";
     });
-    productStore.setSelectProductList(newVal);
+    // productStore.setSelectProductList(newVal);
+   newVal.forEach((product) => {
+  invoiceStore.addOrUpdateItem(product);
+});
   },
   { deep: true }
 );
@@ -160,7 +132,7 @@ watch(
     <!-- Product Selection Popover -->
     <Popover v-if="!(products.length > 0)">
       <PopoverTrigger as-child>
-        <Button class="flex items-center justify-between px-3 text-left">
+        <Button class="flex items-center justify-between px-3 text-left rounded-lg">
           <Plus /> <span>เพิ่มรายการสินค้า</span>
         </Button>
       </PopoverTrigger>

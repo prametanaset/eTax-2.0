@@ -41,12 +41,20 @@ export const useProfileStore = defineStore("profile", () => {
       merchant_id: string;
       store_name: string;
       branch_no: string;
+      address?: {
+        id: string;
+        store_id: string;
+        address_line1: string;
+        subdistrict_id: number;
+        district_id: number;
+        province_id: number;
+        postal_code: string;
+      };
       created_at: string;
       updated_at: string;
     }>
   >([]);
 
-  // 🧠 ตรวจสอบประเภท merchant
   const isCompany = computed(
     () => merchant.value?.merchant_type.Name === "company"
   );
@@ -54,7 +62,6 @@ export const useProfileStore = defineStore("profile", () => {
     () => merchant.value?.merchant_type.Name === "person"
   );
 
-  // 👤 ชื่อเต็มของ person หรือ company
   const displayName = computed(() => {
     if (isCompany.value && company.value) {
       return company.value.company_name;
@@ -65,7 +72,6 @@ export const useProfileStore = defineStore("profile", () => {
     return "";
   });
 
-  // 🎯 Setter หลักจาก API
   function setProfile(data: any) {
     if (!data || typeof data !== "object") {
       console.warn("Invalid profile data:", data);

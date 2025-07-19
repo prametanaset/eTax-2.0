@@ -81,7 +81,7 @@
           <TableRow
             v-for="hg in table.getHeaderGroups()"
             :key="hg.id"
-            class="font-noto bg-gray-50 dark:bg-gray-800"
+            class="font-noto bg-white dark:bg-gray-800"
           >
             <TableHead
               v-for="header in hg.headers"

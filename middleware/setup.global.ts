@@ -8,14 +8,12 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
   try {
     const dataFromService = await userService.getMe();
-    console.log("Received profile data:", dataFromService);
 
     if (dataFromService && typeof dataFromService === "object") {
       const plainData = JSON.parse(JSON.stringify(dataFromService));
       profileStore.setProfile(plainData);
 
       const hasMerchant = plainData?.merchant_info?.merchant;
-      console.log("merchant from plainData:", hasMerchant);
 
       if (!hasMerchant && to.path !== "/setting-store") {
         return navigateTo("/setting-store");

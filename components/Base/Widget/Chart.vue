@@ -53,7 +53,7 @@ const chartOptions1 = computed(() => ({
     opacity: 0.9,
     gradient: {
       shadeIntensity: 1,
-      opacityFrom: 0.6,
+      opacityFrom: 0.4,
       opacityTo: 0,
       stops: [0, 100],
     },

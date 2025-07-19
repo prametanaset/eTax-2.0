@@ -2,23 +2,11 @@
 import { ref, onMounted } from "vue";
 import { Plus, Check, X, Clock10Icon } from "lucide-vue-next";
 import type { Customer } from "~/types/customer";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
-import {
-  Command,
-  CommandInput,
-  CommandList,
-  CommandEmpty,
-  CommandGroup,
-  CommandItem,
-} from "@/components/ui/command";
-import { Button } from "@/components/ui/button";
+
 import { toast } from "~/components/ui/toast/use-toast";
 
 const customerStore = useCustomerStore();
+const invoiceStore = useInvoiceStore();
 
 onMounted(() => {
   customerStore.getCustomer();
@@ -35,6 +23,11 @@ const { createCustomerService, updateCustomerService, deleteCustomerService } =
 
 const handleSelect = (customer: Customer) => {
   selectedUser.value = customer;
+  // invoiceStore.setBuyerInfo({
+  //   name: customer.FirstName,
+  //   // ถึงตรงนี้ 
+  // })
+  console.log("customer seleced:", customer)
 };
 
 const handleCreateCustomer = async (newCustomer: Customer) => {
@@ -66,14 +59,14 @@ const handleCreateCustomer = async (newCustomer: Customer) => {
 <template>
   <div>
     <div
-      class="bg-[hsl(var(--card))] border border-purple-700 rounded-lg p-4 h-full relative py-7"
+      class="dark:bg-[hsl(var(--card))] rounded-lg p-4 h-full relative py-7 bg-gradient-to-r from-violet-200 to-pink-200"
       v-if="!selectedUser"
     >
       <!-- Popover เลือกลูกค้า -->
       <Dialog>
         <DialogTrigger as-child>
           <Button
-            class="absolute top-[50%] left-[50%]"
+            class="absolute top-7 -right-[12%] rounded-lg px-3"
             style="transform: translate(-50%, -50%)"
             ><Plus />เลือกข้อมูลลูกค้า</Button
           >
@@ -213,3 +206,27 @@ const handleCreateCustomer = async (newCustomer: Customer) => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.bg-gradient-animation {
+	background: linear-gradient(-45deg, #f3e5f5, #ede7f6, #e8eaf6, #fce4ec);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+	height: 100%;
+}
+
+
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+</style>

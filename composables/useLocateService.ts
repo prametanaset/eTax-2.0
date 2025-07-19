@@ -26,11 +26,28 @@ export const useLocateService = () => {
     return response.data;
   }
 
+  async function getProvinceById(id?: string) {
+    const response = await apiClient.get(`/locations/province/${id}`);
+    return response.data;
+  }
+
+  async function getDistrictById(id?: string) {
+    const response = await apiClient.get(`/locations/district/${id}`);
+    return response.data;
+  }
+
+  async function getSubdistrictById(id?: string) {
+    const response = await apiClient.get(`/locations/subdistrict/${id}`);
+    return response.data;
+  }
 
   return {
     fetchProvinces,
     fetchDistricts,
     fetchSubdistricts,
-    fetchZipcode
+    fetchZipcode,
+    getProvinceById,
+    getDistrictById,
+    getSubdistrictById
   };
 }

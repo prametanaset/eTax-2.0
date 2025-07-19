@@ -60,7 +60,9 @@ export default defineNuxtConfig({
     componentDir: "./components/ui",
   },
   colorMode: {
-    classSuffix: "",
+    preference: 'light', // ค่าตั้งต้นเมื่อผู้ใช้เข้าเว็บ
+    fallback: 'light',   // กรณีไม่รู้ว่า user ต้องการ theme อะไร
+    classSuffix: '',     // จะเพิ่ม class เป็น 'dark' หรือ 'light' ไม่ใช้ 'light-mode'
   },
   googleFonts: {
     families: {
