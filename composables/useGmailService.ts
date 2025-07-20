@@ -7,11 +7,17 @@ export function useGmailService() {
   }
 
   async function listMessages(
+    keyword: string,
     maxResults = 10,
     pageToken?: string
   ): Promise<{ data: any[]; nextPageToken?: string }> {
+    const params: Record<string, any> = { maxResults };
+    if (pageToken) params.pageToken = pageToken;
+    // ค้นหาที่ส่งเมลจาก edta
+    params.q = "csemail@etax.teda.th";
+    // params.q = keyword;
     const res = await gmailClient.get<GmailListResult>("/users/me/messages", {
-      params: { maxResults, pageToken },
+      params,
     });
 
     const messages = res.data.messages || [];
@@ -28,7 +34,6 @@ export function useGmailService() {
           headers.find((h: any) => h.name === name)?.value || "";
 
         // ค้นหาไฟล์แนบใน parts ของ payload
-        // const attachments = hasAttachments(payload.parts);
         // ฟังก์ชันดึงไฟล์แนบจาก messageId และ attachmentId
         const getAttachments = async (parts: any[] = []) => {
           const files = [];
@@ -105,11 +110,30 @@ export function useGmailService() {
     return decodedHtml;
   }
 
-  async function sendMessage(rawBase64: string) {
-    const res = await gmailClient.post("/users/me/messages/send", {
-      raw: rawBase64,
+  function encodeSubject(subject: string) {
+    const utf8Bytes = new TextEncoder().encode(subject);
+    const base64 = btoa(String.fromCharCode(...utf8Bytes));
+    return `=?UTF-8?B?${base64}?=`;
+  }
+
+  async function sendMail(to: string, subject: string, body: string) {
+    const email = [
+      `To: ${to}`,
+      'Content-Type: text/plain; charset="UTF-8"',
+      "MIME-Version: 1.0",
+      `Subject: ${encodeSubject(subject)}`,
+      "",
+      body,
+    ].join("\n");
+
+    const encodedMessage = btoa(unescape(encodeURIComponent(email)))
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/, "");
+
+    return await gmailClient.post("/users/me/messages/send", {
+      raw: encodedMessage,
     });
-    return res.data;
   }
 
   async function markAsRead(id: string) {
@@ -228,20 +252,37 @@ export function useGmailService() {
       );
 
       const messages = searchRes.data.messages || [];
-
       if (messages.length === 0) return [];
 
-      // Step 2: ดึงรายละเอียดแต่ละ message (batch หรือ loop ก็ได้)
+      // Step 2: ดึงข้อมูลจดหมายแต่ละฉบับ
       const detailedMails = await Promise.all(
         messages.slice(0, 20).map(async (msg: { id: string }) => {
-          const mailRes = await gmailClient.get(
+          const res = await gmailClient.get(
             `/gmail/v1/users/me/messages/${msg.id}`,
-            {
-              params: { format: "full" }, // "metadata" ก็ใช้ได้ถ้าต้องการเฉพาะ headers
-            }
+            { params: { format: "full" } }
           );
 
-          return mailRes.data;
+          const payload = res.data.payload;
+          const headers = payload.headers || [];
+
+          // Helper: ดึงค่าจาก headers
+          const getHeader = (name: string) => {
+            return (
+              headers.find(
+                (h: any) => h.name.toLowerCase() === name.toLowerCase()
+              )?.value || ""
+            );
+          };
+
+          return {
+            id: res.data.id,
+            threadId: res.data.threadId,
+            from: getHeader("From"),
+            to: getHeader("To"),
+            subject: getHeader("Subject"),
+            date: getHeader("Date"),
+            snippet: res.data.snippet,
+          };
         })
       );
 
@@ -255,7 +296,7 @@ export function useGmailService() {
   return {
     listMessages,
     getMessage,
-    sendMessage,
+    sendMail,
     markAsRead,
     downloadFile,
     imageSrc,

@@ -84,11 +84,6 @@ const searchQuery = ref("");
 const filteredMails = ref<typeof mailStore.mailList.data>([]);
 const loading = ref(false);
 
-function extractName(from: string) {
-  const match = /"?([^"]+)"?\s*<.*>/.exec(from);
-  return match?.[1] || from;
-}
-
 const onSearch = useDebounceFn(async () => {
   const query = searchQuery.value.trim().toLowerCase();
   if (!query) {

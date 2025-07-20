@@ -266,8 +266,7 @@ const { data } = useAuth();
         </div>
       </DialogContent>
     </Dialog>
-
-    <BaseMailNotion />
+    <BaseMailNotionTestSendMail />
     <!-- <pre>{{ emailHtml }}</pre> -->
 
     <!-- <SafeHtml
