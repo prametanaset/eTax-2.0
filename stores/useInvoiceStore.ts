@@ -47,7 +47,6 @@ export const useInvoiceStore = defineStore('invoice', () => {
     vat_amount: 0,
     grand_total: 0,
     remarks: '',
-    created_at: '',
     items: [],
   })
 

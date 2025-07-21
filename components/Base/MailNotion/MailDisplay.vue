@@ -28,12 +28,12 @@ const sanitizedHtml = computed(() =>
 </script>
 
 <template>
-  <ScrollArea class="bg-muted-200 dark:bg-[hsl(var(--card))] h-full">
+  <ScrollArea class="bg-[hsl(var(--card))]  h-full">
     <div class="flex flex-col">
       <div v-if="mail?.data.html" class="">
         <!-- header -->
         <div
-          class="flex items-start px-4 py-2 justify-between sticky top-0 z-10 bg-muted-200 dark:bg-[hsl(var(--card))] border-b border-primary-500"
+          class="flex items-start px-4 py-4 justify-between sticky top-0 z-10 bg-[hsl(var(--card))] border-b border-primary-500"
         >
           <div class="flex items-center gap-2 text-sm">
             <div class="flex items-center gap-2">
@@ -52,7 +52,7 @@ const sanitizedHtml = computed(() =>
                 <!-- <TooltipContent>ปิด</TooltipContent> -->
               </Tooltip>
             </div>
-            <Separator orientation="vertical" class="mx-2 h-6" />
+            <!-- <Separator orientation="vertical" class="mx-2 h-6" /> -->
             <div class="grid gap-1 max-w-[400px]">
               <!-- ผู้ส่ง -->
               <TooltipProvider>
@@ -91,8 +91,8 @@ const sanitizedHtml = computed(() =>
         <!-- end header -->
 
         <!-- Body ที่กินพื้นที่ที่เหลือ -->
-        <div class="relative">
-          <div class="overflow-auto px-5 py-2" v-html="sanitizedHtml" />
+        <div class="relative bg-[hsl(var(--card))]">
+          <div class="overflow-auto px-10 pt-5" v-html="sanitizedHtml" />
         </div>
 
         <div

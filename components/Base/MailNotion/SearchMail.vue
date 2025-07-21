@@ -9,7 +9,7 @@
             v-model="searchQuery"
             type="text"
             placeholder="ค้นหาเมล..."
-            class="pl-10"
+            class="pl-10 bg-[hsl(var(--card))]"
             @input="onSearch"
           />
           <span

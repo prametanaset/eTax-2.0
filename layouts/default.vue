@@ -101,7 +101,7 @@ watch(
       ]"
     >
       <!-- Invisible marker -->
-      <header
+      <header  v-if="!['/mail','/mail/sendcustomer','/mail/fromedta'].includes(route.path)"
         :class="[
           'sticky top-0 flex h-14 shrink-0 z-50 bg-[hsl(var(--background))] items-center gap-2 transition-all',
           isStuck ? 'shadow-sm ' : '',
@@ -229,10 +229,10 @@ watch(
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.25s ease;
+   transition: all 0.2s;
 }
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
 }
-</style>
+ </style>

@@ -19,7 +19,6 @@
 import { ref, onMounted } from 'vue'
 import { Store } from 'lucide-vue-next'
 import InfoRow from '~/components/Base/SellerAddress/InfoRow.vue'
-import { profileEnd } from 'console'
 
 const profileStore = useProfileStore()
 const invoiceStore = useInvoiceStore()

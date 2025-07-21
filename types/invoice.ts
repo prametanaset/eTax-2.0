@@ -62,7 +62,6 @@ export interface InvoiceDocument {
   vat_amount: number
   grand_total: number
   remarks: string
-  created_at: string
 
   items: InvoiceItem[]
 }

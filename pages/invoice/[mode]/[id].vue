@@ -103,7 +103,7 @@
           >
             <Notebook class="w-4 h-4" /> หมายเหตุ
           </h3>
-          <Textarea class="mt-1" />
+          <Textarea v-model="invoiceStore.invoice.remarks" class="mt-1" />
         </div>
       </Card>
     </div>
@@ -129,6 +129,26 @@
 
 <script lang="ts" setup>
 import Swal from "sweetalert2";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import {
+  Send,
+  Save,
+  Notebook,
+} from "lucide-vue-next";
+
+const invoiceStore = useInvoiceStore()
+
+definePageMeta({
+  title: "ออกใบกำกับภาษี",
+  auth: {
+    unauthenticatedOnly: false,
+  },
+});
+
+onMounted(() => {
+  invoiceStore.invoice.status = "IN-PROGRESS"
+})
 
 const showAlert = () => {
   Swal.fire({
@@ -143,77 +163,7 @@ const showAlert = () => {
   });
 };
 
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
-import {
-  Send,
-  Save,
-  Notebook,
-} from "lucide-vue-next";
 
-const invoiceStore = useInvoiceStore()
-invoiceStore.invoice.items
-definePageMeta({
-  title: "ออกใบกำกับภาษี",
-  auth: {
-    unauthenticatedOnly: false,
-  },
-});
-
-import { ref } from "vue";
-
-
-
-const customer = ref(null);
-const customerAddress = ref("");
-
-
-const invoice = reactive({
-  invId: 0,
-  invNo: "",
-  invDiscount: 0,
-  invVat: 0,
-  invTotalAmount: 0,
-  invTotalDiscount: 0,
-  invSubtotal: 0,
-  invTotalVat: 0,
-  invGrandTotal: 0,
-  invItem: [
-    {
-      itemName: "",
-      qty: 0,
-      price: 0,
-      discount: 0,
-      vat: 0,
-      totalPrice: 0,
-      includeVat: "รวมภาษีมูลค่าเพิ่มแล้ว",
-    },
-  ],
-});
-
-// const invoiceIdProxy = computed({
-//   get: () => invoiceStore.invoice.d ?? '', // แสดงเป็นช่องว่างเมื่อ id เป็น null
-//   set: (val: string | number) => {
-//     const num = Number(val);
-//     invoiceStore.invoice.document_number = isNaN(num) ? null : num;
-//   }
-// });
-
-watch(
-  invoice.invItem,
-  (newVal: any[]) => {
-    newVal.forEach((item, index) => {
-      invoice.invItem[index].totalPrice = item.qty * item.price - item.discount;
-    });
-  },
-  { deep: true }
-);
-
-watch(customer, (newAddress: { Address: any }) => {
-  if (customer.value) {
-    customerAddress.value = newAddress.Address;
-  }
-});
 </script>
 
 <style></style>

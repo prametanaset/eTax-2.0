@@ -1,7 +1,7 @@
 <template>
   <div
     :data-collapsed="isCollapsed"
-    class="group flex flex-col gap-4 max-w-[17rem] w-[17rem]"
+    class="group flex flex-col gap-4 max-w-[15rem] w-[15rem] "
   >
     <nav
       class="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2"
