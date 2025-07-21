@@ -1,9 +1,38 @@
+import type { label } from "@unovis/ts/components/axis/style";
+import { Filter } from "lucide-vue-next";
+
 export function useGmailService() {
   const { gmailClient } = useGmailClient();
+  const mailStore = useMailStore();
 
   interface GmailListResult {
     messages: { id: string }[];
     nextPageToken?: string;
+  }
+
+  async function createLabel(name: string) {
+    try {
+      // ดึง label ทั้งหมดมาก่อน
+      const res = await gmailClient.get("/users/me/labels");
+      mailStore.labelList = res.data;
+      const etaxlabel = res.data.labels.find((l: any) => l.name === name);
+      if (etaxlabel) {
+        mailStore.labelID = etaxlabel.id;
+        return;
+      }
+
+      // สร้าง label ใหม่
+      const createRes = await gmailClient.post("/users/me/labels", {
+        name,
+        labelListVisibility: "labelShow",
+        messageListVisibility: "show",
+      });
+
+      mailStore.labelID = createRes.data.id;
+      return;
+    } catch (error: any) {
+      throw error;
+    }
   }
 
   async function listMessages(
@@ -14,7 +43,7 @@ export function useGmailService() {
     const params: Record<string, any> = { maxResults };
     if (pageToken) params.pageToken = pageToken;
     // ค้นหาที่ส่งเมลจาก edta
-    params.q = "csemail@etax.teda.th";
+    params.q = `${keyword}`;
     // params.q = keyword;
     const res = await gmailClient.get<GmailListResult>("/users/me/messages", {
       params,
@@ -58,8 +87,14 @@ export function useGmailService() {
           snippet: res.data.snippet || "",
           subject: getHeader("Subject"),
           from: getHeader("From"),
+          to: getHeader("To"),
           date: getHeader("Date"),
           read: !res.data.labelIds.includes("UNREAD"),
+          labels: mailStore.labelList.labels.filter(
+            (label) =>
+              ["etax", "etda"].includes(label.name) &&
+              res.data.labelIds.includes(label.id)
+          ),
           html: await getMessage(msg.id),
           attachments, // เพิ่มข้อมูลไฟล์แนบ
         };
@@ -116,10 +151,15 @@ export function useGmailService() {
     return `=?UTF-8?B?${base64}?=`;
   }
 
-  async function sendMail(to: string, subject: string, body: string) {
+  async function sendMail(
+    to: string,
+    subject: string,
+    body: string,
+    labelId: string
+  ) {
     const email = [
       `To: ${to}`,
-      'Content-Type: text/plain; charset="UTF-8"',
+      'Content-Type: text/html; charset="UTF-8"',
       "MIME-Version: 1.0",
       `Subject: ${encodeSubject(subject)}`,
       "",
@@ -131,9 +171,21 @@ export function useGmailService() {
       .replace(/\//g, "_")
       .replace(/=+$/, "");
 
-    return await gmailClient.post("/users/me/messages/send", {
+    // 1. ส่งอีเมลก่อน
+    const res = await gmailClient.post("/users/me/messages/send", {
       raw: encodedMessage,
     });
+
+    const messageId = res.data.id;
+
+    // 2. ถ้ามี labelId ส่งมา ให้เพิ่ม label หลังส่ง
+    if (messageId) {
+      await gmailClient.post(`/users/me/messages/${messageId}/modify`, {
+        addLabelIds: [labelId],
+      });
+    }
+
+    return res;
   }
 
   async function markAsRead(id: string) {
@@ -244,55 +296,6 @@ export function useGmailService() {
     return `data:${mime};base64,${base64}`;
   }
 
-  async function searchMail(keyword: string) {
-    try {
-      // Step 1: Search message IDs
-      const searchRes = await gmailClient.get(
-        `/gmail/v1/users/me/messages?q=${encodeURIComponent(keyword)}`
-      );
-
-      const messages = searchRes.data.messages || [];
-      if (messages.length === 0) return [];
-
-      // Step 2: ดึงข้อมูลจดหมายแต่ละฉบับ
-      const detailedMails = await Promise.all(
-        messages.slice(0, 20).map(async (msg: { id: string }) => {
-          const res = await gmailClient.get(
-            `/gmail/v1/users/me/messages/${msg.id}`,
-            { params: { format: "full" } }
-          );
-
-          const payload = res.data.payload;
-          const headers = payload.headers || [];
-
-          // Helper: ดึงค่าจาก headers
-          const getHeader = (name: string) => {
-            return (
-              headers.find(
-                (h: any) => h.name.toLowerCase() === name.toLowerCase()
-              )?.value || ""
-            );
-          };
-
-          return {
-            id: res.data.id,
-            threadId: res.data.threadId,
-            from: getHeader("From"),
-            to: getHeader("To"),
-            subject: getHeader("Subject"),
-            date: getHeader("Date"),
-            snippet: res.data.snippet,
-          };
-        })
-      );
-
-      return detailedMails;
-    } catch (err) {
-      console.error("searchMail error:", err);
-      return [];
-    }
-  }
-
   return {
     listMessages,
     getMessage,
@@ -300,6 +303,6 @@ export function useGmailService() {
     markAsRead,
     downloadFile,
     imageSrc,
-    searchMail,
+    createLabel,
   };
 }

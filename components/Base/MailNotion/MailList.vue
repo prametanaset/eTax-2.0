@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const { listMessages } = useGmailService();
+const { listMessages, createLabel } = useGmailService();
 const { data: session, status, signIn } = useAuth();
 import { Dot, Paperclip } from "lucide-vue-next";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -23,13 +23,15 @@ const nextPageToken = computed(() => mailStore.mailList.nextPageToken);
 const scrollContainer = ref<HTMLElement | null>(null);
 const device = useDevice();
 const mailStore = useMailStore();
+const route = useRoute();
+const profileStore = useProfileStore();
+const query = ref("");
 
 const fetchInitialEmails = async (targetCount = 40, pageSize = 10) => {
   if (loading.value) return;
   if (mailStore.mailList.data.length === 0) {
     mailStore.mailLoaded = true;
   }
-
   loading.value = true;
 
   let token = mailStore.mailList.nextPageToken || undefined;
@@ -37,7 +39,7 @@ const fetchInitialEmails = async (targetCount = 40, pageSize = 10) => {
 
   while (loaded < targetCount) {
     const { data, nextPageToken } = await listMessages(
-      keyword,
+      query.value,
       pageSize,
       token
     );
@@ -105,8 +107,11 @@ const groupedEmails = computed(() => {
 });
 
 // โหลดรอบแรก
-onMounted(() => {
-  if (session.value?.googleAccessToken) fetchInitialEmails();
+onMounted(async () => {
+  if (session.value?.googleAccessToken) {
+    fetchInitialEmails();
+    await createLabel("etax");
+  }
 });
 
 // สังเกต scroll ถึงล่างสุด
@@ -137,6 +142,23 @@ watchEffect(() => {
     }
   }
 });
+
+watch(
+  () => route.path,
+  (newPath) => {
+    if (newPath) {
+      mailStore.clearMailListStore();
+    }
+    if (newPath === "/mail") {
+      query.value = `from:csemail@etax.teda.th OR from:${profileStore.user?.username}`;
+    } else if (newPath === "/mail/fromedta") {
+      query.value = "from:csemail@etax.teda.th";
+    } else if (newPath === "/mail/sendcustomer") {
+      query.value = `from:${profileStore.user?.username}`;
+    }
+  },
+  { immediate: true }
+);
 
 const selectedMail = defineModel<string>("selectedMail", { required: false });
 </script>
@@ -267,13 +289,20 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
 
                   <td
                     :class="[
-                      'max-w-[16vw] min-w-[16vw] pr-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis truncate',
+                      'max-w-[16vw] min-w-[16vw] pr-4 py-2 flex ',
                       item.read
                         ? 'font-normal text-muted-800 dark:text-muted-400'
                         : 'font-semibold',
                     ]"
                   >
-                    {{ extractName(item.from) }}
+                    <p
+                      class="overflow-hidden whitespace-nowrap text-ellipsis truncate"
+                    >
+                      {{ extractName(item.from) }}
+                    </p>
+                    <Badge v-for="label in item.labels" variant="secondary">{{
+                      label.name
+                    }}</Badge>
                   </td>
 
                   <td

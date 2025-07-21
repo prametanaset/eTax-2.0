@@ -4,6 +4,8 @@ export const useMailStore = defineStore("mailStore", () => {
   const { markAsRead } = useGmailService();
   const route = useRoute();
   const showMailType = ref("all");
+  const labelID = ref("");
+  const labelList = ref([] as any[]);
 
   const selectMail = ref<{
     data: any;
@@ -54,6 +56,13 @@ export const useMailStore = defineStore("mailStore", () => {
     selectMail.value = null;
   }
 
+  function clearMailListStore() {
+    mailList.data = [];
+    mailList.nextPageToken = null;
+  }
+
+  function getLabelByName(label: string) {}
+
   watch(
     () => route.path,
     (newVal) => {
@@ -83,6 +92,8 @@ export const useMailStore = defineStore("mailStore", () => {
   );
 
   return {
+    labelID,
+    labelList,
     selectMail,
     showMailType,
     mailList,
@@ -91,5 +102,6 @@ export const useMailStore = defineStore("mailStore", () => {
     setSelectMail,
     clearSelectMailStore,
     setShowMailType,
+    clearMailListStore,
   };
 });

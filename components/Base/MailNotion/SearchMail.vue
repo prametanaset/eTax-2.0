@@ -46,6 +46,7 @@
             <div class="font-semibold">
               {{ mail.from }}
             </div>
+            <div class="text-sm">ถึง : {{ mail.to }}</div>
             <div class="text-sm text-muted-foreground line-clamp-1">
               {{ mail.subject }}
             </div>
@@ -78,7 +79,8 @@ import { Search, X } from "lucide-vue-next";
 import { useDebounceFn } from "@vueuse/core";
 
 const mailStore = useMailStore();
-const { searchMail } = useGmailService();
+const profileStore = useProfileStore();
+const { listMessages } = useGmailService();
 
 const searchQuery = ref("");
 const filteredMails = ref<typeof mailStore.mailList.data>([]);
@@ -104,12 +106,14 @@ const onSearch = useDebounceFn(async () => {
   }
 
   // ถ้าไม่เจอใน local -> ดึงจาก backend
-  // loading.value = true;
-  // try {
-  //   const remote = await searchMail(query); // สร้าง method นี้ใน store
-  //   filteredMails.value = remote;
-  // } finally {
-  //   loading.value = false;
-  // }
+  loading.value = true;
+  try {
+    const fetchQuery = `from:${profileStore.user?.username} OR from:csemail@etax.teda.th ${query}`;
+    const max = 5;
+    const remote = await listMessages(fetchQuery, max); // สร้าง method นี้ใน store
+    filteredMails.value = remote.data;
+  } finally {
+    loading.value = false;
+  }
 }, 400);
 </script>

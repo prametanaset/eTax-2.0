@@ -22,7 +22,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useGmailService } from "@/composables/useGmailService"; // ปรับ path ตามโปรเจกต์ของคุณ
 
-const { sendMail } = useGmailService();
+const { sendMail, createLabel } = useGmailService();
+
+const mailStore = useMailStore();
 
 const to = ref("taksin.cup@gmail.com");
 const subject = ref("ทดสอบส่งเมล");
@@ -31,21 +33,41 @@ const message = ref("");
 const error = ref("");
 const loading = ref(false);
 
+const buildHtmlBody = (content: string) => {
+  return `
+    <div style="max-width:600px;margin:40px auto;background-color:#ffffff;padding:30px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);font-family:sans-serif;">
+      <div style="text-align:center;padding-bottom:20px;">
+        <h1 style="margin:0;font-size:24px;color:#af38ff;">${content}</h1>
+      </div>
+      <div style="text-align:center;font-size:16px;color:#555555;">
+        <p>ทดสอบ</p>
+      </div>
+      <div style="margin-top:30px;font-size:13px;color:#999999;text-align:center;">
+        <p>&copy; 2025 sunscaleup Ltd. All rights reserved.</p>
+      </div>
+    </div>
+  `;
+};
+
 const handleSend = async () => {
   loading.value = true;
   message.value = "";
   error.value = "";
 
+  const labels = mailStore.labelID;
   try {
-    await sendMail(to.value, subject.value, body.value);
+    await sendMail(to.value, subject.value, buildHtmlBody(body.value), labels);
     message.value = "ส่งอีเมลสำเร็จแล้ว";
-    to.value = subject.value = body.value = "";
   } catch (err: any) {
     error.value = "ส่งไม่สำเร็จ: " + err.message;
   } finally {
     loading.value = false;
   }
 };
+
+onMounted(async () => {
+  await createLabel("etax");
+});
 </script>
 
 <style scoped></style>
