@@ -105,9 +105,6 @@ const sanitizedHtml = computed(() =>
           </div>
         </div>
       </div>
-      <div v-else class="p-8 text-center text-muted-foreground">
-        ไม่พบข้อมูลเมล
-      </div>
     </div>
   </ScrollArea>
 </template>

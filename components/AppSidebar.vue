@@ -26,6 +26,7 @@ import {
   Home,
   Microscope,
 } from "lucide-vue-next";
+import type { LinkProp } from "./Base/MailNotion/Nav.vue";
 
 const props = withDefaults(defineProps<SidebarProps>(), {
   collapsible: "icon",
@@ -165,10 +166,12 @@ const data = {
     },
   ],
 };
+
 </script>
 
 <template>
-  <Sidebar class="w-[240px]" v-bind="props">
+  <div>
+    <Sidebar class="w-[240px]" v-bind="props">
     <SidebarHeader>
       <!-- <TeamSwitcher :teams="data.teams" /> -->
       <SidebarMenuButton
@@ -226,8 +229,10 @@ const data = {
       <!-- <NavProjects :projects="data.projects" /> -->
     </SidebarContent>
     <SidebarFooter>
-      <!-- <NavUser :user="data.user" /> -->
+      <NavUser :user="data.user" />
     </SidebarFooter>
     <SidebarRail />
   </Sidebar>
+
+  </div>
 </template>

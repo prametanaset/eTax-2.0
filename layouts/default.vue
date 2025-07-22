@@ -20,6 +20,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { MailCheck } from "lucide-vue-next";
+import type { LinkProp } from "~/components/Base/MailNotion/Nav.vue";
 
 const route = useRoute();
 
@@ -83,6 +84,27 @@ watch(
   },
   { immediate: true } // ให้ทำงานทันทีตอน mounted
 );
+const links: LinkProp[] = [
+  {
+    title: "Inbox",
+    label: "128",
+    icon: "lucide:inbox",
+    url: "/mail",
+  },
+  {
+    title: "จาก ETDA",
+    label: "50",
+    icon: "lucide:inbox",
+    url: "/mail/fromedta",
+  },
+  {
+    title: "ที่ส่งให้ลูกค้า",
+    label: "9",
+    icon: "lucide:send",
+    url: "/mail/sendcustomer",
+  },
+];
+const { data: session, status } = useAuth();
 
 // เปิด/ปิดตามขนาดจอ
 // watch(isLg, (val) => open.value = val, { immediate: true });
@@ -92,6 +114,30 @@ watch(
   <SidebarProvider v-model:open="open">
     <AppSidebar />
     <SidebarInset
+      v-if="
+        session?.googleAccessToken &&
+        ['/mail', '/mail/sendcustomer', '/mail/fromedta'].includes(route.path)
+      "
+    >
+      <div class="flex h-screen w-full bg-[hsl(var(--card))]">
+        <!-- Sidebar -->
+        <div
+          class="shrink-0 w-[15rem] border-r border-muted-200 dark:border-muted-700"
+        >
+          <BaseMailNotionNav :links="links" :is-collapsed="false" />
+        </div>
+
+        <!-- Main content -->
+        <div class="flex-1 h-screen overflow-y-auto">
+          <div id="main">
+            <slot />
+          </div>
+        </div>
+      </div>
+    </SidebarInset>
+
+    <SidebarInset
+      v-else
       :class="[
         route.path == '/mail' ||
         route.path == '/mail/sendcustomer' ||
@@ -101,7 +147,12 @@ watch(
       ]"
     >
       <!-- Invisible marker -->
-      <header  v-if="!['/mail','/mail/sendcustomer','/mail/fromedta'].includes(route.path)"
+      <header
+        v-if="
+          !['/mail', '/mail/sendcustomer', '/mail/fromedta'].includes(
+            route.path
+          )
+        "
         :class="[
           'sticky top-0 flex h-14 shrink-0 z-50 bg-[hsl(var(--background))] items-center gap-2 transition-all',
           isStuck ? 'shadow-sm ' : '',
@@ -229,10 +280,10 @@ watch(
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-   transition: all 0.2s;
+  transition: all 0.2s;
 }
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
 }
- </style>
+</style>

@@ -1,25 +1,14 @@
 <template>
   <NuxtLayout>
-    <template v-if="!excludedPaths.includes(route.path)">
-      <Transition name="page" mode="out-in">
-        <div :key="route.fullPath">
-          <NuxtPage />
-        </div>
-      </Transition>
-    </template>
-
-    <!-- No transition -->
-    <template v-else>
-      <NuxtPage :key="route.fullPath" />
-    </template>
+    <!-- <Transition name="fade" mode="out-in"> -->
+      <!-- wrap NuxtPage in a real element and give it a key -->
+        <NuxtPage />
+    <!-- </Transition> -->
   </NuxtLayout>
 </template>
 
 <script setup>
-import { useRoute } from 'vue-router'
-const route = useRoute()
-
-const excludedPaths = ['/mail', '/mail/sendcustomer', '/mail/fromedta']
+// no changes here
 </script>
 
 <style>
@@ -30,5 +19,6 @@ const excludedPaths = ['/mail', '/mail/sendcustomer', '/mail/fromedta']
 .page-enter-from,
 .page-leave-to {
   opacity: 0;
+  /* filter: blur(1rem); */
 }
 </style>
