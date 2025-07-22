@@ -228,7 +228,7 @@ const data = {
       <NavMain :items="data.navMain" />
       <!-- <NavProjects :projects="data.projects" /> -->
     </SidebarContent>
-    <SidebarFooter>
+    <SidebarFooter class="pr-5">
       <NavUser :user="data.user" />
     </SidebarFooter>
     <SidebarRail />
