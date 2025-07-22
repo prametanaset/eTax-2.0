@@ -5,21 +5,8 @@ export const containerClass = "w-full h-full";
 </script>
 
 <script setup lang="ts">
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { MailCheck } from "lucide-vue-next";
+
+import { Inbox } from "lucide-vue-next";
 import type { LinkProp } from "~/components/Base/MailNotion/Nav.vue";
 
 const route = useRoute();
@@ -104,8 +91,23 @@ const links: LinkProp[] = [
     url: "/mail/sendcustomer",
   },
 ];
-const { data: session, status } = useAuth();
 
+const titleNav = ref("");
+const { data: session, status } = useAuth();
+watch(
+  () => route.path,
+  (newPath) => {
+    if (newPath === "/mail") {
+      titleNav.value = "Inbox";
+      // query.value = `from:csemail@etax.teda.th OR from:${profileStore.user?.username}`;
+    } else if (newPath === "/mail/fromedta") {
+      titleNav.value = "จาก ETDA";
+    } else if (newPath === "/mail/sendcustomer") {
+      titleNav.value = "ที่ส่งให้ลูกค้า";
+    }
+  },
+  { immediate: true }
+);
 // เปิด/ปิดตามขนาดจอ
 // watch(isLg, (val) => open.value = val, { immediate: true });
 </script>
@@ -114,27 +116,42 @@ const { data: session, status } = useAuth();
   <SidebarProvider v-model:open="open">
     <AppSidebar />
     <SidebarInset
-      v-if="
-        session?.googleAccessToken &&
-        ['/mail', '/mail/sendcustomer', '/mail/fromedta'].includes(route.path)
-      "
+  v-if="
+    session?.googleAccessToken &&
+    ['/mail', '/mail/sendcustomer', '/mail/fromedta'].includes(route.path)
+  "
+>
+  <div class="flex h-screen w-full ">
+    <!-- Sidebar -->
+    <div
+      class="shrink-0 w-[15rem] border-r border-muted-200 dark:border-muted-700"
     >
-      <div class="flex h-screen w-full bg-[hsl(var(--card))]">
-        <!-- Sidebar -->
-        <div
-          class="shrink-0 w-[15rem] border-r border-muted-200 dark:border-muted-700"
-        >
-          <BaseMailNotionNav :links="links" :is-collapsed="false" />
-        </div>
+      <BaseMailNotionNav :links="links" :is-collapsed="false" />
+    </div>
 
-        <!-- Main content -->
-        <div class="flex-1 h-screen overflow-y-auto">
-          <div id="main">
-            <slot />
-          </div>
+    <!-- Right Section -->
+    <div class="flex flex-col flex-1 h-screen overflow-hidden">
+      <!-- Header -->
+      <header
+        :class="[
+          'sticky top-0 flex h-14 shrink-0 z-50 items-center gap-2 transition-all bg-[hsl(var(--card))]',
+          isStuck ? 'shadow-sm' : '',
+        ]"
+      >
+      <Transition name="fade" mode="out-in">
+        <h1 :key="titleNav" class="text-md font-semibold flex items-center gap-2 px-16"><Inbox class="h-4 w-4" /> {{ titleNav }}</h1>
+        </Transition>
+      </header>
+
+      <!-- Main content -->
+      <div class="flex-1 overflow-y-auto">
+        <div id="main">
+          <slot />
         </div>
       </div>
-    </SidebarInset>
+    </div>
+  </div>
+</SidebarInset>
 
     <SidebarInset
       v-else
@@ -193,7 +210,7 @@ const { data: session, status } = useAuth();
               <MailCheck class="h-4 mr-1" />e-Tax พร้อมใช้งาน
             </Badge> -->
 
-            <TooltipProvider :delay-duration="100">
+            <!-- <TooltipProvider :delay-duration="100">
               <Tooltip>
                 <TooltipTrigger as-child>
                   <BaseDotNoti
@@ -226,7 +243,7 @@ const { data: session, status } = useAuth();
               class="h-5 mx-1 w-px bg-muted-300"
             />
 
-            <NavUser2 :user="data.user" />
+            <NavUser2 :user="data.user" /> -->
           </div>
         </div>
       </header>

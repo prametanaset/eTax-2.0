@@ -229,19 +229,19 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
       </div>
       <!-- ------------------desktop layout-------------------- -->
       <div
-        class="relative overflow-y-auto h-[calc(100dvh)] hidden xl:block custom-scroll px-2 bg-[hsl(var(--card))]"
+        class="relative overflow-y-auto h-[calc(100dvh-3.5rem)] hidden xl:block custom-scroll px-2 bg-[hsl(var(--card))]"
         @scroll="onScroll"
       >
         <table class="table-auto w-full">
           <thead class="sticky top-0 z-10 bg-[hsl(var(--card))]">
             <tr>
-              <th class="py-4"></th>
-              <th class="py-4 flex gap-2 items-center">
-                <Inbox class="h-4 w-4" /> {{ titleNav }}
+              <th></th>
+              <th>
+                
               </th>
-              <th class="py-4"></th>
-              <th class="py-4"></th>
-              <th class="py-4"></th>
+              <th></th>
+              <th></th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
