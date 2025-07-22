@@ -149,7 +149,7 @@ watch(
     }
     if (newPath === "/mail") {
       titleNav.value = "Inbox";
-      // query.value = `from:csemail@etax.teda.th OR from:${profileStore.user?.username}`;
+      query.value = `from:csemail@etax.teda.th OR from:${profileStore.user?.username}`;
     } else if (newPath === "/mail/fromedta") {
       titleNav.value = "จาก ETDA";
       query.value = "from:csemail@etax.teda.th";
