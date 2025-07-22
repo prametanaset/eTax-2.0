@@ -2,7 +2,6 @@
 import MailDisplay from "./MailDisplay.vue";
 import MailList from "./MailList.vue";
 import Nav from "./Nav.vue";
-const mailStore = useMailStore();
 
 const { data: session, status } = useAuth();
 
@@ -21,7 +20,6 @@ export interface LinkProp {
     />
 
     <div v-else class="flex flex-row h-full w-full">
-      <Separator orientation="vertical" />
       <slot />
     </div>
   </div>

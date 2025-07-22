@@ -26,7 +26,7 @@ const mailStore = useMailStore();
 const route = useRoute();
 const profileStore = useProfileStore();
 const query = ref("");
-const titleNav = ref("")
+const titleNav = ref("");
 
 const fetchInitialEmails = async (targetCount = 40, pageSize = 10) => {
   if (loading.value) return;
@@ -113,6 +113,14 @@ onMounted(async () => {
     fetchInitialEmails();
     await createLabel("etax");
   }
+  nextTick(() => {
+    const el = scrollContainer.value?.querySelector(
+      "[data-radix-scroll-area-viewport]"
+    );
+    if (el) {
+      el.addEventListener("scroll", onScroll);
+    }
+  });
 });
 
 // สังเกต scroll ถึงล่างสุด
@@ -123,17 +131,6 @@ const onScroll = (e: Event) => {
     if (mailStore.mailList.nextPageToken) fetchInitialEmails();
   }
 };
-
-onMounted(() => {
-  nextTick(() => {
-    const el = scrollContainer.value?.querySelector(
-      "[data-radix-scroll-area-viewport]"
-    );
-    if (el) {
-      el.addEventListener("scroll", onScroll);
-    }
-  });
-});
 
 watchEffect(() => {
   if (mailStore.showMailType === "unread") {
@@ -151,13 +148,13 @@ watch(
       mailStore.clearMailListStore();
     }
     if (newPath === "/mail") {
-      titleNav.value = "Inbox"
-      query.value = `from:csemail@etax.teda.th OR from:${profileStore.user?.username}`;
+      titleNav.value = "Inbox";
+      // query.value = `from:csemail@etax.teda.th OR from:${profileStore.user?.username}`;
     } else if (newPath === "/mail/fromedta") {
-      titleNav.value = "จาก ETDA"
+      titleNav.value = "จาก ETDA";
       query.value = "from:csemail@etax.teda.th";
     } else if (newPath === "/mail/sendcustomer") {
-      titleNav.value = "ที่ส่งให้ลูกค้า"
+      titleNav.value = "ที่ส่งให้ลูกค้า";
       query.value = `from:${profileStore.user?.username}`;
     }
   },
@@ -172,83 +169,106 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
     <div v-if="mailStore.mailLoaded" class="flex flex-col gap-1 px-2">
       <Skeleton v-for="i in 10" class="h-10 w-full" />
     </div>
-    <BaseMailNotionMailNotFound v-else-if="mailStore.mailList.data.length == 0" />
+    <BaseMailNotionMailNotFound
+      v-else-if="mailStore.mailList.data.length == 0"
+    />
     <div v-else>
       <!-- ------------------mobile layout-------------------- -->
-      <div class="xl:hidden overflow-y-auto h-[calc(100dvh-3.5rem)] custom-scroll" @scroll="onScroll">
-        <div v-for="item of emails" :key="item.id"
+      <div
+        class="xl:hidden overflow-y-auto h-[calc(100dvh-3.5rem)] custom-scroll"
+        @scroll="onScroll"
+      >
+        <div
+          v-for="item of emails"
+          :key="item.id"
           class="cursor-pointer hover:bg-accent relative p-2 flex gap-3 border-b"
-          @click="(selectedMail = item.id), mailStore.setSelectMail(item)" :class="{
+          @click="(selectedMail = item.id), mailStore.setSelectMail(item)"
+          :class="{
             'bg-muted-300 dark:bg-muted-800 ':
               selectedMail === item.id && !device.isMobile,
             'bg-[hsl(var(--card))] rounded-sm overflow-hidden': !item.read,
-          }">
+          }"
+        >
           <div class="">
             <!-- ชื่อผู้ส่ง -->
             <div :class="[item.read ? 'font-normal' : 'font-bold']">
               {{ extractName(item.from) }}
             </div>
             <!-- หัวข้อ + เนื้อหา -->
-            <div class="w-[80vw] overflow-hidden whitespace-nowrap text-ellipsis truncate">
+            <div
+              class="w-[80vw] overflow-hidden whitespace-nowrap text-ellipsis truncate"
+            >
               <span :class="item.read ? 'font-normal' : 'font-bold'">
                 {{ item.subject }}
               </span>
             </div>
             <!-- หัวข้อ + เนื้อหา -->
-            <div class="w-[80vw] overflow-hidden whitespace-nowrap text-ellipsis truncate">
-              <span class="text-muted-800 dark:text-muted-400" :title="item.snippet">
+            <div
+              class="w-[80vw] overflow-hidden whitespace-nowrap text-ellipsis truncate"
+            >
+              <span
+                class="text-muted-800 dark:text-muted-400"
+                :title="item.snippet"
+              >
                 {{ item.snippet }}
               </span>
             </div>
             <!-- วันที่ -->
-            <div class="px-4 text-xs text-end min-w-[6rem] absolute right-0 top-1" :class="selectedMail === item.id
-                ? 'text-foreground'
-                : 'text-muted-foreground'
-              ">
+            <div
+              class="px-4 text-xs text-end min-w-[6rem] absolute right-0 top-1"
+              :class="
+                selectedMail === item.id
+                  ? 'text-foreground'
+                  : 'text-muted-foreground'
+              "
+            >
               {{ formatMailDate(item.date) }}
             </div>
           </div>
         </div>
       </div>
       <!-- ------------------desktop layout-------------------- -->
-<div
-  class="relative overflow-y-auto h-[calc(100dvh)] hidden xl:block custom-scroll px-2 bg-[hsl(var(--card))]"
-  @scroll="onScroll"
->
-  <table class="table-auto w-full">
-    <thead class="sticky top-0 z-10 bg-[hsl(var(--card))]">
-      <tr>
-        <th class="py-4"></th>
-        <th class="py-4 flex gap-2 items-center">
-          <Inbox class="h-4 w-4" /> {{ titleNav }}
-        </th>
-        <th class="py-4"></th>
-        <th class="py-4"></th>
-        <th class="py-4"></th>
-      </tr>
-    </thead>
+      <div
+        class="relative overflow-y-auto h-[calc(100dvh)] hidden xl:block custom-scroll px-2 bg-[hsl(var(--card))]"
+        @scroll="onScroll"
+      >
+        <table class="table-auto w-full">
+          <thead class="sticky top-0 z-10 bg-[hsl(var(--card))]">
+            <tr>
+              <th class="py-4"></th>
+              <th class="py-4 flex gap-2 items-center">
+                <Inbox class="h-4 w-4" /> {{ titleNav }}
+              </th>
+              <th class="py-4"></th>
+              <th class="py-4"></th>
+              <th class="py-4"></th>
+            </tr>
+          </thead>
           <tbody>
             <TransitionGroup name="list" appear>
               <template v-for="(group, label) in groupedEmails" :key="label">
                 <tr v-if="group.length">
-                  <td v-if="label !== 'Today'" colspan="5"
-                    class="pl-12 pr-10 py-2 pt-5 text-sm font-bold text-primary-500 bg-muted">
+                  <td
+                    v-if="label !== 'Today'"
+                    colspan="5"
+                    class="pl-12 pr-10 py-2 pt-5 text-sm font-bold text-primary-500 bg-muted"
+                  >
                     <div class="border-b border-muted">
                       <div class="pl-4 pb-2">
                         {{
                           label === "Yesterday"
                             ? "เมื่อวาน"
                             : label === "Last7Days"
-                              ? "7 วันที่ผ่านมา"
-                              : label === "Last30Days"
-                                ? "30 วันที่ผ่านมา"
-                                : "ก่อนหน้านี้"
+                            ? "7 วันที่ผ่านมา"
+                            : label === "Last30Days"
+                            ? "30 วันที่ผ่านมา"
+                            : "ก่อนหน้านี้"
                         }}
                       </div>
                     </div>
                   </td>
                 </tr>
-                 <tr
+                <tr
                   v-for="item in group"
                   :key="item.id"
                   :class="[
@@ -269,13 +289,17 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                     />
                   </td>
 
-                  <td :class="[
-                    'max-w-[16vw] min-w-[16vw] pr-4 py-2 flex items-center gap-2',
-                    item.read
-                      ? 'font-normal text-muted-800 dark:text-muted-400'
-                      : 'font-semibold',
-                  ]">
-                    <p class="overflow-hidden whitespace-nowrap  text-ellipsis truncate">
+                  <td
+                    :class="[
+                      'max-w-[16vw] min-w-[16vw] pr-4 py-2 flex items-center gap-2',
+                      item.read
+                        ? 'font-normal text-muted-800 dark:text-muted-400'
+                        : 'font-semibold',
+                    ]"
+                  >
+                    <p
+                      class="overflow-hidden whitespace-nowrap text-ellipsis truncate"
+                    >
                       {{ extractName(item.from) }}
                     </p>
                     <Badge v-for="label in item.labels" variant="secondary">{{
@@ -283,22 +307,33 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                     }}</Badge>
                   </td>
 
-                  <td class="w-full max-w-[800px] pr-10 py-2" :colspan="item.attachments?.length > 0 ? 1 : 2">
+                  <td
+                    class="w-full max-w-[800px] pr-10 py-2"
+                    :colspan="item.attachments?.length > 0 ? 1 : 2"
+                  >
                     <div class="flex items-center gap-2 overflow-hidden">
                       <!-- Subject + Snippet -->
-                      <div class="truncate whitespace-nowrap overflow-hidden min-w-0">
-                        <span :class="item.read
-                            ? 'font-normal text-muted-500 dark:text-muted-400'
-                            : 'font-semibold'
-                          ">
+                      <div
+                        class="truncate whitespace-nowrap overflow-hidden min-w-0"
+                      >
+                        <span
+                          :class="
+                            item.read
+                              ? 'font-normal text-muted-500 dark:text-muted-400'
+                              : 'font-semibold'
+                          "
+                        >
                           {{ item.subject }}
                         </span>
                         -
-                        <span :class="[
-                          item.read
-                            ? 'text-muted-500 dark:text-muted-400'
-                            : 'font-semibold',
-                        ]" :title="item.snippet">
+                        <span
+                          :class="[
+                            item.read
+                              ? 'text-muted-500 dark:text-muted-400'
+                              : 'font-semibold',
+                          ]"
+                          :title="item.snippet"
+                        >
                           {{ item.snippet }}
                         </span>
                       </div>
@@ -315,7 +350,10 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                             </div>
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p v-for="file in item.attachments" :key="file.filename">
+                            <p
+                              v-for="file in item.attachments"
+                              :key="file.filename"
+                            >
                               {{ file.filename }}
                             </p>
                           </TooltipContent>
@@ -324,10 +362,14 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                     </div>
                   </td>
 
-                  <td class="px-4 py-2 text-xs text-end min-w-[6rem] pr-10" :class="selectedMail === item.id
-                      ? 'text-foreground'
-                      : 'text-muted-foreground'
-                    ">
+                  <td
+                    class="px-4 py-2 text-xs text-end min-w-[6rem] pr-10"
+                    :class="
+                      selectedMail === item.id
+                        ? 'text-foreground'
+                        : 'text-muted-foreground'
+                    "
+                  >
                     {{ formatMailDate(item.date) }}
                   </td>
                 </tr>
@@ -337,11 +379,15 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
         </table>
       </div>
     </div>
-    <div v-if="loading"
-      class="absolute bottom-0 w-full flex justify-center items-center py-3 bg-[hsl(var(--card))]/50 z-50 backdrop-blur-sm">
+    <div
+      v-if="loading"
+      class="absolute bottom-0 w-full flex justify-center items-center py-3 bg-[hsl(var(--card))]/50 z-50 backdrop-blur-sm"
+    >
       <div class="flex items-center space-x-2">
         <!-- Spinner -->
-        <div class="w-5 h-5 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
+        <div
+          class="w-5 h-5 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"
+        ></div>
         <!-- Loading Text -->
         <span class="text-sm text-gray-600 animate-pulse">กำลังโหลด...</span>
       </div>
