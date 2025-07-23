@@ -5,9 +5,9 @@ export const containerClass = "w-full h-full";
 </script>
 
 <script setup lang="ts">
-
 import { Inbox, ChevronDown } from "lucide-vue-next";
 import type { LinkProp } from "~/components/Base/MailNotion/Nav.vue";
+import { Menu } from "lucide-vue-next";
 
 const route = useRoute();
 
@@ -110,61 +110,73 @@ watch(
 );
 // เปิด/ปิดตามขนาดจอ
 // watch(isLg, (val) => open.value = val, { immediate: true });
-
 </script>
 
 <template>
   <SidebarProvider v-model:open="open">
     <AppSidebar />
     <SidebarInset
-  v-if="
-    session?.googleAccessToken &&
-    ['/mail', '/mail/sendcustomer', '/mail/fromedta'].includes(route.path)
-  "
->
-  <div class="flex h-screen w-full ">
-    <!-- Sidebar -->
-    <!-- <div
+      v-if="
+        session?.googleAccessToken &&
+        ['/mail', '/mail/sendcustomer', '/mail/fromedta'].includes(route.path)
+      "
+    >
+      <div class="flex h-screen w-full">
+        <!-- Sidebar -->
+        <!-- <div
       class="shrink-0 w-[15rem] border-r border-muted-200 dark:border-muted-700"
     >
       <BaseMailNotionNav :links="links" :is-collapsed="false" />
     </div> -->
-    <MailSideBar />
 
-    <!-- Right Section -->
-    <div class="flex flex-col flex-1 h-screen overflow-hidden">
-      <!-- Header -->
-      <header
-        :class="[
-          'sticky top-0 flex h-14 shrink-0 z-50 items-center gap-2 transition-all bg-[hsl(var(--card))] border-l border-muted-200 dark:border-muted-700',
-          isStuck ? 'shadow-sm' : '',
-        ]"
-      >
-      <Transition name="fade" mode="out-in">
-        <h1 :key="titleNav" class="text-md font-semibold flex items-center gap-2 px-14"><Inbox class="h-4 w-4" /> {{ titleNav }}</h1>
-        </Transition>
-      </header>
+        <div class="hidden xl:block">
+          <MailSideBar />
+        </div>
 
-      <!-- Main content -->
-      <div class="flex-1 overflow-y-auto border-l border-muted-200 dark:border-muted-700">
-        <div id="main">
-          <slot />
+        <!-- Right Section -->
+        <div class="flex flex-col flex-1 h-screen overflow-hidden relative">
+          <!-- Header -->
+          <header
+            :class="[
+              'sticky  top-0 flex h-14 shrink-0 z-50 items-center gap-2 transition-all bg-[hsl(var(--card))] border-l border-muted-200 dark:border-muted-700 px-2',
+              isStuck ? 'shadow-sm' : '',
+            ]"
+          >
+            <Sheet>
+              <SheetTrigger class="block xl:hidden"
+                ><Button variant="outline"><Menu :size="15" /></Button
+              ></SheetTrigger>
+              <SheetContent :side="'left'" class="p-0 pt-10 m-0">
+                <SheetHeader>
+                  <SheetTitle class="hidden"></SheetTitle>
+                  <SheetDescription class="hidden"></SheetDescription>
+                  <MailSideBar />
+                </SheetHeader>
+              </SheetContent>
+            </Sheet>
+            <Transition name="fade" mode="out-in">
+              <h1
+                :key="titleNav"
+                class="text-md font-semibold flex items-center gap-2 xl:pl-12"
+              >
+                <Inbox class="h-4 w-4" /> {{ titleNav }}
+              </h1>
+            </Transition>
+          </header>
+
+          <!-- Main content -->
+          <div
+            class="flex-1 overflow-y-auto overflow-x-hidden w-full border-l border-muted-200 dark:border-muted-700"
+          >
+            <div id="main" class="w-full overflow-x-hidden">
+              <slot />
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</SidebarInset>
+    </SidebarInset>
 
-    <SidebarInset
-      v-else
-      :class="[
-        route.path == '/mail' ||
-        route.path == '/mail/sendcustomer' ||
-        route.path == '/mail/fromedta'
-          ? 'relative overflow-x-hidden'
-          : '',
-      ]"
-    >
+    <SidebarInset v-else>
       <!-- Invisible marker -->
       <header
         v-if="
@@ -250,16 +262,7 @@ watch(
         </div>
       </header>
       <!-- Layout.vue -->
-      <div
-        :class="[
-          'w-full mx-auto pt-0 ',
-          route.path == '/mail' ||
-          route.path == '/mail/sendcustomer' ||
-          route.path == '/mail/fromedta'
-            ? ''
-            : 'max-w-[1440px] px-4 pb-6',
-        ]"
-      >
+      <div :class="['w-full mx-auto pt-0 ']">
         <div v-if="false" class="flex items-center gap-2">
           <!-- <NuxtLink to="/"  v-if="route.name !== 'index'">
             <svg
@@ -279,16 +282,7 @@ watch(
           </NuxtLink> -->
           <h1 class="text-2xl font-semibold">{{ route.meta.title }}</h1>
         </div>
-        <div
-          :class="[
-            route.path == '/mail' ||
-            route.path == '/mail/sendcustomer' ||
-            route.path == '/mail/fromedta'
-              ? ''
-              : 'pt-4',
-          ]"
-          id="main"
-        >
+        <div id="main">
           <slot />
         </div>
       </div>
