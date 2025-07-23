@@ -106,8 +106,17 @@ export function mapCustomerResponseToCustomer(response: any[]): Customer[] {
 }
 
 export function extractName(from: string): string {
-  const match = from.match(/^(.*?)\s*<.*?>$/);
-  return match ? match[1] : from;
+  const match = from.match(/^(.*?)\s*<(.+?)>$/); // ดึงชื่อกับ email
+  const profileStore = useProfileStore();
+  if (match) {
+    const name = match[1].trim();
+
+    if (name === profileStore.user?.username) return "ฉัน";
+    return name;
+  }
+
+  if (from === profileStore.user?.username) return "ฉัน";
+  return from;
 }
 
 /**
