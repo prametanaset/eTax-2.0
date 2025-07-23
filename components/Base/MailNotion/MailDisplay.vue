@@ -28,7 +28,7 @@ const sanitizedHtml = computed(() =>
 </script>
 
 <template>
-  <ScrollArea class="bg-[hsl(var(--card))]  h-full">
+  <ScrollArea class="bg-[hsl(var(--card))] h-full">
     <div class="flex flex-col">
       <div v-if="mail?.data.html" class="">
         <!-- header -->

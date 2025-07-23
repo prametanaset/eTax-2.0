@@ -159,7 +159,7 @@ watch(
                 :key="titleNav"
                 class="text-md font-semibold flex items-center gap-2 xl:pl-12"
               >
-                <Inbox class="h-4 w-4" /> {{ titleNav }}
+                <Inbox class="h-4 w-4 text-red-500" /> {{ titleNav }}
               </h1>
             </Transition>
           </header>
