@@ -141,7 +141,7 @@ watch(
         ]"
       >
       <Transition name="fade" mode="out-in">
-        <h1 :key="titleNav" class="text-md font-semibold flex items-center gap-2 px-16"><Inbox class="h-4 w-4" /> {{ titleNav }}</h1>
+        <h1 :key="titleNav" class="text-md font-semibold flex items-center gap-2 px-14"><Inbox class="h-4 w-4" /> {{ titleNav }}</h1>
         </Transition>
       </header>
 

@@ -281,7 +281,7 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                     <Dot
                       :class="[
                         item.read
-                          ? 'text-transparent'
+                          ? 'text-transparent h-8 w-8'
                           : 'text-primary-500 h-8 w-8',
                       ]"
                     />
