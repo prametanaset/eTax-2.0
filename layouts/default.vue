@@ -262,7 +262,7 @@ watch(
         </div>
       </header>
       <!-- Layout.vue -->
-      <div :class="['w-full mx-auto pt-0 ']">
+      <div :class="['w-full mx-auto pt-0 max-w-[1440px]']">
         <div v-if="false" class="flex items-center gap-2">
           <!-- <NuxtLink to="/"  v-if="route.name !== 'index'">
             <svg

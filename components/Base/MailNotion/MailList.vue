@@ -331,7 +331,7 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                     :class="[
                       'max-w-[16vw] min-w-[16vw] pr-4 py-2 flex items-center gap-2',
                       item.read
-                        ? 'font-normal text-muted-800 dark:text-muted-400'
+                        ? 'font-normal text-muted-800 dark:text-muted-300'
                         : 'font-semibold',
                     ]"
                   >
@@ -355,7 +355,7 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                         <span
                           :class="
                             item.read
-                              ? 'font-normal text-muted-500 dark:text-muted-400'
+                              ? 'font-normal text-muted-800 dark:text-muted-300'
                               : 'font-semibold'
                           "
                         >
