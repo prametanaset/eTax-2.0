@@ -33,7 +33,7 @@ const sanitizedHtml = computed(() =>
       <div v-if="mail?.data.html" class="">
         <!-- header -->
         <div
-          class="flex items-start px-4 py-4 justify-between sticky top-0 z-10 bg-[hsl(var(--card))] border-b border-primary-500"
+          class="flex items-start px-4 py-4 justify-between sticky top-0 z-10 bg-[hsl(var(--card))] border-b border-muted-300/30"
         >
           <div class="flex items-center gap-2 text-sm">
             <div class="flex items-center gap-2">
