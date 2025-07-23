@@ -289,7 +289,7 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                   <td
                     v-if="label !== 'Today'"
                     colspan="5"
-                    class="pl-7 pr-10 py-2 pt-5 text-sm font-bold text-primary-500 bg-muted"
+                    class="pl-7 pr-10 py-2 pt-5 text-sm font-semibold text-muted-800 bg-muted"
                   >
                     <div class="border-b border-muted">
                       <div class="pl-4 pb-2">
@@ -312,7 +312,7 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                   :class="[
                     'cursor-pointer hover:bg-accent text-sm w-full h-10',
                     mailStore.selectMail?.data.id === item.id
-                      ? 'dark:bg-[hsl(var(--card))] bg-muted-200'
+                      ? 'dark:bg-[hsl(var(--card))] bg-[#0000000d]'
                       : '',
                   ]"
                   @click="mailStore.setSelectMail(item)"
@@ -322,7 +322,7 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                       :class="[
                         item.read
                           ? 'text-transparent h-8 w-8'
-                          : 'text-primary-500 h-8 w-8',
+                          : 'text-blue-500 h-8 w-8',
                       ]"
                     />
                   </td>
@@ -335,7 +335,7 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                         : 'font-semibold',
                     ]"
                   >
-                    <p class="truncate leading-normal">
+                    <p class="truncate leading-normal pt-[1px]">
                       {{ extractName(item.from) }}
                     </p>
                     <Badge v-for="label in item.labels" variant="secondary">{{

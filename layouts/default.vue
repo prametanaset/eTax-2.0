@@ -138,7 +138,7 @@ watch(
           <!-- Header -->
           <header
             :class="[
-              'sticky  top-0 flex h-14 shrink-0 z-50 items-center gap-2 transition-all border-l border-muted-200 dark:border-muted-700 px-2',
+              'sticky  top-0 flex h-12 shrink-0 z-50 items-center gap-2 transition-all border-l border-muted-200 dark:border-muted-700 px-2 font-suk',
               isStuck ? 'shadow-sm' : '',
             ]"
           >
@@ -159,7 +159,8 @@ watch(
                 :key="titleNav"
                 class="text-md font-semibold flex items-center gap-2 xl:pl-12"
               >
-                <Inbox class="h-4 w-4 text-red-500" /> {{ titleNav }}
+                <!-- <Inbox class="h-4 w-4 text-red-500" /> -->
+                <svg class="inbox" height="20" viewBox="0 0 20 20" width="20" style="min-width: 20px; pointer-events: none;"><path d="M15.834 2.5H4.166L2.5 12.5v5h15v-5zm-3.959 10c0 1.034-.84 1.875-1.875 1.875A1.876 1.876 0 0 1 8.125 12.5H4.4l1.353-8.125h8.49l1.354 8.125h-3.725z" fill="rgba(212, 76, 71, 1)"></path></svg> {{ titleNav }}
               </h1>
             </Transition>
           </header>

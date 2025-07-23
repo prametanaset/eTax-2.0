@@ -25,7 +25,7 @@ import {
   Sparkles,
 } from "lucide-vue-next";
 const { signOut } = useAuth();
-
+const profileStore = useProfileStore();
 const props = defineProps<{
   user: {
     name: string;
@@ -66,8 +66,8 @@ const handleSignOut = async () => {
               <AvatarFallback class="rounded-full"> CN </AvatarFallback>
             </Avatar>
             <div class="grid flex-1 text-left text-sm leading-tight">
-              <span class="truncate font-semibold">{{ user.name }}</span>
-              <span class="truncate text-xs">{{ user.email }}</span>
+              <span class="truncate font-semibold">{{ profileStore.user?.username }}</span>
+              <span class="truncate text-xs">{{ profileStore.displayName }}</span>
             </div>
             <ChevronsUpDown class="ml-auto size-4" />
           </SidebarMenuButton>
@@ -85,8 +85,8 @@ const handleSignOut = async () => {
                 <AvatarFallback class="rounded-xl"> CN </AvatarFallback>
               </Avatar>
               <div class="grid flex-1 text-left text-sm leading-tight">
-                <span class="truncate font-semibold">{{ user.name }}</span>
-                <span class="truncate text-xs">{{ user.email }}</span>
+                <span class="truncate font-semibold">{{ profileStore.user?.username }}</span>
+                <span class="truncate text-xs">{{ profileStore.displayName }}</span>
               </div>
             </div>
             <ThemeToggle />

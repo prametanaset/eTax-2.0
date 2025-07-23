@@ -91,6 +91,8 @@ export default defineNuxtConfig({
     },
     authSecret: "mySuperSecretString123",
     apiSecret: process.env.NUXT_API_SECRET,
+    googleClientId: process.env.GOOGLE_CLIENT_ID,
+    googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   },
   plugins: [{ src: "~/plugins/error-handler.ts" }],
 });
