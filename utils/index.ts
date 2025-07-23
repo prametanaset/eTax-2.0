@@ -111,11 +111,11 @@ export function extractName(from: string): string {
   if (match) {
     const name = match[1].trim();
 
-    if (name === profileStore.user?.username) return "ฉัน";
+    if (name === profileStore.user?.username) return "me";
     return name;
   }
 
-  if (from === profileStore.user?.username) return "ฉัน";
+  if (from === profileStore.user?.username) return "me";
   return from;
 }
 

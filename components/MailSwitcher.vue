@@ -38,17 +38,11 @@ const activeTeam = ref(props.teams[0])
       <DropdownMenu>
         <DropdownMenuTrigger as-child>
           <SidebarMenuButton
-            :size="null"
             class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground py-1"
           >
             <div class="flex aspect-square size-6 items-center justify-center rounded-full bg-sidebar-primary text-sidebar-primary-foreground">
               <Avatar class="h-6 w-6 rounded-full">
-                <AvatarImage
-                  :src="data?.user?.image"
-                />
-                <!-- <AvatarFallback class="rounded-full">
-                  {{ user.name.slice(0, 2).toUpperCase() }}
-                </AvatarFallback> -->
+                <AvatarImage :src="data?.user?.image" class="h-8 w-8 rounded-full" />
               </Avatar>
             </div>
             <div class="grid flex-1 text-left text-sm leading-tight">
@@ -71,9 +65,6 @@ const activeTeam = ref(props.teams[0])
                 <AvatarImage
                   :src="data?.user?.image"
                 />
-                <!-- <AvatarFallback class="rounded-full">
-                  {{ user.name.slice(0, 2).toUpperCase() }}
-                </AvatarFallback> -->
               </Avatar>
             </div>
             <div class="grid flex-1 text-left text-sm leading-tight">

@@ -22,6 +22,7 @@ import {
   type LucideIcon,
   MoreHorizontal,
   Trash2,
+  Inbox
 } from 'lucide-vue-next'
 
 defineProps<{
@@ -42,9 +43,9 @@ const route = useRoute();
     <SidebarGroupLabel>Mail</SidebarGroupLabel>
     <SidebarMenu>
       <SidebarMenuItem v-for="item in projects" :key="item.name">
-        <SidebarMenuButton as-child :is-active="route.path === item.url" class="rounded-lg">
+        <SidebarMenuButton as-child :is-active="route.path === item.url" class="rounded-lg data-[active=true]:bg-[#0000000d] data-[active=true]:text-black">
           <NuxtLink :to="item.url">
-            <component :is="item.icon" />
+            <component :is="item.icon" :class="item.icon == Inbox ?  'text-red-500' : ''" />
             <span>{{ item.name }}</span>
           </NuxtLink>
         </SidebarMenuButton>

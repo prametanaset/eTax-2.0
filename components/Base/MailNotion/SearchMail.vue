@@ -20,7 +20,7 @@
       class="w-[30rem] ml-2 p-0 bg-transparent border-0  transition-none !animate-none shadow-xl
       "
     >
-      <div class="bg-[hsl(var(--card))] rounded  w-full">
+      <div class="bg-[hsl(var(--card))] rounded-lg  w-full">
         <div class="relative w-full items-center">
           <Input
             ref="inputRef"
@@ -48,7 +48,7 @@
         <!-- Result List -->
         <Card
           v-if="searchQuery && filteredMails.length > 0"
-          class="mt-2 max-h-[50dvh] overflow-y-auto bg-[hsl(var(--card))] p-2 text-start text-muted-foreground custom-scroll"
+          class="mt-2 max-h-[50dvh] overflow-y-auto bg-[hsl(var(--card))] p-2 text-start text-muted-foreground custom-scroll border-none"
         >
           <div
             v-for="(mail, index) in filteredMails"
@@ -68,7 +68,7 @@
         <!-- Empty -->
         <Card
           v-else-if="searchQuery && !loading"
-          class="mt-2 bg-[hsl(var(--card))] p-2 text-center text-muted-foreground"
+          class="mt-2 bg-[hsl(var(--card))] p-2 text-center text-muted-foreground border-none "
         >
           ไม่พบเมลที่ตรงกับ "{{ searchQuery }}"
         </Card>

@@ -104,7 +104,7 @@ const data = {
 </script>
 
 <template>
-  <div class="w-[240px]">
+  <div class="w-[240px] pt-2">
     <SidebarHeader>
       <MailSwitcher :teams="data.teams" />
     </SidebarHeader>
