@@ -249,7 +249,7 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                   <td
                     v-if="label !== 'Today'"
                     colspan="5"
-                    class="pl-12 pr-10 py-2 pt-5 text-sm font-bold text-primary-500 bg-muted"
+                    class="pl-7 pr-10 py-2 pt-5 text-sm font-bold text-primary-500 bg-muted"
                   >
                     <div class="border-b border-muted">
                       <div class="pl-4 pb-2">
