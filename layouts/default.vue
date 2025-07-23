@@ -129,7 +129,7 @@ watch(
       <BaseMailNotionNav :links="links" :is-collapsed="false" />
     </div> -->
 
-        <div class="hidden xl:block">
+        <div class="hidden xl:block bg-[hsl(var(--card))]">
           <MailSideBar />
         </div>
 
@@ -138,7 +138,7 @@ watch(
           <!-- Header -->
           <header
             :class="[
-              'sticky  top-0 flex h-14 shrink-0 z-50 items-center gap-2 transition-all bg-[hsl(var(--card))] border-l border-muted-200 dark:border-muted-700 px-2',
+              'sticky  top-0 flex h-14 shrink-0 z-50 items-center gap-2 transition-all border-l border-muted-200 dark:border-muted-700 px-2',
               isStuck ? 'shadow-sm' : '',
             ]"
           >

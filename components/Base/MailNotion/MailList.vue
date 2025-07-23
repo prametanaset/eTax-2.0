@@ -269,11 +269,11 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
       </div>
       <!-- ------------------desktop layout-------------------- -->
       <div
-        class="relative overflow-y-auto h-[calc(100dvh-3.5rem)] hidden xl:block custom-scroll px-3 bg-[hsl(var(--card))]"
+        class="relative overflow-y-auto h-[calc(100dvh-3.5rem)] hidden xl:block custom-scroll px-3"
         @scroll="onScroll"
       >
         <table class="table-auto w-full">
-          <thead class="sticky top-0 z-10 bg-[hsl(var(--card))]">
+          <thead class="sticky top-0 z-10 ">
             <tr>
               <th></th>
               <th></th>
