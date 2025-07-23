@@ -9,17 +9,14 @@ export interface LinkProp {
 }
 </script>
 <template>
-  <div
-    :class="[
-      !session?.googleAccessToken
-        ? 'lg:h-[calc(100dvh)]'
-        : 'lg:h-[calc(100dvh-3.5rem)]',
-    ]"
-  >
+  <div>
     <!-- Main content -->
-    <BaseGoogleAuthLogin
+    <div
+      class="w-full h-full overflow-hidden"
       v-if="status !== 'loading' && !session?.googleAccessToken"
-    />
+    >
+      <BaseGoogleAuthLogin />
+    </div>
 
     <div v-else>
       <div class="overflow-x-hidden">

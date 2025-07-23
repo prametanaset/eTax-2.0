@@ -117,7 +117,6 @@ watch(
     <AppSidebar />
     <SidebarInset
       v-if="
-        session?.googleAccessToken &&
         ['/mail', '/mail/sendcustomer', '/mail/fromedta'].includes(route.path)
       "
     >
@@ -129,7 +128,10 @@ watch(
       <BaseMailNotionNav :links="links" :is-collapsed="false" />
     </div> -->
 
-        <div class="hidden xl:block bg-[hsl(var(--card))]">
+        <div
+          v-if="session?.googleAccessToken"
+          class="hidden xl:block bg-[hsl(var(--card))]"
+        >
           <MailSideBar />
         </div>
 
@@ -137,6 +139,7 @@ watch(
         <div class="flex flex-col flex-1 h-screen overflow-hidden relative">
           <!-- Header -->
           <header
+            v-if="session?.googleAccessToken"
             :class="[
               'sticky  top-0 flex h-14 shrink-0 z-50 items-center gap-2 transition-all border-l border-muted-200 dark:border-muted-700 px-2',
               isStuck ? 'shadow-sm' : '',
