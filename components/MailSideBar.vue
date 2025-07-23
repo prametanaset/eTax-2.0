@@ -21,6 +21,9 @@ import {
   Star,
   Trash,
   Send,
+  Search,
+  PieChart,
+  Map,
 } from "lucide-vue-next";
 
 const props = withDefaults(defineProps<SidebarProps>(), {
@@ -80,21 +83,38 @@ const data = {
       icon: Trash,
     },
   ],
+  projects: [
+    {
+      name: "กล่องจดหมาย",
+      url: "/mail",
+      icon: Inbox,
+    },
+    {
+      name: "ส่งแล้ว",
+      url: "/mail/fromedta",
+      icon: Send,
+    },
+    // {
+    //   name: "Travel",
+    //   url: "/mail/sendcustomer",
+    //   icon: Map,
+    // },
+  ],
 };
 </script>
 
 <template>
-  <Sidebar v-bind="props">
-    <!-- <SidebarHeader>
-      <TeamSwitcher :teams="data.teams" />
-    </SidebarHeader> -->
+  <div class="pr-1">
+    <SidebarHeader>
+      <MailSwitcher :teams="data.teams" />
+    </SidebarHeader>
     <SidebarContent>
-      <NavMain :items="data.navMain" />
-      <!-- <NavProjects :projects="data.projects" /> -->
+      <BaseMailNotionSearchMail />
+      <NavProjects :projects="data.projects" />
     </SidebarContent>
     <SidebarFooter>
       <!-- <NavUser :user="data.user" /> -->
     </SidebarFooter>
     <SidebarRail />
-  </Sidebar>
+  </div>
 </template>

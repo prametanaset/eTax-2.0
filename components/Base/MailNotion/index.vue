@@ -13,7 +13,7 @@ export interface LinkProp {
 }
 </script>
 <template>
-  <div class="flex gap-6 lg:h-[calc(100dvh-3.5rem)] overflow-hidden">
+  <div class="flex gap-6 overflow-hidden" :class="!session?.googleAccessToken ? 'lg:h-[calc(100dvh)]' : 'lg:h-[calc(100dvh-3.5rem)]'">
     <!-- Main content -->
     <BaseGoogleAuthLogin
       v-if="status !== 'loading' && !session?.googleAccessToken"

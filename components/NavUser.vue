@@ -24,6 +24,7 @@ import {
   LogOut,
   Sparkles,
 } from "lucide-vue-next";
+const { signOut } = useAuth();
 
 const props = defineProps<{
   user: {
@@ -34,6 +35,21 @@ const props = defineProps<{
 }>();
 
 const { isMobile } = useSidebar();
+
+const loading = ref(false);
+const error = ref("");
+
+const handleSignOut = async () => {
+  loading.value = true;
+  error.value = "";
+  try {
+    await signOut({ callbackUrl: "/" });
+  } catch (e: any) {
+    error.value = e?.message || "Logout failed";
+  } finally {
+    loading.value = false;
+  }
+};
 </script>
 
 <template>
@@ -77,7 +93,7 @@ const { isMobile } = useSidebar();
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem class="cursor-pointer">
+            <DropdownMenuItem class="cursor-pointer rounded-lg">
               <Sparkles />
 
               อัปเกรดบริการของคุณ
@@ -85,26 +101,24 @@ const { isMobile } = useSidebar();
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem class="cursor-pointer"> 
+            <DropdownMenuItem class="cursor-pointer rounded-lg"> 
               <BadgeCheck />
               โปรไฟล์
             </DropdownMenuItem>
-            <DropdownMenuItem class="cursor-pointer">
+            <DropdownMenuItem class="cursor-pointer rounded-lg">
               <CreditCard />
               ดูบริการ
             </DropdownMenuItem>
-            <DropdownMenuItem class="cursor-pointer">
+            <DropdownMenuItem class="cursor-pointer rounded-lg">
               <Bell />
               การแจ้งเตือน
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <NuxtLink to="/login" >
-            <DropdownMenuItem class="cursor-pointer">
+            <DropdownMenuItem class="cursor-pointer rounded-lg" @click="handleSignOut">
               <LogOut />
               ลงชื่อออก
             </DropdownMenuItem>
-          </NuxtLink>
         </DropdownMenuContent>
       </DropdownMenu>
     </SidebarMenuItem>

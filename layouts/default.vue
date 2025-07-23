@@ -6,7 +6,7 @@ export const containerClass = "w-full h-full";
 
 <script setup lang="ts">
 
-import { Inbox } from "lucide-vue-next";
+import { Inbox, ChevronDown } from "lucide-vue-next";
 import type { LinkProp } from "~/components/Base/MailNotion/Nav.vue";
 
 const route = useRoute();
@@ -110,6 +110,7 @@ watch(
 );
 // เปิด/ปิดตามขนาดจอ
 // watch(isLg, (val) => open.value = val, { immediate: true });
+
 </script>
 
 <template>
@@ -123,18 +124,19 @@ watch(
 >
   <div class="flex h-screen w-full ">
     <!-- Sidebar -->
-    <div
+    <!-- <div
       class="shrink-0 w-[15rem] border-r border-muted-200 dark:border-muted-700"
     >
       <BaseMailNotionNav :links="links" :is-collapsed="false" />
-    </div>
+    </div> -->
+    <MailSideBar />
 
     <!-- Right Section -->
     <div class="flex flex-col flex-1 h-screen overflow-hidden">
       <!-- Header -->
       <header
         :class="[
-          'sticky top-0 flex h-14 shrink-0 z-50 items-center gap-2 transition-all bg-[hsl(var(--card))]',
+          'sticky top-0 flex h-14 shrink-0 z-50 items-center gap-2 transition-all bg-[hsl(var(--card))] border-l border-muted-200 dark:border-muted-700',
           isStuck ? 'shadow-sm' : '',
         ]"
       >
@@ -144,7 +146,7 @@ watch(
       </header>
 
       <!-- Main content -->
-      <div class="flex-1 overflow-y-auto">
+      <div class="flex-1 overflow-y-auto border-l border-muted-200 dark:border-muted-700">
         <div id="main">
           <slot />
         </div>
@@ -250,7 +252,7 @@ watch(
       <!-- Layout.vue -->
       <div
         :class="[
-          'w-full mx-auto   pt-0 ',
+          'w-full mx-auto pt-0 ',
           route.path == '/mail' ||
           route.path == '/mail/sendcustomer' ||
           route.path == '/mail/fromedta'

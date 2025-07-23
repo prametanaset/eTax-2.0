@@ -33,20 +33,22 @@ defineProps<{
 }>()
 
 const { isMobile } = useSidebar()
+const route = useRoute();
+
 </script>
 
 <template>
-  <SidebarGroup class="group-data-[collapsible=icon]:hidden">
-    <SidebarGroupLabel>Projects</SidebarGroupLabel>
+  <SidebarGroup class="group-data-[collapsible=icon]:hidden py-0">
+    <SidebarGroupLabel>Mail</SidebarGroupLabel>
     <SidebarMenu>
       <SidebarMenuItem v-for="item in projects" :key="item.name">
-        <SidebarMenuButton as-child>
-          <a :href="item.url">
+        <SidebarMenuButton as-child :is-active="route.path === item.url" class="rounded-lg">
+          <NuxtLink :to="item.url">
             <component :is="item.icon" />
             <span>{{ item.name }}</span>
-          </a>
+          </NuxtLink>
         </SidebarMenuButton>
-        <DropdownMenu>
+        <!-- <DropdownMenu>
           <DropdownMenuTrigger as-child>
             <SidebarMenuAction show-on-hover>
               <MoreHorizontal />
@@ -72,7 +74,7 @@ const { isMobile } = useSidebar()
               <span>Delete Project</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> -->
       </SidebarMenuItem>
       <SidebarMenuItem>
         <SidebarMenuButton class="text-sidebar-foreground/70">

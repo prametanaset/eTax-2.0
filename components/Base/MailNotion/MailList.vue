@@ -229,16 +229,14 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
       </div>
       <!-- ------------------desktop layout-------------------- -->
       <div
-        class="relative overflow-y-auto h-[calc(100dvh-3.5rem)] hidden xl:block custom-scroll px-2 bg-[hsl(var(--card))]"
+        class="relative overflow-y-auto h-[calc(100dvh-3.5rem)] hidden xl:block custom-scroll px-3 bg-[hsl(var(--card))]"
         @scroll="onScroll"
       >
         <table class="table-auto w-full">
           <thead class="sticky top-0 z-10 bg-[hsl(var(--card))]">
             <tr>
               <th></th>
-              <th>
-                
-              </th>
+              <th></th>
               <th></th>
               <th></th>
               <th></th>
@@ -279,7 +277,7 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                   ]"
                   @click="mailStore.setSelectMail(item)"
                 >
-                  <td class="pl-8">
+                  <td class="pl-3 rounded-l-xl">
                     <Dot
                       :class="[
                         item.read
@@ -297,9 +295,7 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                         : 'font-semibold',
                     ]"
                   >
-                    <p
-                      class="overflow-hidden whitespace-nowrap text-ellipsis truncate"
-                    >
+                    <p class="truncate leading-normal">
                       {{ extractName(item.from) }}
                     </p>
                     <Badge v-for="label in item.labels" variant="secondary">{{
@@ -363,7 +359,7 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
                   </td>
 
                   <td
-                    class="px-4 py-2 text-xs text-end min-w-[6rem] pr-10"
+                    class="px-4 py-2 text-xs text-end min-w-[6rem] pr-10 rounded-r-xl"
                     :class="
                       selectedMail === item.id
                         ? 'text-foreground'
