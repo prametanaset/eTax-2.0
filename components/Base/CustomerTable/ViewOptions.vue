@@ -2,7 +2,7 @@
   <DropdownMenu>
     <div class="mr-4">
       <Toaster />
-      <Button @click="isDialogOpen = true">เพิ่มข้อมูลลูกค้า</Button>
+      <Button @click="isDialogOpen = true"><Plus /> เพิ่มข้อมูลลูกค้า</Button>
       <BaseAddCustomerForm
         v-model="isDialogOpen"
         mode="create"
@@ -52,6 +52,7 @@ import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/toast/use-toast";
 import MixerHorizontalIcon from "~icons/radix-icons/mixer-horizontal";
+import { Plus } from "lucide-vue-next";
 
 const { toast } = useToast();
 
@@ -72,6 +73,7 @@ const customer = reactive<Customer>({
   Address: "",
   Tin: "",
   CustomerType: "",
+  companyName: "",
 });
 
 const resetCustomer = () => {

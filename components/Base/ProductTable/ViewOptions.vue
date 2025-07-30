@@ -14,7 +14,7 @@
       <Button
         variant="outline"
         size="sm"
-        class="ml-auto hidden h-8 lg:flex bg-[hsl(var(--card))]"
+        class="ml-auto h-8 bg-[hsl(var(--card))]"
       >
         <MixerHorizontalIcon class="mr-2 h-4 w-4" />
         View

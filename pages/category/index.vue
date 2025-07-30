@@ -1,5 +1,5 @@
 <template>
-  <div class="xl:w-[1400px]">
+  <div class="px-2">
     <BaseProductTable :data="products" :columns="columns"></BaseProductTable>
   </div>
 </template>
@@ -22,7 +22,7 @@ definePageMeta({
   title: "รายการสินค้า",
   auth: {
     unauthenticatedOnly: false,
-  }
+  },
 });
 
 useHead({

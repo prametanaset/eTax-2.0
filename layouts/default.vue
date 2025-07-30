@@ -163,7 +163,19 @@ watch(
                 class="text-md font-semibold flex items-center gap-2 xl:pl-12"
               >
                 <!-- <Inbox class="h-4 w-4 text-red-500" /> -->
-                <svg class="inbox" height="20" viewBox="0 0 20 20" width="20" style="min-width: 20px; pointer-events: none;"><path d="M15.834 2.5H4.166L2.5 12.5v5h15v-5zm-3.959 10c0 1.034-.84 1.875-1.875 1.875A1.876 1.876 0 0 1 8.125 12.5H4.4l1.353-8.125h8.49l1.354 8.125h-3.725z" fill="rgba(212, 76, 71, 1)"></path></svg> {{ titleNav }}
+                <svg
+                  class="inbox"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  width="20"
+                  style="min-width: 20px; pointer-events: none"
+                >
+                  <path
+                    d="M15.834 2.5H4.166L2.5 12.5v5h15v-5zm-3.959 10c0 1.034-.84 1.875-1.875 1.875A1.876 1.876 0 0 1 8.125 12.5H4.4l1.353-8.125h8.49l1.354 8.125h-3.725z"
+                    fill="rgba(212, 76, 71, 1)"
+                  ></path>
+                </svg>
+                {{ titleNav }}
               </h1>
             </Transition>
           </header>
@@ -193,7 +205,7 @@ watch(
           isStuck ? 'shadow-sm ' : '',
         ]"
       >
-        <div class="flex items-center justify-between w-full px-4 pr-2">
+        <div class="flex items-center justify-between w-full pr-2">
           <div id="bread-crumb" class="flex items-center">
             <SidebarTrigger />
             <!-- <Separator v-if="route.name !== 'index'" orientation="vertical" class="mr-2 h-4" /> -->
@@ -266,7 +278,7 @@ watch(
         </div>
       </header>
       <!-- Layout.vue -->
-      <div :class="['w-full mx-auto pt-0 max-w-[1440px]']">
+      <div :class="['w-full mx-auto pt-0 max-w-[1440px] px-2 overflow-hidden']">
         <div v-if="false" class="flex items-center gap-2">
           <!-- <NuxtLink to="/"  v-if="route.name !== 'index'">
             <svg

@@ -1,15 +1,21 @@
 <template>
   <div class="space-y-4">
     <DataTableToolbar :table="table" />
-    <div class="rounded-md border bg-[hsl(var(--card))]">
-      <!-- hsl(var(--card)); -->
-      <Table class=" ">
+
+    <!-- Wrapper ที่ทำให้ตารางเลื่อนแนวนอนได้ในจอเล็ก -->
+    <div class="w-full overflow-x-auto rounded-md border bg-[hsl(var(--card))]">
+      <!-- ใช้ min-w กับ table เพื่อบังคับความกว้างขั้นต่ำ -->
+      <Table class="min-w-[600px]">
         <TableHeader class="bg-[hsl(var(--card))]">
           <TableRow
             v-for="headerGroup in table.getHeaderGroups()"
             :key="headerGroup.id"
           >
-            <TableHead v-for="header in headerGroup.headers" :key="header.id">
+            <TableHead
+              v-for="header in headerGroup.headers"
+              :key="header.id"
+              class="whitespace-nowrap px-4 py-2 text-left"
+            >
               <FlexRender
                 v-if="!header.isPlaceholder"
                 :render="header.column.columnDef.header"
@@ -18,6 +24,7 @@
             </TableHead>
           </TableRow>
         </TableHeader>
+
         <TableBody>
           <template v-if="table.getRowModel().rows?.length">
             <TableRow
@@ -25,7 +32,11 @@
               :key="row.id"
               :data-state="row.getIsSelected() && 'selected'"
             >
-              <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
+              <TableCell
+                v-for="cell in row.getVisibleCells()"
+                :key="cell.id"
+                class="whitespace-nowrap px-4 py-2"
+              >
                 <FlexRender
                   :render="cell.column.columnDef.cell"
                   :props="cell.getContext()"
@@ -35,7 +46,10 @@
           </template>
 
           <TableRow v-else>
-            <TableCell :colspan="columns.length" class="h-24 text-center">
+            <TableCell
+              :colspan="columns.length"
+              class="h-24 text-center text-sm text-muted-foreground"
+            >
               No results.
             </TableCell>
           </TableRow>

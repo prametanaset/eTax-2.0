@@ -50,7 +50,7 @@ import DataTableFacetedFilter from "./FacetedFilter.vue";
 import DataTableViewOptions from "./ViewOptions.vue";
 
 interface DataTableToolbarProps {
-  table: Table<Customer>;
+  table?: Table<Customer>;
 }
 
 const props = defineProps<DataTableToolbarProps>();
