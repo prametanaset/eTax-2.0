@@ -11,6 +11,11 @@ export const useMailStore = defineStore("mailStore", () => {
     data: any;
   } | null>(null);
 
+  const date = reactive({
+    start: "",
+    end: "",
+  });
+
   const mailList = reactive({
     data: [] as any[],
     nextPageToken: null as string | null,
@@ -98,6 +103,7 @@ export const useMailStore = defineStore("mailStore", () => {
     showMailType,
     mailList,
     mailLoaded,
+    date,
     updateMailList,
     setSelectMail,
     clearSelectMailStore,

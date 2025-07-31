@@ -161,6 +161,17 @@ watch(
   { immediate: true }
 );
 
+watch(
+  mailStore.date,
+  (val) => {
+    if (val) {
+      mailStore.clearMailListStore();
+      fetchInitialEmails();
+    }
+  },
+  { deep: true }
+);
+
 const selectedMail = defineModel<string>("selectedMail", { required: false });
 </script>
 
@@ -273,7 +284,7 @@ const selectedMail = defineModel<string>("selectedMail", { required: false });
         @scroll="onScroll"
       >
         <table class="table-auto w-full">
-          <thead class="sticky top-0 z-10 ">
+          <thead class="sticky top-0 z-10">
             <tr>
               <th></th>
               <th></th>

@@ -138,3 +138,49 @@ export function formatBytes(bytes: number): string {
   const size = parseFloat((bytes / Math.pow(k, i)).toFixed(2));
   return `${size} ${sizes[i]}`;
 }
+
+export function convertToFormProps(res: any) {
+  const address = res.customer.customer_address;
+  const contacts = res.contact;
+  const customerType = res.customer.customer_type;
+
+  const email =
+    contacts.find((c: any) => c.contact_type === "email")?.contact_value || "-";
+  const phone =
+    contacts.find((c: any) => c.contact_type === "phone")?.contact_value || "-";
+  const zipCode = parseInt(address.postal_code);
+
+  if (customerType === "person") {
+    const person = res.person;
+    return {
+      id: person.customer_id,
+      customerType,
+      firstName: person.first_name,
+      lastName: person.last_name,
+      tin: person.tin,
+      email,
+      phone,
+      zipCode,
+      address: address.address_line1,
+      provinceId: address.province_id,
+      districtsId: address.districts_id,
+      subdistrictsId: address.subdistricts_id,
+    };
+  } else {
+    const company = res.company;
+    return {
+      id: company.customer_id,
+      customerType,
+      companyName: company.company_name,
+      email,
+      phone,
+      zipCode,
+      tin: company.tin,
+      branchCode: company.branch_no,
+      address: address.address_line1,
+      provinceId: address.province_id,
+      districtsId: address.districts_id,
+      subdistrictsId: address.subdistricts_id,
+    };
+  }
+}

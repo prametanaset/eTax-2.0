@@ -43,7 +43,7 @@ export function useGmailService() {
     const params: Record<string, any> = { maxResults };
     if (pageToken) params.pageToken = pageToken;
     // ค้นหาที่ส่งเมลจาก edta
-    params.q = `${keyword}`;
+    params.q = `${keyword} ${mailStore.date.end} ${mailStore.date.start}`;
     // params.q = keyword;
     const res = await gmailClient.get<GmailListResult>("/users/me/messages", {
       params,

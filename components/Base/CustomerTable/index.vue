@@ -4,7 +4,7 @@
 
     <div v-else class="flex flex-col gap-5 mt-1">
       <div class="flex gap-2 w-full">
-        <div class="relative flex-1 min-w-0 lg:min-w-[200px]">
+        <div class="relative flex-1 min-w-0 lg:min-w-[200px] w-full">
           <Input
             id="search"
             type="text"
@@ -18,28 +18,30 @@
         </div>
         <ViewOptions />
       </div>
-      <Tabs v-model="activeStatus">
-        <TabsList class="inline-flex space-x-2 p-0 bg-transparent">
-          <TabsTrigger
-            value="all"
-            class="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-black dark:data-[state=active]:text-foreground data-[state=active]:shadow-none"
-          >
-            ทั้งหมด
-          </TabsTrigger>
-          <TabsTrigger
-            value="0"
-            class="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-black dark:data-[state=active]:text-foreground data-[state=active]:shadow-none"
-          >
-            บุคคลธรรมดา
-          </TabsTrigger>
-          <TabsTrigger
-            value="1"
-            class="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-black dark:data-[state=active]:text-foreground data-[state=active]:shadow-none"
-          >
-            นิติบุคคล
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
+      <div>
+        <Tabs v-model="activeStatus">
+          <TabsList class="inline-flex space-x-2 p-0 bg-transparent">
+            <TabsTrigger
+              value="all"
+              class="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-black dark:data-[state=active]:text-foreground data-[state=active]:shadow-none"
+            >
+              ทั้งหมด
+            </TabsTrigger>
+            <TabsTrigger
+              value="0"
+              class="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-black dark:data-[state=active]:text-foreground data-[state=active]:shadow-none"
+            >
+              บุคคลธรรมดา
+            </TabsTrigger>
+            <TabsTrigger
+              value="1"
+              class="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-black dark:data-[state=active]:text-foreground data-[state=active]:shadow-none"
+            >
+              นิติบุคคล
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
     </div>
 
     <div class="rounded-md border bg-[hsl(var(--card))]">
@@ -92,7 +94,7 @@
           >
             <Accordion type="single" collapsible class="p-0 m-0">
               <AccordionItem
-                v-for="customer in filteredCustomers"
+                v-for="(customer, index) in filteredCustomers"
                 :key="customer.id"
                 :value="`item-${customer.id}`"
                 class="px-2 m-0 overflow-x-hidden"
@@ -113,10 +115,7 @@
                       <div
                         class="truncate overflow-x-hidden whitespace-nowrap min-w-0"
                       >
-                        <span class="text-sm font-medium mr-5">
-                          {{ getCustomerDisplayTin(customer) }}
-                        </span>
-                        <span class="text-sm text-muted-foreground">
+                        <span class="text-sm text-muted-foreground mr-5">
                           {{ getCustomerDisplayName(customer) }}
                         </span>
                       </div>
@@ -126,10 +125,14 @@
                     >
                       <Mail :size="15" />
                       {{ getCustomerDisplayGmail(customer) }}
+                      <span
+                        ><strong>วันที่ออกใบ :</strong>
+                        {{ formatMailDisplayDate(customer.created_at) }}</span
+                      >
                     </p>
 
                     <div class="ml-auto">
-                      <RowActions :row="customer" />
+                      <RowActions @click.stop :row="customerList[index]" />
                     </div>
                   </div>
                 </AccordionTrigger>
@@ -151,6 +154,12 @@
                         }}</Badge
                       >
                     </div>
+                    <p>
+                      หมายเลขผู้เสียภาษี :
+                      <span class="text-muted-600 dark:text-muted-400">{{
+                        getCustomerDisplayTin(customer)
+                      }}</span>
+                    </p>
                     <p>
                       ที่อยู่ :
                       <span class="text-muted-600 dark:text-muted-400"
@@ -218,8 +227,12 @@ interface DataTableProps {
 }
 const props = defineProps<DataTableProps>();
 const customerStore = useCustomerStore();
-const { createCustomerService, updateCustomerService, deleteCustomerService } =
-  useCustomerService();
+const {
+  createCustomerService,
+  updateCustomerService,
+  deleteCustomerService,
+  getCustomersByIdService,
+} = useCustomerService();
 
 const { getDistrictById, getSubdistrictById, getProvinceById } =
   useLocateService();
@@ -229,8 +242,8 @@ const columnFilters = ref<ColumnFiltersState>([]);
 const columnVisibility = ref<VisibilityState>({});
 const rowSelection = ref({});
 const activeStatus = ref("all");
-const isDialogOpen = ref(false);
 const searchQuery = ref("");
+var customerList = ref<Customer[]>([]);
 const locationLabels = ref<Record<number, string>>({});
 
 const isMobile = useMediaQuery("(max-width: 660px)");
@@ -260,7 +273,6 @@ function getCustomerDisplayTin(customer: any) {
   }
   return "Unknown Customer";
 }
-
 function getCustomerDisplayGmail(customer: any) {
   const email =
     customer.customer_contacts?.find((c) => c.contact_type === "email")
@@ -268,7 +280,6 @@ function getCustomerDisplayGmail(customer: any) {
 
   return email;
 }
-
 async function fetchLocationLabel(customer: any) {
   const location = customer.customer_address;
   if (!location) {
@@ -318,15 +329,47 @@ const filteredCustomers = computed(() => {
   });
 });
 
+function convertToCustomer(raw: any): Customer {
+  const email =
+    raw.customer_contacts?.find((c: any) => c.contact_type === "email")
+      ?.contact_value || "";
+
+  const phone = raw.customer_contacts?.find(
+    (c: any) => c.contact_type === "phone"
+  )?.contact_value;
+
+  const isPerson = raw.customer_type === "person";
+
+  return {
+    original: {
+      ID: raw.id,
+      StoreID: raw.store_id,
+      CustomerType: raw.customer_type,
+      FirstName: isPerson
+        ? raw.person_customer?.first_name || ""
+        : raw.company_customer?.company_name || "",
+      LastName: isPerson ? raw.person_customer?.last_name || "" : "",
+      Email: email,
+      Address: raw.customer_address?.address_line1 || "",
+      Tin: isPerson
+        ? raw.person_customer?.tin || ""
+        : raw.company_customer?.tin || "",
+      Phone: phone,
+    },
+  };
+}
+
 watch(
   () => customerStore.customerList,
-  (customers) => {
-    customers.forEach((customer) => {
+  (customersList) => {
+    customersList.forEach((customer) => {
       if (!locationLabels.value[customer.id]) {
         fetchLocationLabel(customer);
       }
+      customerList.value = customersList.map((c) => convertToCustomer(c));
     });
   },
+
   { immediate: true }
 );
 

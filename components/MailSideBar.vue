@@ -104,12 +104,12 @@ const data = {
 </script>
 
 <template>
-  <div class="w-[240px] pt-2">
+  <div class="w-[280px] pt-2">
     <SidebarHeader>
       <MailSwitcher :teams="data.teams" />
     </SidebarHeader>
     <SidebarContent>
-      <BaseMailNotionSearchMail />
+      <BaseMailNotionSearchMail class="" />
       <NavProjects :projects="data.projects" />
     </SidebarContent>
     <SidebarFooter>

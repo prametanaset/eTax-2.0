@@ -9,6 +9,7 @@ import {
   Calendar as CalendarIcon,
   ChevronLeft,
   ChevronRight,
+  X,
 } from "lucide-vue-next";
 import { type DateRange, RangeCalendarRoot, useDateFormatter } from "reka-ui";
 
@@ -30,6 +31,7 @@ import {
   RangeCalendarGridRow,
   RangeCalendarHeadCell,
 } from "@/components/ui/range-calendar";
+import { date } from "zod";
 
 // const value = ref({
 //   start: new CalendarDate(2022, 1, 20),
@@ -37,6 +39,10 @@ import {
 // }) as Ref<DateRange>
 
 const value = ref<DateRange | null>(null);
+
+const emit = defineEmits<{
+  (e: "dateValue", value: DateRange): void;
+}>();
 
 const locale = ref("th-TH");
 const formatter = useDateFormatter(locale.value);
@@ -100,6 +106,12 @@ watch(secondMonthPlaceholder, (_secondMonthPlaceholder) => {
   if (isEqualMonth(_secondMonthPlaceholder, placeholder.value))
     placeholder.value = placeholder.value.subtract({ months: 1 });
 });
+
+watch(value, (newVal) => {
+  if (newVal || newVal == null) {
+    emit("dateValue", newVal);
+  }
+});
 </script>
 
 <template>
@@ -109,7 +121,7 @@ watch(secondMonthPlaceholder, (_secondMonthPlaceholder) => {
         variant="outline"
         :class="
           cn(
-            'w-[280px] justify-start text-left font-normal bg-white dark:bg-transparent h-9',
+            'w-[280px] justify-start text-left font-normal bg-white dark:bg-transparent h-9 relative z-99',
             !value && 'text-muted-foreground'
           )
         "
@@ -124,6 +136,11 @@ watch(secondMonthPlaceholder, (_secondMonthPlaceholder) => {
           <template v-else>
             {{ formatter.custom(toDate(value.start), { dateStyle: "medium" }) }}
           </template>
+          <span
+            @click.stop="(value.start = null), (value.end = null)"
+            class="absolute right-2 z-999 hover:text-primary-500"
+            ><X />
+          </span>
         </template>
         <template v-else>เลือกวันที่</template>
       </Button>
