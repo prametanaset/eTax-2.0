@@ -16,7 +16,7 @@
             <Search class="w-4 h-4 text-muted-foreground" />
           </span>
         </div>
-        <ViewOptions />
+        <!-- <ViewOptions /> -->
       </div>
       <div>
         <Tabs v-model="activeStatus">
